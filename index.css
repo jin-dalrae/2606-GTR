@@ -2017,3 +2017,88 @@
       grid-template-columns: 1fr;
     }
   }
+
+  /* Glossary Term Styling */
+  .glossary-term {
+    border-bottom: 1px dashed var(--accent-neutral);
+    cursor: help;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .glossary-term:hover {
+    color: var(--accent-neutral);
+    border-bottom-color: var(--text-primary);
+    text-shadow: 0 0 8px rgba(210, 100, 60, 0.3);
+  }
+
+  /* Glossary list styling inside Modal */
+  .glossary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+
+  .glossary-item-card {
+    background: hsla(0, 0%, 100%, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    transition: all 0.2s ease;
+  }
+
+  .glossary-item-card.highlighted {
+    border-color: var(--accent-neutral);
+    background: hsla(210, 100%, 60%, 0.05);
+    box-shadow: 0 0 15px hsla(210, 100%, 60%, 0.1);
+  }
+
+  .glossary-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .glossary-item-title {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent-neutral);
+  }
+
+  .glossary-item-card.highlighted .glossary-item-title {
+    animation: glowText 1.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes glowText {
+    from { text-shadow: 0 0 4px rgba(210, 100, 60, 0.2); }
+    to { text-shadow: 0 0 10px rgba(210, 100, 60, 0.6); }
+  }
+
+  .glossary-item-tag {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    background: hsla(0, 0%, 100%, 0.05);
+    color: var(--text-secondary);
+  }
+
+  .glossary-item-def {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+  }
+
+  .glossary-item-context {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    border-left: 2px solid var(--border-color);
+    padding-left: 0.75rem;
+    font-style: italic;
+  }

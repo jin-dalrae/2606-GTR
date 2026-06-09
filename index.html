@@ -70,6 +70,12 @@
               <span>5. Diligence Share</span>
             </a>
           </li>
+          <li>
+            <a href="#" class="nav-link" id="nav-glossary-trigger">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              <span>📚 Climate Glossary</span>
+            </a>
+          </li>
         </ul>
       </nav>
       
@@ -286,7 +292,7 @@
           </div>
           <div class="net-banner-description">
             <span class="warning-tag">IMPORTANT DISCLOSURE</span>
-            <p>This is a <strong>derived context figure</strong>, not a certified accounting offset. Your footprint inventory (−) represents real physical emissions. Your handprint (+) represents emissions avoided vs. a baseline reference scenario. They use different methodologies and cannot be directly mathematically netted to claim zero physical emissions.</p>
+            <p>This is a <strong class="glossary-term" data-term="net">derived context figure</strong>, not a certified accounting <span class="glossary-term" data-term="offset">offset</span>. Your <span class="glossary-term" data-term="footprint">footprint</span> inventory (−) represents real physical emissions. Your <span class="glossary-term" data-term="handprint">handprint</span> (+) represents emissions avoided vs. a <span class="glossary-term" data-term="baseline">baseline</span> reference scenario. They use different methodologies and cannot be directly mathematically netted to claim zero physical emissions.</p>
           </div>
         </div>
         
@@ -664,7 +670,7 @@
       <form id="form-claim-gate">
         <div class="modal-body scrollable-body">
           <div class="alert alert-info">
-            <strong>Additionality Gate Active</strong>: Gating baseline scenario and counterfactuals prevents overclaiming. A claim cannot be published without completing these fields.
+            <strong><span class="glossary-term" data-term="additionality">Additionality</span> Gate Active</strong>: Gating <span class="glossary-term" data-term="baseline">baseline scenario</span> and counterfactuals prevents overclaiming. A claim cannot be published without completing these fields.
           </div>
           
           <div class="form-group">
@@ -702,7 +708,7 @@
             </div>
             
             <div class="form-group">
-              <label for="claim-additionality">Additionality Status <span class="required">*</span></label>
+              <label for="claim-additionality"><span class="glossary-term" data-term="additionality">Additionality Status</span> <span class="required">*</span></label>
               <select id="claim-additionality" required>
                 <option value="" disabled selected>Select additionality type...</option>
                 <option value="Strong">Strong Additionality (Financial/regulatory barrier overcome; would not exist without us)</option>
@@ -720,14 +726,14 @@
                 <label class="radio-label">
                   <input type="radio" name="grid-signal" value="marginal" checked>
                   <div class="radio-custom-box">
-                    <strong>Marginal (WattTime MOER)</strong>
+                    <strong><span class="glossary-term" data-term="marginal">Marginal (WattTime MOER)</span></strong>
                     <span>(Recommended) Evaluates actual incremental grid change. Required for claims.</span>
                   </div>
                 </label>
                 <label class="radio-label">
                   <input type="radio" name="grid-signal" value="average">
                   <div class="radio-custom-box">
-                    <strong>Average (Electricity Maps)</strong>
+                    <strong><span class="glossary-term" data-term="average">Average (Electricity Maps)</span></strong>
                     <span>Not recommended for displacement. Context only.</span>
                   </div>
                 </label>
@@ -735,7 +741,7 @@
             </div>
             
             <div class="form-group">
-              <label for="claim-rebound">Rebound / Jevons Paradox Check</label>
+              <label for="claim-rebound"><span class="glossary-term" data-term="rebound">Rebound / Jevons Paradox Check</span></label>
               <textarea id="claim-rebound" placeholder="Does your solution lower prices in a way that will increase overall consumption volume? Describe rebound mitigation efforts..."></textarea>
             </div>
           </div>
@@ -790,6 +796,33 @@
           <button type="submit" class="btn btn-primary">Attach Evidence (+10 pts)</button>
         </div>
       </form>
+    </div>
+  </dialog>
+
+  <!-- 3. EDUCATIONAL GLOSSARY MODAL -->
+  <dialog id="dialog-glossary" closedby="any" aria-labelledby="glossaryModalTitle">
+    <div class="modal-wrapper">
+      <div class="modal-header">
+        <h2 id="glossaryModalTitle">📚 Climate & Impact Glossary</h2>
+        <button class="btn-close-modal" id="btn-close-glossary-modal" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      
+      <div class="modal-body scrollable-body">
+        <div class="form-group">
+          <label for="glossary-search">Search Glossary Terms</label>
+          <input type="text" id="glossary-search" placeholder="Search terms (e.g. additionality, scope)...">
+        </div>
+        
+        <div class="glossary-list" id="glossary-list-container">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btn-close-glossary-footer">Close</button>
+      </div>
     </div>
   </dialog>
 
