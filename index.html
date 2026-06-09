@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Climate Startup Impact Dashboard | Social Lab</title>
+  <meta name="description" content="A gamified, two-sided environmental impact dashboard tracking positive handprints and negative footprints with rigorous additionality gates for climate startups.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/index.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <div class="logo-container">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          <span class="logo-text">Social Lab</span>
+        </div>
+        <div class="app-badge">Impact MVP</div>
+      </div>
+      
+      <!-- Company Profile Widget -->
+      <div class="company-widget" id="sidebar-company-widget">
+        <div class="avatar">C</div>
+        <div class="details">
+          <h4 id="sidebar-company-name">Configure Startup</h4>
+          <p id="sidebar-company-stage">Stage 1 Intake</p>
+        </div>
+      </div>
+      
+      <!-- Navigation Links -->
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="#intake" class="nav-link active" id="nav-intake" data-view="intake">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+              <span>1. Intake Wizard</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ledger" class="nav-link" id="nav-ledger" data-view="ledger">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="9"></line><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="15" y2="17"></line></svg>
+              <span>2. Impact Ledger (+/-)</span>
+            </a>
+          </li>
+          <li>
+            <a href="#goals" class="nav-link" id="nav-goals" data-view="goals">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <span>3. Goal Board</span>
+            </a>
+          </li>
+          <li>
+            <a href="#game" class="nav-link" id="nav-game" data-view="game">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              <span>4. Game Center</span>
+            </a>
+          </li>
+          <li>
+            <a href="#share" class="nav-link" id="nav-share" data-view="share">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+              <span>5. Diligence Share</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <!-- Sidebar Footer / Live Widget -->
+      <div class="sidebar-footer">
+        <div class="live-signal-widget">
+          <div class="signal-header">
+            <span class="live-dot animate-pulse"></span>
+            <span class="signal-title">WATTTIME GRID SIGNAL</span>
+          </div>
+          <div class="signal-body">
+            <div class="signal-value" id="live-grid-intensity">-- lbs/MWh</div>
+            <div class="signal-desc" id="live-grid-region">Simulated Marginal Em. (CAISO)</div>
+          </div>
+        </div>
+        <div class="game-mini-status">
+          <div class="status-row">
+            <span>Maturity</span>
+            <span class="badge" id="mini-maturity-level">Level 0</span>
+          </div>
+          <div class="status-row">
+            <span>Update Streak</span>
+            <span class="streak-val" id="mini-streak-val">🔥 0w</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="app-main">
+      
+      <!-- 1. INTAKE WIZARD VIEW -->
+      <section id="view-intake" class="app-view active">
+        <div class="view-header">
+          <div>
+            <h1>Activity Map Intake</h1>
+            <p class="subtitle">Complete this initial mapping to structure your two-sided impact ledger in less than 15 minutes.</p>
+          </div>
+        </div>
+        
+        <div class="card glass-card wizard-card">
+          <div class="wizard-steps-indicator">
+            <div class="step-indicator active" id="indicator-step-1">1. Company Profile</div>
+            <div class="step-indicator" id="indicator-step-2">2. Impact Activities</div>
+            <div class="step-indicator" id="indicator-step-3">3. Materiality Ranking</div>
+          </div>
+          
+          <form id="intake-form">
+            <!-- Step 1 Content -->
+            <div class="wizard-step" id="step-1">
+              <h3>Tell us about your startup</h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="company-name">Company Name <span class="required">*</span></label>
+                  <input type="text" id="company-name" required placeholder="e.g. Climatico">
+                </div>
+                <div class="form-group">
+                  <label for="company-url">Website URL <span class="required">*</span></label>
+                  <input type="url" id="company-url" required placeholder="https://example.com">
+                </div>
+                <div class="form-group">
+                  <label for="company-stage">Funding / Growth Stage <span class="required">*</span></label>
+                  <select id="company-stage" required>
+                    <option value="" disabled selected>Select stage...</option>
+                    <option value="Pre-seed">Pre-seed</option>
+                    <option value="Seed">Seed</option>
+                    <option value="Series A">Series A</option>
+                    <option value="Series B+">Series B+</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="business-model">Business Model <span class="required">*</span></label>
+                  <select id="business-model" required>
+                    <option value="" disabled selected>Select model...</option>
+                    <option value="SaaS">SaaS / Cloud Software</option>
+                    <option value="Hardware">Hardware / Climate Tech Device</option>
+                    <option value="Marketplace">Marketplace / Platform</option>
+                    <option value="Deep Tech">Deep Tech / Lab Scale R&D</option>
+                    <option value="Logistics">Logistics / Supply Chain solutions</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="team-size">Team Size (FTEs)</label>
+                  <input type="number" id="team-size" min="1" placeholder="e.g. 15">
+                </div>
+              </div>
+              <div class="wizard-actions">
+                <button type="button" class="btn btn-primary" id="btn-next-to-2">Next: Select Activities &rarr;</button>
+              </div>
+            </div>
+            
+            <!-- Step 2 Content -->
+            <div class="wizard-step hidden" id="step-2">
+              <h3>Select Startup-Relevant Activities</h3>
+              <p class="step-desc">Check the activities that apply to your operations. This builds your two-sided footprint (-) and handprint (+) framework.</p>
+              
+              <div class="activity-checkbox-grid">
+                <div class="activity-category-card">
+                  <h4>Footprint (-) Direct/Indirect Activities</h4>
+                  
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="act-compute" value="compute" checked>
+                    <div class="checkbox-label">
+                      <strong>Cloud & AI Compute</strong>
+                      <span>Data center hosting, cloud APIs, GPU compute servers</span>
+                    </div>
+                  </label>
+                  
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="act-hardware" value="hardware">
+                    <div class="checkbox-label">
+                      <strong>Hardware & Electronics</strong>
+                      <span>Office laptops, servers, physical prototyping components</span>
+                    </div>
+                  </label>
+                  
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="act-travel" value="travel" checked>
+                    <div class="checkbox-label">
+                      <strong>FTE Travel & Commutes</strong>
+                      <span>Flights, hotel stays, daily office commutes</span>
+                    </div>
+                  </label>
+                  
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="act-vendors" value="vendors">
+                    <div class="checkbox-label">
+                      <strong>Key Vendors & SaaS</strong>
+                      <span>Corporate services, external design labs, SaaS subscriptions</span>
+                    </div>
+                  </label>
+                  
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="act-logistics" value="logistics">
+                    <div class="checkbox-label">
+                      <strong>Logistics & Distribution</strong>
+                      <span>Physical product shipping, supplier transport</span>
+                    </div>
+                  </label>
+                </div>
+                
+                <div class="activity-category-card handprint-bg">
+                  <h4>Handprint (+) Avoided/Enabled Emissions</h4>
+                  
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="act-avoided-grid" value="avoided-grid" checked>
+                    <div class="checkbox-label">
+                      <strong>Grid Decarbonization</strong>
+                      <span>Displacing fossil fuels with renewable energy or efficiency</span>
+                    </div>
+                  </label>
+                  
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="act-avoided-transport" value="avoided-transport">
+                    <div class="checkbox-label">
+                      <strong>Transport & Mobility Avoidance</strong>
+                      <span>Substituting high-carbon logistics with electrified or optimized solutions</span>
+                    </div>
+                  </label>
+                  
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="act-avoided-material" value="avoided-material">
+                    <div class="checkbox-label">
+                      <strong>Low-Carbon Materials</strong>
+                      <span>Displacing concrete, steel, or plastics with green alternatives</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+              
+              <div class="wizard-actions">
+                <button type="button" class="btn btn-secondary" id="btn-back-to-1">&larr; Back</button>
+                <button type="button" class="btn btn-primary" id="btn-next-to-3">Next: Rank Materiality &rarr;</button>
+              </div>
+            </div>
+            
+            <!-- Step 3 Content -->
+            <div class="wizard-step hidden" id="step-3">
+              <h3>Rank Likely Materiality</h3>
+              <p class="step-desc">Drag or order the checked activities from highest expected greenhouse gas (GHG) impact to lowest. This helps recommend prioritized goals.</p>
+              
+              <div class="ranking-container" id="materiality-rank-list">
+                <!-- Dynamically populated via JS -->
+              </div>
+              
+              <div class="wizard-actions">
+                <button type="button" class="btn btn-secondary" id="btn-back-to-2">&larr; Back</button>
+                <button type="submit" class="btn btn-success" id="btn-submit-intake">Complete Setup & Initialize Ledger</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- 2. IMPACT LEDGER VIEW -->
+      <section id="view-ledger" class="app-view">
+        <div class="view-header flex-header">
+          <div>
+            <h1>Impact Ledger (+/-)</h1>
+            <p class="subtitle">Two-sided environmental tracking. Avoided claims (+) are counterfactual and distinct from actual Footprint (-).</p>
+          </div>
+          <button class="btn btn-primary btn-icon" id="btn-trigger-claim-modal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Add Avoided Claim (+)
+          </button>
+        </div>
+        
+        <!-- Derived Net Impact Banner -->
+        <div class="net-impact-banner card">
+          <div class="net-banner-info">
+            <div class="net-label">DERIVED NET IMPACT</div>
+            <div class="net-value" id="ledger-net-value">Calculating...</div>
+            <div class="net-uncertainty" id="ledger-net-uncertainty">Uncertainty: --</div>
+          </div>
+          <div class="net-banner-description">
+            <span class="warning-tag">IMPORTANT DISCLOSURE</span>
+            <p>This is a <strong>derived context figure</strong>, not a certified accounting offset. Your footprint inventory (−) represents real physical emissions. Your handprint (+) represents emissions avoided vs. a baseline reference scenario. They use different methodologies and cannot be directly mathematically netted to claim zero physical emissions.</p>
+          </div>
+        </div>
+        
+        <!-- Two-Sided Panels -->
+        <div class="ledger-panels-container">
+          
+          <!-- Footprint Panel (-) -->
+          <div class="ledger-panel card glass-card border-footprint">
+            <div class="panel-header">
+              <div class="title-with-icon">
+                <div class="icon-circle footprint-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-2-4-3.5c-.5 1.5-2 2-4 3.5S5 13 5 15a7 7 0 0 0 7 7z"></path></svg>
+                </div>
+                <h3>Physical Footprint (−)</h3>
+              </div>
+              <div class="panel-total" id="footprint-total">-- tCO2e/yr</div>
+            </div>
+            
+            <p class="panel-desc">Operational greenhouse gas emissions according to GHG Protocol scope definitions.</p>
+            
+            <div class="ledger-section">
+              <div class="section-title">Scope 1 & 2 (Direct / Purchased Energy)</div>
+              <div class="ledger-items" id="footprint-scope-1-2-list">
+                <!-- Scope 1/2 elements -->
+              </div>
+            </div>
+            
+            <div class="ledger-section">
+              <div class="section-title">Scope 3 (Value Chain - Startup Relevant)</div>
+              <div class="ledger-items" id="footprint-scope-3-list">
+                <!-- Scope 3 elements -->
+              </div>
+            </div>
+            
+            <!-- Quick Add Metric Form inside Footprint -->
+            <div class="ledger-add-inline">
+              <h4>Update Metric Estimate</h4>
+              <form id="form-update-metric" class="inline-form">
+                <div class="input-row">
+                  <select id="metric-select-name" required>
+                    <!-- Options populated by active activities -->
+                  </select>
+                  <input type="number" id="metric-input-value" required step="any" placeholder="Value">
+                  <select id="metric-input-unit" required>
+                    <option value="tCO2e/yr">tCO2e/yr</option>
+                    <option value="kWh/yr">kWh/yr</option>
+                  </select>
+                </div>
+                <div class="input-row">
+                  <select id="metric-input-type" required>
+                    <option value="modeled">Modeled (Estimate)</option>
+                    <option value="metered">Metered (Real-time/Direct)</option>
+                  </select>
+                  <input type="number" id="metric-input-uncertainty" min="0" max="100" placeholder="Uncertainty ±%">
+                  <button type="submit" class="btn btn-secondary">Update</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          
+          <!-- Handprint Panel (+) -->
+          <div class="ledger-panel card glass-card border-handprint">
+            <div class="panel-header">
+              <div class="title-with-icon">
+                <div class="icon-circle handprint-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
+                </div>
+                <h3>Avoided & Enabled Handprint (+)</h3>
+              </div>
+              <div class="panel-total" id="handprint-total">-- tCO2e/yr</div>
+            </div>
+            
+            <p class="panel-desc">Estimated greenhouse gas emissions avoided or displaced by customer use of startup solutions compared to baseline.</p>
+            
+            <div class="ledger-section">
+              <div class="section-title">Gated Avoided Emissions Claims</div>
+              <div class="ledger-items" id="handprint-claims-list">
+                <!-- Claims list dynamically populated -->
+              </div>
+            </div>
+            
+            <div class="handprint-info-footer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              <span>Avoided emissions are strictly gated behind additionality checks. Claims failing additionality do not sum into the Handprint.</span>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+
+      <!-- 3. GOAL BOARD VIEW -->
+      <section id="view-goals" class="app-view">
+        <div class="view-header">
+          <h1>Goal Board</h1>
+          <p class="subtitle">Set targets for high-materiality activities, link evidence, and drive weekly operational improvements.</p>
+        </div>
+        
+        <div class="goals-layout">
+          <div class="goals-content">
+            <!-- Active Goals List -->
+            <div class="section-header-row">
+              <h3>Active Goals</h3>
+              <div class="filter-controls">
+                <select id="filter-goal-status">
+                  <option value="all">All Statuses</option>
+                  <option value="Not Started">Not Started</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Complete">Complete</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="goals-grid" id="goals-list-container">
+              <!-- Dynamically populated via JS -->
+            </div>
+          </div>
+          
+          <div class="goals-sidebar">
+            <!-- Recommendations Sidebar -->
+            <div class="card glass-card sidebar-recommend-card">
+              <h3>Recommended Goals</h3>
+              <p class="desc">Suggested actions derived from your highest materiality activities and impact gaps.</p>
+              <div id="recommendations-container" class="recs-list">
+                <!-- Dynamically populated via JS -->
+              </div>
+            </div>
+            
+            <!-- Quick Add Custom Goal -->
+            <div class="card glass-card sidebar-quick-goal">
+              <h3>Create Custom Goal</h3>
+              <form id="form-create-goal">
+                <div class="form-group">
+                  <label for="goal-title">Goal Title</label>
+                  <input type="text" id="goal-title" required placeholder="e.g. 20% compute reduction">
+                </div>
+                <div class="form-group">
+                  <label for="goal-owner">Owner</label>
+                  <select id="goal-owner" required>
+                    <!-- Populated via members list -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="goal-deadline">Deadline</label>
+                  <input type="date" id="goal-deadline" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-full">Add Goal</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. GAME CENTER VIEW -->
+      <section id="view-game" class="app-view">
+        <div class="view-header">
+          <h1>Cooperative Progress Game</h1>
+          <p class="subtitle">Drive impact integrity together. No public rankings — just team milestones, streaks, and validation levels.</p>
+        </div>
+        
+        <div class="game-dashboard-layout">
+          <!-- Left: Maturity Levels -->
+          <div class="card glass-card maturity-card">
+            <h3>Impact Maturity Level</h3>
+            <div class="maturity-meter-container">
+              <div class="maturity-gauge">
+                <div class="gauge-center">
+                  <div class="gauge-level" id="game-maturity-level">Level 0</div>
+                  <div class="gauge-title" id="game-maturity-title">Unmapped</div>
+                </div>
+                <!-- Dynamic SVG SVG Ring representing 0-5 -->
+                <svg class="gauge-ring" viewBox="0 0 100 100">
+                  <circle class="ring-bg" cx="50" cy="50" r="40" fill="transparent" stroke-width="8"></circle>
+                  <circle class="ring-fill" id="game-maturity-ring-fill" cx="50" cy="50" r="40" fill="transparent" stroke-width="8" stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle>
+                </svg>
+              </div>
+              <div class="maturity-checklist">
+                <div class="check-item" id="check-level-1">
+                  <span class="icon"></span>
+                  <div class="check-details">
+                    <strong>Level 1: Mapped</strong>
+                    <span>Complete the initial Activity Map Intake wizard.</span>
+                  </div>
+                </div>
+                <div class="check-item" id="check-level-2">
+                  <span class="icon"></span>
+                  <div class="check-details">
+                    <strong>Level 2: Gated</strong>
+                    <span>Answer baseline, displacement, and additionality checks for positive claims.</span>
+                  </div>
+                </div>
+                <div class="check-item" id="check-level-3">
+                  <span class="icon"></span>
+                  <div class="check-details">
+                    <strong>Level 3: Metered</strong>
+                    <span>Integrate at least one metered/real-time footprint data source.</span>
+                  </div>
+                </div>
+                <div class="check-item" id="check-level-4">
+                  <span class="icon"></span>
+                  <div class="check-details">
+                    <strong>Level 4: Active</strong>
+                    <span>Select at least 3 material company-wide goals and assign owners.</span>
+                  </div>
+                </div>
+                <div class="check-item" id="check-level-5">
+                  <span class="icon"></span>
+                  <div class="check-details">
+                    <strong>Level 5: Improved</strong>
+                    <span>Attach validated evidence to complete at least 2 active goals.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right: Streak and Evidence Points -->
+          <div class="game-stats-grid">
+            <div class="card glass-card streak-card">
+              <div class="streak-icon">🔥</div>
+              <h3>Team Streak</h3>
+              <div class="stat-number" id="game-streak-count">0 Weeks</div>
+              <p class="desc">Keep metrics updated or goals progressing weekly. Updates refresh every Monday.</p>
+              <div class="streak-btn-container">
+                <button class="btn btn-secondary w-full" id="btn-simulate-week-update">Update Log (Simulate Weekly Activity)</button>
+              </div>
+            </div>
+            
+            <div class="card glass-card points-card">
+              <div class="points-icon">🛡️</div>
+              <h3>Evidence Points</h3>
+              <div class="stat-number" id="game-evidence-points">0</div>
+              <p class="desc">Earned by attaching links or documents verifying carbon footprint entries or avoided handprints.</p>
+              <div class="recent-events">
+                <h4>Recent Point Logs</h4>
+                <ul id="game-events-log">
+                  <li class="empty-log">No points earned yet. Add evidence to goals or claims!</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. SHARE PAGE / INVESTOR VIEW -->
+      <section id="view-share" class="app-view">
+        <div class="view-header flex-header">
+          <div>
+            <h1>Investor Diligence Share</h1>
+            <p class="subtitle">A VC-ready view showing footprint, gated handprints, and derived net impact while strictly preserving uncertainty.</p>
+          </div>
+          <div class="share-toggle-controls">
+            <span class="label">Audience View:</span>
+            <div class="toggle-group">
+              <button class="btn btn-toggle active" id="btn-toggle-internal">Internal View</button>
+              <button class="btn btn-toggle" id="btn-toggle-external">Investor View</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="share-main-container">
+          
+          <!-- Public Header Info (Always Visible) -->
+          <div class="share-profile-card card glass-card">
+            <div class="share-meta">
+              <h2 id="share-company-title">Climatico Impact Profile</h2>
+              <div class="meta-row">
+                <span class="tag" id="share-company-stage-badge">Seed</span>
+                <span class="tag" id="share-company-model-badge">SaaS</span>
+                <span class="tag-date" id="share-freshness-date">Freshness: --</span>
+              </div>
+            </div>
+            <div class="two-axis-widget">
+              <h4>TWO-AXIS IMPACT EVALUATION</h4>
+              <div class="matrix-container">
+                <div class="matrix-grid">
+                  <div class="matrix-cell label-cell">Scaling Readiness (Climate Brick)</div>
+                  <div class="matrix-cell label-cell">Impact Integrity Scored Axis</div>
+                  <div class="matrix-plot-area">
+                    <!-- Graph visual -->
+                    <div class="matrix-grid-lines">
+                      <div class="line horizontal" style="bottom: 20%;"></div>
+                      <div class="line horizontal" style="bottom: 40%;"></div>
+                      <div class="line horizontal" style="bottom: 60%;"></div>
+                      <div class="line horizontal" style="bottom: 80%;"></div>
+                      <div class="line vertical" style="left: 20%;"></div>
+                      <div class="line vertical" style="left: 40%;"></div>
+                      <div class="line vertical" style="left: 60%;"></div>
+                      <div class="line vertical" style="left: 80%;"></div>
+                    </div>
+                    <div class="matrix-point" id="matrix-dot"></div>
+                  </div>
+                </div>
+                <div class="matrix-labels">
+                  <div class="label-x">Scale Stage &rarr;</div>
+                  <div class="label-y">Integrity &rarr;</div>
+                </div>
+              </div>
+              <div class="matrix-description" id="matrix-explanation">
+                Loading assessment...
+              </div>
+            </div>
+          </div>
+          
+          <!-- Derived Net Impact View (Same as ledger but visually tailored for external eyes) -->
+          <div class="card glass-card share-impact-summary">
+            <h3>Net Impact Overview</h3>
+            <div class="net-derived-visual">
+              <div class="axis-display">
+                <div class="axis-side left-side">
+                  <span class="title">Footprint Inventory (−)</span>
+                  <span class="value" id="share-footprint-value">-- tCO2e</span>
+                </div>
+                <div class="divider">vs</div>
+                <div class="axis-side right-side">
+                  <span class="title">Gated Handprint (+)</span>
+                  <span class="value" id="share-handprint-value">-- tCO2e</span>
+                </div>
+              </div>
+              <div class="derived-band-container">
+                <div class="band-label">Derived Net Impact Uncertainty Range</div>
+                <div class="band-visualization">
+                  <div class="band-limit left-limit" id="share-band-min">-- tCO2e</div>
+                  <div class="band-bar">
+                    <div class="band-fill" id="share-band-fill" style="left: 30%; width: 40%;"></div>
+                    <div class="band-marker" id="share-band-center" style="left: 50%;"></div>
+                  </div>
+                  <div class="band-limit right-limit" id="share-band-max">-- tCO2e</div>
+                </div>
+              </div>
+              <p class="net-disclosure">
+                ⚠️ **Uncertainty Warning**: Avoided emissions claims are counterfactual models with standard deviation margins. The bars above show 95% confidence intervals based on individual model inputs. Do not assume handprints directly offset scope footprint.
+              </p>
+            </div>
+          </div>
+          
+          <!-- Diligence Checklist & Integrity Gate Disclosures (Critical for VCs) -->
+          <div class="card glass-card share-diligence-list">
+            <h3>Investor Diligence Checklist (Claims Gated)</h3>
+            <p class="desc">Review the baseline, displacement, and additionality checks protecting each claim from greenwashing risk.</p>
+            <div class="diligence-table-container">
+              <table class="diligence-table">
+                <thead>
+                  <tr>
+                    <th>Avoided Claim</th>
+                    <th>Annual Estimate</th>
+                    <th>Additionality Status</th>
+                    <th>Grid Signal Used</th>
+                    <th>Diligence Status</th>
+                  </tr>
+                </thead>
+                <tbody id="share-diligence-tbody">
+                  <!-- Dynamically populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+    </main>
+  </div>
+
+  <!-- NATIVE MODALS (DIALOG TAGS) -->
+  
+  <!-- 1. GATED HANDPRINT CLAIM MODAL -->
+  <dialog id="dialog-claim" closedby="any" aria-labelledby="claimModalTitle">
+    <div class="modal-wrapper">
+      <div class="modal-header">
+        <h2 id="claimModalTitle">New Avoided Emissions Claim (+)</h2>
+        <button class="btn-close-modal" id="btn-close-claim-modal" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      
+      <form id="form-claim-gate">
+        <div class="modal-body scrollable-body">
+          <div class="alert alert-info">
+            <strong>Additionality Gate Active</strong>: Gating baseline scenario and counterfactuals prevents overclaiming. A claim cannot be published without completing these fields.
+          </div>
+          
+          <div class="form-group">
+            <label for="claim-name">Claim Title <span class="required">*</span></label>
+            <input type="text" id="claim-name" required placeholder="e.g. Electric Vehicle fleet grid displacement">
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="claim-value">Estimated Avoided Value <span class="required">*</span></label>
+              <div class="input-unit-group">
+                <input type="number" id="claim-value" required step="any" placeholder="e.g. 150">
+                <span class="unit">tCO2e/yr</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="claim-uncertainty">Value Uncertainty (± %) <span class="required">*</span></label>
+              <input type="number" id="claim-uncertainty" required min="1" max="100" placeholder="e.g. 20">
+            </div>
+          </div>
+          
+          <hr class="modal-divider">
+          
+          <div class="integrity-section">
+            <h3>Integrity Gating Requirements</h3>
+            
+            <div class="form-group">
+              <label for="claim-baseline">Baseline Counterfactual Scenario <span class="required">*</span></label>
+              <textarea id="claim-baseline" required placeholder="Describe what emissions would occur in the absence of your startup's solution (e.g. Average US diesel fleet cargo logistics)..."></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="claim-displacement">Displacement Mechanism <span class="required">*</span></label>
+              <textarea id="claim-displacement" required placeholder="Describe how your solution replaces the baseline (e.g. Displaces 100k diesel transport miles with solar-charged logistics)..."></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="claim-additionality">Additionality Status <span class="required">*</span></label>
+              <select id="claim-additionality" required>
+                <option value="" disabled selected>Select additionality type...</option>
+                <option value="Strong">Strong Additionality (Financial/regulatory barrier overcome; would not exist without us)</option>
+                <option value="Moderate">Moderate Additionality (Speeds up market transition that was happening slowly)</option>
+                <option value="None">No Additionality (Would have happened anyway / baseline gaming)</option>
+              </select>
+              <div class="field-tip warning hidden" id="additionality-warning-text">
+                ⚠️ **Warning**: Selecting "No Additionality" means this claim is auto-flagged. The Handprint value will be treated as 0 in net ledger equations.
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>Grid Signal Assumption <span class="required">*</span></label>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" name="grid-signal" value="marginal" checked>
+                  <div class="radio-custom-box">
+                    <strong>Marginal (WattTime MOER)</strong>
+                    <span>(Recommended) Evaluates actual incremental grid change. Required for claims.</span>
+                  </div>
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="grid-signal" value="average">
+                  <div class="radio-custom-box">
+                    <strong>Average (Electricity Maps)</strong>
+                    <span>Not recommended for displacement. Context only.</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="claim-rebound">Rebound / Jevons Paradox Check</label>
+              <textarea id="claim-rebound" placeholder="Does your solution lower prices in a way that will increase overall consumption volume? Describe rebound mitigation efforts..."></textarea>
+            </div>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-claim">Cancel</button>
+          <button type="submit" class="btn btn-success" id="btn-save-claim">Publish & Gate Claim</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+  
+  <!-- 2. EVIDENCE UPLOAD MODAL -->
+  <dialog id="dialog-evidence" closedby="any" aria-labelledby="evidenceModalTitle">
+    <div class="modal-wrapper">
+      <div class="modal-header">
+        <h2 id="evidenceModalTitle">Attach Diligence Evidence</h2>
+        <button class="btn-close-modal" id="btn-close-evidence-modal" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      
+      <form id="form-evidence">
+        <input type="hidden" id="evidence-ref-id" value="">
+        <input type="hidden" id="evidence-ref-type" value=""> <!-- 'goal' or 'claim' -->
+        
+        <div class="modal-body">
+          <p class="evidence-intro">Supporting evidence is verified by climate advisors/investors and unlocks your next gamified maturity levels.</p>
+          
+          <div class="form-group">
+            <label for="evidence-type">Evidence Type <span class="required">*</span></label>
+            <select id="evidence-type" required>
+              <option value="link">Public Web Link (Git repo, billing dashboard, WattTime API logs)</option>
+              <option value="doc">Document PDF/XLSX (LCA report, utility bill file)</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="evidence-ref">File Upload or Link URL <span class="required">*</span></label>
+            <input type="text" id="evidence-ref" required placeholder="https://... or path/to/document.pdf">
+          </div>
+          
+          <div class="form-group">
+            <label for="evidence-note">Verification Note / Context</label>
+            <textarea id="evidence-note" placeholder="Provide context about what this file or URL proves (e.g. AWS Customer Carbon Footprint screenshot showing Q1 2026 usage)..."></textarea>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-evidence">Cancel</button>
+          <button type="submit" class="btn btn-primary">Attach Evidence (+10 pts)</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Script entry -->
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
