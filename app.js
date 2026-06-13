@@ -439,7 +439,7 @@ class ClimateDashboardApp {
 
     this.state.assessment = {
       name: document.getElementById("fn-name").value.trim(),
-      url: document.getElementById("fn-url").value.trim(),
+      url: this.normalizeWebsiteInput(document.getElementById("fn-url").value),
       stage: document.getElementById("fn-stage").value,
       businessModel: document.getElementById("fn-model").value,
       teamSize: parseInt(document.getElementById("fn-team").value) || 0,
@@ -454,6 +454,14 @@ class ClimateDashboardApp {
     };
 
     this.goFunnelStage("report");
+  }
+
+  normalizeWebsiteInput(value) {
+    const trimmed = String(value || "").trim();
+    if (!trimmed) return "";
+    if (/^[a-z][a-z0-9+.-]*:\/\//i.test(trimmed)) return trimmed;
+    if (/^[^\s@]+\.[^\s@]+(?:\/.*)?$/i.test(trimmed)) return `https://${trimmed}`;
+    return trimmed;
   }
 
   // Build a modeled footprint snapshot from activity defaults.
