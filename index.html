@@ -72,6 +72,74 @@
           </div>
         </div>
       </div>
+
+      <!-- Customer stories -->
+      <div class="landing-stories">
+        <div class="stories-head">
+          <span class="funnel-kicker">Who uses Social Lab</span>
+          <h2>Two startups, two very different climate stories</h2>
+          <p class="subtitle">Your footprint hides where you least expect it. Here's what our assessment surfaces for founders like you.</p>
+        </div>
+
+        <div class="stories-grid">
+
+          <!-- Story 1: RAG SaaS -->
+          <article class="story-card card glass-card">
+            <div class="story-card-head">
+              <div class="story-icon story-icon-saas">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              </div>
+              <div>
+                <h3>Verba AI</h3>
+                <span class="story-tag">RAG SaaS · Seed</span>
+              </div>
+            </div>
+            <p class="story-business"><strong>The business:</strong> A B2B assistant that answers employees' questions over a company's internal docs using retrieval-augmented generation. Revenue is per-seat plus usage; the product runs continuous GPU inference and a vector database in the cloud.</p>
+
+            <div class="story-row">
+              <span class="story-row-label footprint-text">Where their impact lands</span>
+              <p>Almost everything is <strong>Scope 2 &amp; 3 cloud compute</strong> — GPU inference electricity plus the embodied carbon of data-center hardware. A 12-person team can carry the compute footprint of a mid-size factory, and it grows with every query.</p>
+            </div>
+            <div class="story-row">
+              <span class="story-row-label">What's forcing their hand</span>
+              <p>The <strong>EU AI Act</strong> (GPAI energy &amp; resource-use disclosure, live Aug 2025) and customer pressure from <strong>CSRD</strong> and <strong>California SB 253</strong>: enterprise buyers must report Scope 3, so they demand per-workload emissions from Verba before signing.</p>
+            </div>
+            <div class="story-row">
+              <span class="story-row-label warning-text">The unexpected ripple</span>
+              <p><strong>Jevons rebound.</strong> When Verba ships a cheaper, faster model tier, customers 10× their query volume — total inference emissions <em>rise</em> even as per-query efficiency improves. It typically shows up <strong>2–4 quarters after a price cut</strong>, and spikes again the week a big customer rolls out company-wide.</p>
+            </div>
+          </article>
+
+          <!-- Story 2: Pet service -->
+          <article class="story-card card glass-card">
+            <div class="story-card-head">
+              <div class="story-icon story-icon-pet">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="4" r="2"></circle><circle cx="18" cy="8" r="2"></circle><circle cx="4" cy="8" r="2"></circle><circle cx="6.5" cy="14" r="2"></circle><circle cx="15.5" cy="14" r="2"></circle><path d="M8 18a4 4 0 0 1 8 0c0 2-2 3-4 3s-4-1-4-3z"></path></svg>
+              </div>
+              <div>
+                <h3>Trottr</h3>
+                <span class="story-tag">Pet services · Series A</span>
+              </div>
+            </div>
+            <p class="story-business"><strong>The business:</strong> A marketplace for fresh, refrigerated pet-food delivery and on-demand dog walking. Subscription meals are made from real meat, shipped cold to the door, with a gig network of walkers.</p>
+
+            <div class="story-row">
+              <span class="story-row-label footprint-text">Where their impact lands</span>
+              <p>Footprint is dominated by <strong>Scope 3 livestock ingredients</strong> (beef &amp; chicken), <strong>cold-chain delivery</strong>, and packaging waste — not the dog-walking app everyone thinks of. Refrigerant leakage from delivery vans is a hidden <strong>Scope 1</strong> source.</p>
+            </div>
+            <div class="story-row">
+              <span class="story-row-label">What's forcing their hand</span>
+              <p>The <strong>EU Deforestation Regulation (EUDR)</strong> — in force for large operators since 30 Dec 2025 — requires beef and soy to be traced as deforestation-free. Add <strong>PPWR</strong> packaging rules and the <strong>F-Gas Regulation</strong> HFC phase-down on refrigerated transport.</p>
+            </div>
+            <div class="story-row">
+              <span class="story-row-label warning-text">The unexpected ripple</span>
+              <p><strong>A supply-chain cliff.</strong> EUDR just hit — their meat supply chain is suddenly non-compliant, forcing origin traceability within months. Then in <strong>2027</strong>, tightening F-gas quotas surface van-refrigerant leaks as the single largest line item they never measured.</p>
+            </div>
+          </article>
+
+        </div>
+        <p class="stories-foot">Illustrative composites of the founders we work with. Your assessment finds the version of this story hiding in <em>your</em> numbers.</p>
+      </div>
     </section>
 
     <!-- 4. ENGAGE — Assessment onboarding (upload + questions) -->
@@ -80,7 +148,7 @@
         <div class="funnel-screen-head">
           <span class="funnel-kicker">Free Impact Assessment</span>
           <h2>Tell us about your startup</h2>
-          <p class="subtitle">Two minutes of input. We'll turn it into a structured impact snapshot instantly.</p>
+          <p class="subtitle">About two minutes. We turn it into an instant snapshot of your carbon footprint, your biggest hotspots, and where to act first.</p>
         </div>
 
         <form id="fn-assess-form" class="card glass-card funnel-form">
@@ -127,31 +195,32 @@
 
           <!-- Section 2: uploads -->
           <div class="funnel-section">
-            <h3 class="funnel-section-title">2 · Upload documents <span class="optional-tag">optional, speeds things up</span></h3>
+            <h3 class="funnel-section-title">2 · Add your documents <span class="optional-tag">optional — but makes your estimate far more accurate</span></h3>
+            <p class="step-desc">We read these to detect your sector and spending patterns, then pre-fill your numbers. You can correct everything afterward.</p>
             <div class="upload-grid">
               <label class="upload-drop" id="fn-drop-deck">
                 <input type="file" id="fn-file-deck" accept=".pdf,.ppt,.pptx,.key" hidden>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                 <strong>Pitch deck</strong>
-                <span class="upload-hint" id="fn-deck-name">PDF or PPTX</span>
+                <span class="upload-hint" id="fn-deck-name">Tells us what you build · PDF, PPTX</span>
               </label>
               <label class="upload-drop" id="fn-drop-acct">
                 <input type="file" id="fn-file-acct" accept=".pdf,.csv,.xls,.xlsx" hidden>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 17V7m4 10V11m4 6V9"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-                <strong>Accounting / expense report</strong>
-                <span class="upload-hint" id="fn-acct-name">CSV, XLSX or PDF</span>
+                <strong>Recent accounts</strong>
+                <span class="upload-hint" id="fn-acct-name">P&amp;L or spend export · CSV, XLSX, PDF</span>
               </label>
             </div>
             <div class="upload-privacy">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              <span>Processed in your browser for this assessment. Files are not uploaded to a server in this preview.</span>
+              <span>Your files stay in your browser for this assessment — nothing is uploaded to a server in this preview.</span>
             </div>
           </div>
 
           <!-- Section 3: activities -->
           <div class="funnel-section">
-            <h3 class="funnel-section-title">3 · What drives your impact?</h3>
-            <p class="step-desc">We've pre-selected typical activities for your model — adjust as needed.</p>
+            <h3 class="funnel-section-title">3 · Confirm what your company does</h3>
+            <p class="step-desc">We've ticked the activities most startups like yours have. Add the ones that apply and uncheck the rest — this decides which emissions we estimate.</p>
             <div class="fn-activity-grid">
               <div class="fn-activity-col">
                 <span class="fn-activity-col-title footprint-text">Emits (−) Footprint</span>
@@ -227,6 +296,15 @@
             ⚠️ This is a <strong>modeled estimate</strong> from industry defaults and your inputs — a starting point, not certified accounting. Refine it with real data inside the dashboard.
           </p>
 
+          <details class="report-methodology">
+            <summary>How is this calculated?</summary>
+            <div class="methodology-body">
+              <p>Each activity you selected maps to a typical annual emission factor (tCO2e/yr) drawn from climate-tech startup benchmarks, scaled to your stage and model. We sum these into your footprint and propagate each factor's uncertainty in quadrature (root-sum-of-squares) to produce the ± range.</p>
+              <ul id="fn-methodology-list"></ul>
+              <p class="methodology-foot">Inside the dashboard you replace any modeled factor with metered or metered-equivalent data, which shrinks the uncertainty and raises your verified-data coverage.</p>
+            </div>
+          </details>
+
           <!-- Actions: share + enter dashboard -->
           <div class="report-actions">
             <button class="btn btn-secondary btn-share-li" id="fn-share-linkedin">
@@ -298,6 +376,12 @@
             <a href="#share" class="nav-link" id="nav-share" data-view="share">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
               <span>5. Diligence Share</span>
+            </a>
+          </li>
+          <li>
+            <a href="#extend" class="nav-link" id="nav-extend" data-view="extend">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              <span>6. Team &amp; Next Steps</span>
             </a>
           </li>
           <li>
@@ -881,7 +965,66 @@
           </div>
         </div>
       </section>
-      
+
+      <!-- 6. TEAM & NEXT STEPS VIEW (Storyboard steps 7-8: Exit -> Extend) -->
+      <section id="view-extend" class="app-view">
+        <div class="view-header">
+          <h1>Team &amp; Next Steps</h1>
+          <p class="subtitle">Bring in your team to fill the gaps, then turn your assessment into action.</p>
+        </div>
+
+        <div class="extend-layout">
+          <!-- STEP 7: Share & invite contributors -->
+          <div class="card glass-card">
+            <div class="section-header-row">
+              <h3>Your impact team</h3>
+              <span class="data-coverage-badge" id="extend-coverage">Data coverage: --%</span>
+            </div>
+            <p class="desc">Invite teammates to verify metrics, own goals, and complete missing information.</p>
+
+            <div class="team-members-list" id="extend-members-list">
+              <!-- Populated via JS -->
+            </div>
+
+            <form id="form-invite-member" class="invite-form">
+              <div class="invite-row">
+                <input type="email" id="invite-email" required placeholder="teammate@company.com">
+                <select id="invite-role" required>
+                  <option value="Contributor">Contributor</option>
+                  <option value="Data Owner">Data Owner</option>
+                  <option value="Advisor / Investor">Advisor / Investor</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Send invite</button>
+              </div>
+              <p class="invite-hint">Invitees receive an email link to the dashboard. (Preview: invite is recorded locally, no email sent.)</p>
+            </form>
+
+            <div class="share-link-box">
+              <span class="share-link-label">Or share a read-only dashboard link</span>
+              <div class="share-link-row">
+                <input type="text" id="extend-share-link" readonly>
+                <button class="btn btn-secondary" id="btn-copy-dashboard-link" type="button">Copy</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 8: Extend — consulting & initiatives -->
+          <div class="card glass-card extend-cta-card">
+            <span class="funnel-kicker">Ready to go deeper?</span>
+            <h3>Turn your snapshot into real reductions</h3>
+            <p class="desc">Your modeled assessment shows where to act. These guided tracks help you close the gap with verified data and expert support.</p>
+
+            <div class="extend-options" id="extend-options">
+              <!-- Populated via JS -->
+            </div>
+
+            <div class="extend-readiness" id="extend-readiness">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
     </main>
   </div>
 

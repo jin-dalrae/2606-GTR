@@ -32,7 +32,9 @@ const DEFAULT_STATE = {
   evidenceLogs: [],
   // Pre-login funnel: "landing" -> "onboard" -> "report" -> "done"
   funnelStage: "landing",
-  assessment: null
+  assessment: null,
+  // Step 7: pending teammate invitations
+  invites: []
 };
 
 // Activity Database Definitions
@@ -282,7 +284,7 @@ class ClimateDashboardApp {
         footprintTotal += db.defaultVal;
         const uncAbs = db.defaultVal * (db.defaultUnc / 100);
         uncSumSq += Math.pow(uncAbs, 2);
-        footprintItems.push({ name: db.name, value: db.defaultVal });
+        footprintItems.push({ name: db.name, value: db.defaultVal, unc: db.defaultUnc, scope: db.scope });
       }
     });
 
@@ -297,6 +299,7 @@ class ClimateDashboardApp {
       footprintTotal,
       uncertaintyAbs: Math.sqrt(uncSumSq),
       hotspots: hotspots.map(h => ({ ...h, pct: Math.round((h.value / maxVal) * 100) })),
+      breakdown: footprintItems.sort((a, b) => b.value - a.value),
       handprintPotential
     };
   }
@@ -339,6 +342,18 @@ class ClimateDashboardApp {
       `;
       hotspotsEl.appendChild(row);
     });
+
+    // Methodology breakdown (transparency: "how is this number calculated?")
+    const methodList = document.getElementById("fn-methodology-list");
+    if (methodList) {
+      methodList.innerHTML = "";
+      (s.breakdown || []).forEach(item => {
+        const li = document.createElement("li");
+        const scopeLabel = item.scope === "avoided" ? "" : `Scope ${item.scope} · `;
+        li.innerHTML = `<span>${item.name}</span> <span class="methodology-factor">${scopeLabel}${item.value.toFixed(1)} tCO2e/yr ±${item.unc}%</span>`;
+        methodList.appendChild(li);
+      });
+    }
 
     // Reveal after a short, believable delay
     const loadingText = document.getElementById("fn-loading-text");
@@ -682,6 +697,24 @@ class ClimateDashboardApp {
     });
     document.getElementById("btn-toggle-external").addEventListener("click", () => {
       this.toggleAudienceView(true);
+    });
+
+    // 7b. Team & Extend view
+    document.getElementById("form-invite-member").addEventListener("submit", (e) => {
+      e.preventDefault();
+      this.inviteMember();
+    });
+    document.getElementById("btn-copy-dashboard-link").addEventListener("click", () => {
+      const input = document.getElementById("extend-share-link");
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(input.value).then(
+          () => this.showToast("Dashboard link copied"),
+          () => this.showToast(input.value)
+        );
+      } else {
+        input.select();
+        this.showToast("Dashboard link ready to copy");
+      }
     });
 
     // 8. Glossary Modal Controls
@@ -1155,6 +1188,8 @@ class ClimateDashboardApp {
       this.renderGameView();
     } else if (view === "share") {
       this.renderShareView();
+    } else if (view === "extend") {
+      this.renderExtendView();
     }
   }
 
@@ -1641,6 +1676,136 @@ class ClimateDashboardApp {
         tableBody.appendChild(tr);
       });
     }
+  }
+
+  // ==========================================================================
+  // TEAM & NEXT STEPS (storyboard steps 7-8)
+  // ==========================================================================
+
+  // A simple "verified data coverage" score: how much of the impact data is
+  // backed by real measurement / evidence rather than modeled defaults.
+  calculateDataCoverage() {
+    const metrics = this.state.metrics;
+    const claims = this.state.claims;
+    const totalSignals = metrics.length + claims.length;
+    if (totalSignals === 0) return 0;
+    const metered = metrics.filter(m => m.source_type === "metered").length;
+    const evidenced = claims.filter(c => c.evidence && c.evidence.length > 0).length;
+    return Math.round(((metered + evidenced) / totalSignals) * 100);
+  }
+
+  inviteMember() {
+    const email = document.getElementById("invite-email").value.trim();
+    const role = document.getElementById("invite-role").value;
+    if (!email) return;
+
+    const name = email.split("@")[0].replace(/[._-]/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+    const member = {
+      id: `m-${Date.now()}`,
+      name: name,
+      role: role,
+      email: email,
+      pending: true
+    };
+    this.state.members.push(member);
+    this.state.invites.push({ email, role, sentAt: new Date().toISOString() });
+
+    this.saveState();
+    document.getElementById("invite-email").value = "";
+    this.showToast(`Invite sent to ${email}`);
+    this.renderExtendView();
+  }
+
+  renderExtendView() {
+    const coverage = this.calculateDataCoverage();
+
+    // Coverage badge
+    const covBadge = document.getElementById("extend-coverage");
+    covBadge.innerText = `Data coverage: ${coverage}%`;
+    covBadge.style.color = coverage >= 60 ? "var(--accent-handprint)" : coverage >= 30 ? "var(--warning-amber)" : "var(--accent-footprint)";
+
+    // Members list
+    const membersEl = document.getElementById("extend-members-list");
+    membersEl.innerHTML = "";
+    this.state.members.forEach(m => {
+      const ownedGoals = this.state.goals.filter(g => g.owner_id === m.id).length;
+      const row = document.createElement("div");
+      row.className = "team-member-row";
+      row.innerHTML = `
+        <div class="team-avatar">${m.name.charAt(0).toUpperCase()}</div>
+        <div class="team-member-info">
+          <div class="team-member-name">${m.name} ${m.pending ? '<span class="pending-tag">Invite pending</span>' : ''}</div>
+          <div class="team-member-role">${m.role}${ownedGoals ? ` · owns ${ownedGoals} goal${ownedGoals > 1 ? "s" : ""}` : ""}</div>
+        </div>
+      `;
+      membersEl.appendChild(row);
+    });
+
+    // Read-only share link
+    document.getElementById("extend-share-link").value = `${window.location.href.split("#")[0]}#share`;
+
+    // STEP 8: Extend tracks — the explicit free -> paid transition
+    const optionsEl = document.getElementById("extend-options");
+    const tracks = [
+      {
+        name: "Self-Serve",
+        price: "Free",
+        tag: "current",
+        desc: "Keep mapping activities, set goals, and invite your team — at no cost.",
+        cta: "You're here",
+        active: false
+      },
+      {
+        name: "Verified Data Pack",
+        price: "From $490",
+        tag: "paid",
+        desc: "We connect your cloud, utility, and accounting sources to replace modeled estimates with metered data and lift your coverage above 80%.",
+        cta: "Talk to us",
+        active: true
+      },
+      {
+        name: "Expert Consulting",
+        price: "Custom",
+        tag: "paid",
+        desc: "A climate advisor validates your handprint claims, builds a reduction roadmap, and prepares investor-grade disclosures.",
+        cta: "Book a call",
+        active: true
+      }
+    ];
+    optionsEl.innerHTML = "";
+    tracks.forEach(t => {
+      const card = document.createElement("div");
+      card.className = `extend-option ${t.tag === "paid" ? "extend-option-paid" : ""}`;
+      card.innerHTML = `
+        <div class="extend-option-head">
+          <span class="extend-option-name">${t.name}</span>
+          <span class="extend-option-price">${t.price}</span>
+        </div>
+        <p class="extend-option-desc">${t.desc}</p>
+        <button class="btn ${t.active ? "btn-primary" : "btn-secondary"} w-full" ${t.active ? "" : "disabled"} data-track="${t.name}">${t.cta}</button>
+      `;
+      if (t.active) {
+        card.querySelector("button").addEventListener("click", () => {
+          this.showToast(`Thanks! We'll reach out about ${t.name}.`);
+        });
+      }
+      optionsEl.appendChild(card);
+    });
+
+    // Readiness nudge based on coverage
+    const readinessEl = document.getElementById("extend-readiness");
+    let msg;
+    if (coverage >= 60) {
+      msg = `Your data is <strong>${coverage}%</strong> verified — strong enough for investor diligence. Consulting can help you act on it.`;
+    } else if (coverage >= 30) {
+      msg = `You're at <strong>${coverage}%</strong> verified data. A Verified Data Pack would close the gap toward investor-ready confidence.`;
+    } else {
+      msg = `Most of your figures are still <strong>modeled estimates</strong> (${coverage}% verified). Connecting real data is the fastest way to build trust in these numbers.`;
+    }
+    readinessEl.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+      <span>${msg}</span>
+    `;
   }
 
   toggleAudienceView(isExternal) {
