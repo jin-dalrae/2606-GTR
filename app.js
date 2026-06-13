@@ -727,7 +727,7 @@ class ClimateDashboardApp {
         title: title,
         regulation: risk.regulation || "",
         timing: risk.timing || "",
-        severity: ["high", "medium", "low"].includes(risk.severity) ? risk.severity : "medium",
+        severity: ["high", "medium", "low"].includes((risk.severity || "").toLowerCase()) ? risk.severity.toLowerCase() : "medium",
         action: risk.action || "",
         owner_id: "rae",
         status: "Watching"

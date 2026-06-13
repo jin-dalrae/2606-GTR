@@ -25,19 +25,14 @@
   // R2: document byte storage (deck, accounts, evidence).
   "r2_buckets": [
     { "binding": "DOCS", "bucket_name": "gtr" }
-  ]
+  ],
 
-  // --- Secrets Store (AI features) -----------------------------------------
-  // Add the AI provider key to the store, then bind it here:
-  //   npx wrangler secrets-store secret create 1c0123c07e2b422490e2a73a670a5d25 \
-  //     --name AI_API_KEY --scopes workers
-  // Then uncomment:
-  //
-  // ,"secrets_store_secrets": [
-  //   {
-  //     "binding": "AI_API_KEY",
-  //     "store_id": "1c0123c07e2b422490e2a73a670a5d25",
-  //     "secret_name": "AI_API_KEY"
-  //   }
-  // ]
+  // Secrets Store: Gemini API key for AI report + Risk Radar generation.
+  "secrets_store_secrets": [
+    {
+      "binding": "AI_API_KEY",
+      "store_id": "1c0123c07e2b422490e2a73a670a5d25",
+      "secret_name": "AI_API_KEY"
+    }
+  ]
 }
