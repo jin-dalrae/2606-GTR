@@ -144,7 +144,6 @@ class ClimateDashboardApp {
     this.user = null;                 // signed-in email, or null (offline draft)
     this.authMode = "signup";         // "signup" | "login"
     this._authOnSuccess = null;       // callback after successful auth
-    this._pendingDocs = [];           // File objects to upload after sign-up
     this._statePushTimer = null;      // debounce handle for PUT /api/state
 
     // Bind DOM events
@@ -365,6 +364,13 @@ class ClimateDashboardApp {
     document.getElementById("fn-cta-start").addEventListener("click", () => this.goFunnelStage("onboard"));
     document.getElementById("fn-back-landing").addEventListener("click", () => this.goFunnelStage("landing"));
 
+    // Pricing CTAs (both start the assessment; Pro is free for now)
+    document.getElementById("fn-price-free").addEventListener("click", () => this.goFunnelStage("onboard"));
+    document.getElementById("fn-price-pro").addEventListener("click", () => {
+      this.showToast("Pro is free for a limited time — let's start your assessment.");
+      this.goFunnelStage("onboard");
+    });
+
     // File upload visual feedback (files are not parsed in this preview)
     const bindUpload = (inputId, dropId, nameId) => {
       const input = document.getElementById(inputId);
@@ -429,11 +435,7 @@ class ClimateDashboardApp {
 
     const deckFile = document.getElementById("fn-file-deck").files[0];
     const acctFile = document.getElementById("fn-file-acct").files[0];
-
-    // Hold the File objects to upload to R2 after the user creates an account.
-    this._pendingDocs = [];
-    if (deckFile) this._pendingDocs.push({ file: deckFile, kind: "deck" });
-    if (acctFile) this._pendingDocs.push({ file: acctFile, kind: "accounting" });
+    const notes = document.getElementById("fn-notes").value.trim();
 
     this.state.assessment = {
       name: document.getElementById("fn-name").value.trim(),
@@ -442,6 +444,7 @@ class ClimateDashboardApp {
       businessModel: document.getElementById("fn-model").value,
       teamSize: parseInt(document.getElementById("fn-team").value) || 0,
       activities: uniqueActivities,
+      notes: notes,
       docs: {
         deck: deckFile ? deckFile.name : null,
         accounting: acctFile ? acctFile.name : null
@@ -583,11 +586,11 @@ class ClimateDashboardApp {
     this.afterReportAuth();
   }
 
-  // After the user has an account: persist the assessment, upload docs, run AI.
+  // After the user has an account: persist the assessment, run AI.
+  // Source files (deck/accounts) are never uploaded — they stay in the browser.
   async afterReportAuth() {
     this.finalizeCompanyFromAssessment();
     await this.pushState();
-    this.uploadPendingDocs();
     await this.generateAIReport();
   }
 
@@ -698,7 +701,7 @@ class ClimateDashboardApp {
     `;
   }
 
-  // Fill the dashboard with AI-suggested goals (deduped against existing).
+  // Fill the dashboard with AI-suggested goals and Risk Radar items.
   applyAIReportToState(r) {
     (r.goalPriorities || []).slice(0, 3).forEach((title, i) => {
       const t = (title || "").trim();
@@ -713,6 +716,24 @@ class ClimateDashboardApp {
         evidence: []
       });
     });
+
+    // Seed the Risk Radar with trackable, dated risks
+    if (!Array.isArray(this.state.risks)) this.state.risks = [];
+    (r.risks || []).forEach((risk, i) => {
+      const title = (risk.title || "").trim();
+      if (!title || this.state.risks.some(x => x.title.toLowerCase() === title.toLowerCase())) return;
+      this.state.risks.push({
+        id: `risk-${Date.now()}-${i}`,
+        title: title,
+        regulation: risk.regulation || "",
+        timing: risk.timing || "",
+        severity: ["high", "medium", "low"].includes(risk.severity) ? risk.severity : "medium",
+        action: risk.action || "",
+        owner_id: "rae",
+        status: "Watching"
+      });
+    });
+
     this.updateMaturityLevel();
   }
 
@@ -722,16 +743,6 @@ class ClimateDashboardApp {
     this.applyShell();
     this.saveState();
     window.location.hash = "#ledger";
-  }
-
-  // Upload documents captured during onboarding to R2 (after sign-up).
-  async uploadPendingDocs() {
-    if (!this.user || !this._pendingDocs.length) return;
-    const docs = this._pendingDocs;
-    this._pendingDocs = [];
-    for (const d of docs) {
-      await this.uploadDocument(d.file, d.kind, true);
-    }
   }
 
   async uploadDocument(file, kind, silent) {
@@ -766,14 +777,14 @@ class ClimateDashboardApp {
       return;
     }
     uploadLabel.classList.remove("is-disabled");
-    hintEl.innerText = "Stored securely against your account.";
+    hintEl.innerText = "Kept for diligence until you delete them.";
 
     try {
       const res = await fetch("/api/documents", { credentials: "same-origin" });
       if (!res.ok) return;
       const { documents } = await res.json();
       if (!documents.length) {
-        listEl.innerHTML = `<p class="invite-hint" style="margin:0;">No documents yet.</p>`;
+        listEl.innerHTML = `<p class="invite-hint" style="margin:0;">No evidence files yet.</p>`;
         return;
       }
       listEl.innerHTML = "";
@@ -785,10 +796,26 @@ class ClimateDashboardApp {
           <span class="doc-kind">${d.kind || "doc"}</span>
           <a class="doc-name" href="/api/documents/${d.id}" target="_blank" rel="noopener">${this.escapeHtml(d.name)}</a>
           <span class="doc-size">${kb}</span>
+          <button class="doc-delete" title="Delete" aria-label="Delete document">&times;</button>
         `;
+        row.querySelector(".doc-delete").addEventListener("click", () => this.deleteDocument(d.id, d.name));
         listEl.appendChild(row);
       });
     } catch (e) { /* ignore */ }
+  }
+
+  async deleteDocument(id, name) {
+    try {
+      const res = await fetch(`/api/documents/${id}`, { method: "DELETE", credentials: "same-origin" });
+      if (res.ok) {
+        this.showToast(`Deleted ${name}`);
+        this.renderDocuments();
+      } else {
+        this.showToast("Couldn't delete file.");
+      }
+    } catch (e) {
+      this.showToast("Couldn't delete file.");
+    }
   }
 
   escapeHtml(str) {
@@ -1521,6 +1548,8 @@ class ClimateDashboardApp {
       this.renderShareView();
     } else if (view === "extend") {
       this.renderExtendView();
+    } else if (view === "radar") {
+      this.renderRadarView();
     }
   }
 
@@ -2140,6 +2169,69 @@ class ClimateDashboardApp {
 
     // Uploaded documents (R2-backed when signed in)
     this.renderDocuments();
+  }
+
+  // ==========================================================================
+  // RISK RADAR
+  // ==========================================================================
+  renderRadarView() {
+    const grid = document.getElementById("radar-grid");
+    const risks = this.state.risks || [];
+
+    if (risks.length === 0) {
+      grid.innerHTML = `
+        <div class="radar-empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+          <h3>Your radar is still warming up</h3>
+          <p>Risks appear here once your AI briefing runs — it spots the regulations and ripple effects heading for a company like yours, with dates and actions. ${this.user ? "Re-run your assessment to populate it." : "Sign in and open your assessment to populate it."}</p>
+        </div>
+      `;
+      return;
+    }
+
+    const sevRank = { high: 0, medium: 1, low: 2 };
+    const sorted = [...risks].sort((a, b) => (sevRank[a.severity] ?? 1) - (sevRank[b.severity] ?? 1));
+
+    grid.innerHTML = "";
+    sorted.forEach(risk => {
+      const ownerOpts = this.state.members.map(m =>
+        `<option value="${m.id}" ${m.id === risk.owner_id ? "selected" : ""}>${this.escapeHtml(m.name)}</option>`
+      ).join("");
+      const statusOpts = ["Watching", "Acting", "Mitigated"].map(s =>
+        `<option value="${s}" ${s === risk.status ? "selected" : ""}>${s}</option>`
+      ).join("");
+
+      const card = document.createElement("div");
+      card.className = `radar-card sev-${risk.severity}`;
+      card.innerHTML = `
+        <div class="radar-card-top">
+          <span class="radar-sev sev-${risk.severity}">${risk.severity}</span>
+          <span class="radar-timing">${this.escapeHtml(risk.timing || "TBD")}</span>
+        </div>
+        <h3 class="radar-title">${this.escapeHtml(risk.title)}</h3>
+        <p class="radar-reg">${this.escapeHtml(risk.regulation)}</p>
+        ${risk.action ? `<p class="radar-action"><strong>Do this:</strong> ${this.escapeHtml(risk.action)}</p>` : ""}
+        <div class="radar-controls">
+          <label>Owner <select class="radar-owner">${ownerOpts}</select></label>
+          <label>Status <select class="radar-status">${statusOpts}</select></label>
+        </div>
+        <button class="btn btn-secondary w-full radar-help">Get expert help &rarr;</button>
+      `;
+      card.querySelector(".radar-owner").addEventListener("change", (e) => this.updateRisk(risk.id, "owner_id", e.target.value));
+      card.querySelector(".radar-status").addEventListener("change", (e) => this.updateRisk(risk.id, "status", e.target.value));
+      card.querySelector(".radar-help").addEventListener("click", () => {
+        this.showToast("We'll connect you with a specialist on this.");
+        window.location.hash = "#extend";
+      });
+      grid.appendChild(card);
+    });
+  }
+
+  updateRisk(id, field, value) {
+    const risk = (this.state.risks || []).find(r => r.id === id);
+    if (!risk) return;
+    risk[field] = value;
+    this.saveState();
   }
 
   toggleAudienceView(isExternal) {

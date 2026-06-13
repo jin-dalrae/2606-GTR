@@ -10,7 +10,7 @@ const PBKDF2_ITERATIONS = 100000;
 
 // Gemini config — kept tight to control API spend.
 const GEMINI_MODEL = "gemini-3.1-flash-lite-preview";
-const GEMINI_MAX_OUTPUT_TOKENS = 600;
+const GEMINI_MAX_OUTPUT_TOKENS = 800;
 
 export default {
   async fetch(request, env) {
@@ -49,6 +49,7 @@ async function handleApi(request, env, url) {
   if (path === "/api/documents" && method === "POST") return uploadDocument(request, env);
   const docMatch = path.match(/^\/api\/documents\/([A-Za-z0-9_-]+)$/);
   if (docMatch && method === "GET") return getDocument(request, env, docMatch[1]);
+  if (docMatch && method === "DELETE") return deleteDocument(request, env, docMatch[1]);
 
   return json({ error: "Not found" }, 404);
 }
@@ -157,11 +158,14 @@ async function generateReport(request, env) {
     `Company: ${a.name || "Unknown"}\n` +
     `Stage: ${a.stage || "Unknown"} | Business model: ${a.businessModel || "Unknown"} | Team: ${a.teamSize || "?"} FTEs\n` +
     `Activities: ${activities || "n/a"}\n` +
+    `In their own words: ${a.notes ? a.notes.slice(0, 800) : "n/a"}\n` +
     `Modeled annual footprint: ${snapshot.footprintTotal != null ? snapshot.footprintTotal.toFixed(1) : "?"} tCO2e/yr\n` +
     `Top hotspots: ${hotspots || "n/a"}\n` +
     `Uploaded documents: ${[a.docs && a.docs.deck, a.docs && a.docs.accounting].filter(Boolean).join(", ") || "none"}\n\n` +
     `Write a short founder-facing impact briefing. Name a real, named regulation that is forcing ` +
-    `companies like this to act, and one unexpected second-order effect to watch. Keep every field tight.`;
+    `companies like this to act, and one unexpected second-order effect to watch. Then list 2 to 4 ` +
+    `dated risks for a "risk radar" — each with the regulation or trend behind it, when it bites, a ` +
+    `severity, and a concrete action. Keep every field tight and specific.`;
 
   const schema = {
     type: "object",
@@ -178,9 +182,24 @@ async function generateReport(request, env) {
       regulation: { type: "string", description: "One sentence: the law/regulation forcing action" },
       unexpected: { type: "string", description: "One sentence: an unexpected second-order effect + rough timing" },
       firstAction: { type: "string", description: "One sentence: the recommended first move" },
-      goalPriorities: { type: "array", items: { type: "string" }, description: "Up to 3 short goal titles" }
+      goalPriorities: { type: "array", items: { type: "string" }, description: "Up to 3 short goal titles" },
+      risks: {
+        type: "array",
+        description: "2 to 4 dated regulatory or second-order risks for the Risk Radar",
+        items: {
+          type: "object",
+          properties: {
+            title: { type: "string", description: "Short risk name" },
+            regulation: { type: "string", description: "The law, standard, or trend behind it" },
+            timing: { type: "string", description: "When it bites, e.g. 'Dec 2025' or '2027'" },
+            severity: { type: "string", enum: ["high", "medium", "low"] },
+            action: { type: "string", description: "One short sentence: what to do about it" }
+          },
+          required: ["title", "regulation", "timing", "severity", "action"]
+        }
+      }
     },
-    required: ["headline", "issues", "regulation", "firstAction", "goalPriorities"]
+    required: ["headline", "issues", "regulation", "firstAction", "goalPriorities", "risks"]
   };
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
@@ -282,6 +301,19 @@ async function getDocument(request, env, docId) {
       "Content-Disposition": `inline; filename="${row.name}"`
     }
   });
+}
+
+async function deleteDocument(request, env, docId) {
+  const session = await requireSession(request, env);
+  if (session instanceof Response) return session;
+
+  const row = await env.DB.prepare("SELECT r2_key FROM documents WHERE id = ? AND user_id = ?")
+    .bind(docId, session.user_id).first();
+  if (!row) return json({ error: "Not found" }, 404);
+
+  if (env.DOCS) await env.DOCS.delete(row.r2_key);
+  await env.DB.prepare("DELETE FROM documents WHERE id = ? AND user_id = ?").bind(docId, session.user_id).run();
+  return json({ ok: true });
 }
 
 // ---------------------------------------------------------------------------
