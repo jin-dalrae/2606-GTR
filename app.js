@@ -29,7 +29,10 @@ const DEFAULT_STATE = {
   },
   maturityLevel: 0,
   evidencePoints: 0,
-  evidenceLogs: []
+  evidenceLogs: [],
+  // Pre-login funnel: "landing" -> "onboard" -> "report" -> "done"
+  funnelStage: "landing",
+  assessment: null
 };
 
 // Activity Database Definitions
@@ -137,11 +140,325 @@ class ClimateDashboardApp {
     
     // Bind DOM events
     this.initDOM();
+    this.initFunnelDOM();
     this.initRouter();
     this.initWattTimeSimulator();
-    
+
+    // Decide whether to show the pre-login funnel or the dashboard shell.
+    // New / mid-funnel visitors see the funnel; returning initialized users skip it.
+    this.showFunnel = !this.state.company.isInitialized && this.state.funnelStage !== "done";
+    this.applyShell();
+    if (this.showFunnel) this.renderFunnel();
+
     // Render initial state
     this.render();
+  }
+
+  // ==========================================================================
+  // PRE-LOGIN FUNNEL (storyboard steps 3-5)
+  // ==========================================================================
+
+  // Toggle between the marketing funnel and the dashboard application shell.
+  applyShell() {
+    const funnel = document.getElementById("funnel");
+    const appContainer = document.querySelector(".app-container");
+    if (this.showFunnel) {
+      funnel.classList.remove("hidden");
+      appContainer.classList.add("hidden");
+    } else {
+      funnel.classList.add("hidden");
+      appContainer.classList.remove("hidden");
+    }
+  }
+
+  initFunnelDOM() {
+    // Skip-to-dashboard link (returning user with an invite)
+    document.getElementById("fn-login-link").addEventListener("click", (e) => {
+      e.preventDefault();
+      if (this.state.company.isInitialized) {
+        this.enterDashboard();
+      } else {
+        this.showToast("Complete the free assessment to unlock your dashboard.");
+        this.goFunnelStage("onboard");
+      }
+    });
+
+    // Landing -> Onboard
+    document.getElementById("fn-cta-start").addEventListener("click", () => this.goFunnelStage("onboard"));
+    document.getElementById("fn-back-landing").addEventListener("click", () => this.goFunnelStage("landing"));
+
+    // File upload visual feedback (files are not parsed in this preview)
+    const bindUpload = (inputId, dropId, nameId) => {
+      const input = document.getElementById(inputId);
+      input.addEventListener("change", () => {
+        const file = input.files && input.files[0];
+        const drop = document.getElementById(dropId);
+        const nameEl = document.getElementById(nameId);
+        if (file) {
+          drop.classList.add("has-file");
+          nameEl.innerText = file.name;
+        } else {
+          drop.classList.remove("has-file");
+        }
+      });
+    };
+    bindUpload("fn-file-deck", "fn-drop-deck", "fn-deck-name");
+    bindUpload("fn-file-acct", "fn-drop-acct", "fn-acct-name");
+
+    // Generate assessment
+    document.getElementById("fn-assess-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      this.runAssessment();
+    });
+
+    // Report actions
+    document.getElementById("fn-share-linkedin").addEventListener("click", () => this.shareToLinkedIn());
+    document.getElementById("fn-copy-link").addEventListener("click", () => this.copyShareLink());
+    document.getElementById("fn-enter-dashboard").addEventListener("click", () => this.enterDashboard());
+  }
+
+  goFunnelStage(stage) {
+    this.state.funnelStage = stage;
+    localStorage.setItem("climate_dashboard_state", JSON.stringify(this.state));
+    this.renderFunnel();
+  }
+
+  renderFunnel() {
+    const stage = this.state.funnelStage === "done" ? "landing" : this.state.funnelStage;
+    document.querySelectorAll(".funnel-screen").forEach(screen => {
+      screen.classList.toggle("active", screen.id === `fn-${stage}`);
+    });
+    if (stage === "report") {
+      if (this.state.assessment) {
+        this.renderReport();
+      } else {
+        // No assessment data (e.g. stale state) -> send back to onboarding
+        this.goFunnelStage("onboard");
+      }
+    }
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  // Collect onboarding inputs, model a snapshot, advance to the report.
+  runAssessment() {
+    const activities = [];
+    document.querySelectorAll("#fn-onboard .fn-activity-grid input[type='checkbox']").forEach(cb => {
+      if (cb.checked) activities.push(cb.value);
+    });
+    // Footprint always includes baseline grid + direct emissions
+    activities.push("scope2-grid", "scope1-direct");
+    const uniqueActivities = [...new Set(activities)];
+
+    const deckFile = document.getElementById("fn-file-deck").files[0];
+    const acctFile = document.getElementById("fn-file-acct").files[0];
+
+    this.state.assessment = {
+      name: document.getElementById("fn-name").value.trim(),
+      url: document.getElementById("fn-url").value.trim(),
+      stage: document.getElementById("fn-stage").value,
+      businessModel: document.getElementById("fn-model").value,
+      teamSize: parseInt(document.getElementById("fn-team").value) || 0,
+      activities: uniqueActivities,
+      docs: {
+        deck: deckFile ? deckFile.name : null,
+        accounting: acctFile ? acctFile.name : null
+      },
+      snapshot: this.computeSnapshot(uniqueActivities),
+      createdAt: new Date().toISOString()
+    };
+
+    this.goFunnelStage("report");
+  }
+
+  // Build a modeled footprint snapshot from activity defaults.
+  computeSnapshot(activities) {
+    const footprintItems = [];
+    let footprintTotal = 0;
+    let uncSumSq = 0;
+
+    activities.forEach(key => {
+      const db = ACTIVITIES_DB[key];
+      if (db && db.scope !== "avoided") {
+        footprintTotal += db.defaultVal;
+        const uncAbs = db.defaultVal * (db.defaultUnc / 100);
+        uncSumSq += Math.pow(uncAbs, 2);
+        footprintItems.push({ name: db.name, value: db.defaultVal });
+      }
+    });
+
+    const hotspots = footprintItems.sort((a, b) => b.value - a.value).slice(0, 3);
+    const maxVal = hotspots.length ? hotspots[0].value : 1;
+
+    // Handprint potential: rough scaled signal of selected avoided activities
+    const avoidedCount = activities.filter(k => ACTIVITIES_DB[k] && ACTIVITIES_DB[k].scope === "avoided").length;
+    const handprintPotential = avoidedCount * Math.max(footprintTotal * 0.6, 10);
+
+    return {
+      footprintTotal,
+      uncertaintyAbs: Math.sqrt(uncSumSq),
+      hotspots: hotspots.map(h => ({ ...h, pct: Math.round((h.value / maxVal) * 100) })),
+      handprintPotential
+    };
+  }
+
+  renderReport() {
+    const a = this.state.assessment;
+    const s = a.snapshot;
+
+    // Brief "analyzing" shimmer, then reveal — sells the instant-analysis moment
+    const loading = document.getElementById("fn-report-loading");
+    const body = document.getElementById("fn-report-body");
+    loading.classList.remove("hidden");
+    body.classList.add("hidden");
+
+    document.getElementById("fn-report-company").innerText = a.name || "Your startup";
+    const docNote = a.docs.deck || a.docs.accounting ? " · refined with your documents" : "";
+    document.getElementById("fn-report-meta").innerText =
+      `${a.stage || "Stage"} · ${a.businessModel || "Model"} · Modeled estimate${docNote}`;
+
+    document.getElementById("fn-report-footprint").innerHTML =
+      `${s.footprintTotal.toFixed(1)} <small>tCO2e/yr</small>`;
+    document.getElementById("fn-report-unc").innerText =
+      `±${s.uncertaintyAbs.toFixed(1)} tCO2e modeled uncertainty`;
+    document.getElementById("fn-report-handprint").innerText =
+      `${s.handprintPotential > 0 ? "~" + s.handprintPotential.toFixed(0) : "0"} tCO2e/yr`;
+    document.getElementById("fn-report-maturity").innerText = "Level 1 · Mapped";
+
+    const hotspotsEl = document.getElementById("fn-report-hotspots");
+    hotspotsEl.innerHTML = "";
+    s.hotspots.forEach((h, i) => {
+      const row = document.createElement("div");
+      row.className = "hotspot-row";
+      row.innerHTML = `
+        <div class="hotspot-rank">${i + 1}</div>
+        <div class="hotspot-info">
+          <div class="hotspot-name">${h.name}</div>
+          <div class="hotspot-bar-bg"><div class="hotspot-bar-fill" style="width: ${h.pct}%;"></div></div>
+        </div>
+        <div class="hotspot-val">${h.value.toFixed(1)} tCO2e/yr</div>
+      `;
+      hotspotsEl.appendChild(row);
+    });
+
+    // Reveal after a short, believable delay
+    const loadingText = document.getElementById("fn-loading-text");
+    const steps = ["Reading your inputs…", "Mapping activities to GHG scopes…", "Modeling your footprint…"];
+    let step = 0;
+    loadingText.innerText = steps[0];
+    const ticker = setInterval(() => {
+      step++;
+      if (step < steps.length) loadingText.innerText = steps[step];
+    }, 420);
+
+    setTimeout(() => {
+      clearInterval(ticker);
+      loading.classList.add("hidden");
+      body.classList.remove("hidden");
+    }, 1400);
+  }
+
+  shareToLinkedIn() {
+    const a = this.state.assessment;
+    const shareUrl = window.location.href.split("#")[0];
+    const text = a
+      ? `${a.name || "We"} just modeled our climate impact with Social Lab: ~${a.snapshot.footprintTotal.toFixed(1)} tCO2e/yr footprint mapped. #climatetech #impact`
+      : "Check out Social Lab impact assessment";
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}&summary=${encodeURIComponent(text)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+    this.showToast("Opening LinkedIn share…");
+  }
+
+  copyShareLink() {
+    const shareUrl = window.location.href.split("#")[0];
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(shareUrl).then(
+        () => this.showToast("Report link copied to clipboard"),
+        () => this.showToast("Couldn't copy — " + shareUrl)
+      );
+    } else {
+      this.showToast(shareUrl);
+    }
+  }
+
+  // Finalize the assessment into the real company record and reveal the dashboard.
+  enterDashboard() {
+    const a = this.state.assessment;
+
+    if (a && !this.state.company.isInitialized) {
+      // Materiality: footprint activities ordered by modeled magnitude (desc)
+      const materiality = [...a.activities]
+        .filter(k => ACTIVITIES_DB[k] && ACTIVITIES_DB[k].scope !== "avoided")
+        .sort((x, y) => ACTIVITIES_DB[y].defaultVal - ACTIVITIES_DB[x].defaultVal);
+
+      this.state.company = {
+        name: a.name,
+        url: a.url,
+        stage: a.stage,
+        businessModel: a.businessModel,
+        teamSize: a.teamSize,
+        activities: a.activities,
+        materiality: materiality,
+        isInitialized: true,
+        scalingReference: `Climate Brick Reference: ${a.stage === "Pre-seed" || a.stage === "Seed" ? "Brick #1 - Seed Scaling" : "Brick #2 - Series A Acceleration"}`
+      };
+
+      // Seed metrics from selected footprint activities
+      this.state.metrics = [];
+      a.activities.forEach(actKey => {
+        const db = ACTIVITIES_DB[actKey];
+        if (db && db.scope !== "avoided") {
+          this.state.metrics.push({
+            id: db.id,
+            name: db.name,
+            scope: db.scope,
+            value: db.defaultVal,
+            unit: db.unit,
+            cadence: "annual",
+            source_type: db.type,
+            measured_at: new Date().toISOString(),
+            uncertainty: db.defaultUnc
+          });
+        }
+      });
+
+      // Seed recommended goals
+      this.state.goals = [];
+      a.activities.forEach(actKey => {
+        const template = GOAL_TEMPLATES[actKey];
+        if (template) {
+          this.state.goals.push({
+            id: `goal-${actKey}`,
+            title: template.title,
+            owner_id: "rae",
+            status: "Not Started",
+            deadline: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+            level: "company-wide",
+            evidence: []
+          });
+        }
+      });
+
+      this.state.streak.count = 1;
+      this.state.streak.lastUpdate = new Date().toISOString();
+      this.updateMaturityLevel();
+    }
+
+    this.state.funnelStage = "done";
+    this.showFunnel = false;
+    this.applyShell();
+    this.saveState();
+
+    // Drop the user into the ledger view of the dashboard
+    window.location.hash = "#ledger";
+  }
+
+  showToast(message) {
+    const toast = document.getElementById("fn-toast");
+    if (!toast) return;
+    toast.innerText = message;
+    toast.classList.add("show");
+    clearTimeout(this._toastTimer);
+    this._toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
   }
 
   // State Persistence

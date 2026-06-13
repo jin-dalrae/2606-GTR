@@ -14,6 +14,236 @@
   <link rel="stylesheet" href="/index.css">
 </head>
 <body>
+
+  <!-- ======================================================================
+       PRE-LOGIN FUNNEL (Storyboard steps 3-5: Enter -> Engage -> Engage)
+       Landing  ->  Free Assessment Onboarding  ->  Instant Shareable Report
+       ====================================================================== -->
+  <div id="funnel" class="funnel-root">
+
+    <!-- Shared lightweight top bar -->
+    <header class="funnel-topbar">
+      <div class="logo-container">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+        <span class="logo-text">Social Lab</span>
+      </div>
+      <a href="#" class="funnel-login-link" id="fn-login-link">Have an invite? Open dashboard &rarr;</a>
+    </header>
+
+    <!-- 3. ENTER — Landing -->
+    <section class="funnel-screen active" id="fn-landing">
+      <div class="landing-hero">
+        <div class="landing-eyebrow">
+          <span class="live-dot animate-pulse"></span>
+          Trusted by VC-backed climate founders
+        </div>
+        <h1 class="landing-title">Know your startup's<br><span class="grad-handprint">real climate impact</span> in 15 minutes.</h1>
+        <p class="landing-sub">Upload your pitch deck and recent accounts. Get an instant, investor-grade snapshot of your footprint and avoided-emissions potential — no spreadsheets, no consultants, no jargon.</p>
+        <div class="landing-cta-row">
+          <button class="btn btn-primary btn-lg" id="fn-cta-start">Get your free assessment</button>
+          <span class="landing-cta-note">Free · No credit card · ~3 minutes</span>
+        </div>
+
+        <div class="landing-steps">
+          <div class="landing-step">
+            <div class="landing-step-num">1</div>
+            <div>
+              <strong>Upload &amp; answer</strong>
+              <span>Drop in your deck and accounting export, answer a few questions.</span>
+            </div>
+          </div>
+          <div class="landing-step-arrow">&rarr;</div>
+          <div class="landing-step">
+            <div class="landing-step-num">2</div>
+            <div>
+              <strong>Get your snapshot</strong>
+              <span>An instant, shareable impact report you can post or send.</span>
+            </div>
+          </div>
+          <div class="landing-step-arrow">&rarr;</div>
+          <div class="landing-step">
+            <div class="landing-step-num">3</div>
+            <div>
+              <strong>Open the dashboard</strong>
+              <span>Dive into goals, timelines, and impact projections with your team.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. ENGAGE — Assessment onboarding (upload + questions) -->
+    <section class="funnel-screen" id="fn-onboard">
+      <div class="funnel-narrow">
+        <div class="funnel-screen-head">
+          <span class="funnel-kicker">Free Impact Assessment</span>
+          <h2>Tell us about your startup</h2>
+          <p class="subtitle">Two minutes of input. We'll turn it into a structured impact snapshot instantly.</p>
+        </div>
+
+        <form id="fn-assess-form" class="card glass-card funnel-form">
+
+          <!-- Section 1: profile -->
+          <div class="funnel-section">
+            <h3 class="funnel-section-title">1 · About your company</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="fn-name">Company Name <span class="required">*</span></label>
+                <input type="text" id="fn-name" required placeholder="e.g. Climatico">
+              </div>
+              <div class="form-group">
+                <label for="fn-url">Website URL</label>
+                <input type="url" id="fn-url" placeholder="https://example.com">
+              </div>
+              <div class="form-group">
+                <label for="fn-stage">Funding Stage <span class="required">*</span></label>
+                <select id="fn-stage" required>
+                  <option value="" disabled selected>Select stage...</option>
+                  <option value="Pre-seed">Pre-seed</option>
+                  <option value="Seed">Seed</option>
+                  <option value="Series A">Series A</option>
+                  <option value="Series B+">Series B+</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="fn-model">Business Model <span class="required">*</span></label>
+                <select id="fn-model" required>
+                  <option value="" disabled selected>Select model...</option>
+                  <option value="SaaS">SaaS / Cloud Software</option>
+                  <option value="Hardware">Hardware / Climate Tech Device</option>
+                  <option value="Marketplace">Marketplace / Platform</option>
+                  <option value="Deep Tech">Deep Tech / Lab Scale R&D</option>
+                  <option value="Logistics">Logistics / Supply Chain solutions</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="fn-team">Team Size (FTEs)</label>
+                <input type="number" id="fn-team" min="1" placeholder="e.g. 15">
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: uploads -->
+          <div class="funnel-section">
+            <h3 class="funnel-section-title">2 · Upload documents <span class="optional-tag">optional, speeds things up</span></h3>
+            <div class="upload-grid">
+              <label class="upload-drop" id="fn-drop-deck">
+                <input type="file" id="fn-file-deck" accept=".pdf,.ppt,.pptx,.key" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <strong>Pitch deck</strong>
+                <span class="upload-hint" id="fn-deck-name">PDF or PPTX</span>
+              </label>
+              <label class="upload-drop" id="fn-drop-acct">
+                <input type="file" id="fn-file-acct" accept=".pdf,.csv,.xls,.xlsx" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 17V7m4 10V11m4 6V9"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                <strong>Accounting / expense report</strong>
+                <span class="upload-hint" id="fn-acct-name">CSV, XLSX or PDF</span>
+              </label>
+            </div>
+            <div class="upload-privacy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span>Processed in your browser for this assessment. Files are not uploaded to a server in this preview.</span>
+            </div>
+          </div>
+
+          <!-- Section 3: activities -->
+          <div class="funnel-section">
+            <h3 class="funnel-section-title">3 · What drives your impact?</h3>
+            <p class="step-desc">We've pre-selected typical activities for your model — adjust as needed.</p>
+            <div class="fn-activity-grid">
+              <div class="fn-activity-col">
+                <span class="fn-activity-col-title footprint-text">Emits (−) Footprint</span>
+                <label class="fn-chip"><input type="checkbox" value="compute" checked><span>Cloud &amp; AI Compute</span></label>
+                <label class="fn-chip"><input type="checkbox" value="hardware"><span>Hardware &amp; Electronics</span></label>
+                <label class="fn-chip"><input type="checkbox" value="travel" checked><span>FTE Travel &amp; Commutes</span></label>
+                <label class="fn-chip"><input type="checkbox" value="vendors"><span>Key Vendors &amp; SaaS</span></label>
+                <label class="fn-chip"><input type="checkbox" value="logistics"><span>Logistics &amp; Distribution</span></label>
+              </div>
+              <div class="fn-activity-col">
+                <span class="fn-activity-col-title handprint-text">Avoids (+) Handprint</span>
+                <label class="fn-chip"><input type="checkbox" value="avoided-grid" checked><span>Grid Decarbonization</span></label>
+                <label class="fn-chip"><input type="checkbox" value="avoided-transport"><span>Transport Avoidance</span></label>
+                <label class="fn-chip"><input type="checkbox" value="avoided-material"><span>Low-Carbon Materials</span></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="funnel-form-actions">
+            <button type="button" class="btn btn-secondary" id="fn-back-landing">&larr; Back</button>
+            <button type="submit" class="btn btn-primary btn-lg" id="fn-generate">Generate my assessment &rarr;</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- 5. ENGAGE — Instant shareable report -->
+    <section class="funnel-screen" id="fn-report">
+      <div class="funnel-narrow">
+
+        <!-- Loading shimmer (brief, sells the "instant analysis" moment) -->
+        <div class="report-loading" id="fn-report-loading">
+          <div class="report-spinner"></div>
+          <h3 id="fn-loading-text">Analyzing your inputs…</h3>
+          <p class="subtitle">Mapping activities to GHG scopes and modeling your footprint.</p>
+        </div>
+
+        <!-- Actual report -->
+        <div class="report-body hidden" id="fn-report-body">
+          <div class="funnel-screen-head report-head">
+            <span class="funnel-kicker">Your instant impact snapshot</span>
+            <h2 id="fn-report-company">Climatico</h2>
+            <p class="subtitle" id="fn-report-meta">Seed · SaaS · Modeled estimate</p>
+          </div>
+
+          <!-- Headline footprint -->
+          <div class="card glass-card report-headline">
+            <div class="report-headline-main">
+              <span class="report-headline-label">Estimated annual footprint</span>
+              <div class="report-headline-value" id="fn-report-footprint">— <small>tCO2e/yr</small></div>
+              <span class="report-headline-unc" id="fn-report-unc">±— tCO2e modeled uncertainty</span>
+            </div>
+            <div class="report-headline-side">
+              <div class="report-side-stat">
+                <span class="report-side-label">Handprint potential (+)</span>
+                <span class="report-side-val handprint-text" id="fn-report-handprint">— tCO2e/yr</span>
+              </div>
+              <div class="report-side-stat">
+                <span class="report-side-label">Impact maturity</span>
+                <span class="report-side-val" id="fn-report-maturity">Level 1 · Mapped</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hotspots -->
+          <div class="card glass-card report-hotspots">
+            <h3>Top emission hotspots we found</h3>
+            <p class="step-desc">Where your modeled footprint concentrates — your highest-leverage places to act.</p>
+            <div id="fn-report-hotspots" class="hotspot-list"></div>
+          </div>
+
+          <p class="report-disclosure">
+            ⚠️ This is a <strong>modeled estimate</strong> from industry defaults and your inputs — a starting point, not certified accounting. Refine it with real data inside the dashboard.
+          </p>
+
+          <!-- Actions: share + enter dashboard -->
+          <div class="report-actions">
+            <button class="btn btn-secondary btn-share-li" id="fn-share-linkedin">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+              Share on LinkedIn
+            </button>
+            <button class="btn btn-secondary" id="fn-copy-link">Copy link</button>
+            <button class="btn btn-primary btn-lg" id="fn-enter-dashboard">Open full dashboard &rarr;</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Toast for share / copy feedback -->
+  <div class="fn-toast" id="fn-toast" role="status" aria-live="polite"></div>
+
   <div class="app-container">
     
     <!-- Sidebar Navigation -->
