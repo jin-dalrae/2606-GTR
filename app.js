@@ -499,7 +499,7 @@ class ClimateDashboardApp {
     body.classList.add("hidden");
 
     document.getElementById("fn-report-company").innerText = a.name || "Your startup";
-    const docNote = a.docs.deck || a.docs.accounting ? " · refined with your documents" : "";
+    const docNote = a.docs.deck || a.docs.accounting ? " · documents noted" : "";
     document.getElementById("fn-report-meta").innerText =
       `${a.stage || "Stage"} · ${a.businessModel || "Model"} · Modeled estimate${docNote}`;
 
@@ -694,6 +694,7 @@ class ClimateDashboardApp {
     `).join("");
     bodyEl.innerHTML = `
       <div class="ai-headline">${this.escapeHtml(r.headline || "")}</div>
+      ${r.basis ? `<div class="ai-line"><b>Basis:</b> ${this.escapeHtml(r.basis)}</div>` : ""}
       ${issues}
       ${r.regulation ? `<div class="ai-line"><b>Forcing function:</b> ${this.escapeHtml(r.regulation)}</div>` : ""}
       ${r.unexpected ? `<div class="ai-line"><b>Watch for:</b> ${this.escapeHtml(r.unexpected)}</div>` : ""}

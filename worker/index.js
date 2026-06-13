@@ -10,7 +10,10 @@ const PBKDF2_ITERATIONS = 100000;
 
 // Gemini config — kept tight to control API spend.
 const GEMINI_MODEL = "gemini-3.1-flash-lite-preview";
-const GEMINI_MAX_OUTPUT_TOKENS = 800;
+const GEMINI_MAX_OUTPUT_TOKENS = 1100;
+const WEBSITE_FETCH_TIMEOUT_MS = 3500;
+const WEBSITE_CONTEXT_MAX_BYTES = 64 * 1024;
+const WEBSITE_CONTEXT_MAX_CHARS = 1800;
 
 export default {
   async fetch(request, env) {
@@ -148,59 +151,9 @@ async function generateReport(request, env) {
 
   const body = await readJson(request);
   const a = body.assessment || {};
-  const snapshot = a.snapshot || {};
-  const hotspots = (snapshot.hotspots || []).map(h => `${h.name} (~${h.value} tCO2e/yr)`).join(", ");
-  const activities = (a.activities || []).join(", ");
-
-  const prompt =
-    `You are a climate-impact analyst advising an early-stage startup founder. Be concrete, ` +
-    `specific to their sector, and brutally concise — no filler, no hedging.\n\n` +
-    `Company: ${a.name || "Unknown"}\n` +
-    `Stage: ${a.stage || "Unknown"} | Business model: ${a.businessModel || "Unknown"} | Team: ${a.teamSize || "?"} FTEs\n` +
-    `Activities: ${activities || "n/a"}\n` +
-    `In their own words: ${a.notes ? a.notes.slice(0, 800) : "n/a"}\n` +
-    `Modeled annual footprint: ${snapshot.footprintTotal != null ? snapshot.footprintTotal.toFixed(1) : "?"} tCO2e/yr\n` +
-    `Top hotspots: ${hotspots || "n/a"}\n` +
-    `Uploaded documents: ${[a.docs && a.docs.deck, a.docs && a.docs.accounting].filter(Boolean).join(", ") || "none"}\n\n` +
-    `Write a short founder-facing impact briefing. Name a real, named regulation that is forcing ` +
-    `companies like this to act, and one unexpected second-order effect to watch. Then list 2 to 4 ` +
-    `dated risks for a "risk radar" — each with the regulation or trend behind it, when it bites, a ` +
-    `severity, and a concrete action. Keep every field tight and specific.`;
-
-  const schema = {
-    type: "object",
-    properties: {
-      headline: { type: "string", description: "1-2 sentence key insight" },
-      issues: {
-        type: "array",
-        items: {
-          type: "object",
-          properties: { title: { type: "string" }, detail: { type: "string" } },
-          required: ["title", "detail"]
-        }
-      },
-      regulation: { type: "string", description: "One sentence: the law/regulation forcing action" },
-      unexpected: { type: "string", description: "One sentence: an unexpected second-order effect + rough timing" },
-      firstAction: { type: "string", description: "One sentence: the recommended first move" },
-      goalPriorities: { type: "array", items: { type: "string" }, description: "Up to 3 short goal titles" },
-      risks: {
-        type: "array",
-        description: "2 to 4 dated regulatory or second-order risks for the Risk Radar",
-        items: {
-          type: "object",
-          properties: {
-            title: { type: "string", description: "Short risk name" },
-            regulation: { type: "string", description: "The law, standard, or trend behind it" },
-            timing: { type: "string", description: "When it bites, e.g. 'Dec 2025' or '2027'" },
-            severity: { type: "string", enum: ["high", "medium", "low"] },
-            action: { type: "string", description: "One short sentence: what to do about it" }
-          },
-          required: ["title", "regulation", "timing", "severity", "action"]
-        }
-      }
-    },
-    required: ["headline", "issues", "regulation", "firstAction", "goalPriorities", "risks"]
-  };
+  const websiteContext = await fetchWebsiteContext(a.url);
+  const prompt = buildReportPrompt(a, { websiteContext, asOfDate: new Date().toISOString().slice(0, 10) });
+  const schema = buildReportSchema();
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
   let resp;
@@ -237,6 +190,223 @@ async function generateReport(request, env) {
   try { report = JSON.parse(text); } catch { return json({ error: "AI returned malformed output." }, 502); }
 
   return json({ report });
+}
+
+function buildReportPrompt(assessment, context = {}) {
+  const a = assessment || {};
+  const snapshot = a.snapshot || {};
+  const websiteContext = context.websiteContext || {};
+  const asOfDate = context.asOfDate || new Date().toISOString().slice(0, 10);
+  const activities = (a.activities || []).join(", ");
+  const hotspots = (snapshot.hotspots || [])
+    .map(h => `${h.name} (~${formatNumber(h.value)} tCO2e/yr)`)
+    .join(", ");
+  const breakdown = (snapshot.breakdown || [])
+    .map(h => `${h.name}: ${formatNumber(h.value)} tCO2e/yr, Scope ${h.scope}, ${h.unc}% uncertainty`)
+    .join("; ");
+  const docs = [a.docs && a.docs.deck, a.docs && a.docs.accounting].filter(Boolean).join(", ");
+
+  return [
+    "You are a climate-impact analyst advising an early-stage startup founder.",
+    "Write a concise briefing that is grounded in the specific company situation below.",
+    "",
+    `Current date: ${asOfDate}`,
+    `Company: ${cleanPromptValue(a.name) || "Unknown"}`,
+    `Website URL: ${cleanPromptValue(a.url) || "not provided"}`,
+    `Stage: ${cleanPromptValue(a.stage) || "Unknown"}`,
+    `Business model: ${cleanPromptValue(a.businessModel) || "Unknown"}`,
+    `Team: ${Number.isFinite(Number(a.teamSize)) && Number(a.teamSize) > 0 ? Number(a.teamSize) : "unknown"} FTEs`,
+    `Selected activities: ${activities || "n/a"}`,
+    `Founder notes: ${cleanPromptValue(a.notes, 1000) || "n/a"}`,
+    `Public website context: ${formatWebsiteContext(websiteContext)}`,
+    `Selected document filenames only: ${docs || "none"}`,
+    "",
+    "Modeled footprint snapshot:",
+    `- Annual footprint: ${snapshot.footprintTotal != null ? formatNumber(snapshot.footprintTotal) : "unknown"} tCO2e/yr`,
+    `- Modeled uncertainty: ${snapshot.uncertaintyAbs != null ? formatNumber(snapshot.uncertaintyAbs) : "unknown"} tCO2e/yr`,
+    `- Top hotspots: ${hotspots || "n/a"}`,
+    `- Breakdown: ${breakdown || "n/a"}`,
+    `- Handprint potential signal: ${snapshot.handprintPotential != null ? formatNumber(snapshot.handprintPotential) : "unknown"} tCO2e/yr`,
+    "",
+    "Evidence and realism rules:",
+    "- You have no browsing tools beyond the supplied public website context; do not imply you inspected pages not shown here.",
+    "- You did not read source files. Treat selected document filenames as workflow clues only, not evidence.",
+    "- Treat footprint values as modeled defaults, not measured accounting.",
+    "- Tie every issue and goal to the founder notes, website context, selected activities, stage, business model, or hotspots.",
+    "- If geography, customer segment, suppliers, or revenue thresholds are unknown, make the dependency explicit instead of inventing facts.",
+    "- Do not say CSRD, SEC, California SB 253/SB 261, CBAM, EUDR, or zero-emission-zone rules apply directly unless the supplied context supports that. Prefer conditional language such as 'if selling into EU enterprise customers' or 'if operating urban delivery fleets'.",
+    "- Name only real regulations, standards, or market trends, and include why the trigger is plausible for this company.",
+    "- If the situation is too thin, say the first action is to verify the missing operational data, not to claim precision.",
+    "",
+    "Return a founder-facing JSON report. Include a basis field naming the real context used and any key missing assumption. Keep every field tight, practical, and specific. The Risk Radar must contain 2 to 4 dated risks with concrete actions."
+  ].join("\n");
+}
+
+function buildReportSchema() {
+  return {
+    type: "object",
+    properties: {
+      headline: { type: "string", description: "1-2 sentence key insight grounded in the supplied company context" },
+      basis: { type: "string", description: "One sentence naming facts used from notes, website context, selected activities, or hotspots; include the key assumption if context is thin" },
+      issues: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: { title: { type: "string" }, detail: { type: "string" } },
+          required: ["title", "detail"]
+        }
+      },
+      regulation: { type: "string", description: "One sentence: a real regulation, standard, or customer requirement and the assumption that makes it relevant" },
+      unexpected: { type: "string", description: "One sentence: an unexpected second-order effect + rough timing" },
+      firstAction: { type: "string", description: "One sentence: the recommended first move" },
+      goalPriorities: { type: "array", items: { type: "string" }, description: "Up to 3 short goal titles" },
+      risks: {
+        type: "array",
+        description: "2 to 4 dated regulatory or second-order risks for the Risk Radar",
+        items: {
+          type: "object",
+          properties: {
+            title: { type: "string", description: "Short risk name" },
+            regulation: { type: "string", description: "The law, standard, or trend behind it" },
+            timing: { type: "string", description: "When it bites, e.g. 'Dec 2025' or '2027'" },
+            severity: { type: "string", enum: ["high", "medium", "low"] },
+            action: { type: "string", description: "One short sentence: what to do about it" }
+          },
+          required: ["title", "regulation", "timing", "severity", "action"]
+        }
+      }
+    },
+    required: ["headline", "basis", "issues", "regulation", "firstAction", "goalPriorities", "risks"]
+  };
+}
+
+async function fetchWebsiteContext(rawUrl) {
+  const url = normalizePublicWebsiteUrl(rawUrl);
+  if (!url) return { status: "not_provided", text: "No company website URL was provided." };
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), WEBSITE_FETCH_TIMEOUT_MS);
+  try {
+    const resp = await fetch(url, {
+      signal: controller.signal,
+      headers: {
+        "Accept": "text/html,text/plain;q=0.8"
+      }
+    });
+
+    if (!resp.ok) return { status: "unavailable", url, text: `Website returned HTTP ${resp.status}.` };
+    const contentType = resp.headers.get("Content-Type") || "";
+    if (contentType && !/text\/html|text\/plain|application\/xhtml\+xml/i.test(contentType)) {
+      return { status: "unsupported", url, text: `Website returned unsupported content type ${contentType}.` };
+    }
+
+    const raw = await readTextCapped(resp, WEBSITE_CONTEXT_MAX_BYTES);
+    const text = extractUsefulText(raw).slice(0, WEBSITE_CONTEXT_MAX_CHARS);
+    if (!text) return { status: "empty", url, text: "Website text could not be extracted." };
+    return { status: "ok", url, text };
+  } catch (err) {
+    return { status: "unavailable", url, text: "Website context could not be fetched within the assessment timeout." };
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+function normalizePublicWebsiteUrl(rawUrl) {
+  const value = String(rawUrl || "").trim();
+  if (!value) return null;
+
+  let url;
+  try {
+    url = new URL(/^[a-z][a-z0-9+.-]*:\/\//i.test(value) ? value : `https://${value}`);
+  } catch {
+    return null;
+  }
+
+  if (!["http:", "https:"].includes(url.protocol)) return null;
+  if (url.username || url.password) return null;
+  if (isBlockedHostname(url.hostname)) return null;
+  url.hash = "";
+  return url.toString();
+}
+
+function isBlockedHostname(hostname) {
+  const host = String(hostname || "").toLowerCase();
+  if (!host || host === "localhost" || host.endsWith(".localhost") || host.endsWith(".local")) return true;
+  if (host.includes(":")) return true;
+
+  const ipv4 = host.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+  if (!ipv4) return false;
+
+  const parts = ipv4.slice(1).map(n => Number(n));
+  if (parts.some(n => !Number.isInteger(n) || n < 0 || n > 255)) return true;
+  const [a, b] = parts;
+  return (
+    a === 0 ||
+    a === 10 ||
+    a === 127 ||
+    a === 169 && b === 254 ||
+    a === 172 && b >= 16 && b <= 31 ||
+    a === 192 && b === 168
+  );
+}
+
+async function readTextCapped(resp, maxBytes) {
+  if (!resp.body) return "";
+  const reader = resp.body.getReader();
+  const decoder = new TextDecoder();
+  let bytesRead = 0;
+  let text = "";
+
+  try {
+    while (bytesRead < maxBytes) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      const remaining = maxBytes - bytesRead;
+      const chunk = value.byteLength > remaining ? value.slice(0, remaining) : value;
+      text += decoder.decode(chunk, { stream: true });
+      bytesRead += chunk.byteLength;
+      if (value.byteLength > remaining) break;
+    }
+  } finally {
+    try { await reader.cancel(); } catch {}
+  }
+
+  return text + decoder.decode();
+}
+
+function extractUsefulText(markup) {
+  return decodeHtmlEntities(String(markup || "")
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<noscript[\s\S]*?<\/noscript>/gi, " ")
+    .replace(/<!--[\s\S]*?-->/g, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim());
+}
+
+function decodeHtmlEntities(text) {
+  return String(text || "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, "\"")
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">");
+}
+
+function formatWebsiteContext(context) {
+  if (!context || context.status === "not_provided") return "not provided";
+  return `[${context.status}${context.url ? ` from ${context.url}` : ""}] ${cleanPromptValue(context.text, WEBSITE_CONTEXT_MAX_CHARS) || "n/a"}`;
+}
+
+function cleanPromptValue(value, maxChars = 600) {
+  return String(value == null ? "" : value).replace(/\s+/g, " ").trim().slice(0, maxChars);
+}
+
+function formatNumber(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n.toFixed(1) : "?";
 }
 
 // ---------------------------------------------------------------------------
@@ -443,3 +613,10 @@ function fromB64(b64) {
   for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
   return out;
 }
+
+export {
+  buildReportPrompt,
+  buildReportSchema,
+  extractUsefulText,
+  normalizePublicWebsiteUrl
+};

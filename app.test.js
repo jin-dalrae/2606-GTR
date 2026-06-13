@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { buildReportPrompt, buildReportSchema, extractUsefulText, normalizePublicWebsiteUrl } from './worker/index.js';
 
 // Calculation helper extracted to verify mathematics logic independently
 function calculateLedgerTotals(state) {
@@ -147,4 +148,59 @@ describe('Climate Startup +/- Impact Dashboard Mathematics', () => {
     expect(calculateMaturityLevel(state)).toBe(5);
   });
 
+});
+
+describe('AI report grounding', () => {
+  it('builds a prompt that uses real context and labels missing evidence', () => {
+    const prompt = buildReportPrompt({
+      name: 'Trottr',
+      url: 'https://trottr.example',
+      stage: 'Seed',
+      businessModel: 'Logistics',
+      teamSize: 12,
+      activities: ['logistics', 'scope2-grid', 'scope1-direct'],
+      notes: 'We replace diesel vans with e-cargo bikes for inner-city grocery drops.',
+      docs: { deck: 'deck.pdf', accounting: 'pnl.xlsx' },
+      snapshot: {
+        footprintTotal: 19.1,
+        uncertaintyAbs: 4.5,
+        hotspots: [{ name: 'Logistics & Distribution', value: 12 }],
+        breakdown: [{ name: 'Logistics & Distribution', value: 12, scope: 3, unc: 35 }],
+        handprintPotential: 11.5
+      }
+    }, {
+      asOfDate: '2026-06-13',
+      websiteContext: {
+        status: 'ok',
+        url: 'https://trottr.example/',
+        text: 'Trottr operates e-cargo-bike grocery delivery in London and Amsterdam.'
+      }
+    });
+
+    expect(prompt).toContain('Current date: 2026-06-13');
+    expect(prompt).toContain('Trottr operates e-cargo-bike grocery delivery');
+    expect(prompt).toContain('You did not read source files');
+    expect(prompt).toContain('Selected document filenames only: deck.pdf, pnl.xlsx');
+    expect(prompt).toContain('if selling into EU enterprise customers');
+  });
+
+  it('normalizes public websites and rejects local/private targets', () => {
+    expect(normalizePublicWebsiteUrl('example.com/path#team')).toBe('https://example.com/path');
+    expect(normalizePublicWebsiteUrl('https://localhost:8787')).toBeNull();
+    expect(normalizePublicWebsiteUrl('http://10.0.0.4')).toBeNull();
+    expect(normalizePublicWebsiteUrl('javascript:alert(1)')).toBeNull();
+  });
+
+  it('requires a basis field so the briefing shows what context was used', () => {
+    const schema = buildReportSchema();
+    expect(schema.required).toContain('basis');
+    expect(schema.properties.basis.description).toContain('facts used');
+  });
+
+  it('extracts usable website text without script or style content', () => {
+    const text = extractUsefulText('<title>Acme</title><style>.x{}</style><script>alert(1)</script><h1>Grid software &amp; batteries</h1>');
+    expect(text).toContain('Acme');
+    expect(text).toContain('Grid software & batteries');
+    expect(text).not.toContain('alert');
+  });
 });
