@@ -292,6 +292,15 @@
             <div id="fn-report-hotspots" class="hotspot-list"></div>
           </div>
 
+          <!-- AI briefing (populated after sign-up via Gemini) -->
+          <div class="card glass-card ai-briefing hidden" id="fn-ai-briefing">
+            <div class="ai-briefing-head">
+              <span class="ai-badge">✦ AI briefing</span>
+              <span class="ai-briefing-status" id="fn-ai-status"></span>
+            </div>
+            <div class="ai-briefing-body" id="fn-ai-body"></div>
+          </div>
+
           <p class="report-disclosure">
             ⚠️ This is a <strong>modeled estimate</strong> from industry defaults and your inputs — a starting point, not certified accounting. Refine it with real data inside the dashboard.
           </p>
@@ -414,6 +423,13 @@
             <span>Update Streak</span>
             <span class="streak-val" id="mini-streak-val">🔥 0w</span>
           </div>
+        </div>
+        <div class="account-widget" id="sidebar-account">
+          <div class="account-info">
+            <span class="account-status" id="account-status">Working offline</span>
+            <span class="account-email" id="account-email">Not signed in</span>
+          </div>
+          <button class="account-action" id="account-action" type="button">Sign in</button>
         </div>
       </div>
     </aside>
@@ -1006,6 +1022,16 @@
                 <button class="btn btn-secondary" id="btn-copy-dashboard-link" type="button">Copy</button>
               </div>
             </div>
+
+            <div class="documents-box">
+              <span class="share-link-label">Company documents</span>
+              <p class="invite-hint" id="documents-hint">Sign in to upload and store source documents.</p>
+              <div class="documents-list" id="documents-list"></div>
+              <label class="btn btn-secondary doc-upload-btn" id="doc-upload-label">
+                <input type="file" id="doc-upload-input" accept=".pdf,.csv,.xls,.xlsx,.ppt,.pptx,.png,.jpg" hidden>
+                + Upload a document
+              </label>
+            </div>
           </div>
 
           <!-- STEP 8: Extend — consulting & initiatives -->
@@ -1169,6 +1195,37 @@
           <button type="submit" class="btn btn-primary">Attach Evidence (+10 pts)</button>
         </div>
       </form>
+    </div>
+  </dialog>
+
+  <!-- 4. AUTH MODAL (sign up / log in) -->
+  <dialog id="dialog-auth" closedby="any" aria-labelledby="authModalTitle">
+    <div class="modal-wrapper">
+      <div class="modal-header">
+        <h2 id="authModalTitle">Create your account</h2>
+        <button class="btn-close-modal" id="btn-close-auth-modal" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="auth-intro" id="auth-intro">Save your assessment and unlock your live dashboard — it stays here every time you return.</p>
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="auth-tab-signup" type="button">Sign up</button>
+          <button class="auth-tab" id="auth-tab-login" type="button">Log in</button>
+        </div>
+        <form id="form-auth">
+          <div class="form-group">
+            <label for="auth-email">Work email</label>
+            <input type="email" id="auth-email" required placeholder="you@company.com" autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="auth-password">Password</label>
+            <input type="password" id="auth-password" required minlength="8" placeholder="At least 8 characters" autocomplete="current-password">
+          </div>
+          <div class="auth-error hidden" id="auth-error"></div>
+          <button type="submit" class="btn btn-primary w-full" id="btn-auth-submit">Create account &amp; continue</button>
+        </form>
+      </div>
     </div>
   </dialog>
 

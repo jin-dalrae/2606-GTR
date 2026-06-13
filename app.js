@@ -139,10 +139,18 @@ class ClimateDashboardApp {
     this.state = this.loadState();
     this.currentView = "intake";
     this.wattTimeIntensity = 432; // base simulated intensity
-    
+
+    // Backend / auth state
+    this.user = null;                 // signed-in email, or null (offline draft)
+    this.authMode = "signup";         // "signup" | "login"
+    this._authOnSuccess = null;       // callback after successful auth
+    this._pendingDocs = [];           // File objects to upload after sign-up
+    this._statePushTimer = null;      // debounce handle for PUT /api/state
+
     // Bind DOM events
     this.initDOM();
     this.initFunnelDOM();
+    this.initAuthDOM();
     this.initRouter();
     this.initWattTimeSimulator();
 
@@ -152,8 +160,181 @@ class ClimateDashboardApp {
     this.applyShell();
     if (this.showFunnel) this.renderFunnel();
 
-    // Render initial state
+    // Render initial state (offline-first), then reconcile with the backend.
     this.render();
+    this.syncSession();
+  }
+
+  // ==========================================================================
+  // BACKEND SYNC & AUTH
+  // ==========================================================================
+
+  // On load: if a valid session exists, hydrate dashboard state from the server.
+  async syncSession() {
+    try {
+      const res = await fetch("/api/me", { credentials: "same-origin" });
+      if (!res.ok) { this.renderAccountUI(); return; }
+      const { email } = await res.json();
+      this.user = email;
+      await this.loadServerState();
+      this.renderAccountUI();
+    } catch (e) {
+      // Offline / API unavailable — keep working from localStorage.
+      this.renderAccountUI();
+    }
+  }
+
+  async loadServerState() {
+    const res = await fetch("/api/state", { credentials: "same-origin" });
+    if (!res.ok) return;
+    const { state } = await res.json();
+    if (state && state.company && state.company.isInitialized) {
+      this.state = state;
+      localStorage.setItem("climate_dashboard_state", JSON.stringify(state));
+      this.state.funnelStage = "done";
+      this.showFunnel = false;
+      this.applyShell();
+      const hash = window.location.hash.replace("#", "");
+      if (!hash || hash === "intake") window.location.hash = "#ledger";
+      this.currentView = window.location.hash.replace("#", "") || "ledger";
+      this.render();
+    }
+  }
+
+  // Persist state to the server (debounced) when signed in.
+  pushStateDebounced() {
+    if (!this.user) return;
+    clearTimeout(this._statePushTimer);
+    this._statePushTimer = setTimeout(() => this.pushState(), 800);
+  }
+
+  async pushState() {
+    if (!this.user) return;
+    try {
+      await fetch("/api/state", {
+        method: "PUT",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ state: this.state })
+      });
+    } catch (e) { /* best-effort; localStorage remains source of truth offline */ }
+  }
+
+  initAuthDOM() {
+    const dialog = document.getElementById("dialog-auth");
+    document.getElementById("btn-close-auth-modal").addEventListener("click", () => dialog.close());
+
+    document.getElementById("auth-tab-signup").addEventListener("click", () => this.setAuthMode("signup"));
+    document.getElementById("auth-tab-login").addEventListener("click", () => this.setAuthMode("login"));
+
+    document.getElementById("form-auth").addEventListener("submit", (e) => {
+      e.preventDefault();
+      this.submitAuth();
+    });
+
+    // Sidebar account action (sign in / sign out)
+    document.getElementById("account-action").addEventListener("click", () => {
+      if (this.user) this.logout();
+      else this.openAuth("login", null);
+    });
+
+    // Document upload from the Team view
+    document.getElementById("doc-upload-input").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) this.uploadDocument(file, "evidence");
+      e.target.value = "";
+    });
+  }
+
+  setAuthMode(mode) {
+    this.authMode = mode;
+    const isSignup = mode === "signup";
+    document.getElementById("auth-tab-signup").classList.toggle("active", isSignup);
+    document.getElementById("auth-tab-login").classList.toggle("active", !isSignup);
+    document.getElementById("authModalTitle").innerText = isSignup ? "Create your account" : "Welcome back";
+    document.getElementById("btn-auth-submit").innerText = isSignup ? "Create account & continue" : "Log in";
+    document.getElementById("auth-password").setAttribute("autocomplete", isSignup ? "new-password" : "current-password");
+    document.getElementById("auth-error").classList.add("hidden");
+  }
+
+  openAuth(mode, onSuccess) {
+    this._authOnSuccess = onSuccess || null;
+    this.setAuthMode(mode);
+    document.getElementById("auth-error").classList.add("hidden");
+    document.getElementById("form-auth").reset();
+    document.getElementById("dialog-auth").showModal();
+  }
+
+  async submitAuth() {
+    const email = document.getElementById("auth-email").value.trim();
+    const password = document.getElementById("auth-password").value;
+    const errEl = document.getElementById("auth-error");
+    const btn = document.getElementById("btn-auth-submit");
+    const path = this.authMode === "signup" ? "/api/signup" : "/api/login";
+
+    btn.disabled = true;
+    const originalLabel = btn.innerText;
+    btn.innerText = "Working…";
+    errEl.classList.add("hidden");
+
+    try {
+      const res = await fetch(path, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        errEl.innerText = data.error || "Something went wrong. Try again.";
+        errEl.classList.remove("hidden");
+        return;
+      }
+      this.user = data.email;
+      this.renderAccountUI();
+      document.getElementById("dialog-auth").close();
+      if (this._authOnSuccess) {
+        const cb = this._authOnSuccess;
+        this._authOnSuccess = null;
+        cb();
+      }
+    } catch (e) {
+      errEl.innerText = "Network error. Please try again.";
+      errEl.classList.remove("hidden");
+    } finally {
+      btn.disabled = false;
+      btn.innerText = originalLabel;
+    }
+  }
+
+  async logout() {
+    try {
+      await fetch("/api/logout", { method: "POST", credentials: "same-origin" });
+    } catch (e) { /* ignore */ }
+    this.user = null;
+    this.renderAccountUI();
+    this.showToast("Signed out");
+  }
+
+  renderAccountUI() {
+    const widget = document.getElementById("sidebar-account");
+    const statusEl = document.getElementById("account-status");
+    const emailEl = document.getElementById("account-email");
+    const actionEl = document.getElementById("account-action");
+    if (!widget) return;
+    if (this.user) {
+      widget.classList.add("is-online");
+      statusEl.innerText = "Synced to cloud";
+      emailEl.innerText = this.user;
+      actionEl.innerText = "Sign out";
+    } else {
+      widget.classList.remove("is-online");
+      statusEl.innerText = "Working offline";
+      emailEl.innerText = "Not signed in";
+      actionEl.innerText = "Sign in";
+    }
+    // Refresh document UI state if the Team view is mounted
+    if (this.currentView === "extend") this.renderDocuments();
   }
 
   // ==========================================================================
@@ -174,15 +355,10 @@ class ClimateDashboardApp {
   }
 
   initFunnelDOM() {
-    // Skip-to-dashboard link (returning user with an invite)
+    // "Have an invite? Open dashboard" — returning users log in here.
     document.getElementById("fn-login-link").addEventListener("click", (e) => {
       e.preventDefault();
-      if (this.state.company.isInitialized) {
-        this.enterDashboard();
-      } else {
-        this.showToast("Complete the free assessment to unlock your dashboard.");
-        this.goFunnelStage("onboard");
-      }
+      this.openAuth("login", () => this.loadServerState());
     });
 
     // Landing -> Onboard
@@ -253,6 +429,11 @@ class ClimateDashboardApp {
 
     const deckFile = document.getElementById("fn-file-deck").files[0];
     const acctFile = document.getElementById("fn-file-acct").files[0];
+
+    // Hold the File objects to upload to R2 after the user creates an account.
+    this._pendingDocs = [];
+    if (deckFile) this._pendingDocs.push({ file: deckFile, kind: "deck" });
+    if (acctFile) this._pendingDocs.push({ file: acctFile, kind: "accounting" });
 
     this.state.assessment = {
       name: document.getElementById("fn-name").value.trim(),
@@ -395,76 +576,225 @@ class ClimateDashboardApp {
     }
   }
 
-  // Finalize the assessment into the real company record and reveal the dashboard.
+  // Report CTA. Gates account creation, then runs the AI briefing before entry.
   enterDashboard() {
+    if (this._readyForDashboard) { this.completeFunnelToDashboard(); return; }
+    if (!this.user) { this.openAuth("signup", () => this.afterReportAuth()); return; }
+    this.afterReportAuth();
+  }
+
+  // After the user has an account: persist the assessment, upload docs, run AI.
+  async afterReportAuth() {
+    this.finalizeCompanyFromAssessment();
+    await this.pushState();
+    this.uploadPendingDocs();
+    await this.generateAIReport();
+  }
+
+  // Build the real company record from the assessment (no navigation).
+  finalizeCompanyFromAssessment() {
     const a = this.state.assessment;
+    if (!a || this.state.company.isInitialized) return;
 
-    if (a && !this.state.company.isInitialized) {
-      // Materiality: footprint activities ordered by modeled magnitude (desc)
-      const materiality = [...a.activities]
-        .filter(k => ACTIVITIES_DB[k] && ACTIVITIES_DB[k].scope !== "avoided")
-        .sort((x, y) => ACTIVITIES_DB[y].defaultVal - ACTIVITIES_DB[x].defaultVal);
+    const materiality = [...a.activities]
+      .filter(k => ACTIVITIES_DB[k] && ACTIVITIES_DB[k].scope !== "avoided")
+      .sort((x, y) => ACTIVITIES_DB[y].defaultVal - ACTIVITIES_DB[x].defaultVal);
 
-      this.state.company = {
-        name: a.name,
-        url: a.url,
-        stage: a.stage,
-        businessModel: a.businessModel,
-        teamSize: a.teamSize,
-        activities: a.activities,
-        materiality: materiality,
-        isInitialized: true,
-        scalingReference: `Climate Brick Reference: ${a.stage === "Pre-seed" || a.stage === "Seed" ? "Brick #1 - Seed Scaling" : "Brick #2 - Series A Acceleration"}`
-      };
+    this.state.company = {
+      name: a.name,
+      url: a.url,
+      stage: a.stage,
+      businessModel: a.businessModel,
+      teamSize: a.teamSize,
+      activities: a.activities,
+      materiality: materiality,
+      isInitialized: true,
+      scalingReference: `Climate Brick Reference: ${a.stage === "Pre-seed" || a.stage === "Seed" ? "Brick #1 - Seed Scaling" : "Brick #2 - Series A Acceleration"}`
+    };
 
-      // Seed metrics from selected footprint activities
-      this.state.metrics = [];
-      a.activities.forEach(actKey => {
-        const db = ACTIVITIES_DB[actKey];
-        if (db && db.scope !== "avoided") {
-          this.state.metrics.push({
-            id: db.id,
-            name: db.name,
-            scope: db.scope,
-            value: db.defaultVal,
-            unit: db.unit,
-            cadence: "annual",
-            source_type: db.type,
-            measured_at: new Date().toISOString(),
-            uncertainty: db.defaultUnc
-          });
-        }
+    this.state.metrics = [];
+    a.activities.forEach(actKey => {
+      const db = ACTIVITIES_DB[actKey];
+      if (db && db.scope !== "avoided") {
+        this.state.metrics.push({
+          id: db.id, name: db.name, scope: db.scope, value: db.defaultVal,
+          unit: db.unit, cadence: "annual", source_type: db.type,
+          measured_at: new Date().toISOString(), uncertainty: db.defaultUnc
+        });
+      }
+    });
+
+    this.state.goals = [];
+    a.activities.forEach(actKey => {
+      const template = GOAL_TEMPLATES[actKey];
+      if (template) {
+        this.state.goals.push({
+          id: `goal-${actKey}`, title: template.title, owner_id: "rae",
+          status: "Not Started",
+          deadline: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+          level: "company-wide", evidence: []
+        });
+      }
+    });
+
+    this.state.streak.count = 1;
+    this.state.streak.lastUpdate = new Date().toISOString();
+    this.updateMaturityLevel();
+  }
+
+  // Ask Gemini (server-side) for a concise briefing; render it on the report.
+  async generateAIReport() {
+    const card = document.getElementById("fn-ai-briefing");
+    const statusEl = document.getElementById("fn-ai-status");
+    const bodyEl = document.getElementById("fn-ai-body");
+    const cta = document.getElementById("fn-enter-dashboard");
+    card.classList.remove("hidden");
+    statusEl.innerHTML = `<span class="ai-spinner-inline"></span> Generating…`;
+    bodyEl.innerHTML = "";
+
+    const finish = () => {
+      this._readyForDashboard = true;
+      cta.innerText = "Open full dashboard →";
+    };
+
+    try {
+      const res = await fetch("/api/generate-report", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ assessment: this.state.assessment })
       });
-
-      // Seed recommended goals
-      this.state.goals = [];
-      a.activities.forEach(actKey => {
-        const template = GOAL_TEMPLATES[actKey];
-        if (template) {
-          this.state.goals.push({
-            id: `goal-${actKey}`,
-            title: template.title,
-            owner_id: "rae",
-            status: "Not Started",
-            deadline: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
-            level: "company-wide",
-            evidence: []
-          });
-        }
-      });
-
-      this.state.streak.count = 1;
-      this.state.streak.lastUpdate = new Date().toISOString();
-      this.updateMaturityLevel();
+      const data = await res.json();
+      if (!res.ok) {
+        statusEl.innerText = "";
+        bodyEl.innerHTML = `<p class="ai-line">${data.error || "AI briefing unavailable right now."} Your modeled snapshot above still applies — continue to your dashboard.</p>`;
+        finish();
+        return;
+      }
+      this.state.assessment.aiReport = data.report;
+      this.applyAIReportToState(data.report);
+      this.renderAIBriefing(data.report);
+      statusEl.innerText = "Tailored to your inputs";
+      await this.pushState();
+      finish();
+    } catch (e) {
+      statusEl.innerText = "";
+      bodyEl.innerHTML = `<p class="ai-line">Couldn't reach the AI service. Continue to your dashboard — your snapshot is saved.</p>`;
+      finish();
     }
+  }
 
+  renderAIBriefing(r) {
+    const bodyEl = document.getElementById("fn-ai-body");
+    const issues = (r.issues || []).map(i => `
+      <div class="ai-issue"><strong>${this.escapeHtml(i.title)}</strong><span>${this.escapeHtml(i.detail)}</span></div>
+    `).join("");
+    bodyEl.innerHTML = `
+      <div class="ai-headline">${this.escapeHtml(r.headline || "")}</div>
+      ${issues}
+      ${r.regulation ? `<div class="ai-line"><b>Forcing function:</b> ${this.escapeHtml(r.regulation)}</div>` : ""}
+      ${r.unexpected ? `<div class="ai-line"><b>Watch for:</b> ${this.escapeHtml(r.unexpected)}</div>` : ""}
+      ${r.firstAction ? `<div class="ai-line"><b>Start here:</b> ${this.escapeHtml(r.firstAction)}</div>` : ""}
+    `;
+  }
+
+  // Fill the dashboard with AI-suggested goals (deduped against existing).
+  applyAIReportToState(r) {
+    (r.goalPriorities || []).slice(0, 3).forEach((title, i) => {
+      const t = (title || "").trim();
+      if (!t || this.state.goals.some(g => g.title.toLowerCase() === t.toLowerCase())) return;
+      this.state.goals.push({
+        id: `goal-ai-${Date.now()}-${i}`,
+        title: t,
+        owner_id: "rae",
+        status: "Not Started",
+        deadline: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+        level: "ai-recommended",
+        evidence: []
+      });
+    });
+    this.updateMaturityLevel();
+  }
+
+  completeFunnelToDashboard() {
     this.state.funnelStage = "done";
     this.showFunnel = false;
     this.applyShell();
     this.saveState();
-
-    // Drop the user into the ledger view of the dashboard
     window.location.hash = "#ledger";
+  }
+
+  // Upload documents captured during onboarding to R2 (after sign-up).
+  async uploadPendingDocs() {
+    if (!this.user || !this._pendingDocs.length) return;
+    const docs = this._pendingDocs;
+    this._pendingDocs = [];
+    for (const d of docs) {
+      await this.uploadDocument(d.file, d.kind, true);
+    }
+  }
+
+  async uploadDocument(file, kind, silent) {
+    if (!this.user) { this.showToast("Sign in to store documents."); return; }
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      form.append("kind", kind || "evidence");
+      const res = await fetch("/api/documents", { method: "POST", credentials: "same-origin", body: form });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        if (!silent) this.showToast(data.error || "Upload failed.");
+        return;
+      }
+      if (!silent) this.showToast(`Uploaded ${file.name}`);
+      if (this.currentView === "extend") this.renderDocuments();
+    } catch (e) {
+      if (!silent) this.showToast("Upload failed — check your connection.");
+    }
+  }
+
+  async renderDocuments() {
+    const listEl = document.getElementById("documents-list");
+    const hintEl = document.getElementById("documents-hint");
+    const uploadLabel = document.getElementById("doc-upload-label");
+    if (!listEl) return;
+
+    if (!this.user) {
+      listEl.innerHTML = "";
+      hintEl.innerText = "Sign in to upload and store source documents.";
+      uploadLabel.classList.add("is-disabled");
+      return;
+    }
+    uploadLabel.classList.remove("is-disabled");
+    hintEl.innerText = "Stored securely against your account.";
+
+    try {
+      const res = await fetch("/api/documents", { credentials: "same-origin" });
+      if (!res.ok) return;
+      const { documents } = await res.json();
+      if (!documents.length) {
+        listEl.innerHTML = `<p class="invite-hint" style="margin:0;">No documents yet.</p>`;
+        return;
+      }
+      listEl.innerHTML = "";
+      documents.forEach(d => {
+        const row = document.createElement("div");
+        row.className = "document-row";
+        const kb = d.size ? `${Math.max(1, Math.round(d.size / 1024))} KB` : "";
+        row.innerHTML = `
+          <span class="doc-kind">${d.kind || "doc"}</span>
+          <a class="doc-name" href="/api/documents/${d.id}" target="_blank" rel="noopener">${this.escapeHtml(d.name)}</a>
+          <span class="doc-size">${kb}</span>
+        `;
+        listEl.appendChild(row);
+      });
+    } catch (e) { /* ignore */ }
+  }
+
+  escapeHtml(str) {
+    return String(str == null ? "" : str)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
   }
 
   showToast(message) {
@@ -492,6 +822,7 @@ class ClimateDashboardApp {
   saveState() {
     localStorage.setItem("climate_dashboard_state", JSON.stringify(this.state));
     this.render();
+    this.pushStateDebounced();
   }
 
   // WattTime Grid Simulation
@@ -1806,6 +2137,9 @@ class ClimateDashboardApp {
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
       <span>${msg}</span>
     `;
+
+    // Uploaded documents (R2-backed when signed in)
+    this.renderDocuments();
   }
 
   toggleAudienceView(isExternal) {
