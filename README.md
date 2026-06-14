@@ -76,6 +76,10 @@ All API routes live under `/api/*`; everything else serves the SPA.
 | GET  | `/api/state` | Load the user's workspace JSON blob |
 | PUT  | `/api/state` | Save the user's workspace JSON blob |
 | POST | `/api/generate-report` | Generate the AI report/briefing (Gemini), grounded in the fact pack |
+| GET  | `/api/reports` | List all historical report snapshots saved for the user |
+| POST | `/api/reports` | Save a new historical report snapshot of the current state |
+| GET  | `/api/reports/:id` | Fetch the full state JSON of a specific report snapshot |
+| DELETE | `/api/reports/:id` | Delete a saved report snapshot |
 | GET/POST | `/api/documents` | List / upload document metadata (bytes in R2) |
 | GET/DELETE | `/api/documents/:id` | Fetch / delete a document |
 
@@ -83,8 +87,7 @@ All API routes live under `/api/*`; everything else serves the SPA.
 HttpOnly / Secure / SameSite=Lax session cookies.
 
 **Anonymous previews:** logged-out visitors can generate a limited *preview*
-report. A daily quota is enforced per hashed client IP
-(`anonymous_report_limits` table).
+report. A daily quota is enforced per client IP (`anonymous_report_limits` table).
 
 **Web grounding:** the report fetches the submitted public website for context
 behind SSRF guards (blocked private/local hosts, size-capped reads, timeout),
@@ -97,7 +100,8 @@ metadata.
 
 ## Product flow
 
-- **Landing → assessment → instant report** is the pre-login funnel.
+- **Landing → Dedicated Methodology → Onboarding → Instant Report** is the pre-login funnel.
+  - The methodology section is separated into its own dedicated screen in the funnel.
 - **Log in** (topbar) takes an existing account holder straight to their dashboard.
 - **"Have an invite?"** routes invited teammates to the **free assessment** — an
   invitation grants the assessment, not direct access to someone else's dashboard.
@@ -105,6 +109,8 @@ metadata.
 - The report shows: modeled footprint + hotspots, **impact beyond carbon**, a
   **peer benchmark** band, a **cost-exposure** estimate, **relevant precedents**,
   a sourced **methodology** breakdown, and an **AI briefing** with cited sources.
+- **Report History:** Users can save, delete, and open historical report snapshots of their startup's assessments directly inside the dashboard.
+
 
 ---
 
