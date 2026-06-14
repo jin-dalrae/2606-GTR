@@ -145,6 +145,7 @@ class ClimateDashboardApp {
     this.authMode = "signup";         // "signup" | "login"
     this._authOnSuccess = null;       // callback after successful auth
     this._statePushTimer = null;      // debounce handle for PUT /api/state
+    this._rootLanding = !window.location.hash;
 
     // Bind DOM events
     this.initDOM();
@@ -154,8 +155,9 @@ class ClimateDashboardApp {
     this.initWattTimeSimulator();
 
     // Decide whether to show the pre-login funnel or the dashboard shell.
-    // New / mid-funnel visitors see the funnel; returning initialized users skip it.
-    this.showFunnel = !this.state.company.isInitialized && this.state.funnelStage !== "done";
+    // A bare "/" is always the public landing. Dashboard routes use hashes.
+    if (this._rootLanding) this.state.funnelStage = "landing";
+    this.showFunnel = this._rootLanding || (!this.state.company.isInitialized && this.state.funnelStage !== "done");
     this.applyShell();
     if (this.showFunnel) this.renderFunnel();
 
@@ -175,6 +177,10 @@ class ClimateDashboardApp {
       if (!res.ok) { this.renderAccountUI(); return; }
       const { email } = await res.json();
       this.user = email;
+      if (this._rootLanding) {
+        this.renderAccountUI();
+        return;
+      }
       const loaded = await this.loadServerState();
       if (!loaded) this.showAuthenticatedDashboard("intake");
       this.renderAccountUI();
@@ -198,6 +204,7 @@ class ClimateDashboardApp {
   }
 
   showAuthenticatedDashboard(defaultView) {
+    this._rootLanding = false;
     this.state.funnelStage = "done";
     this.showFunnel = false;
     this.applyShell();
@@ -372,6 +379,13 @@ class ClimateDashboardApp {
     // "Have an invite? Open dashboard" — returning users log in here.
     document.getElementById("fn-login-link").addEventListener("click", (e) => {
       e.preventDefault();
+      if (this.user) {
+        this.loadServerState().then(loaded => {
+          if (!loaded) this.showAuthenticatedDashboard("intake");
+          this.renderAccountUI();
+        });
+        return;
+      }
       this.openAuth("login", async () => {
         const loaded = await this.loadServerState();
         if (!loaded) this.showAuthenticatedDashboard("intake");
