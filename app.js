@@ -413,7 +413,7 @@ class ClimateDashboardApp {
     document.querySelectorAll("[data-scroll-target='landing-methodology']").forEach(link => {
       link.addEventListener("click", (e) => {
         e.preventDefault();
-        this.scrollToLandingMethodology();
+        this.goFunnelStage("methodology");
       });
     });
 
@@ -444,6 +444,10 @@ class ClimateDashboardApp {
     // Landing -> Onboard
     document.getElementById("fn-cta-start").addEventListener("click", () => this.goFunnelStage("onboard"));
     document.getElementById("fn-back-landing").addEventListener("click", () => this.goFunnelStage("landing"));
+
+    // Dedicated Methodology buttons
+    document.getElementById("fn-methodology-back").addEventListener("click", () => this.goFunnelStage("landing"));
+    document.getElementById("fn-methodology-start").addEventListener("click", () => this.goFunnelStage("onboard"));
 
     // Pricing CTAs (both start the assessment; Pro is free for now)
     document.getElementById("fn-price-free").addEventListener("click", () => this.goFunnelStage("onboard"));
@@ -1683,6 +1687,24 @@ class ClimateDashboardApp {
         if (!inside) glossaryModal.close();
       });
     }
+
+    // 8. Report History Controls
+    const reportModal = document.getElementById("dialog-report-view");
+    document.getElementById("btn-close-report-view-modal").addEventListener("click", () => reportModal.close());
+    document.getElementById("btn-generate-history-report").addEventListener("click", () => this.generateAndSaveHistoryReport());
+
+    // Light dismissal support for report modal
+    if (!('closedBy' in HTMLDialogElement.prototype)) {
+      reportModal.addEventListener('click', (e) => {
+        if (e.target !== reportModal) return;
+        const rect = reportModal.getBoundingClientRect();
+        const inside = (
+          rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
+          rect.left <= e.clientX && e.clientX <= rect.left + rect.width
+        );
+        if (!inside) reportModal.close();
+      });
+    }
   }
 
   // Intake Logic
@@ -2125,6 +2147,8 @@ class ClimateDashboardApp {
       this.renderExtendView();
     } else if (view === "radar") {
       this.renderRadarView();
+    } else if (view === "history") {
+      this.renderHistoryView();
     }
   }
 
@@ -2904,6 +2928,445 @@ class ClimateDashboardApp {
           No glossary terms match "${filterText}".
         </div>
       `;
+    }
+  }
+
+  // REPORT HISTORY VIEW
+  async renderHistoryView() {
+    const listContainer = document.getElementById("history-list");
+    if (!listContainer) return;
+
+    if (!this.user) {
+      listContainer.innerHTML = `
+        <div class="history-empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <h3>Sign in required</h3>
+          <p>Please log in or create an account to save and manage report history.</p>
+        </div>
+      `;
+      return;
+    }
+
+    listContainer.innerHTML = `<div class="history-loading">Loading report history...</div>`;
+
+    try {
+      const res = await fetch("/api/reports", { credentials: "same-origin" });
+      if (!res.ok) {
+        listContainer.innerHTML = `<div class="history-loading">Failed to load reports history.</div>`;
+        return;
+      }
+      const { reports } = await res.json();
+
+      if (!reports || reports.length === 0) {
+        listContainer.innerHTML = `
+          <div class="history-empty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+            </svg>
+            <h3>No reports generated yet</h3>
+            <p>Click "Generate New Report Snapshot" above to model and save your first startup report.</p>
+          </div>
+        `;
+        return;
+      }
+
+      listContainer.innerHTML = "";
+      reports.forEach(rep => {
+        const dateStr = new Date(rep.created_at).toLocaleString();
+        const item = document.createElement("div");
+        item.className = "history-item";
+        item.innerHTML = `
+          <div class="history-item-left">
+            <span class="history-item-name">${this.escapeHtml(rep.name)}</span>
+            <span class="history-item-meta">Generated: ${dateStr}</span>
+          </div>
+          <div class="history-item-actions">
+            <button class="btn btn-secondary btn-open-report" data-id="${rep.id}">Open</button>
+            <button class="btn btn-secondary btn-delete-report" data-id="${rep.id}" style="color: #ff6b6b; border-color: rgba(255,107,107,0.2);">Delete</button>
+          </div>
+        `;
+
+        item.querySelector(".btn-open-report").addEventListener("click", () => this.openHistoricalReportModal(rep.id));
+        item.querySelector(".btn-delete-report").addEventListener("click", () => this.deleteHistoryReport(rep.id));
+        listContainer.appendChild(item);
+      });
+    } catch (e) {
+      listContainer.innerHTML = `<div class="history-loading">Error connecting to server.</div>`;
+    }
+  }
+
+  async generateAndSaveHistoryReport() {
+    const btn = document.getElementById("btn-generate-history-report");
+    const origText = btn.innerText;
+    btn.disabled = true;
+    btn.innerText = "Generating Snapshot...";
+
+    try {
+      // 1. Build assessment parameters from current state
+      const a = {
+        name: this.state.company.name,
+        url: this.state.company.url,
+        stage: this.state.company.stage,
+        businessModel: this.state.company.businessModel,
+        teamSize: this.state.company.teamSize,
+        activities: this.state.company.activities
+      };
+
+      // 2. Fetch AI report
+      const resReport = await fetch("/api/generate-report", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ assessment: a, mode: "full" })
+      });
+
+      if (!resReport.ok) {
+        throw new Error("Could not generate AI report.");
+      }
+      const dataReport = await resReport.json();
+
+      // 3. Create a transient snapshot state with the generated report
+      const snapshotState = JSON.parse(JSON.stringify(this.state));
+      snapshotState.assessment = snapshotState.assessment || {};
+      snapshotState.assessment.aiReport = dataReport.report;
+      snapshotState.assessment.inferredBusinessModel = dataReport.report.inferredBusinessModel;
+
+      // Also compute the totals for the report rendering
+      const ledgerTotals = this.calculateLedgerTotals();
+      snapshotState.assessment.snapshot = {
+        footprintTotal: ledgerTotals.footprintTotal,
+        handprintTotal: ledgerTotals.handprintTotal,
+        uncertaintyAbs: ledgerTotals.footprintUncertaintyAbs,
+        breakdown: this.state.metrics.map(m => ({ id: m.id, value: m.value }))
+      };
+
+      // 4. Save to history
+      const name = `Report - ${new Date().toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' })}`;
+      const resSave = await fetch("/api/reports", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, state: snapshotState })
+      });
+
+      if (!resSave.ok) {
+        throw new Error("Failed to save report to database.");
+      }
+
+      this.showToast("Snapshot generated and saved to history!");
+      this.renderHistoryView();
+    } catch (e) {
+      this.showToast(`Error: ${e.message}`);
+    } finally {
+      btn.disabled = false;
+      btn.innerText = origText;
+    }
+  }
+
+  // Calculate ledger totals based on state (equivalent logic to test calculation)
+  calculateLedgerTotals() {
+    let footprintTotal = 0;
+    let handprintTotal = 0;
+    let footprintUncertaintySumSq = 0;
+    
+    (this.state.metrics || []).forEach(m => {
+      footprintTotal += m.value;
+      const uncAbs = m.value * (m.uncertainty / 100);
+      footprintUncertaintySumSq += Math.pow(uncAbs, 2);
+    });
+    
+    (this.state.claims || []).forEach(c => {
+      if (c.additionality_status !== "None" && c.status === "active") {
+        handprintTotal += c.value;
+      }
+    });
+    
+    return {
+      footprintTotal,
+      handprintTotal,
+      footprintUncertaintyAbs: Math.sqrt(footprintUncertaintySumSq)
+    };
+  }
+
+  async openHistoricalReportModal(id) {
+    const modal = document.getElementById("dialog-report-view");
+    const body = document.getElementById("history-modal-body");
+    if (!modal || !body) return;
+
+    body.innerHTML = `<div class="history-loading">Retrieving report details...</div>`;
+    modal.showModal();
+
+    try {
+      const res = await fetch(`/api/reports/${id}`, { credentials: "same-origin" });
+      if (!res.ok) {
+        body.innerHTML = `<div class="history-loading">Failed to retrieve report data.</div>`;
+        return;
+      }
+      const data = await res.json();
+      const repState = data.state;
+      const a = repState.assessment || {};
+      const ai = a.aiReport || {};
+      const s = a.snapshot || { footprintTotal: 0, handprintTotal: 0, uncertaintyAbs: 0, breakdown: [] };
+
+      // Generate dimensions/benchmark/precedents for this historical snapshot
+      const bench = computeBenchmark(a.stage, a.teamSize, a.businessModel || a.inferredBusinessModel);
+      const cost = priceFootprint(s.footprintTotal);
+
+      // Render the content visually inside the modal body
+      let verdict, cls;
+      if (s.footprintTotal < bench.low) { verdict = "below the typical peer range"; cls = "bench-low"; }
+      else if (s.footprintTotal > bench.high) { verdict = "above the typical peer range"; cls = "bench-high"; }
+      else { verdict = "within the typical peer range"; cls = "bench-mid"; }
+
+      const scaleLo = Math.min(s.footprintTotal, bench.low) * 0.8;
+      const scaleHi = Math.max(s.footprintTotal, bench.high) * 1.2 || 1;
+      const pct = v => Math.max(0, Math.min(100, ((v - scaleLo) / (scaleHi - scaleLo)) * 100));
+
+      const bmLower = String(a.businessModel || a.inferredBusinessModel || "").toLowerCase();
+      const isHardware = bmLower.includes("hardware") || bmLower.includes("device") || bmLower.includes("physical");
+      const isBiotech = bmLower.includes("biotech") || bmLower.includes("medical") || bmLower.includes("lab");
+
+      let noteText = bench.perFte.note;
+      let warningBanner = "";
+      if (isHardware) {
+        noteText = "Warning: This peer range represents office-based operations only and excludes the physical product supply chain (Scope 3 manufacturing, logistics, and product use).";
+        warningBanner = `
+          <div style="margin-top: 1rem; padding: 0.85rem; border: 1px dashed var(--warning-amber); background: var(--warning-amber-glow); border-radius: 6px; font-size: 0.8rem; line-height: 1.4; color: var(--text-normal); margin-bottom: 1rem;">
+            <strong>⚠️ Benchmark Mismatch:</strong> This peer range represents office-based operations only for digital-first SMEs and excludes physical product manufacturing, logistics, and product use (which typically represent 80-90% of a hardware brand's footprint).
+          </div>
+        `;
+      }
+
+      let costDisclaimer = "Forward-looking scenario, not a current bill. Carbon is one impact dimension among several (water, waste, land, air) not yet priced here.";
+      let costStyle = "";
+      if (isHardware) {
+        costDisclaimer = "<strong>Warning for physical hardware brands:</strong> This exposure models office and facility R&D emissions only. If Scope 3 upstream manufacturing (raw materials, factory assembly, and shipping) were included, your potential carbon fee exposure would likely multiply tenfold (e.g. up to $50,000–$150,000/yr).";
+        costStyle = `style="border-top: 1px dashed var(--warning-amber); margin-top: 0.75rem; padding-top: 0.75rem; color: var(--text-normal);"`;
+      }
+
+      // Hotspots list
+      const hotspotItems = (s.breakdown || [])
+        .map(item => {
+          const db = ACTIVITIES_DB[item.id];
+          return db ? { ...db, value: item.value } : null;
+        })
+        .filter(Boolean)
+        .filter(x => x.scope !== "avoided")
+        .sort((x, y) => y.value - x.value)
+        .slice(0, 3);
+
+      const hotspotsHtml = hotspotItems.map(h => {
+        const src = FACTOR_SOURCES[h.id];
+        const cite = src ? `Modelled default · Source: ${src.source} (${src.year})` : "";
+        return `
+          <div class="hotspot-item">
+            <div class="hotspot-main" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+              <span>${this.escapeHtml(h.name)} (Scope ${h.scope})</span>
+              <strong>${h.value.toFixed(1)} tCO2e/yr</strong>
+            </div>
+            <div class="methodology-source" style="font-size: 0.75rem; color: var(--text-muted);">${this.escapeHtml(cite)}</div>
+            ${isHardware && h.id === "hardware" ? `
+              <div class="hotspot-caveat-sub">
+                This modeled default represents offices, data centers, and prototyping labs. It excludes the carbon footprint of factory assembly, raw materials sourcing, and shipping logistics.
+              </div>
+            ` : ""}
+          </div>
+        `;
+      }).join("") + (isHardware ? `
+        <div class="hotspot-item unmeasured-hotspot">
+          <div class="hotspot-main" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+            <span style="color: var(--warning-amber); font-weight: 500;">⚠️ Supply Chain &amp; Manufacturing (Unmeasured Scope 3)</span>
+            <strong style="color: var(--warning-amber);">Excluded</strong>
+          </div>
+          <div class="methodology-source" style="margin-top: 0.25rem;">
+            Your physical hardware product lifecycle, purchased raw materials, outsourced OEM assembly, and logistics are not currently modeled in this baseline estimate.
+          </div>
+        </div>
+      ` : "");
+
+      // Dimensions
+      const impact = computeImpactProfile(repState.assessment.snapshot || {}, a.activities, a.businessModel);
+      const dimensionsHtml = `
+        <h3>Impact beyond carbon</h3>
+        <p class="step-desc">Modeled operational resource profiles and qualitative local ecological footprint.</p>
+        <div class="dimensions-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 0.75rem;">
+          <div class="dim-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 0.75rem; border-radius: 6px;">
+            <span class="dim-label" style="display: block; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Electricity</span>
+            <strong style="display: block; font-size: 1.1rem; color: var(--text-normal); margin: 0.25rem 0;">${impact.energy.value ? `${Math.round(impact.energy.value).toLocaleString()} kWh/yr` : "—"}</strong>
+            <span class="dim-note" style="display: block; font-size: 0.75rem; color: var(--text-muted); line-height: 1.3;">${this.escapeHtml(impact.energy.note)}</span>
+          </div>
+          <div class="dim-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 0.75rem; border-radius: 6px;">
+            <span class="dim-label" style="display: block; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Water</span>
+            <strong style="display: block; font-size: 1.1rem; color: var(--text-normal); margin: 0.25rem 0;">${impact.water.value ? `${impact.water.value.toLocaleString()} m³/yr` : "—"}</strong>
+            <span class="dim-note" style="display: block; font-size: 0.75rem; color: var(--text-muted); line-height: 1.3;">${this.escapeHtml(impact.water.note)}</span>
+          </div>
+          <div class="dim-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 0.75rem; border-radius: 6px;">
+            <span class="dim-label" style="display: block; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Waste</span>
+            <strong style="display: block; font-size: 1.1rem; color: var(--text-normal); margin: 0.25rem 0;">${impact.waste.value ? `${impact.waste.value.toLocaleString()} kg/yr` : "—"}</strong>
+            <span class="dim-note" style="display: block; font-size: 0.75rem; color: var(--text-muted); line-height: 1.3;">${this.escapeHtml(impact.waste.note)}</span>
+          </div>
+          <div class="dim-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 0.75rem; border-radius: 6px;">
+            <span class="dim-label" style="display: block; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Land &amp; Biodiversity</span>
+            <strong class="severity-${impact.nature.level}" style="display: block; font-size: 1.1rem; margin: 0.25rem 0;">${impact.nature.level.toUpperCase()}</strong>
+            <span class="dim-note" style="display: block; font-size: 0.75rem; color: var(--text-muted); line-height: 1.3;">${this.escapeHtml(impact.nature.note)}</span>
+          </div>
+        </div>
+      `;
+
+      // Precedents
+      const acts = Array.isArray(a.activities) ? a.activities : [];
+      const hasAvoided = acts.some(k => ACTIVITIES_DB[k] && ACTIVITIES_DB[k].scope === "avoided");
+      const matchedPrecedents = CASE_PRECEDENTS.filter(c => {
+        if (c.id === "greenwash" && hasAvoided) return true;
+        if (c.id === "rebound" && acts.includes("compute")) return true;
+        if (c.id === "csrd" && (a.stage === "Series A" || a.stage === "Growth")) return true;
+        if (c.id === "ca-climate" && (a.stage === "Series B+" || a.stage === "Growth")) return true;
+        if (c.id === "rohs-weee" && isHardware) return true;
+        if (c.id === "eudr" && bmLower.includes("food")) return true;
+        if (c.id === "biotech-waste" && isBiotech) return true;
+        return false;
+      });
+      const precedentsHtml = `
+        <h3>Relevant legal &amp; market precedents</h3>
+        <p class="step-desc">Dated, citable regulatory updates and market guidelines matching your startup profile.</p>
+        <div class="precedent-cards" style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.75rem;">
+          ${matchedPrecedents.map(c => `
+            <div class="precedent-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 0.75rem; border-radius: 6px;">
+              <div class="prec-head" style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.25rem;">
+                <strong>${this.escapeHtml(c.title)}</strong>
+                <span style="color: var(--text-muted);">${this.escapeHtml(c.status)} (${c.year})</span>
+              </div>
+              <p class="prec-desc" style="font-size: 0.8rem; line-height: 1.4; margin-bottom: 0.5rem;">${this.escapeHtml(c.summary)}</p>
+              <div class="methodology-source" style="font-size: 0.75rem; color: var(--text-muted);">Relevance: ${this.escapeHtml(c.relevance)} · <a href="${this.escapeHtml(c.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(c.source)}</a></div>
+            </div>
+          `).join("")}
+        </div>
+      `;
+
+      // AI Briefing
+      const aiIssuesHtml = (ai.issues || []).map(i => `
+        <div class="ai-issue" style="margin-bottom: 0.75rem;">
+          <strong style="display: block; font-size: 0.85rem; color: var(--text-normal); margin-bottom: 0.15rem;">${this.escapeHtml(i.title)}</strong>
+          <span style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; display: block;">${this.escapeHtml(i.detail)}</span>
+        </div>
+      `).join("");
+
+      const aiPrioritiesHtml = (ai.goalPriorities || []).map(p => `<li>${this.escapeHtml(p)}</li>`).join("");
+      const aiCitationsHtml = (ai.webSources || []).map(s => `
+        <li><a href="${this.escapeHtml(s.uri)}" target="_blank" rel="noopener noreferrer" style="font-size: 0.8rem;">${this.escapeHtml(s.title || s.uri)}</a></li>
+      `).join("");
+
+      const aiBriefingHtml = ai.headline ? `
+        <div class="ai-briefing-head" style="margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.5rem;">
+          <span class="ai-badge">✦ AI briefing snapshot</span>
+        </div>
+        <div class="ai-briefing-body" style="margin-top: 0.75rem;">
+          <div class="ai-headline" style="font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 600; color: var(--text-normal); margin-bottom: 0.5rem;">${this.escapeHtml(ai.headline)}</div>
+          <p class="ai-basis" style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.45; margin-bottom: 1rem;">${this.escapeHtml(ai.basis)}</p>
+          <div class="ai-section-title" style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; letter-spacing: 0.05em; margin-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.25rem;">Critical issues &amp; blind spots</div>
+          <div class="ai-issues-list">${aiIssuesHtml}</div>
+          
+          ${aiPrioritiesHtml ? `
+            <div class="ai-list-block" style="margin-top: 1.25rem;">
+              <div class="ai-section-title" style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; letter-spacing: 0.05em; margin-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.25rem;">AI recommended goals</div>
+              <ul class="ai-list" style="padding-left: 1.2rem; font-size: 0.8rem; line-height: 1.5; color: var(--text-normal);">${aiPrioritiesHtml}</ul>
+            </div>
+          ` : ""}
+
+          ${aiCitationsHtml ? `
+            <div class="ai-list-block" style="margin-top: 1.25rem; border-top: 1px dashed rgba(255,255,255,0.05); padding-top: 0.75rem;">
+              <div class="ai-section-title" style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; letter-spacing: 0.05em; margin-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.25rem;">Web grounding sources</div>
+              <ul class="ai-list ai-source-list" style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.4rem;">${aiCitationsHtml}</ul>
+            </div>
+          ` : ""}
+        </div>
+      ` : `<div style="text-align: center; color: var(--text-muted); padding: 1rem 0;">No AI Briefing was generated for this snapshot.</div>`;
+
+      // Assemble full report view
+      body.innerHTML = `
+        <div class="funnel-screen-head report-head" style="text-align: left; margin-bottom: 1.5rem;">
+          <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--text-normal); margin: 0;">${this.escapeHtml(a.name || "We")}</h2>
+          <p class="subtitle" style="color: var(--text-muted); margin-top: 0.25rem; font-size: 0.9rem;">${this.escapeHtml(a.stage)} · ${this.escapeHtml(a.businessModel || ai.inferredBusinessModel || "SaaS")} · Historical Snapshot</p>
+        </div>
+
+        <!-- Headline footprint -->
+        <div class="card glass-card report-headline" style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); padding: 1.25rem; border-radius: 8px;">
+          <div class="report-headline-main">
+            <span class="report-headline-label" style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Estimated annual footprint</span>
+            <div class="report-headline-value" style="font-size: 2.4rem; font-weight: 800; color: var(--accent-footprint); margin: 0.35rem 0;">${s.footprintTotal.toFixed(1)} <small style="font-size: 1rem; color: var(--text-muted); font-weight: 500;">tCO2e/yr</small></div>
+            <span class="report-headline-unc" style="font-size: 0.8rem; color: var(--text-muted);">±${s.uncertaintyAbs.toFixed(1)} tCO2e modeled uncertainty</span>
+          </div>
+          <div class="report-headline-side" style="display: flex; flex-direction: column; gap: 0.75rem; text-align: right;">
+            <div class="report-side-stat">
+              <span class="report-side-label" style="display: block; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Handprint potential (+)</span>
+              <span class="report-side-val handprint-text" style="font-size: 1.25rem; font-weight: 700; color: var(--accent-handprint);">${s.handprintTotal.toFixed(1)} tCO2e/yr</span>
+            </div>
+            <div class="report-side-stat">
+              <span class="report-side-label" style="display: block; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Impact maturity</span>
+              <span class="report-side-val" style="font-size: 1.1rem; font-weight: 600; color: var(--text-normal);">Level ${repState.maturityLevel || 1}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hotspots -->
+        <div class="card glass-card report-hotspots" style="margin-bottom: 1.5rem; padding: 1.25rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;">
+          <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif;">Top emission hotspots</h3>
+          <div class="hotspot-list" style="margin-top: 0.75rem; display: flex; flex-direction: column; gap: 0.75rem;">${hotspotsHtml}</div>
+        </div>
+
+        <!-- Dimensions -->
+        <div class="card glass-card report-dimensions" style="margin-bottom: 1.5rem; padding: 1.25rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;">${dimensionsHtml}</div>
+
+        <!-- Benchmarks -->
+        <div class="card glass-card report-benchmark" style="margin-bottom: 1.5rem; padding: 1.25rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;">
+          <div class="methodology-head"><h3>How you compare</h3><span>Indicative</span></div>
+          <p class="step-desc" style="margin: 0.5rem 0;">Your <strong>${s.footprintTotal.toFixed(1)} tCO2e/yr</strong> is <strong class="${cls}">${verdict}</strong> for ${this.escapeHtml(bench.basisFte)}.</p>
+          <div class="bench-track" style="position: relative; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; margin: 1.25rem 0 0.5rem 0;">
+            <div class="bench-range" style="position: absolute; top: 0; bottom: 0; background: rgba(255,255,255,0.12); border-radius: 4px; left:${pct(bench.low)}%; right:${100 - pct(bench.high)}%;"></div>
+            <div class="bench-marker" style="position: absolute; top: -4px; width: 16px; height: 16px; background: var(--accent-footprint); border-radius: 50%; border: 2px solid var(--bg-dark); left:${pct(s.footprintTotal)}%; transform: translateX(-50%);" title="You: ${s.footprintTotal.toFixed(1)} tCO2e/yr"></div>
+          </div>
+          <div class="bench-scale" style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;"><span>~${bench.low} tCO2e/yr</span><span>~${bench.high} tCO2e/yr</span></div>
+          <div class="methodology-source" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.75rem;">Range = ${bench.perFte.low}-${bench.perFte.high} ${bench.perFte.unit} × team size. ${this.escapeHtml(noteText)} <a href="${this.escapeHtml(bench.perFte.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(bench.perFte.source)}</a></div>
+          ${warningBanner}
+        </div>
+
+        <!-- Cost exposure -->
+        <div class="card glass-card report-cost" style="margin-bottom: 1.5rem; padding: 1.25rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;">
+          <div class="methodology-head"><h3>Potential cost exposure</h3><span>Illustrative</span></div>
+          <p class="step-desc" style="margin: 0.5rem 0;">If your <strong>${s.footprintTotal.toFixed(1)} tCO2e/yr</strong> were priced as a future expense — carbon fees, procurement clauses, or offset costs — it maps to roughly:</p>
+          <div class="cost-band" style="font-size: 2rem; font-weight: 700; color: var(--text-normal); margin: 0.75rem 0; font-family: 'Space Grotesk', sans-serif;">
+            <span class="cost-value">$${cost.low.toLocaleString()}</span>
+            <span class="cost-sep">–</span>
+            <span class="cost-value">$${cost.high.toLocaleString()}<small style="font-size: 0.8rem; font-weight: 400; color: var(--text-muted);">/yr</small></span>
+          </div>
+          <div class="methodology-source" ${costStyle} style="font-size: 0.75rem; color: var(--text-muted);">${costDisclaimer}</div>
+        </div>
+
+        <!-- Precedents -->
+        <div class="card glass-card report-precedents" style="margin-bottom: 1.5rem; padding: 1.25rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;">${precedentsHtml}</div>
+
+        <!-- AI Briefing -->
+        <div class="card glass-card ai-briefing" style="padding: 1.25rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;">${aiBriefingHtml}</div>
+      `;
+    } catch (e) {
+      body.innerHTML = `<div class="history-loading" style="color: #ff6b6b;">Error: ${this.escapeHtml(e.message)}</div>`;
+    }
+  }
+
+  async deleteHistoryReport(id) {
+    if (!confirm("Are you sure you want to delete this historical report snapshot?")) return;
+
+    try {
+      const res = await fetch(`/api/reports/${id}`, { method: "DELETE", credentials: "same-origin" });
+      if (!res.ok) {
+        throw new Error("Failed to delete report.");
+      }
+      this.showToast("Report snapshot deleted.");
+      this.renderHistoryView();
+    } catch (e) {
+      this.showToast(`Error: ${e.message}`);
     }
   }
 

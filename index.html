@@ -78,53 +78,7 @@
         </div>
       </div>
 
-      <!-- Methodology -->
-      <div class="landing-methodology" id="landing-methodology">
-        <div class="methodology-landing-head">
-          <span class="funnel-kicker">Methodology</span>
-          <h2>How the assessment is modeled</h2>
-          <p class="subtitle">The first report is a directional model. It is designed to surface the likely hotspots and evidence gaps fast, then improve as you replace defaults with measured data.</p>
-        </div>
-        <div class="methodology-landing-grid">
-          <div class="methodology-landing-item">
-            <span>01</span>
-            <h3>Context</h3>
-            <p>We use your company profile, business model, team size, website text, founder notes, and selected activities to understand the operating situation.</p>
-          </div>
-          <div class="methodology-landing-item">
-            <span>02</span>
-            <h3>Footprint Model</h3>
-            <p>Each activity maps to a modeled annual emission factor in tCO2e, grouped across Scope 1, Scope 2, and Scope 3 categories.</p>
-          </div>
-          <div class="methodology-landing-item">
-            <span>03</span>
-            <h3>Uncertainty</h3>
-            <p>Every modeled factor carries an uncertainty range. The report combines those ranges with root-sum-of-squares propagation.</p>
-          </div>
-          <div class="methodology-landing-item">
-            <span>04</span>
-            <h3>Verification</h3>
-            <p>After login, the dashboard turns the preview into goals, Risk Radar items, evidence gaps, and a path to replace estimates with metered sources.</p>
-          </div>
-        </div>
-        <div class="card glass-card report-methodology landing-methodology-detail">
-          <div class="methodology-head">
-            <h3>Detailed Factor Methodology</h3>
-            <span>Public model</span>
-          </div>
-          <p>These are the default factors available to the instant assessment before measured data is connected. A company-specific report shows only the activities selected for that startup.</p>
-          <ul class="methodology-points">
-            <li><strong>Inputs:</strong> company profile, business model, team size, website context, founder notes, and selected activities.</li>
-            <li><strong>Evidence level:</strong> defaults are modelled estimates until replaced with metered cloud, utility, travel, vendor, logistics, or source-document data.</li>
-            <li><strong>Uncertainty:</strong> every modelled factor carries an uncertainty range that propagates into the footprint total.</li>
-          </ul>
-          <ul id="landing-methodology-list" class="methodology-factor-list"></ul>
-          <div class="methodology-frameworks">
-            <div class="methodology-frameworks-head">Standards &amp; theory this rests on</div>
-            <ul id="landing-frameworks-list" class="methodology-framework-list"></ul>
-          </div>
-        </div>
-      </div>
+
 
       <!-- Customer stories -->
       <div class="landing-stories">
@@ -256,6 +210,68 @@
               <li>Investor-grade diligence export</li>
             </ul>
             <button class="btn btn-primary w-full" id="fn-price-pro" type="button">Claim Pro free</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dedicated Methodology screen -->
+    <section class="funnel-screen" id="fn-methodology">
+      <div class="funnel-narrow">
+        <div style="margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between;">
+          <button class="btn btn-secondary" id="fn-methodology-back" type="button" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 500;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Back to Landing
+          </button>
+          <button class="btn btn-primary" id="fn-methodology-start" type="button">
+            Get your free assessment &rarr;
+          </button>
+        </div>
+
+        <div class="landing-methodology" id="landing-methodology" style="margin-top: 0; padding-top: 0;">
+          <div class="methodology-landing-head">
+            <span class="funnel-kicker">Methodology</span>
+            <h2>How the assessment is modeled</h2>
+            <p class="subtitle">The first report is a directional model. It is designed to surface the likely hotspots and evidence gaps fast, then improve as you replace defaults with measured data.</p>
+          </div>
+          <div class="methodology-landing-grid">
+            <div class="methodology-landing-item">
+              <span>01</span>
+              <h3>Context</h3>
+              <p>We use your company profile, business model, team size, website text, founder notes, and selected activities to understand the operating situation.</p>
+            </div>
+            <div class="methodology-landing-item">
+              <span>02</span>
+              <h3>Footprint Model</h3>
+              <p>Each activity maps to a modeled annual emission factor in tCO2e, grouped across Scope 1, Scope 2, and Scope 3 categories.</p>
+            </div>
+            <div class="methodology-landing-item">
+              <span>03</span>
+              <h3>Uncertainty</h3>
+              <p>Every modeled factor carries an uncertainty range. The report combines those ranges with root-sum-of-squares propagation.</p>
+            </div>
+            <div class="methodology-landing-item">
+              <span>04</span>
+              <h3>Verification</h3>
+              <p>After login, the dashboard turns the preview into goals, Risk Radar items, evidence gaps, and a path to replace estimates with metered sources.</p>
+            </div>
+          </div>
+          <div class="card glass-card report-methodology landing-methodology-detail">
+            <div class="methodology-head">
+              <h3>Detailed Factor Methodology</h3>
+              <span>Public model</span>
+            </div>
+            <p>These are the default factors available to the instant assessment before measured data is connected. A company-specific report shows only the activities selected for that startup.</p>
+            <ul class="methodology-points">
+              <li><strong>Inputs:</strong> company profile, business model, team size, website context, founder notes, and selected activities.</li>
+              <li><strong>Evidence level:</strong> defaults are modelled estimates until replaced with metered cloud, utility, travel, vendor, logistics, or source-document data.</li>
+              <li><strong>Uncertainty:</strong> every modelled factor carries an uncertainty range that propagates into the footprint total.</li>
+            </ul>
+            <ul id="landing-methodology-list" class="methodology-factor-list"></ul>
+            <div class="methodology-frameworks">
+              <div class="methodology-frameworks-head">Standards &amp; theory this rests on</div>
+              <ul id="landing-frameworks-list" class="methodology-framework-list"></ul>
+            </div>
           </div>
         </div>
       </div>
@@ -538,6 +554,12 @@
             <a href="#extend" class="nav-link" id="nav-extend" data-view="extend">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
               <span>7. Team &amp; Next Steps</span>
+            </a>
+          </li>
+          <li>
+            <a href="#history" class="nav-link" id="nav-history" data-view="history">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span>8. Report History</span>
             </a>
           </li>
           <li>
@@ -1225,6 +1247,29 @@
               <!-- Populated via JS -->
             </div>
           </div>
+      </section>
+
+      <!-- 8. REPORT HISTORY VIEW -->
+      <section id="view-history" class="app-view">
+        <div class="view-header flex-header">
+          <div>
+            <h1>Report History</h1>
+            <p class="subtitle">Open, review, and generate historical snapshots of your startup's climate impact reports.</p>
+          </div>
+          <div>
+            <button class="btn btn-primary" id="btn-generate-history-report" type="button">
+              ✦ Generate New Report Snapshot
+            </button>
+          </div>
+        </div>
+        
+        <div class="card glass-card">
+          <h3>All Generated Reports</h3>
+          <p class="step-desc">Click on any past report to view the full details, carbon footprint metrics, benchmarks, and AI briefings.</p>
+          
+          <div class="history-list-container" id="history-list">
+            <div class="history-loading">Loading report history...</div>
+          </div>
         </div>
       </section>
 
@@ -1233,6 +1278,21 @@
 
   <!-- NATIVE MODALS (DIALOG TAGS) -->
   
+  <!-- HISTORICAL REPORT VIEW MODAL -->
+  <dialog id="dialog-report-view" closedby="any" aria-labelledby="historyModalTitle">
+    <div class="modal-wrapper report-modal-wrapper" style="max-width: 900px; width: 90%;">
+      <div class="modal-header">
+        <h2 id="historyModalTitle">Climate Impact Report</h2>
+        <button class="btn-close-modal" id="btn-close-report-view-modal" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body scrollable-body" id="history-modal-body" style="padding: 1.5rem;">
+        <!-- Dynamic rendering of report content goes here -->
+      </div>
+    </div>
+  </dialog>
+
   <!-- 1. GATED HANDPRINT CLAIM MODAL -->
   <dialog id="dialog-claim" closedby="any" aria-labelledby="claimModalTitle">
     <div class="modal-wrapper">

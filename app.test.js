@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildReportPrompt, buildReportSchema, extractGrounding, extractUsefulText, getClientIp, normalizePublicWebsiteUrl } from './worker/index.js';
+import worker, { buildReportPrompt, buildReportSchema, extractGrounding, extractUsefulText, getClientIp, normalizePublicWebsiteUrl } from './worker/index.js';
 import { buildFactPack, computeImpactProfile, priceFootprint, computeBenchmark } from './data/evidence.js';
 
 // Calculation helper extracted to verify mathematics logic independently
@@ -478,5 +478,100 @@ describe('Multi-dimension impact + cost', () => {
     expect(bHybrid.perFte.note).toContain('Hybrid operations');
     expect(bHybrid.perFte.note).toContain('Office operations');
     expect(bHybrid.perFte.note).toContain('lab equipment');
+  });
+
+  describe('Report History API Routing', () => {
+    it('should list and manage reports history', async () => {
+      // Mock database prepare statement
+      const mockDb = {
+        prepare: (query) => {
+          return {
+            bind: (...args) => {
+              return {
+                first: async () => {
+                  if (query.includes("sessions s JOIN users u")) {
+                    // getSession
+                    return { id: args[0], user_id: "user-123", expires_at: "2036-01-01T00:00:00.000Z", email: "user@test.com" };
+                  }
+                  if (query.includes("FROM reports_history WHERE id = ?")) {
+                    // getReport
+                    return { name: "Report A", state_json: JSON.stringify({ company: { name: "Test Startup" } }), created_at: "2026-06-14T00:00:00.000Z" };
+                  }
+                  return null;
+                },
+                all: async () => {
+                  if (query.includes("FROM reports_history WHERE user_id = ?")) {
+                    // listReports
+                    return {
+                      results: [{ id: "rep-1", name: "Report A", created_at: "2026-06-14T00:00:00.000Z" }]
+                    };
+                  }
+                  return { results: [] };
+                },
+                run: async () => {
+                  if (query.includes("INSERT INTO reports_history")) {
+                    // createReport
+                    expect(args[0]).toBeDefined(); // id
+                    expect(args[1]).toBe("user-123"); // user_id
+                    expect(args[2]).toBe("New Report"); // name
+                    expect(args[3]).toContain("Test Startup"); // state_json
+                  }
+                  if (query.includes("DELETE FROM reports_history")) {
+                    // deleteReport
+                    expect(args[0]).toBe("rep-1"); // id
+                    expect(args[1]).toBe("user-123"); // user_id
+                  }
+                  return { success: true };
+                }
+              };
+            }
+          };
+        }
+      };
+
+      const env = { DB: mockDb };
+
+      // 1. Test GET /api/reports (list)
+      const reqList = new Request("https://example.com/api/reports", {
+        headers: { "Cookie": "sid=sess-123" }
+      });
+      const resList = await worker.fetch(reqList, env);
+      expect(resList.status).toBe(200);
+      const dataList = await resList.json();
+      expect(dataList.reports).toHaveLength(1);
+      expect(dataList.reports[0].name).toBe("Report A");
+
+      // 2. Test POST /api/reports (create)
+      const reqCreate = new Request("https://example.com/api/reports", {
+        method: "POST",
+        headers: { "Cookie": "sid=sess-123", "Content-Type": "application/json" },
+        body: JSON.stringify({ name: "New Report", state: { company: { name: "Test Startup" } } })
+      });
+      const resCreate = await worker.fetch(reqCreate, env);
+      expect(resCreate.status).toBe(200);
+      const dataCreate = await resCreate.json();
+      expect(dataCreate.ok).toBe(true);
+      expect(dataCreate.name).toBe("New Report");
+
+      // 3. Test GET /api/reports/:id (get)
+      const reqGet = new Request("https://example.com/api/reports/rep-1", {
+        headers: { "Cookie": "sid=sess-123" }
+      });
+      const resGet = await worker.fetch(reqGet, env);
+      expect(resGet.status).toBe(200);
+      const dataGet = await resGet.json();
+      expect(dataGet.name).toBe("Report A");
+      expect(dataGet.state.company.name).toBe("Test Startup");
+
+      // 4. Test DELETE /api/reports/:id (delete)
+      const reqDelete = new Request("https://example.com/api/reports/rep-1", {
+        method: "DELETE",
+        headers: { "Cookie": "sid=sess-123" }
+      });
+      const resDelete = await worker.fetch(reqDelete, env);
+      expect(resDelete.status).toBe(200);
+      const dataDelete = await resDelete.json();
+      expect(dataDelete.ok).toBe(true);
+    });
   });
 });

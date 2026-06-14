@@ -3349,7 +3349,83 @@
 .unmeasured-hotspot {
   border-top: 1px dashed rgba(210, 100, 60, 0.15);
   margin-top: 0.75rem;
-  padding-top: 0.75rem;
 }
+
+/* Report History View Styles */
+.history-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+.history-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.history-item-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.history-item-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-normal);
+}
+.history-item-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.history-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.history-loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.history-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted);
+}
+.history-empty svg {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  opacity: 0.4;
+  color: var(--text-muted);
+}
+.history-empty h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-normal);
+  margin-bottom: 0.5rem;
+}
+
+/* Dedicated Methodology Page Styles */
+#fn-methodology {
+  background: var(--bg-dark);
+}
+#fn-methodology .landing-methodology {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
 
 

@@ -61,6 +61,12 @@ async function handleApi(request, env, url) {
 
   if (path === "/api/generate-report" && method === "POST") return generateReport(request, env);
 
+  if (path === "/api/reports" && method === "GET") return listReports(request, env);
+  if (path === "/api/reports" && method === "POST") return createReport(request, env);
+  const reportMatch = path.match(/^\/api\/reports\/([A-Za-z0-9_-]+)$/);
+  if (reportMatch && method === "GET") return getReport(request, env, reportMatch[1]);
+  if (reportMatch && method === "DELETE") return deleteReport(request, env, reportMatch[1]);
+
   if (path === "/api/documents" && method === "GET") return listDocuments(request, env);
   if (path === "/api/documents" && method === "POST") return uploadDocument(request, env);
   const docMatch = path.match(/^\/api\/documents\/([A-Za-z0-9_-]+)$/);
@@ -801,6 +807,69 @@ function fromB64(b64) {
   const out = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
   return out;
+}
+
+// ---------------------------------------------------------------------------
+// Report History
+// ---------------------------------------------------------------------------
+async function listReports(request, env) {
+  const session = await requireSession(request, env);
+  if (session instanceof Response) return session;
+
+  const { results } = await env.DB.prepare(
+    "SELECT id, name, created_at FROM reports_history WHERE user_id = ? ORDER BY created_at DESC"
+  ).bind(session.user_id).all();
+
+  return json({ reports: results });
+}
+
+async function createReport(request, env) {
+  const session = await requireSession(request, env);
+  if (session instanceof Response) return session;
+
+  const body = await readJson(request);
+  if (!body || typeof body.state !== "object" || body.state === null) {
+    return json({ error: "Missing state object." }, 400);
+  }
+
+  const name = String(body.name || `Report - ${new Date().toLocaleDateString()}`).trim();
+  const id = crypto.randomUUID();
+  const stateJson = JSON.stringify(body.state);
+
+  await env.DB.prepare(
+    "INSERT INTO reports_history (id, user_id, name, state_json) VALUES (?, ?, ?, ?)"
+  ).bind(id, session.user_id, name, stateJson).run();
+
+  return json({ ok: true, id, name });
+}
+
+async function getReport(request, env, id) {
+  const session = await requireSession(request, env);
+  if (session instanceof Response) return session;
+
+  const row = await env.DB.prepare(
+    "SELECT name, state_json, created_at FROM reports_history WHERE id = ? AND user_id = ?"
+  ).bind(id, session.user_id).first();
+
+  if (!row) return json({ error: "Report not found" }, 404);
+
+  return json({
+    id,
+    name: row.name,
+    state: JSON.parse(row.state_json),
+    created_at: row.created_at
+  });
+}
+
+async function deleteReport(request, env, id) {
+  const session = await requireSession(request, env);
+  if (session instanceof Response) return session;
+
+  await env.DB.prepare(
+    "DELETE FROM reports_history WHERE id = ? AND user_id = ?"
+  ).bind(id, session.user_id).run();
+
+  return json({ ok: true });
 }
 
 export {
