@@ -29,7 +29,10 @@
         </svg>
         <span class="logo-text">Social Lab</span>
       </div>
-      <a href="#" class="funnel-login-link" id="fn-login-link">Have an invite? Open dashboard &rarr;</a>
+      <div class="funnel-topbar-links">
+        <a href="#landing-methodology" class="funnel-methodology-link" data-scroll-target="landing-methodology">Methodology</a>
+        <a href="#" class="funnel-login-link" id="fn-login-link">Have an invite? Open dashboard &rarr;</a>
+      </div>
     </header>
 
     <!-- 3. ENTER — Landing -->
@@ -43,6 +46,7 @@
         <p class="landing-sub">Upload your pitch deck and recent accounts. Get an instant, investor-grade snapshot of your footprint and avoided-emissions potential — no spreadsheets, no consultants, no jargon.</p>
         <div class="landing-cta-row">
           <button class="btn btn-primary btn-lg" id="fn-cta-start">Get your free assessment</button>
+          <a href="#landing-methodology" class="landing-methodology-link" data-scroll-target="landing-methodology">View methodology</a>
           <span class="landing-cta-note">Free · No credit card · ~3 minutes</span>
         </div>
 
@@ -69,6 +73,37 @@
               <strong>Open the dashboard</strong>
               <span>Dive into goals, timelines, and impact projections with your team.</span>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Methodology -->
+      <div class="landing-methodology" id="landing-methodology">
+        <div class="methodology-landing-head">
+          <span class="funnel-kicker">Methodology</span>
+          <h2>How the assessment is modeled</h2>
+          <p class="subtitle">The first report is a directional model. It is designed to surface the likely hotspots and evidence gaps fast, then improve as you replace defaults with measured data.</p>
+        </div>
+        <div class="methodology-landing-grid">
+          <div class="methodology-landing-item">
+            <span>01</span>
+            <h3>Context</h3>
+            <p>We use your company profile, business model, team size, website text, founder notes, and selected activities to understand the operating situation.</p>
+          </div>
+          <div class="methodology-landing-item">
+            <span>02</span>
+            <h3>Footprint Model</h3>
+            <p>Each activity maps to a modeled annual emission factor in tCO2e, grouped across Scope 1, Scope 2, and Scope 3 categories.</p>
+          </div>
+          <div class="methodology-landing-item">
+            <span>03</span>
+            <h3>Uncertainty</h3>
+            <p>Every modeled factor carries an uncertainty range. The report combines those ranges with root-sum-of-squares propagation.</p>
+          </div>
+          <div class="methodology-landing-item">
+            <span>04</span>
+            <h3>Verification</h3>
+            <p>After login, the dashboard turns the preview into goals, Risk Radar items, evidence gaps, and a path to replace estimates with metered sources.</p>
           </div>
         </div>
       </div>

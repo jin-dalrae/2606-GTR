@@ -2127,6 +2127,12 @@
     width: 100%;
     margin: 0 auto;
   }
+  .funnel-topbar-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .funnel-methodology-link,
   .funnel-login-link {
     color: var(--text-secondary);
     text-decoration: none;
@@ -2134,6 +2140,7 @@
     font-weight: 600;
     transition: color 0.2s ease;
   }
+  .funnel-methodology-link:hover,
   .funnel-login-link:hover { color: var(--accent-handprint); }
 
   .funnel-screen { display: none; animation: fadeIn 0.4s ease-out forwards; }
@@ -2193,6 +2200,13 @@
     margin-bottom: 4rem;
   }
   .btn-lg { padding: 1rem 2.25rem; font-size: 1.05rem; }
+  .landing-methodology-link {
+    font-size: 0.86rem;
+    color: var(--accent-neutral);
+    text-decoration: none;
+    font-weight: 700;
+  }
+  .landing-methodology-link:hover { color: var(--accent-handprint); }
   .landing-cta-note { font-size: 0.8rem; color: var(--text-muted); }
 
   .landing-steps {
@@ -2232,6 +2246,48 @@
     align-self: center;
     color: var(--text-muted);
     font-size: 1.25rem;
+  }
+
+  /* --- Landing: methodology --- */
+  .landing-methodology {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 4.5rem 1.5rem 5rem;
+    scroll-margin-top: 1.5rem;
+  }
+  .methodology-landing-head {
+    max-width: 680px;
+    margin-bottom: 2.5rem;
+  }
+  .methodology-landing-head h2 {
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    margin-bottom: 0.6rem;
+  }
+  .methodology-landing-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .methodology-landing-item {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.25rem;
+  }
+  .methodology-landing-item span {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    color: var(--accent-neutral);
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+  .methodology-landing-item h3 {
+    font-size: 1rem;
+    margin-bottom: 0.55rem;
+  }
+  .methodology-landing-item p {
+    color: var(--text-muted);
+    font-size: 0.84rem;
+    line-height: 1.65;
   }
 
   /* --- Landing: customer stories --- */
@@ -2283,6 +2339,7 @@
 
   @media (max-width: 800px) {
     .stories-grid { grid-template-columns: 1fr; }
+    .methodology-landing-grid { grid-template-columns: 1fr 1fr; }
   }
 
   /* --- Landing: data security & trust --- */
@@ -2591,7 +2648,17 @@
   .fn-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
   @media (max-width: 640px) {
-    .funnel-topbar { padding: 1.25rem 1.5rem; }
+    .funnel-topbar {
+      padding: 1.25rem 1.5rem;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .funnel-topbar-links {
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.4rem;
+    }
+    .methodology-landing-grid { grid-template-columns: 1fr; }
     .upload-grid, .fn-activity-grid, .form-grid { grid-template-columns: 1fr; }
     .report-headline { flex-direction: column; gap: 1.25rem; }
     .report-actions .btn-primary { margin-left: 0; width: 100%; }

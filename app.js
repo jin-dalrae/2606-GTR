@@ -376,6 +376,13 @@ class ClimateDashboardApp {
   }
 
   initFunnelDOM() {
+    document.querySelectorAll("[data-scroll-target='landing-methodology']").forEach(link => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        this.scrollToLandingMethodology();
+      });
+    });
+
     // "Have an invite? Open dashboard" — returning users log in here.
     document.getElementById("fn-login-link").addEventListener("click", (e) => {
       e.preventDefault();
@@ -432,6 +439,19 @@ class ClimateDashboardApp {
     document.getElementById("fn-share-linkedin").addEventListener("click", () => this.shareToLinkedIn());
     document.getElementById("fn-copy-link").addEventListener("click", () => this.copyShareLink());
     document.getElementById("fn-enter-dashboard").addEventListener("click", () => this.enterDashboard());
+  }
+
+  scrollToLandingMethodology() {
+    const scroll = () => {
+      const target = document.getElementById("landing-methodology");
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    if (this.state.funnelStage !== "landing") {
+      this.goFunnelStage("landing");
+      requestAnimationFrame(scroll);
+    } else {
+      scroll();
+    }
   }
 
   goFunnelStage(stage) {
