@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { buildReportPrompt, buildReportSchema, extractUsefulText, getClientIp, normalizePublicWebsiteUrl } from './worker/index.js';
-import { computeImpactProfile, priceFootprint } from './data/evidence.js';
+import { buildReportPrompt, buildReportSchema, extractGrounding, extractUsefulText, getClientIp, normalizePublicWebsiteUrl } from './worker/index.js';
+import { buildFactPack, computeImpactProfile, priceFootprint } from './data/evidence.js';
 
 // Calculation helper extracted to verify mathematics logic independently
 function calculateLedgerTotals(state) {
@@ -180,12 +180,14 @@ describe('AI report grounding', () => {
 
     expect(prompt).toContain('Current date: 2026-06-13');
     expect(prompt).toContain('Trottr operates e-cargo-bike grocery delivery');
+    expect(prompt).toContain('company-specific environmental issues, recent news');
+    expect(prompt).toContain('similar-company incidents');
     expect(prompt).toContain('You did not read source files');
     expect(prompt).toContain('Selected document filenames only: deck.pdf, pnl.xlsx');
     expect(prompt).toContain('if selling into EU enterprise customers');
   });
 
-  it('injects a curated fact pack and constrains citations to it', () => {
+  it('injects a curated fact pack and allows web-grounded citations', () => {
     const prompt = buildReportPrompt({
       name: 'Trottr', stage: 'Seed', teamSize: 12,
       activities: ['logistics', 'compute'],
@@ -193,11 +195,32 @@ describe('AI report grounding', () => {
     }, { asOfDate: '2026-06-13' });
 
     expect(prompt).toContain('Curated fact pack');
-    expect(prompt).toContain('Cite ONLY sources that appear in the fact pack');
+    expect(prompt).toContain('Use exact fact-pack source names or web-grounded source titles');
     expect(prompt).toContain('GLEC Framework'); // logistics factor source
     expect(prompt).toContain('Peer benchmark:');
     expect(prompt).toContain('Cost translation:');
     expect(prompt).toContain('$1,500-$3,800'); // 20t x $75 and x $190
+  });
+
+  it('extracts Google Search grounding sources and queries', () => {
+    const grounding = extractGrounding({
+      candidates: [{
+        groundingMetadata: {
+          webSearchQueries: ['Stripe climate news', 'Stripe carbon removal'],
+          groundingChunks: [
+            { web: { uri: 'https://stripe.com/climate', title: 'Stripe Climate' } },
+            { web: { uri: 'https://stripe.com/climate', title: 'Duplicate' } },
+            { web: { uri: 'https://example.com/news', title: 'Climate news' } }
+          ]
+        }
+      }]
+    });
+
+    expect(grounding.queries).toEqual(['Stripe climate news', 'Stripe carbon removal']);
+    expect(grounding.sources).toEqual([
+      { uri: 'https://stripe.com/climate', title: 'Stripe Climate' },
+      { uri: 'https://example.com/news', title: 'Climate news' }
+    ]);
   });
 
   it('requires citations in the full schema', () => {
@@ -274,6 +297,37 @@ describe('Multi-dimension impact + cost', () => {
     expect(p.waste.value).toBe(40); // hardware default
     expect(p.nature.level).toBe('medium'); // hardware -> mining materiality
     expect(p.nature.drivers).toContain('hardware');
+  });
+
+  it('marks waste as a data gap instead of reporting a false zero', () => {
+    const p = computeImpactProfile({
+      footprintTotal: 12,
+      breakdown: [
+        { id: 'scope2-grid', value: 8 },
+        { id: 'compute', value: 4 }
+      ]
+    }, ['scope2-grid', 'compute']);
+
+    expect(p.waste.pending).toBe(true);
+    expect(p.waste.value).toBeNull();
+    expect(p.waste.pendingLabel).toBe('Pending vendor data');
+  });
+
+  it('carries pending waste language into the AI fact pack', () => {
+    const facts = buildFactPack({
+      stage: 'Growth',
+      teamSize: 11000,
+      activities: ['compute', 'scope2-grid'],
+      snapshot: {
+        footprintTotal: 20000,
+        breakdown: [
+          { id: 'scope2-grid', value: 8000 },
+          { id: 'compute', value: 12000 }
+        ]
+      }
+    });
+
+    expect(facts.dimensions).toContain('Waste: Pending vendor data');
   });
 
   it('prices a footprint across compliance and social-cost scenarios', () => {

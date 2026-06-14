@@ -59,6 +59,17 @@ const ACTIVITIES_DB = {
   "avoided-material": { id: "avoided-material", name: "Low-Carbon Materials", scope: "avoided", defaultVal: 0, unit: "tCO2e/yr", defaultUnc: 0, type: "modeled" }
 };
 
+const DEFAULT_MODEL_TEAM_SIZE = 10;
+const ACTIVITY_SCOPE_LABELS = {
+  "compute": "Scope 3 · Purchased services / cloud",
+  "hardware": "Scope 3 · Capital goods",
+  "travel": "Scope 3 · Business travel & commuting",
+  "vendors": "Scope 3 · Purchased services",
+  "logistics": "Scope 3 · Upstream/downstream transport",
+  "scope2-grid": "Scope 2 · Purchased electricity",
+  "scope1-direct": "Scope 1 · Direct emissions"
+};
+
 // Climate & Impact Glossary Database
 const GLOSSARY_DB = {
   "handprint": {
@@ -576,19 +587,21 @@ class ClimateDashboardApp {
     const acctFile = document.getElementById("fn-file-acct").files[0];
     const notes = document.getElementById("fn-notes").value.trim();
 
+    const teamSize = parseInt(document.getElementById("fn-team").value) || 0;
+
     this.state.assessment = {
       name: document.getElementById("fn-name").value.trim(),
       url: this.normalizeWebsiteInput(document.getElementById("fn-url").value),
       stage: document.getElementById("fn-stage").value,
       businessModel: document.getElementById("fn-model").value,
-      teamSize: parseInt(document.getElementById("fn-team").value) || 0,
+      teamSize,
       activities: uniqueActivities,
       notes: notes,
       docs: {
         deck: deckFile ? deckFile.name : null,
         accounting: acctFile ? acctFile.name : null
       },
-      snapshot: this.computeSnapshot(uniqueActivities),
+      snapshot: this.computeSnapshot(uniqueActivities, teamSize),
       createdAt: new Date().toISOString()
     };
 
@@ -603,19 +616,38 @@ class ClimateDashboardApp {
     return trimmed;
   }
 
+  teamScaleFactor(teamSize) {
+    const fte = Number(teamSize);
+    return fte > 0 ? fte / DEFAULT_MODEL_TEAM_SIZE : 1;
+  }
+
+  scaledActivityValue(activity, teamSize) {
+    return activity.defaultVal * this.teamScaleFactor(teamSize);
+  }
+
   // Build a modeled footprint snapshot from activity defaults.
-  computeSnapshot(activities) {
+  computeSnapshot(activities, teamSize = 0) {
     const footprintItems = [];
     let footprintTotal = 0;
     let uncSumSq = 0;
+    const scaleFactor = this.teamScaleFactor(teamSize);
 
     activities.forEach(key => {
       const db = ACTIVITIES_DB[key];
       if (db && db.scope !== "avoided") {
-        footprintTotal += db.defaultVal;
-        const uncAbs = db.defaultVal * (db.defaultUnc / 100);
+        const value = db.defaultVal * scaleFactor;
+        footprintTotal += value;
+        const uncAbs = value * (db.defaultUnc / 100);
         uncSumSq += Math.pow(uncAbs, 2);
-        footprintItems.push({ id: key, name: db.name, value: db.defaultVal, unc: db.defaultUnc, scope: db.scope });
+        footprintItems.push({
+          id: key,
+          name: db.name,
+          value,
+          baseValue: db.defaultVal,
+          unc: db.defaultUnc,
+          scope: db.scope,
+          scopeLabel: ACTIVITY_SCOPE_LABELS[key] || `Scope ${db.scope}`
+        });
       }
     });
 
@@ -631,7 +663,11 @@ class ClimateDashboardApp {
       uncertaintyAbs: Math.sqrt(uncSumSq),
       hotspots: hotspots.map(h => ({ ...h, pct: Math.round((h.value / maxVal) * 100) })),
       breakdown: footprintItems.sort((a, b) => b.value - a.value),
-      handprintPotential
+      handprintPotential,
+      scaleFactor,
+      scalingBasis: teamSize > 0
+        ? `Scaled from a ${DEFAULT_MODEL_TEAM_SIZE}-FTE default model to ${teamSize.toLocaleString()} FTEs.`
+        : `Using the ${DEFAULT_MODEL_TEAM_SIZE}-FTE default model because team size was not supplied.`
     };
   }
 
@@ -657,7 +693,7 @@ class ClimateDashboardApp {
     document.getElementById("fn-report-company").innerText = a.name || "Your startup";
     const docNote = a.docs.deck || a.docs.accounting ? " · documents noted" : "";
     document.getElementById("fn-report-meta").innerText =
-      `${a.stage || "Stage"} · ${a.businessModel || "Model"} · Modeled estimate${docNote}`;
+      `${a.stage || "Stage"} · ${a.businessModel || "Model"} · FTE-scaled modeled estimate${docNote}`;
 
     document.getElementById("fn-report-footprint").innerHTML =
       `${s.footprintTotal.toFixed(1)} <small>tCO2e/yr</small>`;
@@ -676,6 +712,7 @@ class ClimateDashboardApp {
         <div class="hotspot-rank">${i + 1}</div>
         <div class="hotspot-info">
           <div class="hotspot-name">${h.name}</div>
+          <div class="hotspot-scope">${this.escapeHtml(h.scopeLabel || `Scope ${h.scope}`)}</div>
           <div class="hotspot-bar-bg"><div class="hotspot-bar-fill" style="width: ${h.pct}%;"></div></div>
         </div>
         <div class="hotspot-val">${h.value.toFixed(1)} tCO2e/yr</div>
@@ -689,11 +726,18 @@ class ClimateDashboardApp {
       frameworkListId: "fn-frameworks-list",
       items: s.breakdown || []
     });
+    const methodList = document.getElementById("fn-methodology-list");
+    if (methodList && s.scalingBasis) {
+      const li = document.createElement("li");
+      li.innerHTML = `<div class="methodology-source">${this.escapeHtml(s.scalingBasis)} Default activity values are the baseline profile; report values multiply those defaults by the FTE scale factor.</div>`;
+      methodList.prepend(li);
+    }
 
     this.renderDimensions(a, s);
     this.renderBenchmark(a, s);
     this.renderCost(s);
     this.renderPrecedents(a);
+    this.renderOperationalRisks(a);
 
     // Reveal after a short, believable delay
     const loadingText = document.getElementById("fn-loading-text");
@@ -747,8 +791,8 @@ class ClimateDashboardApp {
     const p = computeImpactProfile(s, a.activities);
     const modeled = [p.energy, p.water, p.waste].map(d => `
       <div class="dim">
-        <div class="dim-head"><span class="dim-label">${this.escapeHtml(d.label)}</span><span class="dim-tag dim-modeled">modeled</span></div>
-        <div class="dim-value">${d.value.toLocaleString()} <small>${this.escapeHtml(d.unit)}</small></div>
+        <div class="dim-head"><span class="dim-label">${this.escapeHtml(d.label)}</span><span class="dim-tag ${d.pending ? "dim-gap" : "dim-modeled"}">${d.pending ? "data gap" : "modeled"}</span></div>
+        <div class="dim-value ${d.pending ? "dim-pending" : ""}">${d.pending ? this.escapeHtml(d.pendingLabel) : `${d.value.toLocaleString()} <small>${this.escapeHtml(d.unit)}</small>`}</div>
         <div class="methodology-source">${this.escapeHtml(d.note)} <a href="${this.escapeHtml(d.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(d.source)}</a></div>
       </div>
     `).join("");
@@ -795,16 +839,16 @@ class ClimateDashboardApp {
     `;
   }
 
-  // Real, cited precedents behind the risks we raise — examples, not invented.
+  // Real, cited precedents behind regulatory / market risks — examples, not
+  // broad operational theories.
   renderPrecedents(a) {
     const el = document.getElementById("fn-report-precedents");
     if (!el) return;
     const acts = Array.isArray(a.activities) ? a.activities : [];
     const hasAvoided = acts.some(k => ACTIVITIES_DB[k] && ACTIVITIES_DB[k].scope === "avoided");
-    const hasCompute = acts.includes("compute");
     // Prioritise precedents by relevance to this company, always keep CSRD.
     const ranked = CASE_PRECEDENTS.filter(c => {
-      if (c.id === "rebound") return hasCompute;
+      if (c.id === "rebound") return false;
       if (c.id === "greenwash") return hasAvoided;
       return true; // csrd, ca-sb253 are broadly relevant
     });
@@ -821,6 +865,32 @@ class ClimateDashboardApp {
             <div class="methodology-source">${this.escapeHtml(c.status)} · <a href="${this.escapeHtml(c.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(c.source)} (${c.year})</a></div>
           </div>
         `).join("")}
+      </div>
+    `;
+  }
+
+  renderOperationalRisks(a) {
+    const el = document.getElementById("fn-report-operational-risks");
+    if (!el) return;
+    const acts = Array.isArray(a.activities) ? a.activities : [];
+    const hasCompute = acts.includes("compute");
+    el.classList.toggle("hidden", !hasCompute);
+    if (!hasCompute) {
+      el.innerHTML = "";
+      return;
+    }
+
+    const rebound = CASE_PRECEDENTS.find(c => c.id === "rebound");
+    el.innerHTML = `
+      <div class="methodology-head"><h3>Operational risks</h3><span>Guardrails</span></div>
+      <p class="step-desc">Execution risks that can erase modeled reductions unless the operating team actively controls them.</p>
+      <div class="precedent-list">
+        <div class="precedent">
+          <div class="precedent-title">Compute-efficiency rebound</div>
+          <p class="precedent-summary">Lowering cloud or AI unit cost can increase total inference and training volume. Carbon intensity per job may improve while absolute emissions stay flat or rise.</p>
+          <p class="precedent-relevance"><strong>Guardrail:</strong> pair architecture optimization with usage budgets, workload scheduling, and absolute emissions targets.</p>
+          ${rebound ? `<div class="methodology-source">${this.escapeHtml(rebound.status)} · <a href="${this.escapeHtml(rebound.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(rebound.source)} (${rebound.year})</a></div>` : ""}
+        </div>
       </div>
     `;
   }
@@ -888,8 +958,11 @@ class ClimateDashboardApp {
     a.activities.forEach(actKey => {
       const db = ACTIVITIES_DB[actKey];
       if (db && db.scope !== "avoided") {
+        const modeled = a.snapshot && Array.isArray(a.snapshot.breakdown)
+          ? a.snapshot.breakdown.find(item => item.id === actKey)
+          : null;
         this.state.metrics.push({
-          id: db.id, name: db.name, scope: db.scope, value: db.defaultVal,
+          id: db.id, name: db.name, scope: db.scope, value: modeled ? modeled.value : this.scaledActivityValue(db, a.teamSize),
           unit: db.unit, cadence: "annual", source_type: db.type,
           measured_at: new Date().toISOString(), uncertainty: db.defaultUnc
         });
@@ -1010,6 +1083,7 @@ class ClimateDashboardApp {
       ${!isPreview ? list(r.nextSteps, "Next steps") : ""}
       ${risks}
       ${this.renderCitations(r.citations)}
+      ${this.renderWebSources(r.webSources, r.webSearchQueries)}
       ${isPreview ? `<div class="ai-lock">Create an account to unlock the full report: Risk Radar, goals, evidence gaps, methodology notes, and dashboard tasks.</div>` : ""}
       ${quotaText}
     `;
@@ -1036,6 +1110,26 @@ class ClimateDashboardApp {
       <div class="ai-list-block ai-citations">
         <div class="ai-section-title">Sources</div>
         <ul class="ai-list ai-source-list">${items}</ul>
+      </div>
+    `;
+  }
+
+  renderWebSources(sources, queries) {
+    const items = Array.isArray(sources) ? sources.slice(0, 8).map(source => {
+      const uri = source && source.uri;
+      const title = source && (source.title || source.uri);
+      if (!uri || !title) return "";
+      return `<li><a href="${this.escapeHtml(uri)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(title)}</a></li>`;
+    }).filter(Boolean).join("") : "";
+    const queryText = Array.isArray(queries) && queries.length
+      ? `<div class="ai-line ai-web-queries"><b>Searches used:</b> ${this.escapeHtml(queries.slice(0, 4).join("; "))}</div>`
+      : "";
+    if (!items && !queryText) return "";
+    return `
+      <div class="ai-list-block ai-citations">
+        <div class="ai-section-title">Web grounding</div>
+        ${queryText}
+        ${items ? `<ul class="ai-list ai-source-list">${items}</ul>` : ""}
       </div>
     `;
   }
@@ -1581,7 +1675,7 @@ class ClimateDashboardApp {
           id: dbEntry.id,
           name: dbEntry.name,
           scope: dbEntry.scope,
-          value: dbEntry.defaultVal,
+          value: this.scaledActivityValue(dbEntry, cTeam),
           unit: dbEntry.unit,
           cadence: "annual",
           source_type: dbEntry.type,

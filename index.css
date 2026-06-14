@@ -2627,6 +2627,11 @@
   }
   .hotspot-info { min-width: 0; }
   .hotspot-name { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.35rem; }
+  .hotspot-scope {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-bottom: 0.35rem;
+  }
   .hotspot-bar-bg { height: 6px; background: hsla(0,0%,100%,0.06); border-radius: 999px; overflow: hidden; }
   .hotspot-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent-footprint-dark), var(--accent-footprint)); border-radius: 999px; }
   .hotspot-val { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); white-space: nowrap; }
@@ -3056,17 +3061,18 @@
    ========================================================================== */
 
 /* Accent rail per evidence card (scannability + premium feel) */
-.report-dimensions, .report-benchmark, .report-cost, .report-precedents, .report-methodology {
+.report-dimensions, .report-benchmark, .report-cost, .report-precedents, .report-operational-risks, .report-methodology {
   position: relative; overflow: hidden;
 }
 .report-dimensions::before, .report-benchmark::before, .report-cost::before,
-.report-precedents::before, .report-methodology::before {
+.report-precedents::before, .report-operational-risks::before, .report-methodology::before {
   content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
 }
 .report-dimensions::before { background: linear-gradient(180deg, var(--accent-handprint), transparent); }
 .report-benchmark::before  { background: linear-gradient(180deg, var(--accent-neutral), transparent); }
 .report-cost::before       { background: linear-gradient(180deg, var(--warning-amber), transparent); }
 .report-precedents::before { background: linear-gradient(180deg, var(--accent-neutral), transparent); }
+.report-operational-risks::before { background: linear-gradient(180deg, var(--accent-footprint), transparent); }
 .report-methodology::before{ background: linear-gradient(180deg, var(--text-muted), transparent); }
 
 /* Source footnotes — consistent, quiet, with an external-link affordance */
@@ -3166,8 +3172,10 @@
 .dim-tag { flex-shrink: 0; font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.15rem 0.5rem; border-radius: 999px; }
 .dim-modeled { background: var(--accent-neutral-glow); color: var(--accent-neutral); }
 .dim-qual { background: var(--warning-amber-glow); color: var(--warning-amber); }
+.dim-gap { background: var(--warning-amber-glow); color: var(--warning-amber); }
 .dim-value { font-family: var(--font-heading); font-size: 1.45rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.4rem; line-height: 1.1; }
 .dim-value small { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
+.dim-pending { color: var(--warning-amber); font-size: 1.1rem; }
 .dim-materiality { font-size: 1.1rem; text-transform: capitalize; }
 .dim-materiality small { display: block; margin-top: 0.15rem; font-size: 0.72rem; color: var(--text-muted); text-transform: none; }
 .dim-mat-low { color: var(--accent-handprint); }

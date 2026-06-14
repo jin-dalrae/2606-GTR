@@ -86,9 +86,12 @@ HttpOnly / Secure / SameSite=Lax session cookies.
 report. A daily quota is enforced per hashed client IP
 (`anonymous_report_limits` table).
 
-**Website grounding:** the report optionally fetches the company's public website
-for context, behind SSRF guards (blocked private/local hosts, size-capped reads,
-timeout).
+**Web grounding:** the report fetches the submitted public website for context
+behind SSRF guards (blocked private/local hosts, size-capped reads, timeout),
+then enables Gemini Google Search grounding for company-specific environmental
+issues, recent news, and analogous peer-company incidents. Search queries and
+web sources are surfaced in the AI briefing when Gemini returns grounding
+metadata.
 
 ---
 

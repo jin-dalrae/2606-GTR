@@ -250,7 +250,7 @@ export const IMPACT_DIMENSIONS = {
     label: "Waste & e-waste", unit: "kg/yr", type: "modeled",
     source: "Global E-waste Monitor (UNITAR/ITU) + US EPA WARM",
     url: "https://ewastemonitor.info/",
-    note: "From hardware end-of-life and packaging defaults. Replace with disposal records."
+    note: "From hardware end-of-life and packaging defaults. Replace with disposal records; third-party data-center e-waste is not inferred without vendor data."
   },
   nature: {
     label: "Land & biodiversity", unit: "materiality", type: "qualitative",
@@ -282,6 +282,7 @@ export function computeImpactProfile(snapshot = {}, activities = []) {
   const elecKwh = (tonnesFor(ELECTRIC_ACTIVITIES) * 1000) / c.gridKgPerKwh;
   const waterM3 = +((elecKwh * c.wueLitrePerKwh) / 1000).toFixed(1);
   const wasteKg = acts.reduce((sum, k) => sum + (ACTIVITY_WASTE_KG[k] || 0), 0);
+  const wastePending = wasteKg === 0;
 
   const natureDrivers = acts.filter(k => ACTIVITY_NATURE[k]);
   const natureLevel = natureDrivers.reduce(
@@ -292,7 +293,15 @@ export function computeImpactProfile(snapshot = {}, activities = []) {
   return {
     energy: { ...IMPACT_DIMENSIONS.energy, value: energyKwh },
     water: { ...IMPACT_DIMENSIONS.water, value: waterM3 },
-    waste: { ...IMPACT_DIMENSIONS.waste, value: wasteKg },
+    waste: {
+      ...IMPACT_DIMENSIONS.waste,
+      value: wastePending ? null : wasteKg,
+      pending: wastePending,
+      pendingLabel: "Pending vendor data",
+      note: wastePending
+        ? "No direct hardware, logistics, disposal, or vendor waste records were supplied. Treat this as a data gap, not zero waste."
+        : IMPACT_DIMENSIONS.waste.note
+    },
     nature: { ...IMPACT_DIMENSIONS.nature, level: natureLabel, drivers: natureDrivers }
   };
 }
@@ -312,7 +321,8 @@ export function buildFactPack(assessment = {}) {
   const benchmark = `Indicative peer range for ${bench.basisFte}: ~${bench.low}-${bench.high} tCO2e/yr (${BENCHMARKS.perFte.low}-${BENCHMARKS.perFte.high} ${BENCHMARKS.perFte.unit}). ${BENCHMARKS.perFte.note} Source: ${BENCHMARKS.perFte.source}.`;
 
   const impact = computeImpactProfile(a.snapshot || {}, activities);
-  const dimensions = `Impact beyond carbon (modeled/qualitative, replace with real data): Energy ~${impact.energy.value.toLocaleString()} kWh/yr; Water ~${impact.water.value} m³/yr; Waste ~${impact.waste.value} kg/yr; Land & biodiversity materiality: ${impact.nature.level}${impact.nature.drivers.length ? ` (via ${impact.nature.drivers.join(", ")})` : ""}.`;
+  const wasteText = impact.waste.pending ? impact.waste.pendingLabel : `~${impact.waste.value} kg/yr`;
+  const dimensions = `Impact beyond carbon (modeled/qualitative, replace with real data): Energy ~${impact.energy.value.toLocaleString()} kWh/yr; Water ~${impact.water.value} m³/yr; Waste: ${wasteText}; Land & biodiversity materiality: ${impact.nature.level}${impact.nature.drivers.length ? ` (via ${impact.nature.drivers.join(", ")})` : ""}.`;
 
   const footprintTonnes = a.snapshot && a.snapshot.footprintTotal;
   const cost = footprintTonnes != null ? priceFootprint(footprintTonnes) : null;

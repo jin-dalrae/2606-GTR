@@ -190,6 +190,7 @@ async function generateReport(request, env) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
+        tools: [{ google_search: {} }],
         generationConfig: {
           maxOutputTokens: mode === "preview" ? GEMINI_PREVIEW_MAX_OUTPUT_TOKENS : GEMINI_FULL_MAX_OUTPUT_TOKENS,
           temperature: 0.5,
@@ -216,7 +217,40 @@ async function generateReport(request, env) {
   let report;
   try { report = JSON.parse(text); } catch { return json({ error: "AI returned malformed output." }, 502); }
 
+  const grounding = extractGrounding(data);
+  if (grounding.queries.length || grounding.sources.length) {
+    report.webSearchQueries = grounding.queries;
+    report.webSources = grounding.sources;
+  }
+
   return json({ report, mode, quota });
+}
+
+function extractGrounding(data) {
+  const candidate = data && data.candidates && data.candidates[0];
+  const metadata = candidate && candidate.groundingMetadata;
+  if (!metadata) return { queries: [], sources: [] };
+
+  const queries = Array.from(new Set((metadata.webSearchQueries || [])
+    .map(q => String(q || "").trim())
+    .filter(Boolean)));
+
+  const seen = new Set();
+  const sources = (metadata.groundingChunks || [])
+    .map(chunk => chunk && chunk.web)
+    .filter(web => web && web.uri)
+    .map(web => ({
+      title: String(web.title || web.uri).trim(),
+      uri: String(web.uri || "").trim()
+    }))
+    .filter(source => {
+      if (!source.uri || seen.has(source.uri)) return false;
+      seen.add(source.uri);
+      return true;
+    })
+    .slice(0, 8);
+
+  return { queries, sources };
 }
 
 function buildReportPrompt(assessment, context = {}) {
@@ -251,7 +285,7 @@ function buildReportPrompt(assessment, context = {}) {
   ].join("\n");
 
   return [
-    "You are a climate-impact analyst advising an early-stage startup founder.",
+    "You are a climate-impact analyst advising a startup or growth-company operator. Match the company scale implied by stage, team size, and business context.",
     mode === "preview"
       ? "Write the unlocked preview half of a report: useful, specific, but not the full action plan."
       : "Write the full founder-facing report with enough substance to populate a dashboard and risk radar.",
@@ -277,9 +311,12 @@ function buildReportPrompt(assessment, context = {}) {
     factPack,
     "",
     "Evidence and realism rules:",
-    "- Back specific claims with the fact pack above: cite the source by name (e.g. 'per the GHG Protocol Scope 3 Standard') and compare the modeled footprint against the peer benchmark where useful.",
-    "- Cite ONLY sources that appear in the fact pack. Never invent a citation, statistic, study, or URL. If you have no supporting fact, state the assumption instead.",
-    "- You have no browsing tools beyond the supplied public website context; do not imply you inspected pages not shown here.",
+    "- Back specific claims with the fact pack above or with Google Search grounding. Cite the source by name (e.g. 'per the GHG Protocol Scope 3 Standard') and compare the modeled footprint against the peer benchmark where useful.",
+    "- Never invent a citation, statistic, study, or URL. If neither the fact pack nor search grounding supports a claim, state the assumption instead.",
+    "- Use the supplied website URL/context and Google Search grounding to look for company-specific environmental issues, recent news, sustainability pages, regulatory exposure, and similar-company incidents.",
+    "- Use web search for context and risk discovery only. Do not replace the modeled footprint with unsourced web guesses, and do not invent employee counts, emissions, revenue, or geography if search does not ground them.",
+    "- For similar-company examples, state why the example is analogous and label it as a peer/analog risk, not proof that it applies directly.",
+    "- Use exact fact-pack source names or web-grounded source titles in citations.",
     "- You did not read source files. Treat selected document filenames as workflow clues only, not evidence.",
     "- Treat footprint values as modeled defaults, not measured accounting.",
     "- Tie every issue and goal to the founder notes, website context, selected activities, stage, business model, hotspots, or a fact-pack precedent.",
@@ -288,8 +325,8 @@ function buildReportPrompt(assessment, context = {}) {
     "- If the situation is too thin, say the first action is to verify the missing operational data, not to claim precision.",
     "",
     mode === "preview"
-      ? "Return JSON for a preview only: headline, basis, two material issues, one likely forcing function, the first action, and a citations list naming the fact-pack sources you drew on. Do not include the full risk radar, goals, or methodology notes."
-      : "Return JSON for the full report. Include a basis field naming the real context used and any key missing assumption. Include richer sections: executive summary, evidence gaps, methodology notes, next steps, goals, 2 to 4 dated Risk Radar items with concrete actions, and a citations list (each: the fact-pack source name + what it backs)."
+      ? "Return JSON for a preview only: headline, basis, two material issues, one likely forcing function, the first action, and a citations list naming the fact-pack or web-grounded sources you drew on. Do not include the full risk radar, goals, or methodology notes."
+      : "Return JSON for the full report. Include a basis field naming the real context used and any key missing assumption. Include richer sections: executive summary, evidence gaps, methodology notes, next steps, goals, 2 to 4 dated Risk Radar items with concrete actions, and a citations list (each: the fact-pack or web-grounded source name + what it backs). Include at least one issue or risk from company-specific environmental news or a clearly analogous peer-company incident when search grounding finds one."
   ].join("\n");
 }
 
@@ -313,7 +350,7 @@ function buildReportSchema(mode = "full") {
         firstAction: { type: "string", description: "One sentence: the recommended first move" },
         citations: {
           type: "array",
-          description: "1 to 3 fact-pack sources you relied on, each as 'Source name'. Use the exact source names from the fact pack.",
+          description: "1 to 3 sources you relied on. Use exact fact-pack source names or web-grounded source titles surfaced by Google Search.",
           items: { type: "string" }
         }
       },
@@ -360,7 +397,7 @@ function buildReportSchema(mode = "full") {
       },
       citations: {
         type: "array",
-        description: "2 to 5 fact-pack sources you relied on. Each: 'Source name — what it backs'. Use the exact source names from the fact pack; do not invent sources.",
+        description: "2 to 5 sources you relied on. Each: 'Source name or web source title — what it backs'. Use exact fact-pack source names or web-grounded source titles; do not invent sources.",
         items: { type: "string" }
       }
     },
@@ -765,6 +802,7 @@ function fromB64(b64) {
 export {
   buildReportPrompt,
   buildReportSchema,
+  extractGrounding,
   extractUsefulText,
   getClientIp,
   normalizePublicWebsiteUrl
