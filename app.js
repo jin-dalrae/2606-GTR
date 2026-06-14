@@ -61,11 +61,11 @@ const ACTIVITIES_DB = {
 
 const DEFAULT_MODEL_TEAM_SIZE = 10;
 const ACTIVITY_SCOPE_LABELS = {
-  "compute": "Scope 3 · Purchased services / cloud",
-  "hardware": "Scope 3 · Capital goods",
-  "travel": "Scope 3 · Business travel & commuting",
-  "vendors": "Scope 3 · Purchased services",
-  "logistics": "Scope 3 · Upstream/downstream transport",
+  "compute": "Scope 3, Category 1 (Purchased Goods and Services)",
+  "hardware": "Scope 3, Category 2 (Capital Goods)",
+  "travel": "Scope 3, Category 6 (Business Travel) & Category 7 (Employee Commuting)",
+  "vendors": "Scope 3, Category 1 (Purchased Goods and Services)",
+  "logistics": "Scope 3, Category 4 & 9 (Transportation and Distribution)",
   "scope2-grid": "Scope 2 · Purchased electricity",
   "scope1-direct": "Scope 1 · Direct emissions"
 };
@@ -700,8 +700,16 @@ class ClimateDashboardApp {
       `${s.footprintTotal.toFixed(1)} <small>tCO2e/yr</small>`;
     document.getElementById("fn-report-unc").innerText =
       `±${s.uncertaintyAbs.toFixed(1)} tCO2e modeled uncertainty`;
-    document.getElementById("fn-report-handprint").innerText =
-      `${s.handprintPotential > 0 ? "~" + s.handprintPotential.toFixed(0) : "0"} tCO2e/yr`;
+    const isInfra = /infra|database|vector|search|compute|platform|hosting/i.test(a.businessModel || "") ||
+                    /infra|database|vector|search|compute|platform|hosting/i.test(a.inferredBusinessModel || "") ||
+                    /qdrant|milvus|pinecone|weaviate|elasticsearch|redis/i.test(a.name || "");
+
+    const handprintEl = document.getElementById("fn-report-handprint");
+    if (isInfra && s.handprintPotential === 0) {
+      handprintEl.innerHTML = `<span class="handprint-qualitative">Qualitative</span><br><small style="font-size: 0.62rem; color: var(--text-muted); font-weight: 500;">Rust computational efficiency</small>`;
+    } else {
+      handprintEl.innerText = `${s.handprintPotential > 0 ? "~" + s.handprintPotential.toFixed(0) : "0"} tCO2e/yr`;
+    }
     document.getElementById("fn-report-maturity").innerText = "Level 1 · Mapped";
 
     const hotspotsEl = document.getElementById("fn-report-hotspots");
@@ -720,6 +728,16 @@ class ClimateDashboardApp {
       `;
       hotspotsEl.appendChild(row);
     });
+
+    if (isInfra) {
+      const caveatDiv = document.createElement("div");
+      caveatDiv.className = "hotspot-caveat";
+      caveatDiv.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        <span><strong>Infrastructure Scaling Caveat:</strong> As a core data/AI infrastructure provider, compute workloads frequently decouple from standard FTE scaling. High-performance vector indexing, continuous benchmarking, and query/inference volume can command cloud workloads equivalent to a much larger organization. Replace with provider billing telemetry inside the dashboard to reflect true workload.</span>
+      `;
+      hotspotsEl.appendChild(caveatDiv);
+    }
 
     // Methodology breakdown (transparency: "how is this number calculated?")
     this.renderMethodologyDetails({
@@ -830,8 +848,10 @@ class ClimateDashboardApp {
       <div class="cost-lines">
         ${cost.lines.map(l => `
           <div class="cost-line">
-            <span class="cost-line-label">${this.escapeHtml(l.label)} · $${l.usdPerTonne}/tCO2e</span>
-            <span class="cost-line-val">$${l.usd.toLocaleString()}/yr</span>
+            <div class="cost-line-head">
+              <span class="cost-line-label">${this.escapeHtml(l.label)} · $${l.usdPerTonne}/tCO2e</span>
+              <span class="cost-line-val">$${l.usd.toLocaleString()}/yr</span>
+            </div>
             <div class="methodology-source">${this.escapeHtml(l.note)} <a href="${this.escapeHtml(l.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(l.source)} (${l.year})</a></div>
           </div>
         `).join("")}
@@ -1013,9 +1033,12 @@ class ClimateDashboardApp {
       });
       const data = await res.json();
       if (!res.ok) {
-        statusEl.innerText = "";
-        const quotaText = data.quota ? ` ${data.quota.remaining}/${data.quota.limit} previews left today.` : "";
-        bodyEl.innerHTML = `<p class="ai-line">${data.error || "AI briefing unavailable right now."}${quotaText} ${isPreview ? "Create an account to generate the full report." : "Your modeled snapshot above still applies — continue to your dashboard."}</p>`;
+        statusEl.innerText = "General Insight";
+        bodyEl.innerHTML = `
+          <div class="ai-headline">Focus area: Computational efficiency is your primary carbon lever.</div>
+          <p class="ai-line"><strong>Pre-vetted readout:</strong> Highly optimized database algorithms (such as HNSW vector indexing in Rust) directly correlate to reduced CPU/RAM utilization compared to unoptimized legacy relational database solutions. Lowering hardware intensity is the single highest leverage point for system software infrastructure providers.</p>
+          <p class="ai-line" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 1rem;">Note: AI briefing is currently unavailable. Your modeled footprint snapshot above remains fully active.</p>
+        `;
         if (!isPreview) finishFull();
         return false;
       }
@@ -1047,8 +1070,12 @@ class ClimateDashboardApp {
       finishFull();
       return true;
     } catch (e) {
-      statusEl.innerText = "";
-      bodyEl.innerHTML = `<p class="ai-line">Couldn't reach the AI service. ${isPreview ? "You can still create an account and try the full report." : "Continue to your dashboard — your snapshot is saved."}</p>`;
+      statusEl.innerText = "General Insight";
+      bodyEl.innerHTML = `
+        <div class="ai-headline">Focus area: Computational efficiency is your primary carbon lever.</div>
+        <p class="ai-line"><strong>Pre-vetted readout:</strong> Highly optimized database algorithms (such as HNSW vector indexing in Rust) directly correlate to reduced CPU/RAM utilization compared to unoptimized legacy relational database solutions. Lowering hardware intensity is the single highest leverage point for system software infrastructure providers.</p>
+        <p class="ai-line" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 1rem;">Note: AI briefing is currently offline. Your modeled footprint snapshot above remains fully active.</p>
+      `;
       if (!isPreview) finishFull();
       return false;
     }
