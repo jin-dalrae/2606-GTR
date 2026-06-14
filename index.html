@@ -568,6 +568,12 @@
               <span>📚 Climate Glossary</span>
             </a>
           </li>
+          <li id="sidebar-admin-item" class="hidden">
+            <a href="#admin" class="nav-link" id="nav-admin" data-view="admin">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              <span>🛠️ Admin Stats</span>
+            </a>
+          </li>
         </ul>
       </nav>
       
@@ -1269,6 +1275,100 @@
           
           <div class="history-list-container" id="history-list">
             <div class="history-loading">Loading report history...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. ADMIN DASHBOARD VIEW -->
+      <section id="view-admin" class="app-view">
+        <div class="view-header">
+          <h1>🛠️ Administrator Dashboard</h1>
+          <p class="subtitle">Monitor system-wide statistics, active workspaces, and Gemini API token usage/costs.</p>
+        </div>
+
+        <div class="admin-grid">
+          <!-- Stats Cards -->
+          <div class="card glass-card admin-stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-info">
+              <span class="stat-label">Total Users</span>
+              <h2 id="admin-stat-users" class="stat-value">-</h2>
+            </div>
+          </div>
+          <div class="card glass-card admin-stat-card">
+            <div class="stat-icon">💼</div>
+            <div class="stat-info">
+              <span class="stat-label">Workspaces</span>
+              <h2 id="admin-stat-workspaces" class="stat-value">-</h2>
+            </div>
+          </div>
+          <div class="card glass-card admin-stat-card">
+            <div class="stat-icon">📄</div>
+            <div class="stat-info">
+              <span class="stat-label">Documents</span>
+              <h2 id="admin-stat-documents" class="stat-value">-</h2>
+            </div>
+          </div>
+          <div class="card glass-card admin-stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-info">
+              <span class="stat-label">Reports Generated</span>
+              <h2 id="admin-stat-reports" class="stat-value">-</h2>
+            </div>
+          </div>
+        </div>
+
+        <!-- Token Usage & Cost Card -->
+        <div class="card glass-card text-left" style="margin-top: 1.5rem;">
+          <div class="methodology-head">
+            <h3>Gemini API Token Consumption</h3>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">gemini-3.1-flash-lite-preview</span>
+          </div>
+          
+          <div class="admin-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-top: 1.25rem;">
+            <div class="token-detail">
+              <span class="token-label">Prompt Tokens</span>
+              <h3 id="admin-tokens-prompt" style="font-family: 'Space Grotesk', sans-serif;">-</h3>
+            </div>
+            <div class="token-detail">
+              <span class="token-label">Completion Tokens</span>
+              <h3 id="admin-tokens-completion" style="font-family: 'Space Grotesk', sans-serif;">-</h3>
+            </div>
+            <div class="token-detail">
+              <span class="token-label">Total Tokens</span>
+              <h3 id="admin-tokens-total" style="font-family: 'Space Grotesk', sans-serif;">-</h3>
+            </div>
+            <div class="token-detail cost-highlight">
+              <span class="token-label">Estimated AI Cost</span>
+              <h2 id="admin-tokens-cost" style="color: var(--emerald-neon); font-family: 'Space Grotesk', sans-serif; font-size: 2.25rem; font-weight: 700; margin-top: 0.25rem;">$0.00</h2>
+            </div>
+          </div>
+        </div>
+
+        <!-- Historical Token Logs Table -->
+        <div class="card glass-card text-left" style="margin-top: 1.5rem;">
+          <h3>Historical Report Logs</h3>
+          <p class="step-desc" style="margin-bottom: 1.25rem;">List of recent AI report assessments, associated user accounts, and token usage details.</p>
+          
+          <div style="overflow-x: auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>User Email</th>
+                  <th>Report Name</th>
+                  <th>Prompt Tokens</th>
+                  <th>Completion Tokens</th>
+                  <th>Total Tokens</th>
+                  <th>Est. Cost</th>
+                </tr>
+              </thead>
+              <tbody id="admin-logs-tbody">
+                <tr>
+                  <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading logs...</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>

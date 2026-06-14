@@ -224,7 +224,7 @@ export const CASE_PRECEDENTS = [
     source: "European Commission", year: 2024,
     url: "https://finance.ec.europa.eu/capital-markets-union-and-financial-markets/company-reporting-and-auditing/company-reporting/corporate-sustainability-reporting_en" },
   { id: "ca-sb253", title: "California SB 253 / SB 261",
-    summary: "Climate Corporate Data Accountability Act requires Scope 1-3 disclosure for large companies doing business in California, with reporting phasing in from 2026.",
+    summary: "Climate Corporate Data Accountability Act requires Scope 1-3 disclosure for large companies doing business in California, with initial reporting frameworks now active as of 2026.",
     relevance: "If you sell to or partner with large California firms, expect Scope 3 data requests downstream.",
     status: "Enacted 2023; implementation timeline and litigation ongoing - verify.",
     source: "California Air Resources Board", year: 2023,

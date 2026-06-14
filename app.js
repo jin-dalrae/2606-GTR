@@ -384,6 +384,16 @@ class ClimateDashboardApp {
       emailEl.innerText = "Not signed in";
       actionEl.innerText = "Sign in";
     }
+
+    const adminItem = document.getElementById("sidebar-admin-item");
+    if (adminItem) {
+      const isEmailAdmin = this.user && (this.user.startsWith("admin@") || this.user === "rae@sociallab.com");
+      if (isEmailAdmin) {
+        adminItem.classList.remove("hidden");
+      } else {
+        adminItem.classList.add("hidden");
+      }
+    }
     // Topbar entry point reflects auth: existing users jump to their dashboard.
     const loginLink = document.getElementById("fn-login-link");
     if (loginLink) loginLink.innerHTML = this.user ? "Dashboard &rarr;" : "Log in";
@@ -600,13 +610,17 @@ class ClimateDashboardApp {
     const acctFile = document.getElementById("fn-file-acct").files[0];
     const notes = document.getElementById("fn-notes").value.trim();
 
-    const teamSize = parseInt(document.getElementById("fn-team").value) || 0;
+    let name = document.getElementById("fn-name").value.trim();
+    let url = this.normalizeWebsiteInput(document.getElementById("fn-url").value);
+    let stage = document.getElementById("fn-stage").value;
+    let businessModel = document.getElementById("fn-model").value.trim();
+    let teamSize = parseInt(document.getElementById("fn-team").value) || 0;
 
     this.state.assessment = {
-      name: document.getElementById("fn-name").value.trim(),
-      url: this.normalizeWebsiteInput(document.getElementById("fn-url").value),
-      stage: document.getElementById("fn-stage").value,
-      businessModel: document.getElementById("fn-model").value.trim(),
+      name,
+      url,
+      stage,
+      businessModel,
       teamSize,
       activities: uniqueActivities,
       notes: notes,
@@ -648,7 +662,7 @@ class ClimateDashboardApp {
     activities.forEach(key => {
       const db = ACTIVITIES_DB[key];
       if (db && db.scope !== "avoided") {
-        const value = db.defaultVal * scaleFactor;
+        let value = db.defaultVal * scaleFactor;
         footprintTotal += value;
         const uncAbs = value * (db.defaultUnc / 100);
         uncSumSq += Math.pow(uncAbs, 2);
@@ -1132,6 +1146,11 @@ class ClimateDashboardApp {
         card.classList.add("hidden");
         if (!isPreview) finishFull();
         return false;
+      }
+
+      if (data.snapshot) {
+        this.state.assessment.snapshot = data.snapshot;
+        if (data.snapshot.isEnterpriseAI) this.state.assessment.isEnterpriseAI = true;
       }
 
       if (isPreview) {
@@ -2151,10 +2170,92 @@ class ClimateDashboardApp {
       this.renderRadarView();
     } else if (view === "history") {
       this.renderHistoryView();
+    } else if (view === "admin") {
+      this.renderAdminView();
     }
   }
 
   // Views Renderer Functions
+  renderAdminView() {
+    this.loadAdminStats();
+    this.loadAdminTokenLogs();
+  }
+
+  async loadAdminStats() {
+    try {
+      const res = await fetch("/api/admin/stats");
+      if (!res.ok) {
+        if (res.status === 403 || res.status === 401) {
+          this.showToast("Admin access denied", "error");
+          document.getElementById("view-admin").innerHTML = `<div style="padding: 2rem; text-align: center;"><h2>Access Denied</h2><p>You do not have administrator privileges.</p></div>`;
+          return;
+        }
+        throw new Error("Failed to load admin stats");
+      }
+      const stats = await res.json();
+      
+      const elUsers = document.getElementById("admin-stat-users");
+      const elWorkspaces = document.getElementById("admin-stat-workspaces");
+      const elDocs = document.getElementById("admin-stat-documents");
+      const elReports = document.getElementById("admin-stat-reports");
+      const elPrompt = document.getElementById("admin-tokens-prompt");
+      const elComp = document.getElementById("admin-tokens-completion");
+      const elTotal = document.getElementById("admin-tokens-total");
+      const elCost = document.getElementById("admin-tokens-cost");
+
+      if (elUsers) elUsers.innerText = stats.users.toLocaleString();
+      if (elWorkspaces) elWorkspaces.innerText = stats.workspaces.toLocaleString();
+      if (elDocs) elDocs.innerText = stats.documents.toLocaleString();
+      if (elReports) elReports.innerText = stats.reports.toLocaleString();
+
+      if (stats.tokens) {
+        if (elPrompt) elPrompt.innerText = stats.tokens.prompt.toLocaleString() + " Prompt";
+        if (elComp) elComp.innerText = stats.tokens.completion.toLocaleString() + " Completion";
+        if (elTotal) elTotal.innerText = stats.tokens.total.toLocaleString() + " Total Tokens";
+        
+        // Cost heuristic: roughly $0.000125 per 1k prompt, $0.000375 per 1k completion for Gemini Flash 8B/Pro (estimate)
+        const estCost = ((stats.tokens.prompt / 1000) * 0.000125) + ((stats.tokens.completion / 1000) * 0.000375);
+        if (elCost) elCost.innerText = "$" + estCost.toFixed(4);
+      }
+
+    } catch (e) {
+      console.error(e);
+      this.showToast("Failed to load admin stats", "error");
+    }
+  }
+
+  async loadAdminTokenLogs() {
+    try {
+      const res = await fetch("/api/admin/token-logs");
+      if (!res.ok) {
+        if (res.status === 403 || res.status === 401) return; // handled by loadAdminStats
+        throw new Error("Failed to load token logs");
+      }
+      const { logs } = await res.json();
+      const tbody = document.getElementById("admin-logs-tbody");
+      if (!tbody) return;
+
+      tbody.innerHTML = logs.map(l => {
+        const d = new Date(l.created_at);
+        return `
+          <tr>
+            <td>${d.toLocaleDateString()} ${d.toLocaleTimeString()}</td>
+            <td>${this.escapeHtml(l.user_id)}</td>
+            <td>${l.prompt_tokens.toLocaleString()}</td>
+            <td>${l.completion_tokens.toLocaleString()}</td>
+            <td>${l.total_tokens.toLocaleString()}</td>
+          </tr>
+        `;
+      }).join("");
+
+      if (logs.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 2rem;">No token usage recorded yet.</td></tr>`;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   renderIntakeView() {
     if (this.state.company.isInitialized) {
       // Pre-fill profile

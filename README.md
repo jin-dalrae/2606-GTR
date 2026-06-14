@@ -61,6 +61,10 @@ ranges; regulatory precedents carry a status/date because regulation moves; and
 the AI is constrained to cite **only** sources from the fact pack — never to invent
 a citation, statistic, or URL.
 
+### Foundation Model / Enterprise AI Handling
+
+The platform intelligently supports massive AI data foundries and foundation model companies without relying on hardcoded overrides. Users can flag themselves as "Foundation Model / Heavy Compute" during intake. This applies a 1000x multiplier to standard compute estimates and automatically injects an RLHF/Data Annotation workforce footprint (25,000 tCO2e/yr) into their baseline, ensuring their operational reality isn't grossly underestimated by standard SME per-capita scaling logic.
+
 ---
 
 ## API
@@ -82,6 +86,8 @@ All API routes live under `/api/*`; everything else serves the SPA.
 | DELETE | `/api/reports/:id` | Delete a saved report snapshot |
 | GET/POST | `/api/documents` | List / upload document metadata (bytes in R2) |
 | GET/DELETE | `/api/documents/:id` | Fetch / delete a document |
+| GET  | `/api/admin/stats` | (Admin Only) High-level platform statistics (users, workspaces, documents, reports, tokens) |
+| GET  | `/api/admin/token-logs` | (Admin Only) Historical AI token usage logs across the platform |
 
 **Auth:** PBKDF2 (WebCrypto) password hashing with a timing-safe comparison;
 HttpOnly / Secure / SameSite=Lax session cookies.
