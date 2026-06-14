@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { buildReportPrompt, buildReportSchema, extractGrounding, extractUsefulText, getClientIp, normalizePublicWebsiteUrl } from './worker/index.js';
-import { buildFactPack, computeImpactProfile, priceFootprint } from './data/evidence.js';
+import { buildFactPack, computeImpactProfile, priceFootprint, computeBenchmark } from './data/evidence.js';
 
 // Calculation helper extracted to verify mathematics logic independently
 function calculateLedgerTotals(state) {
@@ -361,5 +361,122 @@ describe('Multi-dimension impact + cost', () => {
     }, [], 'Manufacturing');
     expect(pPhys.waste.value).toBe(75); // 50 * 1.5 scale
     expect(pPhys.waste.note).toContain('non-digital business models');
+  });
+  it('strictly evaluates isHardware on business model and ignores activity checklist', () => {
+    // SaaS company with hardware activity shouldn't trigger physical hardware defaults
+    const pSaaS = computeImpactProfile({ scaleFactor: 1.0, breakdown: [] }, ['hardware'], 'SaaS');
+    expect(pSaaS.nature.level).toBe('medium'); // hardware activity default is medium
+    expect(pSaaS.nature.note).not.toContain('semiconductors, metals, plastics');
+
+    // Physical Hardware company should trigger hardware defaults even without activities
+    const pHardware = computeImpactProfile({ scaleFactor: 1.0, breakdown: [] }, [], 'Hardware');
+    expect(pHardware.nature.level).toBe('high');
+    expect(pHardware.nature.note).toContain('semiconductors, metals, plastics');
+  });
+
+  it('buildFactPack swaps frameworks dynamically for hardware startups', () => {
+    const factsHardware = buildFactPack({ businessModel: 'Hardware', activities: ['hardware'], stage: 'Seed', teamSize: 10 });
+    // Should include LCA and GHG Product, and exclude SCI and Rebound
+    const fwHardware = factsHardware.frameworks.join(' | ');
+    expect(fwHardware).toContain('ISO 14040/14044');
+    expect(fwHardware).toContain('GHG Protocol Product');
+    expect(fwHardware).not.toContain('Software Carbon Intensity');
+    expect(fwHardware).not.toContain('Jevons Paradox');
+
+    const factsSaaS = buildFactPack({ businessModel: 'SaaS', activities: ['compute'], stage: 'Seed', teamSize: 10 });
+    // Should include SCI and Rebound, and exclude LCA and GHG Product
+    const fwSaaS = factsSaaS.frameworks.join(' | ');
+    expect(fwSaaS).toContain('Software Carbon Intensity');
+    expect(fwSaaS).toContain('Jevons Paradox');
+    expect(fwSaaS).not.toContain('ISO 14040/14044');
+    expect(fwSaaS).not.toContain('GHG Protocol Product');
+  });
+
+  it('computes sector-specific benchmarks dynamically', () => {
+    // Biotech range for 10 FTEs: low=100, high=300
+    const bBiotech = computeBenchmark('Seed', 10, 'Biotech');
+    expect(bBiotech.low).toBe(100);
+    expect(bBiotech.high).toBe(300);
+    expect(bBiotech.perFte.note).toContain('lab equipment');
+
+    // Food range for 10 FTEs: low=120, high=350
+    const bFood = computeBenchmark('Seed', 10, 'Food and Beverage');
+    expect(bFood.low).toBe(120);
+    expect(bFood.high).toBe(350);
+    expect(bFood.perFte.note).toContain('agriculture');
+
+    // Hardware range for 10 FTEs: low=150, high=450
+    const bHardware = computeBenchmark('Seed', 10, 'Hardware');
+    expect(bHardware.low).toBe(150);
+    expect(bHardware.high).toBe(450);
+    expect(bHardware.perFte.note).toContain('prototyping');
+  });
+
+  it('models Biotech and Food water/waste profiles', () => {
+    // Biotech at scaleFactor 1.0
+    const pBiotech = computeImpactProfile({ scaleFactor: 1.0, breakdown: [] }, [], 'Biotech');
+    expect(pBiotech.water.value).toBe(45.0);
+    expect(pBiotech.water.note).toContain('laboratory process water');
+    expect(pBiotech.waste.value).toBe(180);
+    expect(pBiotech.waste.note).toContain('biohazardous');
+    expect(pBiotech.nature.level).toBe('medium');
+    expect(pBiotech.nature.drivers).toContain('chemical inputs');
+
+    // Food at scaleFactor 2.0
+    const pFood = computeImpactProfile({ scaleFactor: 2.0, breakdown: [] }, [], 'Food and Beverage');
+    expect(pFood.water.value).toBe(160.0); // 80 * 2.0
+    expect(pFood.water.note).toContain('food processing');
+    expect(pFood.waste.value).toBe(300); // 150 * 2.0
+  });
+
+  it('includes EUDR, RoHS/WEEE, and Biotech waste precedents in fact pack', () => {
+    // Biotech fact pack
+    const factsBiotech = buildFactPack({ businessModel: 'Biotech', activities: [], stage: 'Seed', teamSize: 10 });
+    const precBiotech = factsBiotech.precedents.join(' | ');
+    expect(precBiotech).toContain('Biotech biohazardous');
+
+    // Food fact pack
+    const factsFood = buildFactPack({ businessModel: 'Food and Beverage', activities: [], stage: 'Seed', teamSize: 10 });
+    const precFood = factsFood.precedents.join(' | ');
+    expect(precFood).toContain('EU Deforestation');
+
+    // Hardware fact pack
+    const factsHardware = buildFactPack({ businessModel: 'Hardware', activities: [], stage: 'Seed', teamSize: 10 });
+    const precHardware = factsHardware.precedents.join(' | ');
+    expect(precHardware).toContain('WEEE & RoHS');
+  });
+
+  it('calculates water, waste, and nature profiles cumulatively for hybrid startups', () => {
+    // Combined Biotech + Hardware at scaleFactor 1.0
+    const pHybrid = computeImpactProfile({ scaleFactor: 1.0, breakdown: [] }, [], 'Biotech and Hardware');
+    
+    // Waste: 250 (Hardware) + 180 (Biotech) = 430 kg
+    expect(pHybrid.waste.value).toBe(430);
+    expect(pHybrid.waste.note).toContain('prototyping');
+    expect(pHybrid.waste.note).toContain('biohazardous');
+
+    // Water: 45.0 (Biotech) + 0 (Hardware) = 45.0 m3
+    expect(pHybrid.water.value).toBe(45.0);
+    expect(pHybrid.water.note).toContain('process water');
+
+    // Nature: Level high (max of 3 and 2), both drivers present
+    expect(pHybrid.nature.level).toBe('high');
+    expect(pHybrid.nature.drivers).toContain('raw materials');
+    expect(pHybrid.nature.drivers).toContain('chemical inputs');
+    expect(pHybrid.nature.note).toContain('extraction');
+    expect(pHybrid.nature.note).toContain('reagents');
+  });
+
+  it('aggregates benchmarks modularly for hybrid startups', () => {
+    // Combined SaaS + Biotech at 10 FTEs
+    const bHybrid = computeBenchmark('Seed', 10, 'SaaS and Biotech');
+    
+    // SaaS low=1.5, Biotech low=10.0 -> max is 10.0 -> * 10 = 100
+    expect(bHybrid.low).toBe(100);
+    // SaaS high=4.0, Biotech high=30.0 -> max is 30.0 -> * 10 = 300
+    expect(bHybrid.high).toBe(300);
+    expect(bHybrid.perFte.note).toContain('Hybrid operations');
+    expect(bHybrid.perFte.note).toContain('Office operations');
+    expect(bHybrid.perFte.note).toContain('lab equipment');
   });
 });

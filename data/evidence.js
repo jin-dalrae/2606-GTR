@@ -30,7 +30,7 @@ export const FACTOR_SOURCES = {
     year: 2024,
     url: "https://ghgprotocol.org/guidance-built-ghg-protocol",
     methodology: "Cloud usage converted via provider region carbon intensity and PUE; SCI = (E x I) + M per functional unit.",
-    basis: "Per-FTE cloud/AI compute for a small software team, from typical SaaS+inference spend and hyperscaler carbon disclosures. Replace with billing-derived kWh to move off the default."
+    basis: "Per-FTE cloud/AI compute baseline from typical operational spend and hyperscaler carbon disclosures. Replace with billing-derived kWh to move off the default."
   },
   "hardware": {
     label: "Hardware & Electronics",
@@ -57,7 +57,7 @@ export const FACTOR_SOURCES = {
     year: 2023,
     url: "https://www.epa.gov/land-research/us-environmentally-extended-input-output-useeio-models",
     methodology: "Spend ($) x sector emission intensity (kgCO2e per $) for professional services & software.",
-    basis: "Spend-based estimate for purchased services/SaaS. Coarse by design; supplier-specific factors improve it materially."
+    basis: "Spend-based estimate for purchased services and tools. Coarse by design; supplier-specific factors improve it materially."
   },
   "logistics": {
     label: "Logistics & Distribution",
@@ -121,18 +121,28 @@ export const FRAMEWORKS = [
     url: "https://ghgprotocol.org/project-protocol" },
   { id: "rebound", name: "Rebound Effect (Jevons Paradox)",
     what: "Efficiency lowers cost and can raise total demand; why a compute-efficiency win can be partly eaten by more usage.",
-    url: "https://ukerc.ac.uk/publications/the-rebound-effect-an-assessment-of-the-evidence-for-economy-wide-energy-savings-from-improved-energy-efficiency/" }
+    url: "https://ukerc.ac.uk/publications/the-rebound-effect-an-assessment-of-the-evidence-for-economy-wide-energy-savings-from-improved-energy-efficiency/" },
+  { id: "iso-lca", name: "ISO 14040/14044 (Life Cycle Assessment)",
+    what: "The international standard for modeling the cradle-to-grave lifecycle footprint of physical products (raw materials, production, use, and disposal).",
+    url: "https://www.iso.org/standard/37456.html" },
+  { id: "ghgp-product", name: "GHG Protocol Product Life Cycle Standard",
+    what: "Defines how to measure greenhouse gas emissions of a product throughout its lifecycle, crucial for hardware supply chain audits.",
+    url: "https://ghgprotocol.org/product-standard" }
 ];
 
-// --- Peer benchmarks (transparent, derived ranges) ------------------------
-// Not a proprietary peer dataset: range = typical headcount-at-stage x a
-// per-FTE operational footprint for digital-first startups, both sourced.
 export const BENCHMARKS = {
   perFte: {
     low: 1.5, high: 4.0, unit: "tCO2e/FTE/yr",
     source: "Derived from DESNZ/EPA per-capita office, travel & electricity factors for digital-first SMEs",
     url: "https://www.gov.uk/government/collections/government-conversion-factors-for-company-reporting",
     note: "Operational (Scope 1-2 + business travel/compute). Hardware-heavy or logistics models run higher; verify against your own data."
+  },
+  sectors: {
+    "SaaS": { low: 1.5, high: 4.0, unit: "tCO2e/FTE/yr", note: "Office operations and cloud compute emissions.", source: "DESNZ/EPA digital-first SMEs", url: "https://www.gov.uk/government/collections/government-conversion-factors-for-company-reporting" },
+    "Hardware": { low: 15.0, high: 45.0, unit: "tCO2e/FTE/yr", note: "Includes physical prototyping facilities and outsourced Scope 3 supply chain manufacturing.", source: "Product Lifecycle LCA / Apple & Dell OEM averages", url: "https://ghgprotocol.org/standards/scope-3-standard" },
+    "Food and Beverage": { low: 12.0, high: 35.0, unit: "tCO2e/FTE/yr", note: "Includes supply chain agriculture, raw ingredients, logistics, and processing.", source: "GHG Protocol Food & Land Sector Guidance", url: "https://ghgprotocol.org/standards/scope-3-standard" },
+    "Pet Services": { low: 8.0, high: 24.0, unit: "tCO2e/FTE/yr", note: "Includes organic pet waste processing, operations, and retail logistics.", source: "EPA WARM / US Census business footprint baselines", url: "https://ewastemonitor.info/" },
+    "Biotech": { low: 10.0, high: 30.0, unit: "tCO2e/FTE/yr", note: "Includes high power lab equipment operations, clinical waste disposal, and diagnostics shipping.", source: "My Green Lab / SBTN Biotech benchmarks", url: "https://sciencebasedtargetsnetwork.org/" }
   },
   stages: {
     "Pre-seed": { fteLow: 2, fteHigh: 8 },
@@ -145,18 +155,60 @@ export const BENCHMARKS = {
 
 // Returns an indicative peer footprint range for a company, preferring the
 // real team size and falling back to typical headcount for the stage.
-export function computeBenchmark(stage, teamSize) {
+export function computeBenchmark(stage, teamSize, businessModel = "") {
   const b = BENCHMARKS;
   const s = b.stages[stage] || null;
   const fte = Number(teamSize) > 0 ? Number(teamSize) : null;
   const lowFte = fte || (s ? s.fteLow : 5);
   const highFte = fte || (s ? s.fteHigh : 15);
+
+  const bmLower = String(businessModel || "").toLowerCase();
+  const matchedSectors = [];
+
+  if (bmLower.includes("hardware") || bmLower.includes("device") || bmLower.includes("physical")) {
+    matchedSectors.push(b.sectors["Hardware"]);
+  }
+  if (bmLower.includes("food") || bmLower.includes("agri") || bmLower.includes("farm") || bmLower.includes("beverage") || bmLower.includes("restaurant")) {
+    matchedSectors.push(b.sectors["Food and Beverage"]);
+  }
+  if (/pet|animal|dog|cat|veterinary/i.test(bmLower)) {
+    matchedSectors.push(b.sectors["Pet Services"]);
+  }
+  if (bmLower.includes("biotech") || bmLower.includes("medical") || bmLower.includes("lab")) {
+    matchedSectors.push(b.sectors["Biotech"]);
+  }
+  if (bmLower.includes("saas") || bmLower.includes("software") || bmLower.includes("cloud") || bmLower.includes("digital")) {
+    matchedSectors.push(b.sectors["SaaS"]);
+  }
+
+  let activeBenchmark;
+  if (matchedSectors.length === 0) {
+    activeBenchmark = b.perFte;
+  } else if (matchedSectors.length === 1) {
+    activeBenchmark = matchedSectors[0];
+  } else {
+    // Aggregate multiple sectors: take max rates and combine notes/sources
+    const maxLow = Math.max(...matchedSectors.map(sec => sec.low));
+    const maxHigh = Math.max(...matchedSectors.map(sec => sec.high));
+    const combinedNote = `Hybrid operations baseline combining: ${matchedSectors.map(sec => sec.note).join(" ")}`;
+    const combinedSource = matchedSectors.map(sec => sec.source).join(" + ");
+    const combinedUrl = matchedSectors[0].url; 
+    activeBenchmark = {
+      low: maxLow,
+      high: maxHigh,
+      unit: "tCO2e/FTE/yr",
+      note: combinedNote,
+      source: combinedSource,
+      url: combinedUrl
+    };
+  }
+
   return {
     stage: stage || "unknown stage",
     basisFte: fte ? `${fte} FTEs (your team)` : (s ? `${s.fteLow}-${s.fteHigh} FTEs (typical at ${stage})` : "5-15 FTEs (assumed)"),
-    low: +(lowFte * b.perFte.low).toFixed(1),
-    high: +(highFte * b.perFte.high).toFixed(1),
-    perFte: b.perFte,
+    low: +(lowFte * activeBenchmark.low).toFixed(1),
+    high: +(highFte * activeBenchmark.high).toFixed(1),
+    perFte: activeBenchmark,
     indicative: true
   };
 }
@@ -188,7 +240,25 @@ export const CASE_PRECEDENTS = [
     relevance: "Overstating handprint without a verified baseline is a diligence and legal risk at raise time.",
     status: "EU Green Claims Directive in negotiation - verify; Project Frame guidance current.",
     source: "European Commission / Project Frame", year: 2024,
-    url: "https://www.project-frame.earth/" }
+    url: "https://www.project-frame.earth/" },
+  { id: "rohs-weee", title: "WEEE & RoHS circular directives",
+    summary: "The EU Waste Electrical and Electronic Equipment (WEEE) and Restriction of Hazardous Substances (RoHS) directives enforce strict collection, recycling, and chemical constraints on hardware manufacturers.",
+    relevance: "Physical hardware brands must design for end-of-life disassembly and avoid restricted flame retardants/heavy metals to access global enterprise buyers.",
+    status: "In force; ESPR ecodesign rules expanding requirements from 2026.",
+    source: "European Commission", year: 2024,
+    url: "https://environment.ec.europa.eu/topics/waste-and-recycling/waste-electrical-and-electronic-equipment-weee_en" },
+  { id: "eudr", title: "EU Deforestation Regulation (EUDR)",
+    summary: "Requires companies to prove that seven key commodities (cattle, cocoa, coffee, oil palm, rubber, soya, wood) do not originate from recently deforested land.",
+    relevance: "Essential for food, beverage, and agricultural startups selling into or sourcing from the EU market.",
+    status: "Enacted 2023; phased implementation starting late 2025/2026.",
+    source: "European Commission", year: 2023,
+    url: "https://green-business.ec.europa.eu/deforestation-regulation-implementation_en" },
+  { id: "biotech-waste", title: "Biotech biohazardous & clinical waste compliance",
+    summary: "RCRA and local EPA hazardous waste regulations govern disposal of clinical, biohazardous, and chemical laboratory waste, requiring strict chain-of-custody tracking.",
+    relevance: "Biotech and laboratory startups face direct operational penalties if waste manifests are not tracked and logged.",
+    status: "In force; audited by national and regional environmental agencies.",
+    source: "US EPA / RCRA", year: 2024,
+    url: "https://www.epa.gov/rcra" }
 ];
 
 // --- Carbon price translation (footprint -> potential future expense) -----
@@ -256,7 +326,7 @@ export const IMPACT_DIMENSIONS = {
     label: "Land & biodiversity", unit: "materiality", type: "qualitative",
     source: "Science Based Targets Network (SBTN) + TNFD",
     url: "https://sciencebasedtargetsnetwork.org/",
-    note: "Software-first startups rarely have credible land/biodiversity figures; flagged qualitatively where the value chain (hardware mining, logistics infrastructure) makes it material."
+    note: "Office-based startups rarely have direct land/biodiversity footprints; flagged qualitatively where value-chain activities (like hardware raw materials or logistics infrastructure) have material biodiversity risks."
   }
 };
 
@@ -280,43 +350,94 @@ export function computeImpactProfile(snapshot = {}, activities = [], businessMod
 
   const energyKwh = Math.round((tonnesFor(ENERGY_ACTIVITIES) * 1000) / c.gridKgPerKwh);
   const elecKwh = (tonnesFor(ELECTRIC_ACTIVITIES) * 1000) / c.gridKgPerKwh;
-  const waterM3 = +((elecKwh * c.wueLitrePerKwh) / 1000).toFixed(1);
+  let waterM3Val = (elecKwh * c.wueLitrePerKwh) / 1000;
+  let waterNote = IMPACT_DIMENSIONS.water.note;
   let wasteKg = acts.reduce((sum, k) => sum + (ACTIVITY_WASTE_KG[k] || 0), 0);
   let wasteNote = IMPACT_DIMENSIONS.waste.note;
   let wastePending = wasteKg === 0;
 
   const bmLower = String(businessModel || "").toLowerCase();
+  const isHardware = bmLower.includes("hardware") || bmLower.includes("device") || bmLower.includes("physical");
   const isPetBusiness = /pet|animal|dog|cat|veterinary/i.test(bmLower);
   const isFoodBusiness = /food|agri|farm|beverage|restaurant/i.test(bmLower);
+  const isBiotech = bmLower.includes("biotech") || bmLower.includes("medical") || bmLower.includes("lab");
 
+  const teamScale = snapshot.scaleFactor || 1;
+  const matchedNotes = [];
+  const matchedWaterNotes = [];
+
+  if (isHardware) {
+    const hardwareWasteDefault = 250 * teamScale;
+    wasteKg += hardwareWasteDefault;
+    wastePending = false;
+    matchedNotes.push("Estimated facility prototyping, packaging, and laboratory assembly waste. Replace with raw material scrap and facility waste disposal records.");
+  }
   if (isPetBusiness) {
-    const teamScale = snapshot.scaleFactor || 1;
     const petWasteDefault = 120 * teamScale;
     wasteKg += petWasteDefault;
     wastePending = false;
-    wasteNote = "From hardware end-of-life and packaging defaults, plus modeled organic/pet waste defaults. Replace with actual waste audit and disposal records.";
-  } else if (isFoodBusiness) {
-    const teamScale = snapshot.scaleFactor || 1;
+    matchedNotes.push("From hardware end-of-life and packaging defaults, plus modeled organic/pet waste defaults. Replace with actual waste audit and disposal records.");
+  }
+  if (isFoodBusiness) {
     const foodWasteDefault = 150 * teamScale;
     wasteKg += foodWasteDefault;
     wastePending = false;
-    wasteNote = "From hardware end-of-life and packaging defaults, plus modeled organic food waste defaults. Replace with organic waste composting/disposal records.";
-  } else if (wastePending && bmLower && !/saas|software|cloud|digital/i.test(bmLower)) {
-    const teamScale = snapshot.scaleFactor || 1;
+    matchedNotes.push("From hardware end-of-life and packaging defaults, plus modeled organic food waste defaults. Replace with organic waste composting/disposal records.");
+    const foodWaterDefault = 80 * teamScale;
+    waterM3Val += foodWaterDefault;
+    matchedWaterNotes.push("Includes estimated food processing and washdown water footprints. Replace with facility utility bills.");
+  }
+  if (isBiotech) {
+    const biotechWasteDefault = 180 * teamScale;
+    wasteKg += biotechWasteDefault;
+    wastePending = false;
+    matchedNotes.push("Estimated biohazardous, chemical, and clinical laboratory waste baseline. Replace with manifest disposal records.");
+    const biotechWaterDefault = 45 * teamScale;
+    waterM3Val += biotechWaterDefault;
+    matchedWaterNotes.push("Estimated high laboratory process water usage (cleaning, autoclaves, diagnostics). Replace with facility utility bills.");
+  }
+  if (wastePending && bmLower && !/saas|software|cloud|digital/i.test(bmLower)) {
     wasteKg = 50 * teamScale;
     wastePending = false;
-    wasteNote = "Estimated baseline commercial waste for non-digital business models. Replace with real disposal records.";
+    matchedNotes.push("Estimated baseline commercial waste for non-digital business models. Replace with real disposal records.");
   }
 
-  const natureDrivers = acts.filter(k => ACTIVITY_NATURE[k]);
-  const natureLevel = natureDrivers.reduce(
+  if (matchedNotes.length > 0) {
+    wasteNote = matchedNotes.join(" ");
+  }
+  if (matchedWaterNotes.length > 0) {
+    waterNote = matchedWaterNotes.join(" ");
+  }
+
+  const waterM3 = +(waterM3Val).toFixed(1);
+
+  let natureDrivers = acts.filter(k => ACTIVITY_NATURE[k]);
+  let natureLevel = natureDrivers.reduce(
     (lvl, k) => Math.max(lvl, NATURE_RANK[ACTIVITY_NATURE[k]] || 0), 1
   );
-  const natureLabel = ["", "low", "medium", "high"][natureLevel] || "low";
+  let natureLabel = ["", "low", "medium", "high"][natureLevel] || "low";
+  let natureNote = IMPACT_DIMENSIONS.nature.note;
+
+  const natureNotes = [];
+  if (isHardware) {
+    natureLevel = Math.max(natureLevel, 3);
+    natureDrivers = [...natureDrivers, "raw materials", "mining"];
+    natureNotes.push("Raw material extraction (semiconductors, metals, plastics) and supply chain logistics mean your broader value chain has a highly material impact on land and biodiversity.");
+  }
+  if (isBiotech) {
+    natureLevel = Math.max(natureLevel, 2);
+    natureDrivers = [...natureDrivers, "chemical inputs", "hazardous waste"];
+    natureNotes.push("Active laboratory chemical inputs, clinical reagents, and specialized hazardous waste disposal mean operations have a notable impact on local ecosystems.");
+  }
+
+  if (natureNotes.length > 0) {
+    natureNote = natureNotes.join(" ");
+  }
+  natureLabel = ["", "low", "medium", "high"][natureLevel] || "low";
 
   return {
     energy: { ...IMPACT_DIMENSIONS.energy, value: energyKwh },
-    water: { ...IMPACT_DIMENSIONS.water, value: waterM3 },
+    water: { ...IMPACT_DIMENSIONS.water, value: waterM3, note: waterNote },
     waste: {
       ...IMPACT_DIMENSIONS.waste,
       value: wastePending ? null : Math.round(wasteKg),
@@ -326,7 +447,12 @@ export function computeImpactProfile(snapshot = {}, activities = [], businessMod
         ? "No direct hardware, logistics, disposal, or vendor waste records were supplied. Treat this as a data gap, not zero waste."
         : wasteNote
     },
-    nature: { ...IMPACT_DIMENSIONS.nature, level: natureLabel, drivers: natureDrivers }
+    nature: {
+      ...IMPACT_DIMENSIONS.nature,
+      level: natureLabel,
+      drivers: natureDrivers,
+      note: natureNote
+    }
   };
 }
 
@@ -341,7 +467,7 @@ export function buildFactPack(assessment = {}) {
     .filter(Boolean)
     .map(f => `${f.label}: default is a MODELLED estimate. Source: ${f.source} (${f.publisher}, ${f.year}). Basis: ${f.basis}`);
 
-  const bench = computeBenchmark(a.stage, a.teamSize);
+  const bench = computeBenchmark(a.stage, a.teamSize, a.businessModel || a.inferredBusinessModel);
   const benchmark = `Indicative peer range for ${bench.basisFte}: ~${bench.low}-${bench.high} tCO2e/yr (${BENCHMARKS.perFte.low}-${BENCHMARKS.perFte.high} ${BENCHMARKS.perFte.unit}). ${BENCHMARKS.perFte.note} Source: ${BENCHMARKS.perFte.source}.`;
 
   const impact = computeImpactProfile(a.snapshot || {}, activities, a.businessModel);
@@ -354,7 +480,17 @@ export function buildFactPack(assessment = {}) {
     ? `Potential future cost exposure (illustrative, not a bill): ~$${cost.low.toLocaleString()}-$${cost.high.toLocaleString()}/yr, pricing the modeled footprint at ${cost.lines.map(l => `${l.label} $${l.usdPerTonne}/t (${l.source})`).join(" and ")}.`
     : "Potential future cost exposure: unavailable (footprint not modeled).";
 
-  const frameworks = FRAMEWORKS.map(f => `${f.name}: ${f.what}`);
+  // Filter frameworks based on isHardware
+  const bmLower = String(a.businessModel || a.inferredBusinessModel || "").toLowerCase();
+  const isHardware = bmLower.includes("hardware") || bmLower.includes("device") || bmLower.includes("physical");
+  
+  let fws = FRAMEWORKS;
+  if (isHardware) {
+    fws = FRAMEWORKS.filter(f => f.id !== "sci" && f.id !== "rebound");
+  } else {
+    fws = FRAMEWORKS.filter(f => f.id !== "iso-lca" && f.id !== "ghgp-product");
+  }
+  const frameworks = fws.map(f => `${f.name}: ${f.what}`);
   const precedents = CASE_PRECEDENTS.map(c => `${c.title} (${c.source}, ${c.year}): ${c.summary} Relevance: ${c.relevance} Status: ${c.status}`);
 
   return { factors, benchmark, costLine, dimensions, frameworks, precedents, citationLabels: citationLabels() };

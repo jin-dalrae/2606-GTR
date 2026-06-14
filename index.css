@@ -3336,4 +3336,20 @@
   display: inline-block;
 }
 
+/* Hotspot Caveat Subtext & Unmeasured Hotspots */
+.hotspot-caveat-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-left: 2.25rem;
+  margin-top: 0.25rem;
+  line-height: 1.45;
+  margin-bottom: 0.75rem;
+  text-align: left;
+}
+.unmeasured-hotspot {
+  border-top: 1px dashed rgba(210, 100, 60, 0.15);
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+}
+
 

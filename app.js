@@ -149,7 +149,10 @@ const GOAL_TEMPLATES = {
   "logistics": { title: "Contract exclusively with logistics firms utilizing EV fleets", activity: "logistics" },
   "avoided-grid": { title: "Perform Hourly Marginal Emissions Matching (WattTime MOER)", activity: "avoided-grid" },
   "avoided-transport": { title: "Validate transport avoidance counterfactual baseline with VC", activity: "avoided-transport" },
-  "avoided-material": { title: "Acquire third-party Lifecycle Assessment (LCA) for key material", activity: "avoided-material" }
+  "avoided-material": { title: "Acquire third-party Lifecycle Assessment (LCA) for key material", activity: "avoided-material" },
+  "biotech": { title: "Achieve My Green Lab certification for laboratory operations", activity: "biotech" },
+  "food": { title: "Source agricultural ingredients from audited regenerative suppliers", activity: "food" },
+  "hardware-lca": { title: "Conduct a Screening Cradle-to-Gate Life Cycle Assessment (LCA) to ISO 14040/14044", activity: "hardware-lca" }
 };
 
 class ClimateDashboardApp {
@@ -520,7 +523,7 @@ class ClimateDashboardApp {
     });
   }
 
-  renderMethodologyDetails({ factorListId, frameworkListId, items }) {
+  renderMethodologyDetails({ factorListId, frameworkListId, items, isHardware }) {
     const methodList = document.getElementById(factorListId);
     if (methodList) {
       methodList.innerHTML = "";
@@ -540,7 +543,13 @@ class ClimateDashboardApp {
 
     const fwList = document.getElementById(frameworkListId);
     if (fwList) {
-      fwList.innerHTML = FRAMEWORKS.map(f => `
+      let list = FRAMEWORKS;
+      if (isHardware) {
+        list = FRAMEWORKS.filter(f => f.id !== "sci" && f.id !== "rebound");
+      } else {
+        list = FRAMEWORKS.filter(f => f.id !== "iso-lca" && f.id !== "ghgp-product");
+      }
+      fwList.innerHTML = list.map(f => `
         <li><a href="${this.escapeHtml(f.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(f.name)}</a> — ${this.escapeHtml(f.what)}</li>
       `).join("");
     }
@@ -700,12 +709,17 @@ class ClimateDashboardApp {
       `${s.footprintTotal.toFixed(1)} <small>tCO2e/yr</small>`;
     document.getElementById("fn-report-unc").innerText =
       `±${s.uncertaintyAbs.toFixed(1)} tCO2e modeled uncertainty`;
-    const isInfra = /infra|database|vector|search|compute|platform|hosting/i.test(a.businessModel || "") ||
+    const bmLower = String(a.businessModel || a.inferredBusinessModel || "").toLowerCase();
+    const isHardware = bmLower.includes("hardware") || bmLower.includes("device") || bmLower.includes("physical");
+
+    const isInfra = !isHardware && (/infra|database|vector|search|compute|platform|hosting/i.test(a.businessModel || "") ||
                     /infra|database|vector|search|compute|platform|hosting/i.test(a.inferredBusinessModel || "") ||
-                    /qdrant|milvus|pinecone|weaviate|elasticsearch|redis/i.test(a.name || "");
+                    /qdrant|milvus|pinecone|weaviate|elasticsearch|redis/i.test(a.name || ""));
 
     const handprintEl = document.getElementById("fn-report-handprint");
-    if (isInfra && s.handprintPotential === 0) {
+    if (isHardware && s.handprintPotential === 0) {
+      handprintEl.innerHTML = `<span class="handprint-qualitative">Qualitative</span><br><small style="font-size: 0.62rem; color: var(--text-muted); font-weight: 500;">Hardware durability/LCA</small>`;
+    } else if (isInfra && s.handprintPotential === 0) {
       handprintEl.innerHTML = `<span class="handprint-qualitative">Qualitative</span><br><small style="font-size: 0.62rem; color: var(--text-muted); font-weight: 500;">Rust computational efficiency</small>`;
     } else {
       handprintEl.innerText = `${s.handprintPotential > 0 ? "~" + s.handprintPotential.toFixed(0) : "0"} tCO2e/yr`;
@@ -715,19 +729,52 @@ class ClimateDashboardApp {
     const hotspotsEl = document.getElementById("fn-report-hotspots");
     hotspotsEl.innerHTML = "";
     s.hotspots.forEach((h, i) => {
+      let name = h.name;
+      let note = "";
+      if (isHardware) {
+        if (h.id === "scope2-grid") {
+          name = "Facility R&D / Assembly Office Power (Scope 2)";
+          note = `<p class="hotspot-caveat-sub">Represents physical laboratory and prototyping facilities only. Outsource fab/foundry emissions are not included here.</p>`;
+        } else if (h.id === "scope1-direct") {
+          name = "Direct Emissions (Scope 1)";
+          note = `<p class="hotspot-caveat-sub">Covers on-site lab equipment, heating, gas, or prototype testing emissions.</p>`;
+        }
+      }
       const row = document.createElement("div");
-      row.className = "hotspot-row";
+      row.className = "hotspot-row-wrapper";
       row.innerHTML = `
-        <div class="hotspot-rank">${i + 1}</div>
-        <div class="hotspot-info">
-          <div class="hotspot-name">${h.name}</div>
-          <div class="hotspot-scope">${this.escapeHtml(h.scopeLabel || `Scope ${h.scope}`)}</div>
-          <div class="hotspot-bar-bg"><div class="hotspot-bar-fill" style="width: ${h.pct}%;"></div></div>
+        <div class="hotspot-row">
+          <div class="hotspot-rank">${i + 1}</div>
+          <div class="hotspot-info">
+            <div class="hotspot-name">${name}</div>
+            <div class="hotspot-scope">${this.escapeHtml(h.scopeLabel || `Scope ${h.scope}`)}</div>
+            <div class="hotspot-bar-bg"><div class="hotspot-bar-fill" style="width: ${h.pct}%;"></div></div>
+          </div>
+          <div class="hotspot-val">${h.value.toFixed(1)} tCO2e/yr</div>
         </div>
-        <div class="hotspot-val">${h.value.toFixed(1)} tCO2e/yr</div>
+        ${note}
       `;
       hotspotsEl.appendChild(row);
     });
+
+    if (isHardware) {
+      // Insert unmeasured Upstream Manufacturing hotspot
+      const row = document.createElement("div");
+      row.className = "hotspot-row-wrapper unmeasured-hotspot";
+      row.innerHTML = `
+        <div class="hotspot-row">
+          <div class="hotspot-rank">⚠️</div>
+          <div class="hotspot-info">
+            <div class="hotspot-name" style="color: var(--warning-amber);">Upstream Manufacturing &amp; Supply Chain (Scope 3)</div>
+            <div class="hotspot-scope">Scope 3, Category 1, 4 &amp; 11 · Unmeasured value chain</div>
+            <div class="hotspot-bar-bg"><div class="hotspot-bar-fill" style="width: 100%; background: var(--warning-amber); opacity: 0.3;"></div></div>
+          </div>
+          <div class="hotspot-val">Not modeled</div>
+        </div>
+        <p class="hotspot-caveat-sub"><strong>Crucial omission:</strong> Outsourced raw materials and component manufacturing (Scope 3, Category 1), upstream transportation &amp; shipping logistics (Scope 3, Category 4), and downstream use of sold products (Scope 3, Category 11) are not estimated. These physical supply-chain emissions typically represent 80–90% of a hardware brand's footprint.</p>
+      `;
+      hotspotsEl.appendChild(row);
+    }
 
     if (isInfra) {
       const caveatDiv = document.createElement("div");
@@ -743,7 +790,8 @@ class ClimateDashboardApp {
     this.renderMethodologyDetails({
       factorListId: "fn-methodology-list",
       frameworkListId: "fn-frameworks-list",
-      items: s.breakdown || []
+      items: s.breakdown || [],
+      isHardware
     });
     const methodList = document.getElementById("fn-methodology-list");
     if (methodList && s.scalingBasis) {
@@ -754,7 +802,7 @@ class ClimateDashboardApp {
 
     this.renderDimensions(a, s);
     this.renderBenchmark(a, s);
-    this.renderCost(s);
+    this.renderCost(s, a);
     this.renderPrecedents(a);
     this.renderOperationalRisks(a);
 
@@ -780,7 +828,7 @@ class ClimateDashboardApp {
   renderBenchmark(a, s) {
     const el = document.getElementById("fn-report-benchmark");
     if (!el) return;
-    const b = computeBenchmark(a.stage, a.teamSize);
+    const b = computeBenchmark(a.stage, a.teamSize, a.businessModel || a.inferredBusinessModel);
     const total = s.footprintTotal || 0;
     let verdict, cls;
     if (total < b.low) { verdict = "below the typical peer range"; cls = "bench-low"; }
@@ -790,6 +838,20 @@ class ClimateDashboardApp {
     const scaleLo = Math.min(total, b.low) * 0.8;
     const scaleHi = Math.max(total, b.high) * 1.2 || 1;
     const pct = v => Math.max(0, Math.min(100, ((v - scaleLo) / (scaleHi - scaleLo)) * 100));
+
+    const bmLower = String(a.businessModel || a.inferredBusinessModel || "").toLowerCase();
+    const isHardware = bmLower.includes("hardware") || bmLower.includes("device") || bmLower.includes("physical");
+    let noteText = b.perFte.note;
+    let warningBanner = "";
+    if (isHardware) {
+      noteText = "Warning: This peer range represents office-based operations only and excludes the physical product supply chain (Scope 3 manufacturing, logistics, and product use).";
+      warningBanner = `
+        <div style="margin-top: 1rem; padding: 0.85rem; border: 1px dashed var(--warning-amber); background: var(--warning-amber-glow); border-radius: 6px; font-size: 0.8rem; line-height: 1.4; color: var(--text-normal);">
+          <strong>⚠️ Benchmark Mismatch:</strong> This peer range represents office-based operations only for digital-first SMEs and excludes physical product manufacturing, logistics, and product use (which typically represent 80-90% of a hardware brand's footprint).
+        </div>
+      `;
+    }
+
     el.innerHTML = `
       <div class="methodology-head"><h3>How you compare</h3><span>Indicative</span></div>
       <p class="step-desc">Your <strong>${total.toFixed(1)} tCO2e/yr</strong> is <strong class="${cls}">${verdict}</strong> for ${this.escapeHtml(b.basisFte)}.</p>
@@ -798,7 +860,8 @@ class ClimateDashboardApp {
         <div class="bench-marker" style="left:${pct(total)}%;" title="You: ${total.toFixed(1)} tCO2e/yr"></div>
       </div>
       <div class="bench-scale"><span>~${b.low} tCO2e/yr</span><span>~${b.high} tCO2e/yr</span></div>
-      <div class="methodology-source">Range = ${b.perFte.low}-${b.perFte.high} ${b.perFte.unit} × team size. ${this.escapeHtml(b.perFte.note)} <a href="${this.escapeHtml(b.perFte.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(b.perFte.source)}</a></div>
+      <div class="methodology-source">Range = ${b.perFte.low}-${b.perFte.high} ${b.perFte.unit} × team size. ${this.escapeHtml(noteText)} <a href="${this.escapeHtml(b.perFte.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(b.perFte.source)}</a></div>
+      ${warningBanner}
     `;
   }
 
@@ -832,11 +895,20 @@ class ClimateDashboardApp {
 
   // Translate the modeled footprint into a forward-looking $ exposure band.
   // Explicitly an illustration (carbon-price scenarios), not an invoice.
-  renderCost(s) {
+  renderCost(s, a) {
     const el = document.getElementById("fn-report-cost");
     if (!el) return;
     const total = s.footprintTotal || 0;
     const cost = priceFootprint(total);
+    const bmLower = String(a && (a.businessModel || a.inferredBusinessModel) || "").toLowerCase();
+    const isHardware = bmLower.includes("hardware") || bmLower.includes("device") || bmLower.includes("physical");
+    let costDisclaimer = "Forward-looking scenario, not a current bill. Carbon is one impact dimension among several (water, waste, land, air) not yet priced here.";
+    let style = "";
+    if (isHardware) {
+      costDisclaimer = "<strong>Warning for physical hardware brands:</strong> This exposure models office and facility R&D emissions only. If Scope 3 upstream manufacturing (raw materials, factory assembly, and shipping) were included, your potential carbon fee exposure would likely multiply tenfold (e.g. up to $50,000–$150,000/yr).";
+      style = `style="border-top: 1px dashed var(--warning-amber); margin-top: 0.75rem; padding-top: 0.75rem; color: var(--text-normal);"`;
+    }
+
     el.innerHTML = `
       <div class="methodology-head"><h3>Potential cost exposure</h3><span>Illustrative</span></div>
       <p class="step-desc">If your <strong>${total.toFixed(1)} tCO2e/yr</strong> were priced as a future expense — carbon fees, procurement clauses, or offset costs — it maps to roughly:</p>
@@ -856,7 +928,7 @@ class ClimateDashboardApp {
           </div>
         `).join("")}
       </div>
-      <div class="methodology-source">Forward-looking scenario, not a current bill. Carbon is one impact dimension among several (water, waste, land, air) not yet priced here.</div>
+      <div class="methodology-source" ${style}>${costDisclaimer}</div>
     `;
   }
 
@@ -867,10 +939,15 @@ class ClimateDashboardApp {
     if (!el) return;
     const acts = Array.isArray(a.activities) ? a.activities : [];
     const hasAvoided = acts.some(k => ACTIVITIES_DB[k] && ACTIVITIES_DB[k].scope === "avoided");
-    // Prioritise precedents by relevance to this company, always keep CSRD.
+    const bmLower = String(a.businessModel || a.inferredBusinessModel || "").toLowerCase();
+
+    // Prioritise precedents by relevance to this company
     const ranked = CASE_PRECEDENTS.filter(c => {
       if (c.id === "rebound") return false;
       if (c.id === "greenwash") return hasAvoided;
+      if (c.id === "rohs-weee") return bmLower.includes("hardware") || bmLower.includes("device") || bmLower.includes("physical");
+      if (c.id === "eudr") return bmLower.includes("food") || bmLower.includes("agri") || bmLower.includes("farm") || bmLower.includes("beverage");
+      if (c.id === "biotech-waste") return bmLower.includes("biotech") || bmLower.includes("medical") || bmLower.includes("lab");
       return true; // csrd, ca-sb253 are broadly relevant
     });
     const chosen = (ranked.length ? ranked : CASE_PRECEDENTS).slice(0, 3);
@@ -891,12 +968,12 @@ class ClimateDashboardApp {
   }
 
   renderOperationalRisks(a) {
-    const el = document.getElementById("fn-report-operational-risks");
-    if (!el) return;
+    const bmLower = String(a.businessModel || a.inferredBusinessModel || "").toLowerCase();
+    const isHardware = bmLower.includes("hardware") || bmLower.includes("device") || bmLower.includes("physical");
     const acts = Array.isArray(a.activities) ? a.activities : [];
     const hasCompute = acts.includes("compute");
-    el.classList.toggle("hidden", !hasCompute);
-    if (!hasCompute) {
+    el.classList.toggle("hidden", !hasCompute || isHardware);
+    if (!hasCompute || isHardware) {
       el.innerHTML = "";
       return;
     }
@@ -991,9 +1068,22 @@ class ClimateDashboardApp {
     });
 
     this.state.goals = [];
-    a.activities.forEach(actKey => {
+    const bmLower = String(a.businessModel || a.inferredBusinessModel || "").toLowerCase();
+    const industryGoalKeys = [];
+    if (bmLower.includes("hardware") || bmLower.includes("device") || bmLower.includes("physical")) {
+      industryGoalKeys.push("hardware-lca");
+    }
+    if (bmLower.includes("food") || bmLower.includes("agri") || bmLower.includes("farm") || bmLower.includes("beverage") || bmLower.includes("restaurant")) {
+      industryGoalKeys.push("food");
+    }
+    if (bmLower.includes("biotech") || bmLower.includes("medical") || bmLower.includes("lab")) {
+      industryGoalKeys.push("biotech");
+    }
+
+    [...a.activities, ...industryGoalKeys].forEach(actKey => {
       const template = GOAL_TEMPLATES[actKey];
       if (template) {
+        if (this.state.goals.some(g => g.id === `goal-${actKey}`)) return;
         this.state.goals.push({
           id: `goal-${actKey}`, title: template.title, owner_id: "rae",
           status: "Not Started",
@@ -1033,12 +1123,7 @@ class ClimateDashboardApp {
       });
       const data = await res.json();
       if (!res.ok) {
-        statusEl.innerText = "General Insight";
-        bodyEl.innerHTML = `
-          <div class="ai-headline">Focus area: Computational efficiency is your primary carbon lever.</div>
-          <p class="ai-line"><strong>Pre-vetted readout:</strong> Highly optimized database algorithms (such as HNSW vector indexing in Rust) directly correlate to reduced CPU/RAM utilization compared to unoptimized legacy relational database solutions. Lowering hardware intensity is the single highest leverage point for system software infrastructure providers.</p>
-          <p class="ai-line" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 1rem;">Note: AI briefing is currently unavailable. Your modeled footprint snapshot above remains fully active.</p>
-        `;
+        card.classList.add("hidden");
         if (!isPreview) finishFull();
         return false;
       }
@@ -1070,12 +1155,7 @@ class ClimateDashboardApp {
       finishFull();
       return true;
     } catch (e) {
-      statusEl.innerText = "General Insight";
-      bodyEl.innerHTML = `
-        <div class="ai-headline">Focus area: Computational efficiency is your primary carbon lever.</div>
-        <p class="ai-line"><strong>Pre-vetted readout:</strong> Highly optimized database algorithms (such as HNSW vector indexing in Rust) directly correlate to reduced CPU/RAM utilization compared to unoptimized legacy relational database solutions. Lowering hardware intensity is the single highest leverage point for system software infrastructure providers.</p>
-        <p class="ai-line" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 1rem;">Note: AI briefing is currently offline. Your modeled footprint snapshot above remains fully active.</p>
-      `;
+      card.classList.add("hidden");
       if (!isPreview) finishFull();
       return false;
     }
