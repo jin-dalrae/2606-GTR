@@ -972,6 +972,8 @@ class ClimateDashboardApp {
   }
 
   renderOperationalRisks(a) {
+    const el = document.getElementById("fn-report-operational-risks");
+    if (!el) return;
     const bmLower = String(a.businessModel || a.inferredBusinessModel || "").toLowerCase();
     const isHardware = bmLower.includes("hardware") || bmLower.includes("device") || bmLower.includes("physical");
     const acts = Array.isArray(a.activities) ? a.activities : [];
