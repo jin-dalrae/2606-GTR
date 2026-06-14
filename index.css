@@ -3018,3 +3018,93 @@
   .radar-empty svg { width: 48px; height: 48px; color: var(--text-muted); margin-bottom: 1rem; opacity: 0.6; }
   .radar-empty h3 { margin-bottom: 0.5rem; }
   .radar-empty p { max-width: 460px; margin: 0 auto; font-size: 0.88rem; }
+
+/* ==========================================================================
+   EVIDENCE & SOURCING  (factor citations, benchmark, precedents, AI sources)
+   ========================================================================== */
+.methodology-line { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+.methodology-source {
+  font-size: 0.74rem; color: var(--text-muted); margin-top: 0.25rem; line-height: 1.45;
+}
+.methodology-source a { color: var(--text-secondary); text-decoration: underline; text-underline-offset: 2px; }
+.methodology-source a:hover { color: var(--accent-neutral); }
+.methodology-basis { display: block; margin-top: 0.15rem; opacity: 0.85; }
+#fn-methodology-list li { padding: 0.6rem 0; border-bottom: 1px solid var(--border-color); }
+#fn-methodology-list li:last-child { border-bottom: none; }
+
+.methodology-frameworks { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color); }
+.methodology-frameworks-head { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; }
+#fn-frameworks-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.4rem; }
+#fn-frameworks-list li { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+#fn-frameworks-list a { color: var(--text-secondary); text-decoration: underline; text-underline-offset: 2px; font-weight: 600; }
+#fn-frameworks-list a:hover { color: var(--accent-neutral); }
+
+/* Benchmark comparison */
+.report-benchmark .bench-low { color: var(--accent-handprint); }
+.report-benchmark .bench-high { color: var(--accent-footprint); }
+.report-benchmark .bench-mid { color: var(--accent-neutral); }
+.bench-track {
+  position: relative; height: 10px; border-radius: 999px;
+  background: var(--bg-card-hover); margin: 1.25rem 0 0.4rem;
+}
+.bench-range {
+  position: absolute; top: 0; bottom: 0; border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent-handprint-glow), var(--accent-neutral-glow));
+  border: 1px solid var(--border-hover);
+}
+.bench-marker {
+  position: absolute; top: 50%; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--text-primary); border: 2px solid var(--accent-neutral);
+  transform: translate(-50%, -50%); box-shadow: 0 0 0 4px var(--accent-neutral-glow);
+}
+.bench-scale { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.6rem; }
+
+/* Precedents */
+.precedent-list { display: grid; gap: 0.9rem; margin-top: 0.4rem; }
+.precedent { padding: 0.85rem 1rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: var(--bg-card); }
+.precedent-title { font-weight: 600; font-size: 0.9rem; color: var(--text-primary); margin-bottom: 0.3rem; }
+.precedent-summary { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.35rem; }
+.precedent-relevance { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0.4rem; }
+.precedent-relevance strong { color: var(--text-secondary); }
+
+/* AI briefing citations */
+.ai-citations { margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border-color); }
+.ai-source-list li { font-size: 0.76rem; color: var(--text-muted); line-height: 1.5; }
+.ai-source-list a { color: var(--text-secondary); text-decoration: underline; text-underline-offset: 2px; }
+.ai-source-list a:hover { color: var(--accent-neutral); }
+
+/* Cost exposure */
+.cost-band { display: flex; align-items: baseline; gap: 0.5rem; margin: 0.5rem 0 1rem; font-family: var(--font-heading); }
+.cost-value { font-size: 1.9rem; font-weight: 700; color: var(--warning-amber); }
+.cost-value small { font-size: 0.9rem; color: var(--text-muted); font-weight: 500; }
+.cost-sep { font-size: 1.5rem; color: var(--text-muted); }
+.cost-lines { display: grid; gap: 0.75rem; }
+.cost-line { padding: 0.6rem 0; border-top: 1px solid var(--border-color); }
+.cost-line-label { font-size: 0.82rem; color: var(--text-secondary); font-weight: 600; }
+.cost-line-val { float: right; font-size: 0.82rem; color: var(--text-primary); font-weight: 600; }
+
+/* Topbar invite + login entry points */
+.funnel-invite-link { color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; }
+.funnel-invite-link:hover { color: var(--text-primary); }
+.btn-topbar-login {
+  display: inline-block; padding: 0.45rem 0.95rem; border-radius: var(--radius-sm);
+  background: var(--accent-neutral); color: hsl(222, 47%, 8%); font-weight: 600;
+  font-size: 0.85rem; text-decoration: none; transition: filter var(--transition-speed);
+}
+.btn-topbar-login:hover { filter: brightness(1.1); }
+
+/* Impact beyond carbon (multi-dimension) */
+.dim-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 0.5rem; }
+.dim { padding: 0.85rem 1rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: var(--bg-card); }
+.dim-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+.dim-label { font-size: 0.82rem; font-weight: 600; color: var(--text-secondary); }
+.dim-tag { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.04em; padding: 0.12rem 0.45rem; border-radius: 999px; }
+.dim-modeled { background: var(--accent-neutral-glow); color: var(--accent-neutral); }
+.dim-qual { background: var(--warning-amber-glow); color: var(--warning-amber); }
+.dim-value { font-family: var(--font-heading); font-size: 1.35rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem; }
+.dim-value small { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
+.dim-materiality { font-size: 1.05rem; text-transform: capitalize; }
+.dim-materiality small { text-transform: none; }
+.dim-mat-low { color: var(--accent-handprint); }
+.dim-mat-medium { color: var(--warning-amber); }
+.dim-mat-high { color: var(--accent-footprint); }

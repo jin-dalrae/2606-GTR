@@ -2,6 +2,13 @@
    APPLICATION LOGIC - CLIMATE IMPACT DASHBOARD (MVP)
    ========================================================================== */
 
+import {
+  FACTOR_SOURCES, FRAMEWORKS, CASE_PRECEDENTS,
+  computeBenchmark, priceFootprint, computeImpactProfile, sourceLinks
+} from "./data/evidence.js";
+
+const SOURCE_LINKS = sourceLinks();
+
 // Default State Configuration
 const DEFAULT_STATE = {
   company: {
@@ -154,12 +161,20 @@ class ClimateDashboardApp {
     this.initRouter();
     this.initWattTimeSimulator();
 
+    // An ?invite= link entitles the visitor to the free assessment, never a
+    // direct drop into a dashboard.
+    this._inviteParam = new URLSearchParams(window.location.search).has("invite");
+
     // Decide whether to show the pre-login funnel or the dashboard shell.
     // A bare "/" is always the public landing. Dashboard routes use hashes.
     if (this._rootLanding) this.state.funnelStage = "landing";
-    this.showFunnel = this._rootLanding || (!this.state.company.isInitialized && this.state.funnelStage !== "done");
+    this.showFunnel = this._rootLanding || this._inviteParam || (!this.state.company.isInitialized && this.state.funnelStage !== "done");
     this.applyShell();
-    if (this.showFunnel) this.renderFunnel();
+    if (this._inviteParam) {
+      this.startInvitedAssessment();
+    } else if (this.showFunnel) {
+      this.renderFunnel();
+    }
 
     // Render initial state (offline-first), then reconcile with the backend.
     this.render();
@@ -354,6 +369,10 @@ class ClimateDashboardApp {
       emailEl.innerText = "Not signed in";
       actionEl.innerText = "Sign in";
     }
+    // Topbar entry point reflects auth: existing users jump to their dashboard.
+    const loginLink = document.getElementById("fn-login-link");
+    if (loginLink) loginLink.innerHTML = this.user ? "Dashboard &rarr;" : "Log in";
+
     // Refresh document UI state if the Team view is mounted
     if (this.currentView === "extend") this.renderDocuments();
   }
@@ -383,7 +402,7 @@ class ClimateDashboardApp {
       });
     });
 
-    // "Have an invite? Open dashboard" — returning users log in here.
+    // "Log in" / "Dashboard" — existing account holders go to their dashboard.
     document.getElementById("fn-login-link").addEventListener("click", (e) => {
       e.preventDefault();
       if (this.user) {
@@ -398,6 +417,13 @@ class ClimateDashboardApp {
         if (!loaded) this.showAuthenticatedDashboard("intake");
         this.renderAccountUI();
       });
+    });
+
+    // "Have an invite?" — an invitation grants the free assessment, not direct
+    // dashboard access. Invited teammates run their own assessment first.
+    document.getElementById("fn-invite-link").addEventListener("click", (e) => {
+      e.preventDefault();
+      this.startInvitedAssessment();
     });
 
     // Landing -> Onboard
@@ -458,6 +484,17 @@ class ClimateDashboardApp {
     this.state.funnelStage = stage;
     localStorage.setItem("climate_dashboard_state", JSON.stringify(this.state));
     this.renderFunnel();
+  }
+
+  // An invitation entitles someone to run the free assessment — not to open
+  // an existing account's dashboard. Send them into onboarding from the public
+  // landing, even if they followed an ?invite= link.
+  startInvitedAssessment() {
+    this._rootLanding = true;
+    this.showFunnel = true;
+    this.applyShell();
+    this.goFunnelStage("onboard");
+    this.showToast("You're invited — start with your free assessment.");
   }
 
   renderFunnel() {
@@ -529,7 +566,7 @@ class ClimateDashboardApp {
         footprintTotal += db.defaultVal;
         const uncAbs = db.defaultVal * (db.defaultUnc / 100);
         uncSumSq += Math.pow(uncAbs, 2);
-        footprintItems.push({ name: db.name, value: db.defaultVal, unc: db.defaultUnc, scope: db.scope });
+        footprintItems.push({ id: key, name: db.name, value: db.defaultVal, unc: db.defaultUnc, scope: db.scope });
       }
     });
 
@@ -604,10 +641,26 @@ class ClimateDashboardApp {
       (s.breakdown || []).forEach(item => {
         const li = document.createElement("li");
         const scopeLabel = item.scope === "avoided" ? "" : `Scope ${item.scope} · `;
-        li.innerHTML = `<span>${item.name}</span> <span class="methodology-factor">${scopeLabel}${item.value.toFixed(1)} tCO2e/yr ±${item.unc}%</span>`;
+        const src = FACTOR_SOURCES[item.id];
+        const cite = src
+          ? `<div class="methodology-source">Modelled default · <a href="${this.escapeHtml(src.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(src.source)}</a> <span class="methodology-basis">${this.escapeHtml(src.basis)}</span></div>`
+          : "";
+        li.innerHTML = `<div class="methodology-line"><span>${item.name}</span> <span class="methodology-factor">${scopeLabel}${item.value.toFixed(1)} tCO2e/yr ±${item.unc}%</span></div>${cite}`;
         methodList.appendChild(li);
       });
     }
+
+    const fwList = document.getElementById("fn-frameworks-list");
+    if (fwList) {
+      fwList.innerHTML = FRAMEWORKS.map(f => `
+        <li><a href="${this.escapeHtml(f.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(f.name)}</a> — ${this.escapeHtml(f.what)}</li>
+      `).join("");
+    }
+
+    this.renderDimensions(a, s);
+    this.renderBenchmark(a, s);
+    this.renderCost(s);
+    this.renderPrecedents(a);
 
     // Reveal after a short, believable delay
     const loadingText = document.getElementById("fn-loading-text");
@@ -625,6 +678,118 @@ class ClimateDashboardApp {
       body.classList.remove("hidden");
       if (!this.user) this.generateAIReport("preview");
     }, 1400);
+  }
+
+  // "How you compare" — a transparent, sourced peer range (per-FTE x headcount).
+  renderBenchmark(a, s) {
+    const el = document.getElementById("fn-report-benchmark");
+    if (!el) return;
+    const b = computeBenchmark(a.stage, a.teamSize);
+    const total = s.footprintTotal || 0;
+    let verdict, cls;
+    if (total < b.low) { verdict = "below the typical peer range"; cls = "bench-low"; }
+    else if (total > b.high) { verdict = "above the typical peer range"; cls = "bench-high"; }
+    else { verdict = "within the typical peer range"; cls = "bench-mid"; }
+    // Position the marker across a scale padded 20% beyond the range.
+    const scaleLo = Math.min(total, b.low) * 0.8;
+    const scaleHi = Math.max(total, b.high) * 1.2 || 1;
+    const pct = v => Math.max(0, Math.min(100, ((v - scaleLo) / (scaleHi - scaleLo)) * 100));
+    el.innerHTML = `
+      <div class="methodology-head"><h3>How you compare</h3><span>Indicative</span></div>
+      <p class="step-desc">Your <strong>${total.toFixed(1)} tCO2e/yr</strong> is <strong class="${cls}">${verdict}</strong> for ${this.escapeHtml(b.basisFte)}.</p>
+      <div class="bench-track">
+        <div class="bench-range" style="left:${pct(b.low)}%; right:${100 - pct(b.high)}%;"></div>
+        <div class="bench-marker" style="left:${pct(total)}%;" title="You: ${total.toFixed(1)} tCO2e/yr"></div>
+      </div>
+      <div class="bench-scale"><span>~${b.low} tCO2e/yr</span><span>~${b.high} tCO2e/yr</span></div>
+      <div class="methodology-source">Range = ${b.perFte.low}-${b.perFte.high} ${b.perFte.unit} × team size. ${this.escapeHtml(b.perFte.note)} <a href="${this.escapeHtml(b.perFte.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(b.perFte.source)}</a></div>
+    `;
+  }
+
+  // Impact is not only CO2. Show energy/water/waste (modeled, derived from the
+  // carbon model) and land/biodiversity (qualitative), each clearly labelled.
+  renderDimensions(a, s) {
+    const el = document.getElementById("fn-report-dimensions");
+    if (!el) return;
+    const p = computeImpactProfile(s, a.activities);
+    const modeled = [p.energy, p.water, p.waste].map(d => `
+      <div class="dim">
+        <div class="dim-head"><span class="dim-label">${this.escapeHtml(d.label)}</span><span class="dim-tag dim-modeled">modeled</span></div>
+        <div class="dim-value">${d.value.toLocaleString()} <small>${this.escapeHtml(d.unit)}</small></div>
+        <div class="methodology-source">${this.escapeHtml(d.note)} <a href="${this.escapeHtml(d.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(d.source)}</a></div>
+      </div>
+    `).join("");
+    const n = p.nature;
+    const nature = `
+      <div class="dim">
+        <div class="dim-head"><span class="dim-label">${this.escapeHtml(n.label)}</span><span class="dim-tag dim-qual">qualitative</span></div>
+        <div class="dim-value dim-materiality dim-mat-${n.level}">${n.level} materiality${n.drivers.length ? ` <small>via ${this.escapeHtml(n.drivers.join(", "))}</small>` : ""}</div>
+        <div class="methodology-source">${this.escapeHtml(n.note)} <a href="${this.escapeHtml(n.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(n.source)}</a></div>
+      </div>
+    `;
+    el.innerHTML = `
+      <div class="methodology-head"><h3>Impact beyond carbon</h3><span>Multi-dimension</span></div>
+      <p class="step-desc">Climate impact isn't only CO₂. These are derived from your modeled footprint — directional, to be replaced with measured data.</p>
+      <div class="dim-grid">${modeled}${nature}</div>
+    `;
+  }
+
+  // Translate the modeled footprint into a forward-looking $ exposure band.
+  // Explicitly an illustration (carbon-price scenarios), not an invoice.
+  renderCost(s) {
+    const el = document.getElementById("fn-report-cost");
+    if (!el) return;
+    const total = s.footprintTotal || 0;
+    const cost = priceFootprint(total);
+    el.innerHTML = `
+      <div class="methodology-head"><h3>Potential cost exposure</h3><span>Illustrative</span></div>
+      <p class="step-desc">If your <strong>${total.toFixed(1)} tCO2e/yr</strong> were priced as a future expense — carbon fees, procurement clauses, or offset costs — it maps to roughly:</p>
+      <div class="cost-band">
+        <span class="cost-value">$${cost.low.toLocaleString()}</span>
+        <span class="cost-sep">–</span>
+        <span class="cost-value">$${cost.high.toLocaleString()}<small>/yr</small></span>
+      </div>
+      <div class="cost-lines">
+        ${cost.lines.map(l => `
+          <div class="cost-line">
+            <span class="cost-line-label">${this.escapeHtml(l.label)} · $${l.usdPerTonne}/tCO2e</span>
+            <span class="cost-line-val">$${l.usd.toLocaleString()}/yr</span>
+            <div class="methodology-source">${this.escapeHtml(l.note)} <a href="${this.escapeHtml(l.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(l.source)} (${l.year})</a></div>
+          </div>
+        `).join("")}
+      </div>
+      <div class="methodology-source">Forward-looking scenario, not a current bill. Carbon is one impact dimension among several (water, waste, land, air) not yet priced here.</div>
+    `;
+  }
+
+  // Real, cited precedents behind the risks we raise — examples, not invented.
+  renderPrecedents(a) {
+    const el = document.getElementById("fn-report-precedents");
+    if (!el) return;
+    const acts = Array.isArray(a.activities) ? a.activities : [];
+    const hasAvoided = acts.some(k => ACTIVITIES_DB[k] && ACTIVITIES_DB[k].scope === "avoided");
+    const hasCompute = acts.includes("compute");
+    // Prioritise precedents by relevance to this company, always keep CSRD.
+    const ranked = CASE_PRECEDENTS.filter(c => {
+      if (c.id === "rebound") return hasCompute;
+      if (c.id === "greenwash") return hasAvoided;
+      return true; // csrd, ca-sb253 are broadly relevant
+    });
+    const chosen = (ranked.length ? ranked : CASE_PRECEDENTS).slice(0, 3);
+    el.innerHTML = `
+      <div class="methodology-head"><h3>Relevant precedents</h3><span>Cited examples</span></div>
+      <p class="step-desc">Real-world cases behind the risks above — why they're plausible for a company like yours.</p>
+      <div class="precedent-list">
+        ${chosen.map(c => `
+          <div class="precedent">
+            <div class="precedent-title">${this.escapeHtml(c.title)}</div>
+            <p class="precedent-summary">${this.escapeHtml(c.summary)}</p>
+            <p class="precedent-relevance"><strong>Why it matters:</strong> ${this.escapeHtml(c.relevance)}</p>
+            <div class="methodology-source">${this.escapeHtml(c.status)} · <a href="${this.escapeHtml(c.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(c.source)} (${c.year})</a></div>
+          </div>
+        `).join("")}
+      </div>
+    `;
   }
 
   shareToLinkedIn() {
@@ -811,8 +976,34 @@ class ClimateDashboardApp {
       ${!isPreview ? list(r.methodologyNotes, "Methodology notes") : ""}
       ${!isPreview ? list(r.nextSteps, "Next steps") : ""}
       ${risks}
+      ${this.renderCitations(r.citations)}
       ${isPreview ? `<div class="ai-lock">Create an account to unlock the full report: Risk Radar, goals, evidence gaps, methodology notes, and dashboard tasks.</div>` : ""}
       ${quotaText}
+    `;
+  }
+
+  // Render the AI's cited sources as links back to the curated evidence library.
+  // The model is constrained to cite only fact-pack source names, so we can
+  // resolve each citation's leading source name to its canonical URL.
+  renderCitations(citations) {
+    if (!Array.isArray(citations) || !citations.length) return "";
+    const items = citations.slice(0, 6).map(c => {
+      const text = (c || "").trim();
+      if (!text) return "";
+      // Citations may be "Source name" or "Source name — what it backs".
+      const name = text.split(/\s+[—–-]\s+/)[0].trim();
+      const url = SOURCE_LINKS[name];
+      const label = url
+        ? `<a href="${this.escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(text)}</a>`
+        : this.escapeHtml(text);
+      return `<li>${label}</li>`;
+    }).filter(Boolean).join("");
+    if (!items) return "";
+    return `
+      <div class="ai-list-block ai-citations">
+        <div class="ai-section-title">Sources</div>
+        <ul class="ai-list ai-source-list">${items}</ul>
+      </div>
     `;
   }
 

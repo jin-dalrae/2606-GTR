@@ -4,6 +4,8 @@
    static SPA assets for everything else. No external dependencies.
    ========================================================================== */
 
+import { buildFactPack } from "../data/evidence.js";
+
 const SESSION_COOKIE = "sid";
 const SESSION_TTL_DAYS = 30;
 const PBKDF2_ITERATIONS = 100000;
@@ -12,7 +14,7 @@ const ANONYMOUS_REPORT_LIMIT_PER_DAY = 10;
 // Gemini config — kept tight to control API spend.
 const GEMINI_MODEL = "gemini-3.1-flash-lite-preview";
 const GEMINI_PREVIEW_MAX_OUTPUT_TOKENS = 700;
-const GEMINI_FULL_MAX_OUTPUT_TOKENS = 1800;
+const GEMINI_FULL_MAX_OUTPUT_TOKENS = 2200;
 const WEBSITE_FETCH_TIMEOUT_MS = 3500;
 const WEBSITE_CONTEXT_MAX_BYTES = 64 * 1024;
 const WEBSITE_CONTEXT_MAX_CHARS = 1800;
@@ -232,6 +234,22 @@ function buildReportPrompt(assessment, context = {}) {
     .join("; ");
   const docs = [a.docs && a.docs.deck, a.docs && a.docs.accounting].filter(Boolean).join(", ");
 
+  // Curated, citable facts relevant to this company. The model may cite from
+  // here (and only here) so the report carries real backing without inventing.
+  const facts = buildFactPack(a);
+  const factPack = [
+    "Curated fact pack (the ONLY facts you may cite; reference each by its source name):",
+    "- Emission factor basis:",
+    ...(facts.factors.length ? facts.factors.map(f => `  - ${f}`) : ["  - none (no activities selected)"]),
+    `- Peer benchmark: ${facts.benchmark}`,
+    `- ${facts.dimensions}`,
+    `- Cost translation: ${facts.costLine}`,
+    "- Frameworks / theory you may invoke:",
+    ...facts.frameworks.map(f => `  - ${f}`),
+    "- Real precedents you may use as examples:",
+    ...facts.precedents.map(p => `  - ${p}`)
+  ].join("\n");
+
   return [
     "You are a climate-impact analyst advising an early-stage startup founder.",
     mode === "preview"
@@ -256,19 +274,22 @@ function buildReportPrompt(assessment, context = {}) {
     `- Breakdown: ${breakdown || "n/a"}`,
     `- Handprint potential signal: ${snapshot.handprintPotential != null ? formatNumber(snapshot.handprintPotential) : "unknown"} tCO2e/yr`,
     "",
+    factPack,
+    "",
     "Evidence and realism rules:",
+    "- Back specific claims with the fact pack above: cite the source by name (e.g. 'per the GHG Protocol Scope 3 Standard') and compare the modeled footprint against the peer benchmark where useful.",
+    "- Cite ONLY sources that appear in the fact pack. Never invent a citation, statistic, study, or URL. If you have no supporting fact, state the assumption instead.",
     "- You have no browsing tools beyond the supplied public website context; do not imply you inspected pages not shown here.",
     "- You did not read source files. Treat selected document filenames as workflow clues only, not evidence.",
     "- Treat footprint values as modeled defaults, not measured accounting.",
-    "- Tie every issue and goal to the founder notes, website context, selected activities, stage, business model, or hotspots.",
+    "- Tie every issue and goal to the founder notes, website context, selected activities, stage, business model, hotspots, or a fact-pack precedent.",
     "- If geography, customer segment, suppliers, or revenue thresholds are unknown, make the dependency explicit instead of inventing facts.",
-    "- Do not say CSRD, SEC, California SB 253/SB 261, CBAM, EUDR, or zero-emission-zone rules apply directly unless the supplied context supports that. Prefer conditional language such as 'if selling into EU enterprise customers' or 'if operating urban delivery fleets'.",
-    "- Name only real regulations, standards, or market trends, and include why the trigger is plausible for this company.",
+    "- Do not say CSRD, SEC, California SB 253/SB 261, CBAM, EUDR, or zero-emission-zone rules apply directly unless the context or a fact-pack precedent supports it. Prefer conditional language such as 'if selling into EU enterprise customers' or 'if operating urban delivery fleets', and note the precedent's status caveat.",
     "- If the situation is too thin, say the first action is to verify the missing operational data, not to claim precision.",
     "",
     mode === "preview"
-      ? "Return JSON for a preview only: headline, basis, two material issues, one likely forcing function, and the first action. Do not include the full risk radar, goals, or methodology notes."
-      : "Return JSON for the full report. Include a basis field naming the real context used and any key missing assumption. Include richer sections: executive summary, evidence gaps, methodology notes, next steps, goals, and 2 to 4 dated Risk Radar items with concrete actions."
+      ? "Return JSON for a preview only: headline, basis, two material issues, one likely forcing function, the first action, and a citations list naming the fact-pack sources you drew on. Do not include the full risk radar, goals, or methodology notes."
+      : "Return JSON for the full report. Include a basis field naming the real context used and any key missing assumption. Include richer sections: executive summary, evidence gaps, methodology notes, next steps, goals, 2 to 4 dated Risk Radar items with concrete actions, and a citations list (each: the fact-pack source name + what it backs)."
   ].join("\n");
 }
 
@@ -289,7 +310,12 @@ function buildReportSchema(mode = "full") {
           }
         },
         regulation: { type: "string", description: "One sentence: a real regulation, standard, or customer requirement and the assumption that makes it relevant" },
-        firstAction: { type: "string", description: "One sentence: the recommended first move" }
+        firstAction: { type: "string", description: "One sentence: the recommended first move" },
+        citations: {
+          type: "array",
+          description: "1 to 3 fact-pack sources you relied on, each as 'Source name'. Use the exact source names from the fact pack.",
+          items: { type: "string" }
+        }
       },
       required: ["headline", "basis", "issues", "regulation", "firstAction"]
     };
@@ -331,9 +357,14 @@ function buildReportSchema(mode = "full") {
           },
           required: ["title", "regulation", "timing", "severity", "action"]
         }
+      },
+      citations: {
+        type: "array",
+        description: "2 to 5 fact-pack sources you relied on. Each: 'Source name — what it backs'. Use the exact source names from the fact pack; do not invent sources.",
+        items: { type: "string" }
       }
     },
-    required: ["headline", "basis", "executiveSummary", "issues", "regulation", "firstAction", "goalPriorities", "evidenceGaps", "methodologyNotes", "nextSteps", "risks"]
+    required: ["headline", "basis", "executiveSummary", "issues", "regulation", "firstAction", "goalPriorities", "evidenceGaps", "methodologyNotes", "nextSteps", "risks", "citations"]
   };
 }
 

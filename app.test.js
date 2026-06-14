@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { buildReportPrompt, buildReportSchema, extractUsefulText, getClientIp, normalizePublicWebsiteUrl } from './worker/index.js';
+import { computeImpactProfile, priceFootprint } from './data/evidence.js';
 
 // Calculation helper extracted to verify mathematics logic independently
 function calculateLedgerTotals(state) {
@@ -184,6 +185,27 @@ describe('AI report grounding', () => {
     expect(prompt).toContain('if selling into EU enterprise customers');
   });
 
+  it('injects a curated fact pack and constrains citations to it', () => {
+    const prompt = buildReportPrompt({
+      name: 'Trottr', stage: 'Seed', teamSize: 12,
+      activities: ['logistics', 'compute'],
+      snapshot: { footprintTotal: 20 }
+    }, { asOfDate: '2026-06-13' });
+
+    expect(prompt).toContain('Curated fact pack');
+    expect(prompt).toContain('Cite ONLY sources that appear in the fact pack');
+    expect(prompt).toContain('GLEC Framework'); // logistics factor source
+    expect(prompt).toContain('Peer benchmark:');
+    expect(prompt).toContain('Cost translation:');
+    expect(prompt).toContain('$1,500-$3,800'); // 20t x $75 and x $190
+  });
+
+  it('requires citations in the full schema', () => {
+    expect(buildReportSchema().required).toContain('citations');
+    expect(buildReportSchema('preview').required).not.toContain('citations');
+    expect(buildReportSchema('preview').properties.citations).toBeDefined();
+  });
+
   it('normalizes public websites and rejects local/private targets', () => {
     expect(normalizePublicWebsiteUrl('example.com/path#team')).toBe('https://example.com/path');
     expect(normalizePublicWebsiteUrl('https://localhost:8787')).toBeNull();
@@ -231,5 +253,33 @@ describe('AI report grounding', () => {
     expect(text).toContain('Acme');
     expect(text).toContain('Grid software & batteries');
     expect(text).not.toContain('alert');
+  });
+});
+
+describe('Multi-dimension impact + cost', () => {
+  it('derives energy/water/waste and a nature materiality flag from the carbon model', () => {
+    const snapshot = {
+      footprintTotal: 20,
+      breakdown: [
+        { id: 'scope2-grid', value: 8 },   // electric -> energy + water
+        { id: 'compute', value: 4 },       // electric -> energy + water
+        { id: 'hardware', value: 8 }       // waste + nature driver
+      ]
+    };
+    const p = computeImpactProfile(snapshot, ['scope2-grid', 'compute', 'hardware']);
+    // (8+4)t * 1000 / 0.40 = 30,000 kWh
+    expect(p.energy.value).toBe(30000);
+    // 30,000 kWh * 1.8 L/kWh / 1000 = 54 m³
+    expect(p.water.value).toBeCloseTo(54, 1);
+    expect(p.waste.value).toBe(40); // hardware default
+    expect(p.nature.level).toBe('medium'); // hardware -> mining materiality
+    expect(p.nature.drivers).toContain('hardware');
+  });
+
+  it('prices a footprint across compliance and social-cost scenarios', () => {
+    const cost = priceFootprint(20);
+    expect(cost.low).toBe(1500);   // 20 * 75
+    expect(cost.high).toBe(3800);  // 20 * 190
+    expect(cost.lines).toHaveLength(2);
   });
 });

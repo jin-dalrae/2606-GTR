@@ -31,7 +31,8 @@
       </div>
       <div class="funnel-topbar-links">
         <a href="#landing-methodology" class="funnel-methodology-link" data-scroll-target="landing-methodology">Methodology</a>
-        <a href="#" class="funnel-login-link" id="fn-login-link">Have an invite? Open dashboard &rarr;</a>
+        <a href="#" class="funnel-invite-link" id="fn-invite-link">Have an invite?</a>
+        <a href="#" class="funnel-login-link btn-topbar-login" id="fn-login-link">Log in</a>
       </div>
     </header>
 
@@ -398,6 +399,18 @@
             <div id="fn-report-hotspots" class="hotspot-list"></div>
           </div>
 
+          <!-- Impact beyond carbon (energy, water, waste, land/biodiversity) -->
+          <div class="card glass-card report-dimensions" id="fn-report-dimensions"></div>
+
+          <!-- Peer benchmark (how you compare; derived, sourced range) -->
+          <div class="card glass-card report-benchmark" id="fn-report-benchmark"></div>
+
+          <!-- Potential future cost exposure (footprint priced as $) -->
+          <div class="card glass-card report-cost" id="fn-report-cost"></div>
+
+          <!-- Relevant precedents (real, cited examples behind the risks) -->
+          <div class="card glass-card report-precedents" id="fn-report-precedents"></div>
+
           <!-- AI briefing (populated after sign-up via Gemini) -->
           <div class="card glass-card ai-briefing hidden" id="fn-ai-briefing">
             <div class="ai-briefing-head">
@@ -423,6 +436,10 @@
               <li><strong>Upgrade path:</strong> replace modeled defaults with metered cloud, utility, travel, vendor, and claim evidence inside the dashboard.</li>
             </ul>
             <ul id="fn-methodology-list"></ul>
+            <div class="methodology-frameworks">
+              <div class="methodology-frameworks-head">Standards &amp; theory this rests on</div>
+              <ul id="fn-frameworks-list"></ul>
+            </div>
           </div>
 
           <!-- Actions: share + enter dashboard -->
