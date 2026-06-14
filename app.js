@@ -160,6 +160,7 @@ class ClimateDashboardApp {
     this.initAuthDOM();
     this.initRouter();
     this.initWattTimeSimulator();
+    this.renderLandingMethodology();
 
     // An ?invite= link entitles the visitor to the free assessment, never a
     // direct drop into a dashboard.
@@ -486,6 +487,54 @@ class ClimateDashboardApp {
     this.renderFunnel();
   }
 
+  renderLandingMethodology() {
+    const publicFactorOrder = [
+      "compute", "hardware", "travel", "vendors", "logistics", "scope2-grid", "scope1-direct"
+    ];
+    const items = publicFactorOrder
+      .map(id => ACTIVITIES_DB[id])
+      .filter(Boolean)
+      .map(activity => ({
+        id: activity.id,
+        name: activity.name,
+        scope: activity.scope,
+        value: activity.defaultVal,
+        unc: activity.defaultUnc
+      }));
+
+    this.renderMethodologyDetails({
+      factorListId: "landing-methodology-list",
+      frameworkListId: "landing-frameworks-list",
+      items
+    });
+  }
+
+  renderMethodologyDetails({ factorListId, frameworkListId, items }) {
+    const methodList = document.getElementById(factorListId);
+    if (methodList) {
+      methodList.innerHTML = "";
+      (items || []).forEach(item => {
+        const li = document.createElement("li");
+        const value = Number(item.value) || 0;
+        const uncertainty = Number(item.unc) || 0;
+        const scopeLabel = item.scope === "avoided" ? "" : `Scope ${item.scope} · `;
+        const src = FACTOR_SOURCES[item.id];
+        const cite = src
+          ? `<div class="methodology-source">Modelled default · <a href="${this.escapeHtml(src.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(src.source)}</a><span class="methodology-basis">${this.escapeHtml(src.methodology)} ${this.escapeHtml(src.basis)}</span></div>`
+          : "";
+        li.innerHTML = `<div class="methodology-line"><span>${this.escapeHtml(item.name)}</span> <span class="methodology-factor">${scopeLabel}${value.toFixed(1)} tCO2e/yr ±${uncertainty}%</span></div>${cite}`;
+        methodList.appendChild(li);
+      });
+    }
+
+    const fwList = document.getElementById(frameworkListId);
+    if (fwList) {
+      fwList.innerHTML = FRAMEWORKS.map(f => `
+        <li><a href="${this.escapeHtml(f.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(f.name)}</a> — ${this.escapeHtml(f.what)}</li>
+      `).join("");
+    }
+  }
+
   // An invitation entitles someone to run the free assessment — not to open
   // an existing account's dashboard. Send them into onboarding from the public
   // landing, even if they followed an ?invite= link.
@@ -635,27 +684,11 @@ class ClimateDashboardApp {
     });
 
     // Methodology breakdown (transparency: "how is this number calculated?")
-    const methodList = document.getElementById("fn-methodology-list");
-    if (methodList) {
-      methodList.innerHTML = "";
-      (s.breakdown || []).forEach(item => {
-        const li = document.createElement("li");
-        const scopeLabel = item.scope === "avoided" ? "" : `Scope ${item.scope} · `;
-        const src = FACTOR_SOURCES[item.id];
-        const cite = src
-          ? `<div class="methodology-source">Modelled default · <a href="${this.escapeHtml(src.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(src.source)}</a> <span class="methodology-basis">${this.escapeHtml(src.basis)}</span></div>`
-          : "";
-        li.innerHTML = `<div class="methodology-line"><span>${item.name}</span> <span class="methodology-factor">${scopeLabel}${item.value.toFixed(1)} tCO2e/yr ±${item.unc}%</span></div>${cite}`;
-        methodList.appendChild(li);
-      });
-    }
-
-    const fwList = document.getElementById("fn-frameworks-list");
-    if (fwList) {
-      fwList.innerHTML = FRAMEWORKS.map(f => `
-        <li><a href="${this.escapeHtml(f.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(f.name)}</a> — ${this.escapeHtml(f.what)}</li>
-      `).join("");
-    }
+    this.renderMethodologyDetails({
+      factorListId: "fn-methodology-list",
+      frameworkListId: "fn-frameworks-list",
+      items: s.breakdown || []
+    });
 
     this.renderDimensions(a, s);
     this.renderBenchmark(a, s);

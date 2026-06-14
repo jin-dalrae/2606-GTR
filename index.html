@@ -107,6 +107,23 @@
             <p>After login, the dashboard turns the preview into goals, Risk Radar items, evidence gaps, and a path to replace estimates with metered sources.</p>
           </div>
         </div>
+        <div class="card glass-card report-methodology landing-methodology-detail">
+          <div class="methodology-head">
+            <h3>Detailed Factor Methodology</h3>
+            <span>Public model</span>
+          </div>
+          <p>These are the default factors available to the instant assessment before measured data is connected. A company-specific report shows only the activities selected for that startup.</p>
+          <ul class="methodology-points">
+            <li><strong>Inputs:</strong> company profile, business model, team size, website context, founder notes, and selected activities.</li>
+            <li><strong>Evidence level:</strong> defaults are modelled estimates until replaced with metered cloud, utility, travel, vendor, logistics, or source-document data.</li>
+            <li><strong>Uncertainty:</strong> every modelled factor carries an uncertainty range that propagates into the footprint total.</li>
+          </ul>
+          <ul id="landing-methodology-list" class="methodology-factor-list"></ul>
+          <div class="methodology-frameworks">
+            <div class="methodology-frameworks-head">Standards &amp; theory this rests on</div>
+            <ul id="landing-frameworks-list" class="methodology-framework-list"></ul>
+          </div>
+        </div>
       </div>
 
       <!-- Customer stories -->
@@ -435,10 +452,10 @@
               <li><strong>Evidence level:</strong> document filenames are noted only; source files are not read unless you later opt in to store evidence.</li>
               <li><strong>Upgrade path:</strong> replace modeled defaults with metered cloud, utility, travel, vendor, and claim evidence inside the dashboard.</li>
             </ul>
-            <ul id="fn-methodology-list"></ul>
+            <ul id="fn-methodology-list" class="methodology-factor-list"></ul>
             <div class="methodology-frameworks">
               <div class="methodology-frameworks-head">Standards &amp; theory this rests on</div>
-              <ul id="fn-frameworks-list"></ul>
+              <ul id="fn-frameworks-list" class="methodology-framework-list"></ul>
             </div>
           </div>
 
