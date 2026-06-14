@@ -7,13 +7,24 @@
 const SESSION_COOKIE = "sid";
 const SESSION_TTL_DAYS = 30;
 const PBKDF2_ITERATIONS = 100000;
+const ANONYMOUS_REPORT_LIMIT_PER_DAY = 10;
 
 // Gemini config — kept tight to control API spend.
 const GEMINI_MODEL = "gemini-3.1-flash-lite-preview";
-const GEMINI_MAX_OUTPUT_TOKENS = 1100;
+const GEMINI_PREVIEW_MAX_OUTPUT_TOKENS = 700;
+const GEMINI_FULL_MAX_OUTPUT_TOKENS = 1800;
 const WEBSITE_FETCH_TIMEOUT_MS = 3500;
 const WEBSITE_CONTEXT_MAX_BYTES = 64 * 1024;
 const WEBSITE_CONTEXT_MAX_CHARS = 1800;
+const REPORT_LIMITS_SCHEMA = `
+  CREATE TABLE IF NOT EXISTS anonymous_report_limits (
+    day          TEXT NOT NULL,
+    subject_hash TEXT NOT NULL,
+    count        INTEGER NOT NULL DEFAULT 0,
+    updated_at   TEXT NOT NULL DEFAULT (datetime('now')),
+    PRIMARY KEY (day, subject_hash)
+  )
+`;
 
 export default {
   async fetch(request, env) {
@@ -138,22 +149,36 @@ async function putState(request, env) {
 }
 
 // ---------------------------------------------------------------------------
-// AI report + dashboard fill (Gemini). Auth-gated; one call returns both.
+// AI report + dashboard fill (Gemini). Anonymous users get a rate-limited
+// preview; signed-in users get the full report and dashboard-fill payload.
 // ---------------------------------------------------------------------------
 async function generateReport(request, env) {
-  const session = await requireSession(request, env);
-  if (session instanceof Response) return session;
-
   const apiKey = await getSecret(env, "AI_API_KEY");
   if (!apiKey) {
     return json({ error: "AI is not configured yet. Add the Gemini key to the secret store." }, 503);
   }
 
+  const session = await getSession(request, env);
   const body = await readJson(request);
   const a = body.assessment || {};
+  const requestedMode = body.mode === "full" ? "full" : "preview";
+  const mode = session ? requestedMode : "preview";
+  let quota = null;
+
+  if (!session) {
+    quota = await consumeAnonymousReportQuota(request, env);
+    if (!quota.allowed) {
+      return json({
+        error: "Daily preview limit reached. Create an account to generate the full report.",
+        mode: "preview",
+        quota
+      }, 429);
+    }
+  }
+
   const websiteContext = await fetchWebsiteContext(a.url);
-  const prompt = buildReportPrompt(a, { websiteContext, asOfDate: new Date().toISOString().slice(0, 10) });
-  const schema = buildReportSchema();
+  const prompt = buildReportPrompt(a, { websiteContext, asOfDate: new Date().toISOString().slice(0, 10), mode });
+  const schema = buildReportSchema(mode);
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
   let resp;
@@ -164,7 +189,7 @@ async function generateReport(request, env) {
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: {
-          maxOutputTokens: GEMINI_MAX_OUTPUT_TOKENS,
+          maxOutputTokens: mode === "preview" ? GEMINI_PREVIEW_MAX_OUTPUT_TOKENS : GEMINI_FULL_MAX_OUTPUT_TOKENS,
           temperature: 0.5,
           responseMimeType: "application/json",
           responseSchema: schema
@@ -189,7 +214,7 @@ async function generateReport(request, env) {
   let report;
   try { report = JSON.parse(text); } catch { return json({ error: "AI returned malformed output." }, 502); }
 
-  return json({ report });
+  return json({ report, mode, quota });
 }
 
 function buildReportPrompt(assessment, context = {}) {
@@ -197,6 +222,7 @@ function buildReportPrompt(assessment, context = {}) {
   const snapshot = a.snapshot || {};
   const websiteContext = context.websiteContext || {};
   const asOfDate = context.asOfDate || new Date().toISOString().slice(0, 10);
+  const mode = context.mode === "preview" ? "preview" : "full";
   const activities = (a.activities || []).join(", ");
   const hotspots = (snapshot.hotspots || [])
     .map(h => `${h.name} (~${formatNumber(h.value)} tCO2e/yr)`)
@@ -208,7 +234,9 @@ function buildReportPrompt(assessment, context = {}) {
 
   return [
     "You are a climate-impact analyst advising an early-stage startup founder.",
-    "Write a concise briefing that is grounded in the specific company situation below.",
+    mode === "preview"
+      ? "Write the unlocked preview half of a report: useful, specific, but not the full action plan."
+      : "Write the full founder-facing report with enough substance to populate a dashboard and risk radar.",
     "",
     `Current date: ${asOfDate}`,
     `Company: ${cleanPromptValue(a.name) || "Unknown"}`,
@@ -238,18 +266,44 @@ function buildReportPrompt(assessment, context = {}) {
     "- Name only real regulations, standards, or market trends, and include why the trigger is plausible for this company.",
     "- If the situation is too thin, say the first action is to verify the missing operational data, not to claim precision.",
     "",
-    "Return a founder-facing JSON report. Include a basis field naming the real context used and any key missing assumption. Keep every field tight, practical, and specific. The Risk Radar must contain 2 to 4 dated risks with concrete actions."
+    mode === "preview"
+      ? "Return JSON for a preview only: headline, basis, two material issues, one likely forcing function, and the first action. Do not include the full risk radar, goals, or methodology notes."
+      : "Return JSON for the full report. Include a basis field naming the real context used and any key missing assumption. Include richer sections: executive summary, evidence gaps, methodology notes, next steps, goals, and 2 to 4 dated Risk Radar items with concrete actions."
   ].join("\n");
 }
 
-function buildReportSchema() {
+function buildReportSchema(mode = "full") {
+  if (mode === "preview") {
+    return {
+      type: "object",
+      properties: {
+        headline: { type: "string", description: "1-2 sentence key insight grounded in the supplied company context" },
+        basis: { type: "string", description: "One sentence naming facts used from notes, website context, selected activities, or hotspots; include the key assumption if context is thin" },
+        issues: {
+          type: "array",
+          description: "Exactly two material issues visible in the preview",
+          items: {
+            type: "object",
+            properties: { title: { type: "string" }, detail: { type: "string" } },
+            required: ["title", "detail"]
+          }
+        },
+        regulation: { type: "string", description: "One sentence: a real regulation, standard, or customer requirement and the assumption that makes it relevant" },
+        firstAction: { type: "string", description: "One sentence: the recommended first move" }
+      },
+      required: ["headline", "basis", "issues", "regulation", "firstAction"]
+    };
+  }
+
   return {
     type: "object",
     properties: {
       headline: { type: "string", description: "1-2 sentence key insight grounded in the supplied company context" },
       basis: { type: "string", description: "One sentence naming facts used from notes, website context, selected activities, or hotspots; include the key assumption if context is thin" },
+      executiveSummary: { type: "string", description: "3-5 sentences with the practical interpretation of the modeled footprint, handprint signal, and strongest operational implication" },
       issues: {
         type: "array",
+        description: "3 to 5 material issues, each tied to supplied company context",
         items: {
           type: "object",
           properties: { title: { type: "string" }, detail: { type: "string" } },
@@ -260,6 +314,9 @@ function buildReportSchema() {
       unexpected: { type: "string", description: "One sentence: an unexpected second-order effect + rough timing" },
       firstAction: { type: "string", description: "One sentence: the recommended first move" },
       goalPriorities: { type: "array", items: { type: "string" }, description: "Up to 3 short goal titles" },
+      evidenceGaps: { type: "array", items: { type: "string" }, description: "3 to 5 missing facts or evidence items needed to make the assessment investor-grade" },
+      methodologyNotes: { type: "array", items: { type: "string" }, description: "3 to 5 notes explaining how the modeled estimate should be interpreted and improved" },
+      nextSteps: { type: "array", items: { type: "string" }, description: "3 to 5 concrete next actions in priority order" },
       risks: {
         type: "array",
         description: "2 to 4 dated regulatory or second-order risks for the Risk Radar",
@@ -276,8 +333,68 @@ function buildReportSchema() {
         }
       }
     },
-    required: ["headline", "basis", "issues", "regulation", "firstAction", "goalPriorities", "risks"]
+    required: ["headline", "basis", "executiveSummary", "issues", "regulation", "firstAction", "goalPriorities", "evidenceGaps", "methodologyNotes", "nextSteps", "risks"]
   };
+}
+
+async function consumeAnonymousReportQuota(request, env, today = new Date().toISOString().slice(0, 10)) {
+  await env.DB.prepare(REPORT_LIMITS_SCHEMA).run();
+
+  const clientIp = getClientIp(request);
+  const subjectHash = await sha256Hex(`${today}:${clientIp || "unknown"}`);
+  const row = await env.DB.prepare(
+    "SELECT count FROM anonymous_report_limits WHERE day = ? AND subject_hash = ?"
+  ).bind(today, subjectHash).first();
+  const current = Number(row && row.count || 0);
+
+  if (current >= ANONYMOUS_REPORT_LIMIT_PER_DAY) {
+    return {
+      allowed: false,
+      limit: ANONYMOUS_REPORT_LIMIT_PER_DAY,
+      remaining: 0,
+      reset: nextUtcDayIso(today)
+    };
+  }
+
+  const next = current + 1;
+  if (row) {
+    await env.DB.prepare(
+      "UPDATE anonymous_report_limits SET count = ?, updated_at = datetime('now') WHERE day = ? AND subject_hash = ?"
+    ).bind(next, today, subjectHash).run();
+  } else {
+    await env.DB.prepare(
+      "INSERT INTO anonymous_report_limits (day, subject_hash, count) VALUES (?, ?, ?)"
+    ).bind(today, subjectHash, next).run();
+  }
+
+  return {
+    allowed: true,
+    limit: ANONYMOUS_REPORT_LIMIT_PER_DAY,
+    remaining: Math.max(0, ANONYMOUS_REPORT_LIMIT_PER_DAY - next),
+    reset: nextUtcDayIso(today)
+  };
+}
+
+function getClientIp(request) {
+  const headers = request.headers;
+  const cfIp = headers.get("CF-Connecting-IP");
+  if (cfIp) return cfIp.trim();
+  const trueClientIp = headers.get("True-Client-IP");
+  if (trueClientIp) return trueClientIp.trim();
+  const forwarded = headers.get("X-Forwarded-For");
+  if (forwarded) return forwarded.split(",")[0].trim();
+  return "";
+}
+
+function nextUtcDayIso(day) {
+  const next = new Date(`${day}T00:00:00.000Z`);
+  next.setUTCDate(next.getUTCDate() + 1);
+  return next.toISOString();
+}
+
+async function sha256Hex(value) {
+  const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
+  return [...new Uint8Array(bytes)].map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
 async function fetchWebsiteContext(rawUrl) {
@@ -618,5 +735,6 @@ export {
   buildReportPrompt,
   buildReportSchema,
   extractUsefulText,
+  getClientIp,
   normalizePublicWebsiteUrl
 };

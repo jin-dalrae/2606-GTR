@@ -376,14 +376,19 @@
             ⚠️ This is a <strong>modeled estimate</strong> from industry defaults and your inputs — a starting point, not certified accounting. Refine it with real data inside the dashboard.
           </p>
 
-          <details class="report-methodology">
-            <summary>How is this calculated?</summary>
-            <div class="methodology-body">
-              <p>Each activity you selected maps to a typical annual emission factor (tCO2e/yr) drawn from climate-tech startup benchmarks, scaled to your stage and model. We sum these into your footprint and propagate each factor's uncertainty in quadrature (root-sum-of-squares) to produce the ± range.</p>
-              <ul id="fn-methodology-list"></ul>
-              <p class="methodology-foot">Inside the dashboard you replace any modeled factor with metered or metered-equivalent data, which shrinks the uncertainty and raises your verified-data coverage.</p>
+          <div class="card glass-card report-methodology">
+            <div class="methodology-head">
+              <h3>Methodology</h3>
+              <span>Modeled, not certified</span>
             </div>
-          </details>
+            <p>Each selected activity maps to a typical annual emission factor in tCO2e/yr. The estimate sums those factors, groups them by GHG scope, and propagates uncertainty with root-sum-of-squares.</p>
+            <ul class="methodology-points">
+              <li><strong>Inputs:</strong> company profile, business model, team size, website context, founder notes, and selected activities.</li>
+              <li><strong>Evidence level:</strong> document filenames are noted only; source files are not read unless you later opt in to store evidence.</li>
+              <li><strong>Upgrade path:</strong> replace modeled defaults with metered cloud, utility, travel, vendor, and claim evidence inside the dashboard.</li>
+            </ul>
+            <ul id="fn-methodology-list"></ul>
+          </div>
 
           <!-- Actions: share + enter dashboard -->
           <div class="report-actions">

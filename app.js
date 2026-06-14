@@ -175,7 +175,8 @@ class ClimateDashboardApp {
       if (!res.ok) { this.renderAccountUI(); return; }
       const { email } = await res.json();
       this.user = email;
-      await this.loadServerState();
+      const loaded = await this.loadServerState();
+      if (!loaded) this.showAuthenticatedDashboard("intake");
       this.renderAccountUI();
     } catch (e) {
       // Offline / API unavailable — keep working from localStorage.
@@ -185,19 +186,28 @@ class ClimateDashboardApp {
 
   async loadServerState() {
     const res = await fetch("/api/state", { credentials: "same-origin" });
-    if (!res.ok) return;
+    if (!res.ok) return false;
     const { state } = await res.json();
-    if (state && state.company && state.company.isInitialized) {
+    if (state) {
       this.state = state;
       localStorage.setItem("climate_dashboard_state", JSON.stringify(state));
-      this.state.funnelStage = "done";
-      this.showFunnel = false;
-      this.applyShell();
-      const hash = window.location.hash.replace("#", "");
-      if (!hash || hash === "intake") window.location.hash = "#ledger";
-      this.currentView = window.location.hash.replace("#", "") || "ledger";
-      this.render();
+      this.showAuthenticatedDashboard(state.company && state.company.isInitialized ? "ledger" : "intake");
+      return true;
     }
+    return false;
+  }
+
+  showAuthenticatedDashboard(defaultView) {
+    this.state.funnelStage = "done";
+    this.showFunnel = false;
+    this.applyShell();
+    const hash = window.location.hash.replace("#", "");
+    const hasView = hash && document.getElementById(`view-${hash}`);
+    if (!hasView || (!this.state.company.isInitialized && hash !== "intake")) {
+      window.location.hash = `#${defaultView}`;
+    }
+    this.currentView = window.location.hash.replace("#", "") || defaultView;
+    this.render();
   }
 
   // Persist state to the server (debounced) when signed in.
@@ -296,6 +306,11 @@ class ClimateDashboardApp {
         const cb = this._authOnSuccess;
         this._authOnSuccess = null;
         cb();
+      } else {
+        this.loadServerState().then(loaded => {
+          if (!loaded) this.showAuthenticatedDashboard("intake");
+          this.renderAccountUI();
+        });
       }
     } catch (e) {
       errEl.innerText = "Network error. Please try again.";
@@ -357,7 +372,11 @@ class ClimateDashboardApp {
     // "Have an invite? Open dashboard" — returning users log in here.
     document.getElementById("fn-login-link").addEventListener("click", (e) => {
       e.preventDefault();
-      this.openAuth("login", () => this.loadServerState());
+      this.openAuth("login", async () => {
+        const loaded = await this.loadServerState();
+        if (!loaded) this.showAuthenticatedDashboard("intake");
+        this.renderAccountUI();
+      });
     });
 
     // Landing -> Onboard
@@ -503,8 +522,17 @@ class ClimateDashboardApp {
     // Brief "analyzing" shimmer, then reveal — sells the instant-analysis moment
     const loading = document.getElementById("fn-report-loading");
     const body = document.getElementById("fn-report-body");
+    const cta = document.getElementById("fn-enter-dashboard");
+    const aiCard = document.getElementById("fn-ai-briefing");
+    const aiStatus = document.getElementById("fn-ai-status");
+    const aiBody = document.getElementById("fn-ai-body");
     loading.classList.remove("hidden");
     body.classList.add("hidden");
+    aiCard.classList.add("hidden");
+    aiStatus.innerText = "";
+    aiBody.innerHTML = "";
+    this._readyForDashboard = false;
+    cta.innerText = this.user ? "Generate full report & open dashboard →" : "Create account for full report →";
 
     document.getElementById("fn-report-company").innerText = a.name || "Your startup";
     const docNote = a.docs.deck || a.docs.accounting ? " · documents noted" : "";
@@ -561,6 +589,7 @@ class ClimateDashboardApp {
       clearInterval(ticker);
       loading.classList.add("hidden");
       body.classList.remove("hidden");
+      if (!this.user) this.generateAIReport("preview");
     }, 1400);
   }
 
@@ -653,17 +682,18 @@ class ClimateDashboardApp {
     this.updateMaturityLevel();
   }
 
-  // Ask Gemini (server-side) for a concise briefing; render it on the report.
-  async generateAIReport() {
+  // Ask Gemini (server-side) for a preview or full briefing; render it on the report.
+  async generateAIReport(mode = "full") {
+    const isPreview = mode === "preview";
     const card = document.getElementById("fn-ai-briefing");
     const statusEl = document.getElementById("fn-ai-status");
     const bodyEl = document.getElementById("fn-ai-body");
     const cta = document.getElementById("fn-enter-dashboard");
     card.classList.remove("hidden");
-    statusEl.innerHTML = `<span class="ai-spinner-inline"></span> Generating…`;
+    statusEl.innerHTML = `<span class="ai-spinner-inline"></span> ${isPreview ? "Generating preview…" : "Generating full report…"}`;
     bodyEl.innerHTML = "";
 
-    const finish = () => {
+    const finishFull = () => {
       this._readyForDashboard = true;
       cta.innerText = "Open full dashboard →";
     };
@@ -673,40 +703,82 @@ class ClimateDashboardApp {
         method: "POST",
         credentials: "same-origin",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ assessment: this.state.assessment })
+        body: JSON.stringify({ assessment: this.state.assessment, mode })
       });
       const data = await res.json();
       if (!res.ok) {
         statusEl.innerText = "";
-        bodyEl.innerHTML = `<p class="ai-line">${data.error || "AI briefing unavailable right now."} Your modeled snapshot above still applies — continue to your dashboard.</p>`;
-        finish();
-        return;
+        const quotaText = data.quota ? ` ${data.quota.remaining}/${data.quota.limit} previews left today.` : "";
+        bodyEl.innerHTML = `<p class="ai-line">${data.error || "AI briefing unavailable right now."}${quotaText} ${isPreview ? "Create an account to generate the full report." : "Your modeled snapshot above still applies — continue to your dashboard."}</p>`;
+        if (!isPreview) finishFull();
+        return false;
       }
+
+      if (isPreview) {
+        this.state.assessment.aiPreview = data.report;
+        this.renderAIBriefing(data.report, { preview: true, quota: data.quota });
+        statusEl.innerText = data.quota ? `Preview · ${data.quota.remaining}/${data.quota.limit} left today` : "Preview";
+        return true;
+      }
+
       this.state.assessment.aiReport = data.report;
       this.applyAIReportToState(data.report);
-      this.renderAIBriefing(data.report);
-      statusEl.innerText = "Tailored to your inputs";
+      this.renderAIBriefing(data.report, { preview: false });
+      statusEl.innerText = "Full report generated";
       await this.pushState();
-      finish();
+      finishFull();
+      return true;
     } catch (e) {
       statusEl.innerText = "";
-      bodyEl.innerHTML = `<p class="ai-line">Couldn't reach the AI service. Continue to your dashboard — your snapshot is saved.</p>`;
-      finish();
+      bodyEl.innerHTML = `<p class="ai-line">Couldn't reach the AI service. ${isPreview ? "You can still create an account and try the full report." : "Continue to your dashboard — your snapshot is saved."}</p>`;
+      if (!isPreview) finishFull();
+      return false;
     }
   }
 
-  renderAIBriefing(r) {
+  renderAIBriefing(r, options = {}) {
+    const isPreview = !!options.preview;
     const bodyEl = document.getElementById("fn-ai-body");
-    const issues = (r.issues || []).map(i => `
+    const issues = (r.issues || []).slice(0, isPreview ? 2 : 5).map(i => `
       <div class="ai-issue"><strong>${this.escapeHtml(i.title)}</strong><span>${this.escapeHtml(i.detail)}</span></div>
     `).join("");
+    const list = (items, title) => {
+      if (!Array.isArray(items) || !items.length) return "";
+      return `
+        <div class="ai-list-block">
+          <div class="ai-section-title">${this.escapeHtml(title)}</div>
+          <ul class="ai-list">${items.slice(0, 5).map(item => `<li>${this.escapeHtml(item)}</li>`).join("")}</ul>
+        </div>
+      `;
+    };
+    const risks = !isPreview && Array.isArray(r.risks) && r.risks.length ? `
+      <div class="ai-list-block">
+        <div class="ai-section-title">Risk Radar</div>
+        <div class="ai-risk-list">
+          ${r.risks.slice(0, 4).map(risk => `
+            <div class="ai-risk">
+              <strong>${this.escapeHtml(risk.title || "Risk")}</strong>
+              <span>${this.escapeHtml(risk.timing || "TBD")} · ${this.escapeHtml(risk.severity || "medium")} · ${this.escapeHtml(risk.action || "")}</span>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    ` : "";
+    const quotaText = options.quota ? `<div class="ai-line ai-quota">Anonymous preview quota: ${options.quota.remaining}/${options.quota.limit} left today.</div>` : "";
     bodyEl.innerHTML = `
       <div class="ai-headline">${this.escapeHtml(r.headline || "")}</div>
       ${r.basis ? `<div class="ai-line"><b>Basis:</b> ${this.escapeHtml(r.basis)}</div>` : ""}
+      ${r.executiveSummary && !isPreview ? `<div class="ai-line"><b>Readout:</b> ${this.escapeHtml(r.executiveSummary)}</div>` : ""}
       ${issues}
       ${r.regulation ? `<div class="ai-line"><b>Forcing function:</b> ${this.escapeHtml(r.regulation)}</div>` : ""}
       ${r.unexpected ? `<div class="ai-line"><b>Watch for:</b> ${this.escapeHtml(r.unexpected)}</div>` : ""}
       ${r.firstAction ? `<div class="ai-line"><b>Start here:</b> ${this.escapeHtml(r.firstAction)}</div>` : ""}
+      ${!isPreview ? list(r.evidenceGaps, "Evidence gaps") : ""}
+      ${!isPreview ? list(r.methodologyNotes, "Methodology notes") : ""}
+      ${!isPreview ? list(r.nextSteps, "Next steps") : ""}
+      ${risks}
+      ${isPreview ? `<div class="ai-lock">Create an account to unlock the full report: Risk Radar, goals, evidence gaps, methodology notes, and dashboard tasks.</div>` : ""}
+      ${quotaText}
     `;
   }
 

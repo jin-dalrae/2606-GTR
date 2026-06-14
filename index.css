@@ -2601,24 +2601,31 @@
 
   /* --- Report methodology disclosure --- */
   .report-methodology {
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
-    padding: 0 1rem;
     margin-bottom: 2rem;
   }
-  .report-methodology summary {
-    cursor: pointer;
-    padding: 0.85rem 0;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-    list-style: revert;
+  .methodology-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
   }
-  .report-methodology summary:hover { color: var(--accent-handprint); }
-  .methodology-body { padding-bottom: 1rem; }
-  .methodology-body p { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem; }
-  .methodology-body ul { list-style: none; margin: 0.75rem 0; }
-  .methodology-body li {
+  .methodology-head h3 { margin: 0; }
+  .methodology-head span {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+  }
+  .report-methodology p { font-size: 0.84rem; color: var(--text-muted); margin-bottom: 0.9rem; }
+  .report-methodology ul { list-style: none; margin: 0.75rem 0; }
+  .methodology-points li {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.45rem;
+  }
+  #fn-methodology-list li {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
@@ -2628,7 +2635,6 @@
     color: var(--text-secondary);
   }
   .methodology-factor { color: var(--text-muted); white-space: nowrap; }
-  .methodology-foot { margin-top: 0.75rem; }
 
   /* ==========================================================================
      TEAM & NEXT STEPS VIEW (steps 7-8)
@@ -2782,6 +2788,38 @@
   .ai-issue span { color: var(--text-muted); }
   .ai-line { font-size: 0.84rem; color: var(--text-secondary); }
   .ai-line b { color: var(--accent-handprint); font-weight: 600; }
+  .ai-list-block { display: flex; flex-direction: column; gap: 0.45rem; }
+  .ai-section-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .ai-list {
+    margin: 0;
+    padding-left: 1rem;
+    color: var(--text-muted);
+    font-size: 0.83rem;
+  }
+  .ai-list li { margin-bottom: 0.3rem; }
+  .ai-risk-list { display: grid; gap: 0.55rem; }
+  .ai-risk {
+    border-left: 3px solid var(--accent-neutral);
+    padding-left: 0.7rem;
+    font-size: 0.82rem;
+  }
+  .ai-risk strong { display: block; color: var(--text-primary); margin-bottom: 0.1rem; }
+  .ai-risk span { color: var(--text-muted); }
+  .ai-lock {
+    border: 1px dashed var(--accent-neutral);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem;
+    font-size: 0.83rem;
+    color: var(--text-secondary);
+    background: var(--accent-neutral-glow);
+  }
+  .ai-quota { color: var(--text-muted); }
   .ai-spinner-inline {
     width: 16px; height: 16px;
     border-radius: 50%;

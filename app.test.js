@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildReportPrompt, buildReportSchema, extractUsefulText, normalizePublicWebsiteUrl } from './worker/index.js';
+import { buildReportPrompt, buildReportSchema, extractUsefulText, getClientIp, normalizePublicWebsiteUrl } from './worker/index.js';
 
 // Calculation helper extracted to verify mathematics logic independently
 function calculateLedgerTotals(state) {
@@ -194,7 +194,36 @@ describe('AI report grounding', () => {
   it('requires a basis field so the briefing shows what context was used', () => {
     const schema = buildReportSchema();
     expect(schema.required).toContain('basis');
+    expect(schema.required).toContain('executiveSummary');
+    expect(schema.required).toContain('evidenceGaps');
+    expect(schema.required).toContain('methodologyNotes');
     expect(schema.properties.basis.description).toContain('facts used');
+  });
+
+  it('uses a smaller preview schema before login', () => {
+    const previewSchema = buildReportSchema('preview');
+    expect(previewSchema.required).toEqual(['headline', 'basis', 'issues', 'regulation', 'firstAction']);
+    expect(previewSchema.properties.risks).toBeUndefined();
+
+    const previewPrompt = buildReportPrompt({ name: 'Preview Co', snapshot: {} }, { mode: 'preview', asOfDate: '2026-06-13' });
+    const fullPrompt = buildReportPrompt({ name: 'Preview Co', snapshot: {} }, { mode: 'full', asOfDate: '2026-06-13' });
+    expect(previewPrompt).toContain('unlocked preview half');
+    expect(fullPrompt).toContain('full founder-facing report');
+  });
+
+  it('reads the Cloudflare client IP header before proxy fallbacks', () => {
+    const request = new Request('https://example.com/api/generate-report', {
+      headers: {
+        'CF-Connecting-IP': '203.0.113.1',
+        'X-Forwarded-For': '198.51.100.2, 198.51.100.3'
+      }
+    });
+    expect(getClientIp(request)).toBe('203.0.113.1');
+
+    const fallback = new Request('https://example.com/api/generate-report', {
+      headers: { 'X-Forwarded-For': '198.51.100.2, 198.51.100.3' }
+    });
+    expect(getClientIp(fallback)).toBe('198.51.100.2');
   });
 
   it('extracts usable website text without script or style content', () => {
