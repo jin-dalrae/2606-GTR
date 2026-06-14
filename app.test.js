@@ -247,7 +247,7 @@ describe('AI report grounding', () => {
 
   it('uses a smaller preview schema before login', () => {
     const previewSchema = buildReportSchema('preview');
-    expect(previewSchema.required).toEqual(['headline', 'basis', 'issues', 'regulation', 'firstAction']);
+    expect(previewSchema.required).toEqual(['headline', 'basis', 'inferredBusinessModel', 'issues', 'regulation', 'firstAction']);
     expect(previewSchema.properties.risks).toBeUndefined();
 
     const previewPrompt = buildReportPrompt({ name: 'Preview Co', snapshot: {} }, { mode: 'preview', asOfDate: '2026-06-13' });
@@ -335,5 +335,31 @@ describe('Multi-dimension impact + cost', () => {
     expect(cost.low).toBe(1500);   // 20 * 75
     expect(cost.high).toBe(3800);  // 20 * 190
     expect(cost.lines).toHaveLength(2);
+  });
+
+  it('models industry-specific waste defaults (pet, food, non-digital baseline)', () => {
+    // 1. Pet Industry
+    const pPet = computeImpactProfile({
+      scaleFactor: 2.0,
+      breakdown: []
+    }, [], 'Pet Services');
+    expect(pPet.waste.value).toBe(240); // 120 * 2.0 scale
+    expect(pPet.waste.note).toContain('organic/pet waste');
+
+    // 2. Food Industry
+    const pFood = computeImpactProfile({
+      scaleFactor: 1.0,
+      breakdown: []
+    }, [], 'Food and Beverage');
+    expect(pFood.waste.value).toBe(150); // 150 * 1.0 scale
+    expect(pFood.waste.note).toContain('organic food waste');
+
+    // 3. General non-digital baseline physical business
+    const pPhys = computeImpactProfile({
+      scaleFactor: 1.5,
+      breakdown: []
+    }, [], 'Manufacturing');
+    expect(pPhys.waste.value).toBe(75); // 50 * 1.5 scale
+    expect(pPhys.waste.note).toContain('non-digital business models');
   });
 });

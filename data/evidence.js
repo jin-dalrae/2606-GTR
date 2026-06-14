@@ -270,7 +270,7 @@ const NATURE_RANK = { low: 1, medium: 2, high: 3 };
 // Build the multi-dimension impact profile from the modeled carbon breakdown.
 // Numbers are transparently derived from the carbon model (same defaults), so
 // they carry the same "modeled, replace with real data" caveat.
-export function computeImpactProfile(snapshot = {}, activities = []) {
+export function computeImpactProfile(snapshot = {}, activities = [], businessModel = "") {
   const breakdown = Array.isArray(snapshot.breakdown) ? snapshot.breakdown : [];
   const acts = Array.isArray(activities) ? activities : [];
   const c = IMPACT_CONSTANTS;
@@ -281,8 +281,32 @@ export function computeImpactProfile(snapshot = {}, activities = []) {
   const energyKwh = Math.round((tonnesFor(ENERGY_ACTIVITIES) * 1000) / c.gridKgPerKwh);
   const elecKwh = (tonnesFor(ELECTRIC_ACTIVITIES) * 1000) / c.gridKgPerKwh;
   const waterM3 = +((elecKwh * c.wueLitrePerKwh) / 1000).toFixed(1);
-  const wasteKg = acts.reduce((sum, k) => sum + (ACTIVITY_WASTE_KG[k] || 0), 0);
-  const wastePending = wasteKg === 0;
+  let wasteKg = acts.reduce((sum, k) => sum + (ACTIVITY_WASTE_KG[k] || 0), 0);
+  let wasteNote = IMPACT_DIMENSIONS.waste.note;
+  let wastePending = wasteKg === 0;
+
+  const bmLower = String(businessModel || "").toLowerCase();
+  const isPetBusiness = /pet|animal|dog|cat|veterinary/i.test(bmLower);
+  const isFoodBusiness = /food|agri|farm|beverage|restaurant/i.test(bmLower);
+
+  if (isPetBusiness) {
+    const teamScale = snapshot.scaleFactor || 1;
+    const petWasteDefault = 120 * teamScale;
+    wasteKg += petWasteDefault;
+    wastePending = false;
+    wasteNote = "From hardware end-of-life and packaging defaults, plus modeled organic/pet waste defaults. Replace with actual waste audit and disposal records.";
+  } else if (isFoodBusiness) {
+    const teamScale = snapshot.scaleFactor || 1;
+    const foodWasteDefault = 150 * teamScale;
+    wasteKg += foodWasteDefault;
+    wastePending = false;
+    wasteNote = "From hardware end-of-life and packaging defaults, plus modeled organic food waste defaults. Replace with organic waste composting/disposal records.";
+  } else if (wastePending && bmLower && !/saas|software|cloud|digital/i.test(bmLower)) {
+    const teamScale = snapshot.scaleFactor || 1;
+    wasteKg = 50 * teamScale;
+    wastePending = false;
+    wasteNote = "Estimated baseline commercial waste for non-digital business models. Replace with real disposal records.";
+  }
 
   const natureDrivers = acts.filter(k => ACTIVITY_NATURE[k]);
   const natureLevel = natureDrivers.reduce(
@@ -295,12 +319,12 @@ export function computeImpactProfile(snapshot = {}, activities = []) {
     water: { ...IMPACT_DIMENSIONS.water, value: waterM3 },
     waste: {
       ...IMPACT_DIMENSIONS.waste,
-      value: wastePending ? null : wasteKg,
+      value: wastePending ? null : Math.round(wasteKg),
       pending: wastePending,
       pendingLabel: "Pending vendor data",
       note: wastePending
         ? "No direct hardware, logistics, disposal, or vendor waste records were supplied. Treat this as a data gap, not zero waste."
-        : IMPACT_DIMENSIONS.waste.note
+        : wasteNote
     },
     nature: { ...IMPACT_DIMENSIONS.nature, level: natureLabel, drivers: natureDrivers }
   };
@@ -320,7 +344,7 @@ export function buildFactPack(assessment = {}) {
   const bench = computeBenchmark(a.stage, a.teamSize);
   const benchmark = `Indicative peer range for ${bench.basisFte}: ~${bench.low}-${bench.high} tCO2e/yr (${BENCHMARKS.perFte.low}-${BENCHMARKS.perFte.high} ${BENCHMARKS.perFte.unit}). ${BENCHMARKS.perFte.note} Source: ${BENCHMARKS.perFte.source}.`;
 
-  const impact = computeImpactProfile(a.snapshot || {}, activities);
+  const impact = computeImpactProfile(a.snapshot || {}, activities, a.businessModel);
   const wasteText = impact.waste.pending ? impact.waste.pendingLabel : `~${impact.waste.value} kg/yr`;
   const dimensions = `Impact beyond carbon (modeled/qualitative, replace with real data): Energy ~${impact.energy.value.toLocaleString()} kWh/yr; Water ~${impact.water.value} m³/yr; Waste: ${wasteText}; Land & biodiversity materiality: ${impact.nature.level}${impact.nature.drivers.length ? ` (via ${impact.nature.drivers.join(", ")})` : ""}.`;
 

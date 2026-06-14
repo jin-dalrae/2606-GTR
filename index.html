@@ -295,15 +295,8 @@
                 </select>
               </div>
               <div class="form-group">
-                <label for="fn-model">Business Model <span class="required">*</span></label>
-                <select id="fn-model" required>
-                  <option value="" disabled selected>Select model...</option>
-                  <option value="SaaS">SaaS / Cloud Software</option>
-                  <option value="Hardware">Hardware / Climate Tech Device</option>
-                  <option value="Marketplace">Marketplace / Platform</option>
-                  <option value="Deep Tech">Deep Tech / Lab Scale R&D</option>
-                  <option value="Logistics">Logistics / Supply Chain solutions</option>
-                </select>
+                <label for="fn-model">Business Model <span class="optional-tag">optional — auto-detects if empty</span></label>
+                <input type="text" id="fn-model" placeholder="e.g. SaaS, Pet Services, or leave blank to auto-detect">
               </div>
               <div class="form-group">
                 <label for="fn-team">Team Size (FTEs)</label>
@@ -631,15 +624,8 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="business-model">Business Model <span class="required">*</span></label>
-                  <select id="business-model" required>
-                    <option value="" disabled selected>Select model...</option>
-                    <option value="SaaS">SaaS / Cloud Software</option>
-                    <option value="Hardware">Hardware / Climate Tech Device</option>
-                    <option value="Marketplace">Marketplace / Platform</option>
-                    <option value="Deep Tech">Deep Tech / Lab Scale R&D</option>
-                    <option value="Logistics">Logistics / Supply Chain solutions</option>
-                  </select>
+                  <label for="business-model">Business Model <span class="optional-tag">optional — auto-detects if empty</span></label>
+                  <input type="text" id="business-model" placeholder="e.g. SaaS, Pet Services, or leave blank to auto-detect">
                 </div>
                 <div class="form-group">
                   <label for="team-size">Team Size (FTEs)</label>
@@ -777,6 +763,34 @@
           <div class="net-banner-description">
             <span class="warning-tag">IMPORTANT DISCLOSURE</span>
             <p>This is a <strong class="glossary-term" data-term="net">derived context figure</strong>, not a certified accounting <span class="glossary-term" data-term="offset">offset</span>. Your <span class="glossary-term" data-term="footprint">footprint</span> inventory (−) represents real physical emissions. Your <span class="glossary-term" data-term="handprint">handprint</span> (+) represents emissions avoided vs. a <span class="glossary-term" data-term="baseline">baseline</span> reference scenario. They use different methodologies and cannot be directly mathematically netted to claim zero physical emissions.</p>
+          </div>
+        </div>
+
+        <!-- Footprint and Handprint Verification Guide -->
+        <div class="card glass-card impact-guide-card" id="fn-impact-guide">
+          <div class="guide-header">
+            <h4>💡 Footprint &amp; Handprint Verification Guide</h4>
+            <button class="btn-close-guide" id="btn-close-guide" type="button" aria-label="Dismiss guide">&times;</button>
+          </div>
+          <div class="guide-grid">
+            <div class="guide-column">
+              <h5>Physical Footprint (−)</h5>
+              <p class="guide-col-desc">Emissions your company physically causes. Goal: replace modeled estimates with metered data.</p>
+              <ul>
+                <li><strong>Cloud Compute:</strong> Replace default calculations with real emissions telemetry from your AWS/GCP/Azure sustainability dashboards.</li>
+                <li><strong>FTE Travel:</strong> Replace flat estimates with actual flight segments, passenger class, and hotel room nights.</li>
+                <li><strong>General Waste:</strong> Replace defaults with actual waste bin counts, organic compost records, or recycling manifests.</li>
+              </ul>
+            </div>
+            <div class="guide-column">
+              <h5>Avoided Handprint (+)</h5>
+              <p class="guide-col-desc">Emissions avoided by customers choosing you. Goal: verify additionality and baseline math.</p>
+              <ul>
+                <li><strong>Establish the Baseline:</strong> Document the conventional alternative (e.g. diesel delivery vans, coal grid energy, virgin materials).</li>
+                <li><strong>Pass Additionality Gates:</strong> Prove the carbon reduction isn't already mandated by regulations or happening anyway.</li>
+                <li><strong>Track Displacement:</strong> Multiply verified avoided emissions per unit sold by your actual shipment volume.</li>
+              </ul>
+            </div>
           </div>
         </div>
         

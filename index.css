@@ -3211,3 +3211,86 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Footprint & Handprint Verification Guide Card */
+.impact-guide-card {
+  position: relative;
+  border-left: 3px solid var(--accent-neutral);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  background: hsla(0, 0%, 100%, 0.015);
+}
+.impact-guide-card.hidden {
+  display: none !important;
+}
+.guide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.75rem;
+}
+.guide-header h4 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-family: var(--font-heading);
+  font-weight: 700;
+}
+.btn-close-guide {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.5rem;
+  font-weight: 300;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.5rem;
+  transition: color 0.2s ease;
+}
+.btn-close-guide:hover {
+  color: var(--text-primary);
+}
+.guide-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+.guide-column h5 {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+.guide-column h5:first-of-type {
+  color: var(--accent-footprint);
+}
+.guide-column:nth-child(2) h5 {
+  color: var(--accent-handprint);
+}
+.guide-col-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+.guide-column ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  list-style-type: disc;
+}
+.guide-column li {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 0.6rem;
+}
+.guide-column li strong {
+  color: var(--text-primary);
+}
+@media (max-width: 768px) {
+  .guide-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+

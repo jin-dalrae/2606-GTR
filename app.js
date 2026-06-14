@@ -593,7 +593,7 @@ class ClimateDashboardApp {
       name: document.getElementById("fn-name").value.trim(),
       url: this.normalizeWebsiteInput(document.getElementById("fn-url").value),
       stage: document.getElementById("fn-stage").value,
-      businessModel: document.getElementById("fn-model").value,
+      businessModel: document.getElementById("fn-model").value.trim(),
       teamSize,
       activities: uniqueActivities,
       notes: notes,
@@ -692,8 +692,9 @@ class ClimateDashboardApp {
 
     document.getElementById("fn-report-company").innerText = a.name || "Your startup";
     const docNote = a.docs.deck || a.docs.accounting ? " · documents noted" : "";
+    const bmDisplay = a.inferredBusinessModel || a.businessModel || "Auto-detecting model...";
     document.getElementById("fn-report-meta").innerText =
-      `${a.stage || "Stage"} · ${a.businessModel || "Model"} · FTE-scaled modeled estimate${docNote}`;
+      `${a.stage || "Stage"} · ${bmDisplay} · FTE-scaled modeled estimate${docNote}`;
 
     document.getElementById("fn-report-footprint").innerHTML =
       `${s.footprintTotal.toFixed(1)} <small>tCO2e/yr</small>`;
@@ -788,7 +789,7 @@ class ClimateDashboardApp {
   renderDimensions(a, s) {
     const el = document.getElementById("fn-report-dimensions");
     if (!el) return;
-    const p = computeImpactProfile(s, a.activities);
+    const p = computeImpactProfile(s, a.activities, a.inferredBusinessModel || a.businessModel);
     const modeled = [p.energy, p.water, p.waste].map(d => `
       <div class="dim">
         <div class="dim-head"><span class="dim-label">${this.escapeHtml(d.label)}</span><span class="dim-tag ${d.pending ? "dim-gap" : "dim-modeled"}">${d.pending ? "data gap" : "modeled"}</span></div>
@@ -1021,12 +1022,24 @@ class ClimateDashboardApp {
 
       if (isPreview) {
         this.state.assessment.aiPreview = data.report;
+        if (data.report.inferredBusinessModel) {
+          this.state.assessment.inferredBusinessModel = data.report.inferredBusinessModel;
+          const bm = data.report.inferredBusinessModel;
+          const metaEl = document.getElementById("fn-report-meta");
+          if (metaEl) {
+            const docNote = this.state.assessment.docs.deck || this.state.assessment.docs.accounting ? " · documents noted" : "";
+            metaEl.innerText = `${this.state.assessment.stage || "Stage"} · ${bm} · FTE-scaled modeled estimate${docNote}`;
+          }
+        }
         this.renderAIBriefing(data.report, { preview: true, quota: data.quota });
         statusEl.innerText = data.quota ? `Preview · ${data.quota.remaining}/${data.quota.limit} left today` : "Preview";
         return true;
       }
 
       this.state.assessment.aiReport = data.report;
+      if (data.report.inferredBusinessModel) {
+        this.state.assessment.inferredBusinessModel = data.report.inferredBusinessModel;
+      }
       this.applyAIReportToState(data.report);
       this.renderAIBriefing(data.report, { preview: false });
       statusEl.innerText = "Full report generated";
@@ -1136,6 +1149,10 @@ class ClimateDashboardApp {
 
   // Fill the dashboard with AI-suggested goals and Risk Radar items.
   applyAIReportToState(r) {
+    if (r.inferredBusinessModel && this.state.company) {
+      this.state.company.businessModel = r.inferredBusinessModel;
+      this.renderSidebarCompany();
+    }
     (r.goalPriorities || []).slice(0, 3).forEach((title, i) => {
       const t = (title || "").trim();
       if (!t || this.state.goals.some(g => g.title.toLowerCase() === t.toLowerCase())) return;
@@ -1421,6 +1438,18 @@ class ClimateDashboardApp {
       this.updateMetricInline();
     });
 
+    // 2b. Ledger Guide Card Close Control
+    const closeGuideBtn = document.getElementById("btn-close-guide");
+    if (closeGuideBtn) {
+      closeGuideBtn.addEventListener("click", () => {
+        const guideCard = document.getElementById("fn-impact-guide");
+        if (guideCard) {
+          guideCard.classList.add("hidden");
+          localStorage.setItem("dismissed_impact_guide", "true");
+        }
+      });
+    }
+
     // 3. Claims Modal Controls
     const claimModal = document.getElementById("dialog-claim");
     document.getElementById("btn-trigger-claim-modal").addEventListener("click", () => {
@@ -1639,7 +1668,13 @@ class ClimateDashboardApp {
     const cName = document.getElementById("company-name").value.trim();
     const cUrl = document.getElementById("company-url").value.trim();
     const cStage = document.getElementById("company-stage").value;
-    const cModel = document.getElementById("business-model").value;
+    let cModel = document.getElementById("business-model").value.trim();
+    if (!cModel && this.state.assessment && this.state.assessment.inferredBusinessModel) {
+      cModel = this.state.assessment.inferredBusinessModel;
+    }
+    if (!cModel) {
+      cModel = "Not specified";
+    }
     const cTeam = parseInt(document.getElementById("team-size").value) || 0;
     
     // Get activities listed in rank order
@@ -2005,6 +2040,13 @@ class ClimateDashboardApp {
 
   renderLedgerView() {
     const totals = this.calculateTotals();
+    
+    // Show/hide guide card based on dismissal state
+    const guideCard = document.getElementById("fn-impact-guide");
+    if (guideCard) {
+      const dismissed = localStorage.getItem("dismissed_impact_guide") === "true";
+      guideCard.classList.toggle("hidden", dismissed);
+    }
     
     // Update derived net
     const netVal = totals.footprintTotal - totals.handprintTotal;

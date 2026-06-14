@@ -317,6 +317,8 @@ function buildReportPrompt(assessment, context = {}) {
     "- Use web search for context and risk discovery only. Do not replace the modeled footprint with unsourced web guesses, and do not invent employee counts, emissions, revenue, or geography if search does not ground them.",
     "- For similar-company examples, state why the example is analogous and label it as a peer/analog risk, not proof that it applies directly.",
     "- Use exact fact-pack source names or web-grounded source titles in citations.",
+    "- Look closely at the company's actual industry (e.g. pet care, biotech, hardware, SaaS). If they produce physical goods, raw material waste, organic waste (e.g. pet waste, food ingredients), or chemical waste, explicitly highlight this as a material issue or data gap in the report. Do not assume waste is only office hardware e-waste.",
+    "- In the inferredBusinessModel field, output a clean business model/industry string (e.g., 'Pet Services', 'E-commerce', 'SaaS', 'B2B Software', 'Biotech', 'Food & Agriculture') based on website text and search results.",
     "- You did not read source files. Treat selected document filenames as workflow clues only, not evidence.",
     "- Treat footprint values as modeled defaults, not measured accounting.",
     "- Tie every issue and goal to the founder notes, website context, selected activities, stage, business model, hotspots, or a fact-pack precedent.",
@@ -337,6 +339,7 @@ function buildReportSchema(mode = "full") {
       properties: {
         headline: { type: "string", description: "1-2 sentence key insight grounded in the supplied company context" },
         basis: { type: "string", description: "One sentence naming facts used from notes, website context, selected activities, or hotspots; include the key assumption if context is thin" },
+        inferredBusinessModel: { type: "string", description: "The inferred business model/industry category of the startup (e.g. SaaS, Pet Services, Food & Agriculture, Biotech, E-commerce) based on the website context and notes." },
         issues: {
           type: "array",
           description: "Exactly two material issues visible in the preview",
@@ -354,7 +357,7 @@ function buildReportSchema(mode = "full") {
           items: { type: "string" }
         }
       },
-      required: ["headline", "basis", "issues", "regulation", "firstAction"]
+      required: ["headline", "basis", "inferredBusinessModel", "issues", "regulation", "firstAction"]
     };
   }
 
@@ -363,6 +366,7 @@ function buildReportSchema(mode = "full") {
     properties: {
       headline: { type: "string", description: "1-2 sentence key insight grounded in the supplied company context" },
       basis: { type: "string", description: "One sentence naming facts used from notes, website context, selected activities, or hotspots; include the key assumption if context is thin" },
+      inferredBusinessModel: { type: "string", description: "The inferred business model/industry category of the startup (e.g. SaaS, Pet Services, Food & Agriculture, Biotech, E-commerce) based on the website context and notes." },
       executiveSummary: { type: "string", description: "3-5 sentences with the practical interpretation of the modeled footprint, handprint signal, and strongest operational implication" },
       issues: {
         type: "array",
@@ -401,7 +405,7 @@ function buildReportSchema(mode = "full") {
         items: { type: "string" }
       }
     },
-    required: ["headline", "basis", "executiveSummary", "issues", "regulation", "firstAction", "goalPriorities", "evidenceGaps", "methodologyNotes", "nextSteps", "risks", "citations"]
+    required: ["headline", "basis", "inferredBusinessModel", "executiveSummary", "issues", "regulation", "firstAction", "goalPriorities", "evidenceGaps", "methodologyNotes", "nextSteps", "risks", "citations"]
   };
 }
 
