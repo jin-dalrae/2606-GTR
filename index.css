@@ -533,8 +533,8 @@
     font-size: 0.7rem;
     font-weight: 600;
     color: var(--accent-footprint);
-    background: rgba(180, 60, 50, 0.08);
-    border: 1px solid rgba(180, 60, 50, 0.25);
+    background: var(--accent-footprint-glow);
+    border: 1px solid var(--accent-footprint);
     border-radius: 4px;
     padding: 1px 6px;
     margin-left: 6px;
