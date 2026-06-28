@@ -591,6 +591,7 @@ class ClimateDashboardApp {
     document.querySelectorAll(".funnel-screen").forEach(screen => {
       screen.classList.toggle("active", screen.id === `fn-${stage}`);
     });
+    this.updateStepIndicator(stage);
     if (stage === "report") {
       if (this.state.assessment) {
         this.renderReport();
@@ -600,6 +601,27 @@ class ClimateDashboardApp {
       }
     }
     window.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  updateStepIndicator(stage) {
+    const STEPS = {
+      landing:     { n: 0, total: 3, label: "", eta: "" },
+      methodology: { n: 1, total: 3, label: "Step 1 of 3", eta: "~30 sec read" },
+      onboard:     { n: 2, total: 3, label: "Step 2 of 3", eta: "~3 min" },
+      report:      { n: 3, total: 3, label: "Step 3 of 3", eta: "Done" }
+    };
+    const step = STEPS[stage] || STEPS.landing;
+    const pill = document.getElementById("fn-step-pill");
+    const eta = document.getElementById("fn-step-eta");
+    const wrap = document.getElementById("fn-step-indicator");
+    if (!pill || !eta || !wrap) return;
+    if (step.n === 0) {
+      wrap.classList.add("hidden");
+      return;
+    }
+    wrap.classList.remove("hidden");
+    pill.textContent = step.label;
+    eta.textContent = step.eta;
   }
 
   // Collect onboarding inputs, model a snapshot, advance to the report.
@@ -879,6 +901,7 @@ class ClimateDashboardApp {
     el.innerHTML = `
       <div class="methodology-head"><h3>How you compare</h3><span>Indicative</span></div>
       <p class="step-desc">Your <strong>${total.toFixed(1)} tCO2e/yr</strong> is <strong class="${cls}">${verdict}</strong> for ${this.escapeHtml(b.basisFte)}.</p>
+      <p class="bench-peer-sentence">${this.buildPeerComparisonSentence(total, b, cls)}</p>
       <div class="bench-track">
         <div class="bench-range" style="left:${pct(b.low)}%; right:${100 - pct(b.high)}%;"></div>
         <div class="bench-marker" style="left:${pct(total)}%;" title="You: ${total.toFixed(1)} tCO2e/yr"></div>
@@ -887,6 +910,23 @@ class ClimateDashboardApp {
       <div class="methodology-source">Range = ${b.perFte.low}-${b.perFte.high} ${b.perFte.unit} × team size. ${this.escapeHtml(noteText)} <a href="${this.escapeHtml(b.perFte.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(b.perFte.source)}</a></div>
       ${warningBanner}
     `;
+  }
+
+  buildPeerComparisonSentence(total, b, cls) {
+    const low = Number(b.low) || 0;
+    const high = Number(b.high) || 0;
+    const median = (low + high) / 2;
+    if (!Number.isFinite(median) || median <= 0) return "";
+    const range = Math.max(high - low, 0.01);
+    const positionPct = Math.max(0, Math.min(100, Math.round(((total - low) / range) * 100)));
+    const medianFmt = median >= 10 ? median.toFixed(0) : median.toFixed(1);
+    if (cls === "bench-low") {
+      return `The peer median is ~${medianFmt} tCO2e/yr. You're ${100 - positionPct}% below it — among the lighter-footprint ${Math.max(1, Math.round((1 - total/median) * 100))}% of comparable startups at this stage. (Indicative; range is derived from public per-FTE factors, not measured accounting.)`;
+    }
+    if (cls === "bench-high") {
+      return `The peer median is ~${medianFmt} tCO2e/yr. You're ${positionPct}% of the way to the upper edge of the typical range — the biggest improvement lever is almost always the top hotspot, not the long tail. (Indicative; replace with measured data for investor-grade claims.)`;
+    }
+    return `The peer median is ~${medianFmt} tCO2e/yr, and you're at the ${positionPct}${positionPct === 100 ? "th" : "th"} percentile of the typical range — broadly typical for this stage. (Indicative; per-FTE factor is derived, not measured.)`;
   }
 
   // Impact is not only CO2. Show energy/water/waste (modeled, derived from the
@@ -1022,11 +1062,15 @@ class ClimateDashboardApp {
   shareToLinkedIn() {
     const a = this.state.assessment;
     const fp = a && a.snapshot ? a.snapshot.footprintTotal : null;
+    const hp = a && a.snapshot ? a.snapshot.handprintPotential : 0;
+
+    const positiveSummary = this.buildPositiveShareSummary(a);
+    const preview = positiveSummary.length > 110 ? positiveSummary.slice(0, 107) + "..." : positiveSummary;
 
     const proceed = window.confirm(
       fp == null
-        ? "Share this report publicly on LinkedIn? Anyone with the link will see it."
-        : `Share publicly on LinkedIn? Your snapshot (${fp.toFixed(1)} tCO2e/yr footprint) will be visible to anyone with the link.\n\nTip: If you'd rather share privately, close this and use "Copy private link" instead.`
+        ? `Share this report publicly on LinkedIn?\n\nPreview:\n"${preview}"\n\nAnyone with the link will see the full report.`
+        : `Share publicly on LinkedIn?\n\nPreview:\n"${preview}"\n\nTip: We don't share your raw footprint number by default. If you'd rather share privately, close this and use "Copy private link" instead.`
     );
     if (!proceed) {
       this.showToast("Share cancelled. Your report stays private.");
@@ -1034,12 +1078,32 @@ class ClimateDashboardApp {
     }
 
     const shareUrl = window.location.href.split("#")[0];
-    const text = a
-      ? `${a.name || "We"} just modeled our climate impact with Social Lab: ~${a.snapshot.footprintTotal.toFixed(1)} tCO2e/yr footprint mapped. #climatetech #impact`
-      : "Check out Social Lab impact assessment";
+    const text = positiveSummary;
     const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}&summary=${encodeURIComponent(text)}`;
     window.open(url, "_blank", "noopener,noreferrer");
     this.showToast("Opening LinkedIn share…");
+  }
+
+  buildPositiveShareSummary(a) {
+    if (!a) return "Check out Social Lab impact assessment";
+    const name = a.name || "We";
+    const snapshot = a.snapshot || {};
+    const hp = Number(snapshot.handprintPotential) || 0;
+    const breakdown = Array.isArray(snapshot.breakdown) ? snapshot.breakdown : [];
+
+    if (hp > 0) {
+      return `${name} modeled our climate impact with Social Lab: ~${Math.round(hp)} tCO2e/yr of avoided emissions identified. Early days, but the handprint signal is real. #climatetech #impact`;
+    }
+
+    const smallest = breakdown
+      .filter(b => b && b.value > 0 && b.scope !== "avoided")
+      .sort((x, y) => x.value - y.value)[0];
+
+    if (smallest) {
+      return `${name} started mapping our climate impact with Social Lab. Our smallest modeled line is ${smallest.name.toLowerCase()} at ~${smallest.value.toFixed(1)} tCO2e/yr — a useful starting point. #climatetech #impact`;
+    }
+
+    return `${name} started mapping our climate impact with Social Lab. Modeling the footprint is the first step; the rest is iteration. #climatetech #impact`;
   }
 
   copyShareLink() {

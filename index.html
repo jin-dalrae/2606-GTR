@@ -29,6 +29,10 @@
         </svg>
         <span class="logo-text">Social Lab</span>
       </div>
+      <div class="funnel-step-indicator" id="fn-step-indicator" aria-live="polite">
+        <span class="fn-step-pill" id="fn-step-pill"></span>
+        <span class="fn-step-eta" id="fn-step-eta"></span>
+      </div>
       <div class="funnel-topbar-links">
         <a href="#landing-methodology" class="funnel-methodology-link" data-scroll-target="landing-methodology">Methodology</a>
         <a href="#" class="funnel-invite-link" id="fn-invite-link">Have an invite?</a>
@@ -282,6 +286,7 @@ Auth: none (anonymous)</pre>
             <span class="funnel-kicker">Methodology</span>
             <h2>How the assessment is modeled</h2>
             <p class="subtitle">The first report is a directional model. It is designed to surface the likely hotspots and evidence gaps fast, then improve as you replace defaults with measured data.</p>
+            <p class="methodology-audience"><strong>Built for</strong> Seed–Series B climate-tech founders modeling their first investor-grade snapshot. <strong>Not built for</strong> mature enterprise sustainability teams that already have audited Scope 1–3 data, or for pre-revenue hobby projects without a clear operating footprint.</p>
           </div>
           <div class="methodology-landing-grid">
             <div class="methodology-landing-item">
@@ -361,7 +366,17 @@ Auth: none (anonymous)</pre>
               </div>
               <div class="form-group">
                 <label for="fn-model">Business Model <span class="optional-tag">optional — auto-detects if empty</span></label>
-                <input type="text" id="fn-model" placeholder="e.g. SaaS, Pet Services, or leave blank to auto-detect">
+                <select id="fn-model">
+                  <option value="">Auto-detect (recommended)</option>
+                  <option value="SaaS / Software">SaaS / Software</option>
+                  <option value="Foundation Model / Heavy Compute">Foundation Model / Heavy Compute</option>
+                  <option value="Hardware / Physical Product">Hardware / Physical Product</option>
+                  <option value="Marketplace / Platform">Marketplace / Platform</option>
+                  <option value="Services / Consulting">Services / Consulting</option>
+                  <option value="Biotech / Low-Carbon Materials">Biotech / Low-Carbon Materials</option>
+                  <option value="Logistics / Mobility">Logistics / Mobility</option>
+                  <option value="other">Other (describe in notes below)</option>
+                </select>
               </div>
               <div class="form-group">
                 <label for="fn-team">Team Size (FTEs)</label>
@@ -462,7 +477,7 @@ Auth: none (anonymous)</pre>
               </div>
               <div class="report-side-stat">
                 <span class="report-side-label"><span class="glossary-term" data-term="maturity">Impact maturity</span></span>
-                <span class="report-side-val" id="fn-report-maturity">Level 1 · Mapped</span>
+                <span class="report-side-val glossary-term" data-term="maturity" id="fn-report-maturity">Level 1 · Mapped</span>
               </div>
             </div>
           </div>
@@ -528,8 +543,8 @@ Auth: none (anonymous)</pre>
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
               Share on LinkedIn
             </button>
-            <button class="btn btn-secondary btn-lg" id="fn-enter-dashboard">Open full dashboard &rarr;</button>
           </div>
+          <p class="report-dashboard-note">Want to track goals, milestones, and improvement over time? <button type="button" class="link-button" id="fn-enter-dashboard">Open the dashboard &rarr;</button> <span class="dashboard-privacy-inline">Opt-in. Your data stays in this browser unless you sign in.</span></p>
         </div>
       </div>
     </section>

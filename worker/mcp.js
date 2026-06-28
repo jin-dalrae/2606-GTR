@@ -22,24 +22,11 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { z } from "zod";
 import { computeSnapshot, listActivities, ACTIVITIES_DB, DEFAULT_MODEL_TEAM_SIZE } from "./snapshot.js";
-import { FRAMEWORKS } from "../data/evidence.js";
+import { FRAMEWORKS, BUSINESS_MODEL_OPTIONS, FUNDING_STAGES } from "../data/evidence.js";
 import { generateReportPayload } from "./report.js";
 
 const SERVER_NAME = "climate-impact-mcp";
 const SERVER_VERSION = "1.0.0";
-
-const BUSINESS_MODEL_OPTIONS = [
-  { id: "saas",              label: "SaaS / Software",                       description: "Web or API product, paid seats or usage. Common for AI / climate-data plays." },
-  { id: "foundation_model",  label: "Foundation Model / Heavy Compute",      description: "Training or running large AI models. Will trigger the 1000x compute multiplier automatically." },
-  { id: "hardware",          label: "Hardware / Physical Product",            description: "Manufactured devices, IoT, sensors, lab equipment." },
-  { id: "marketplace",       label: "Marketplace / Platform",                 description: "Connects buyers and sellers, takes a cut." },
-  { id: "service",           label: "Services / Consulting",                  description: "Carbon advisory, verification, project delivery." },
-  { id: "biotech_materials", label: "Biotech / Low-Carbon Materials",          description: "Alternative proteins, novel materials, biotech processes." },
-  { id: "logistics",         label: "Logistics / Mobility",                    description: "Fleet, last-mile, freight, EV charging networks." },
-  { id: "other",             label: "Other",                                   description: "Free-text fallback. Describe in 1-2 sentences." }
-];
-
-const FUNDING_STAGES = ["Pre-Seed", "Seed", "Series A", "Series B", "Series C+"];
 
 function registerTools(server, env) {
   server.registerTool(
