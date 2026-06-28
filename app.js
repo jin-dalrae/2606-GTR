@@ -1260,14 +1260,14 @@ class ClimateDashboardApp {
   }
 
   buildPositiveShareSummary(a) {
-    if (!a) return "Check out Social Lab impact assessment";
+    if (!a) return "Check out GTR Handprint impact assessment";
     const name = a.name || "We";
     const snapshot = a.snapshot || {};
     const hp = Number(snapshot.handprintPotential) || 0;
     const breakdown = Array.isArray(snapshot.breakdown) ? snapshot.breakdown : [];
 
     if (hp > 0) {
-      return `${name} modeled our climate impact with Social Lab: ~${Math.round(hp)} tCO2e/yr of avoided emissions identified. Early days, but the handprint signal is real. #climatetech #impact`;
+      return `${name} modeled our climate impact with GTR Handprint: ~${Math.round(hp)} tCO2e/yr of avoided emissions identified. Early days, but the handprint signal is real. #climatetech #impact`;
     }
 
     const smallest = breakdown
@@ -1275,10 +1275,10 @@ class ClimateDashboardApp {
       .sort((x, y) => x.value - y.value)[0];
 
     if (smallest) {
-      return `${name} started mapping our climate impact with Social Lab. Our smallest modeled line is ${smallest.name.toLowerCase()} at ~${smallest.value.toFixed(1)} tCO2e/yr — a useful starting point. #climatetech #impact`;
+      return `${name} started mapping our climate impact with GTR Handprint. Our smallest modeled line is ${smallest.name.toLowerCase()} at ~${smallest.value.toFixed(1)} tCO2e/yr — a useful starting point. #climatetech #impact`;
     }
 
-    return `${name} started mapping our climate impact with Social Lab. Modeling the footprint is the first step; the rest is iteration. #climatetech #impact`;
+    return `${name} started mapping our climate impact with GTR Handprint. Modeling the footprint is the first step; the rest is iteration. #climatetech #impact`;
   }
 
   copyShareLink() {
