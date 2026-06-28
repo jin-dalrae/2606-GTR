@@ -41,30 +41,30 @@
       <div class="landing-hero">
         <div class="landing-eyebrow">
           <span class="live-dot animate-pulse"></span>
-          Trusted by VC-backed climate founders
+          For Seed–Series B climate-tech founders · Self-serve · No consultants
         </div>
-        <h1 class="landing-title">Know your startup's<br><span class="grad-handprint">real climate impact</span> in 15 minutes.</h1>
-        <p class="landing-sub">Upload your pitch deck and recent accounts. Get an instant, investor-grade snapshot of your footprint and avoided-emissions potential — no spreadsheets, no consultants, no jargon.</p>
+        <h1 class="landing-title">Model your startup's<br><span class="grad-handprint">real climate impact</span> in one report.</h1>
+        <p class="landing-sub">A self-serve climate impact assessment built for early-stage climate startups. Answer 6 questions; get an investor-grade snapshot of your footprint, your avoided emissions, and your data maturity — without spreadsheets, consultants, or jargon.</p>
         <div class="landing-cta-row">
           <button class="btn btn-primary btn-lg" id="fn-cta-start">Get your free assessment</button>
           <a href="#landing-methodology" class="landing-methodology-link" data-scroll-target="landing-methodology">View methodology</a>
-          <span class="landing-cta-note">Free · No credit card · ~3 minutes</span>
+          <span class="landing-cta-note">Free · No credit card · ~3 minutes · Your data stays private</span>
         </div>
 
         <div class="landing-steps">
           <div class="landing-step">
             <div class="landing-step-num">1</div>
             <div>
-              <strong>Upload &amp; answer</strong>
-              <span>Drop in your deck and accounting export, answer a few questions.</span>
+              <strong>Answer 6 questions</strong>
+              <span>Headcount, cloud spend, business model, energy, travel. Dropdowns — no free text.</span>
             </div>
           </div>
           <div class="landing-step-arrow">&rarr;</div>
           <div class="landing-step">
             <div class="landing-step-num">2</div>
             <div>
-              <strong>Get your snapshot</strong>
-              <span>An instant, shareable impact report you can post or send.</span>
+              <strong>Get your instant report</strong>
+              <span>Footprint, hotspots, peer benchmark, and an AI briefing grounded in real sources.</span>
             </div>
           </div>
           <div class="landing-step-arrow">&rarr;</div>
@@ -72,7 +72,7 @@
             <div class="landing-step-num">3</div>
             <div>
               <strong>Open the dashboard</strong>
-              <span>Dive into goals, timelines, and impact projections with your team.</span>
+              <span>Track goals, milestones, and improvement over time. Share only if you choose to.</span>
             </div>
           </div>
         </div>
@@ -293,7 +293,7 @@
             <h3 class="funnel-section-title">1 · About your company</h3>
             <div class="form-grid">
               <div class="form-group">
-                <label for="fn-name">Company Name <span class="required">*</span></label>
+                <label for="fn-name">Company Name <span class="required-tag" aria-label="Required">[Required]</span></label>
                 <input type="text" id="fn-name" required placeholder="e.g. Climatico">
               </div>
               <div class="form-group">
@@ -301,7 +301,7 @@
                 <input type="text" id="fn-url" inputmode="url" autocomplete="url" autocapitalize="off" placeholder="example.com or https://example.com">
               </div>
               <div class="form-group">
-                <label for="fn-stage">Funding Stage <span class="required">*</span></label>
+                <label for="fn-stage">Funding Stage <span class="required-tag" aria-label="Required">[Required]</span></label>
                 <select id="fn-stage" required>
                   <option value="" disabled selected>Select stage...</option>
                   <option value="Pre-seed">Pre-seed</option>
@@ -408,11 +408,11 @@
             </div>
             <div class="report-headline-side">
               <div class="report-side-stat">
-                <span class="report-side-label">Handprint potential (+)</span>
+                <span class="report-side-label"><span class="glossary-term" data-term="handprint">Handprint potential (+)</span></span>
                 <span class="report-side-val handprint-text" id="fn-report-handprint">— tCO2e/yr</span>
               </div>
               <div class="report-side-stat">
-                <span class="report-side-label">Impact maturity</span>
+                <span class="report-side-label"><span class="glossary-term" data-term="maturity">Impact maturity</span></span>
                 <span class="report-side-val" id="fn-report-maturity">Level 1 · Mapped</span>
               </div>
             </div>
@@ -473,12 +473,13 @@
 
           <!-- Actions: share + enter dashboard -->
           <div class="report-actions">
+            <p class="report-privacy-note">Your report is private by default. Sharing is opt-in.</p>
+            <button class="btn btn-primary" id="fn-copy-link">Copy private link</button>
             <button class="btn btn-secondary btn-share-li" id="fn-share-linkedin">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
               Share on LinkedIn
             </button>
-            <button class="btn btn-secondary" id="fn-copy-link">Copy link</button>
-            <button class="btn btn-primary btn-lg" id="fn-enter-dashboard">Open full dashboard &rarr;</button>
+            <button class="btn btn-secondary btn-lg" id="fn-enter-dashboard">Open full dashboard &rarr;</button>
           </div>
         </div>
       </div>
@@ -634,15 +635,15 @@
               <h3>Tell us about your startup</h3>
               <div class="form-grid">
                 <div class="form-group">
-                  <label for="company-name">Company Name <span class="required">*</span></label>
+                  <label for="company-name">Company Name <span class="required-tag" aria-label="Required">[Required]</span></label>
                   <input type="text" id="company-name" required placeholder="e.g. Climatico">
                 </div>
                 <div class="form-group">
-                  <label for="company-url">Website URL <span class="required">*</span></label>
+                  <label for="company-url">Website URL <span class="required-tag" aria-label="Required">[Required]</span></label>
                   <input type="url" id="company-url" required placeholder="https://example.com">
                 </div>
                 <div class="form-group">
-                  <label for="company-stage">Funding / Growth Stage <span class="required">*</span></label>
+                  <label for="company-stage">Funding / Growth Stage <span class="required-tag" aria-label="Required">[Required]</span></label>
                   <select id="company-stage" required>
                     <option value="" disabled selected>Select stage...</option>
                     <option value="Pre-seed">Pre-seed</option>
@@ -1410,20 +1411,20 @@
           </div>
           
           <div class="form-group">
-            <label for="claim-name">Claim Title <span class="required">*</span></label>
+            <label for="claim-name">Claim Title <span class="required-tag" aria-label="Required">[Required]</span></label>
             <input type="text" id="claim-name" required placeholder="e.g. Electric Vehicle fleet grid displacement">
           </div>
           
           <div class="form-row">
             <div class="form-group">
-              <label for="claim-value">Estimated Avoided Value <span class="required">*</span></label>
+              <label for="claim-value">Estimated Avoided Value <span class="required-tag" aria-label="Required">[Required]</span></label>
               <div class="input-unit-group">
                 <input type="number" id="claim-value" required step="any" placeholder="e.g. 150">
                 <span class="unit">tCO2e/yr</span>
               </div>
             </div>
             <div class="form-group">
-              <label for="claim-uncertainty">Value Uncertainty (± %) <span class="required">*</span></label>
+              <label for="claim-uncertainty">Value Uncertainty (± %) <span class="required-tag" aria-label="Required">[Required]</span></label>
               <input type="number" id="claim-uncertainty" required min="1" max="100" placeholder="e.g. 20">
             </div>
           </div>
@@ -1434,17 +1435,17 @@
             <h3>Integrity Gating Requirements</h3>
             
             <div class="form-group">
-              <label for="claim-baseline">Baseline Counterfactual Scenario <span class="required">*</span></label>
+              <label for="claim-baseline">Baseline Counterfactual Scenario <span class="required-tag" aria-label="Required">[Required]</span></label>
               <textarea id="claim-baseline" required placeholder="Describe what emissions would occur in the absence of your startup's solution (e.g. Average US diesel fleet cargo logistics)..."></textarea>
             </div>
             
             <div class="form-group">
-              <label for="claim-displacement">Displacement Mechanism <span class="required">*</span></label>
+              <label for="claim-displacement">Displacement Mechanism <span class="required-tag" aria-label="Required">[Required]</span></label>
               <textarea id="claim-displacement" required placeholder="Describe how your solution replaces the baseline (e.g. Displaces 100k diesel transport miles with solar-charged logistics)..."></textarea>
             </div>
             
             <div class="form-group">
-              <label for="claim-additionality"><span class="glossary-term" data-term="additionality">Additionality Status</span> <span class="required">*</span></label>
+              <label for="claim-additionality"><span class="glossary-term" data-term="additionality">Additionality Status</span> <span class="required-tag" aria-label="Required">[Required]</span></label>
               <select id="claim-additionality" required>
                 <option value="" disabled selected>Select additionality type...</option>
                 <option value="Strong">Strong Additionality (Financial/regulatory barrier overcome; would not exist without us)</option>
@@ -1457,7 +1458,7 @@
             </div>
             
             <div class="form-group">
-              <label>Grid Signal Assumption <span class="required">*</span></label>
+              <label>Grid Signal Assumption <span class="required-tag" aria-label="Required">[Required]</span></label>
               <div class="radio-group">
                 <label class="radio-label">
                   <input type="radio" name="grid-signal" value="marginal" checked>
@@ -1509,7 +1510,7 @@
           <p class="evidence-intro">Evidence is reviewed by climate advisors and investors, and unlocks your next maturity level.</p>
           
           <div class="form-group">
-            <label for="evidence-type">Evidence Type <span class="required">*</span></label>
+            <label for="evidence-type">Evidence Type <span class="required-tag" aria-label="Required">[Required]</span></label>
             <select id="evidence-type" required>
               <option value="link">Public Web Link (Git repo, billing dashboard, WattTime API logs)</option>
               <option value="doc">Document PDF/XLSX (LCA report, utility bill file)</option>
@@ -1517,7 +1518,7 @@
           </div>
           
           <div class="form-group">
-            <label for="evidence-ref">File Upload or Link URL <span class="required">*</span></label>
+            <label for="evidence-ref">File Upload or Link URL <span class="required-tag" aria-label="Required">[Required]</span></label>
             <input type="text" id="evidence-ref" required placeholder="https://... or path/to/document.pdf">
           </div>
           

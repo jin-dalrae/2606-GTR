@@ -137,6 +137,12 @@ const GLOSSARY_DB = {
     tag: "Carbon Accounting",
     definition: "A credit representing the reduction or removal of one metric ton of carbon dioxide from the atmosphere, purchased to compensate for emissions made elsewhere.",
     context: "Handprint claims (avoided emissions) are counterfactual estimates and do not constitute certified offset credits."
+  },
+  "maturity": {
+    title: "Impact Maturity (Level 1–5)",
+    tag: "Readiness",
+    definition: "A 1–5 score reflecting how ready your climate impact data is for investor-grade reporting. Level 1 = mapped; Level 5 = audited, third-party verified.",
+    context: "Each level adds a specific evidence requirement: claimed → measured → corroborated → independently verified → audited. Raising your level increases investor confidence and reduces greenwashing diligence risk."
   }
 };
 
@@ -1015,6 +1021,18 @@ class ClimateDashboardApp {
 
   shareToLinkedIn() {
     const a = this.state.assessment;
+    const fp = a && a.snapshot ? a.snapshot.footprintTotal : null;
+
+    const proceed = window.confirm(
+      fp == null
+        ? "Share this report publicly on LinkedIn? Anyone with the link will see it."
+        : `Share publicly on LinkedIn? Your snapshot (${fp.toFixed(1)} tCO2e/yr footprint) will be visible to anyone with the link.\n\nTip: If you'd rather share privately, close this and use "Copy private link" instead.`
+    );
+    if (!proceed) {
+      this.showToast("Share cancelled. Your report stays private.");
+      return;
+    }
+
     const shareUrl = window.location.href.split("#")[0];
     const text = a
       ? `${a.name || "We"} just modeled our climate impact with Social Lab: ~${a.snapshot.footprintTotal.toFixed(1)} tCO2e/yr footprint mapped. #climatetech #impact`

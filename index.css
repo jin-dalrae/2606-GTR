@@ -527,6 +527,21 @@
     color: var(--accent-footprint);
     margin-left: 2px;
   }
+
+  .required-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--accent-footprint);
+    background: rgba(180, 60, 50, 0.08);
+    border: 1px solid rgba(180, 60, 50, 0.25);
+    border-radius: 4px;
+    padding: 1px 6px;
+    margin-left: 6px;
+    vertical-align: middle;
+    letter-spacing: 0.02em;
+    text-transform: none;
+  }
   
   input[type="text"],
   input[type="url"],
@@ -2701,6 +2716,13 @@
     align-items: center;
   }
   .report-actions .btn-primary { margin-left: auto; }
+  .report-privacy-note {
+    flex-basis: 100%;
+    margin: 0 0 0.25rem 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
   .btn-share-li svg { width: 16px; height: 16px; }
 
   /* Toast */
