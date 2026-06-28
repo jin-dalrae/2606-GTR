@@ -4,7 +4,8 @@
 
 import {
   FACTOR_SOURCES, FRAMEWORKS, CASE_PRECEDENTS,
-  computeBenchmark, priceFootprint, computeImpactProfile, sourceLinks
+  computeBenchmark, priceFootprint, computeImpactProfile, sourceLinks,
+  BUSINESS_MODEL_OPTIONS
 } from "./data/evidence.js";
 
 const SOURCE_LINKS = sourceLinks();
@@ -181,6 +182,7 @@ class ClimateDashboardApp {
     this.initRouter();
     this.initWattTimeSimulator();
     this.renderLandingMethodology();
+    this.populateBusinessModelSelect();
 
     // An ?invite= link entitles the visitor to the free assessment, never a
     // direct drop into a dashboard.
@@ -515,6 +517,26 @@ class ClimateDashboardApp {
     }
   }
 
+  populateBusinessModelSelect() {
+    const sel = document.getElementById("fn-model");
+    if (!sel || !Array.isArray(BUSINESS_MODEL_OPTIONS) || BUSINESS_MODEL_OPTIONS.length === 0) return;
+    const previousValue = sel.value;
+    sel.innerHTML = "";
+    const auto = document.createElement("option");
+    auto.value = "";
+    auto.textContent = "Auto-detect (recommended)";
+    sel.appendChild(auto);
+    for (const opt of BUSINESS_MODEL_OPTIONS) {
+      const o = document.createElement("option");
+      o.value = opt.label;
+      o.textContent = opt.label;
+      sel.appendChild(o);
+    }
+    if (previousValue && [...sel.options].some(o => o.value === previousValue)) {
+      sel.value = previousValue;
+    }
+  }
+
   goFunnelStage(stage) {
     this.state.funnelStage = stage;
     localStorage.setItem("climate_dashboard_state", JSON.stringify(this.state));
@@ -733,7 +755,6 @@ class ClimateDashboardApp {
     // Brief "analyzing" shimmer, then reveal — sells the instant-analysis moment
     const loading = document.getElementById("fn-report-loading");
     const body = document.getElementById("fn-report-body");
-    const cta = document.getElementById("fn-enter-dashboard");
     const aiCard = document.getElementById("fn-ai-briefing");
     const aiStatus = document.getElementById("fn-ai-status");
     const aiBody = document.getElementById("fn-ai-body");
@@ -743,7 +764,6 @@ class ClimateDashboardApp {
     aiStatus.innerText = "";
     aiBody.innerHTML = "";
     this._readyForDashboard = false;
-    cta.innerText = this.user ? "Generate full report & open dashboard →" : "Create account for full report →";
 
     document.getElementById("fn-report-company").innerText = a.name || "Your startup";
     const docNote = a.docs.deck || a.docs.accounting ? " · documents noted" : "";
@@ -917,16 +937,18 @@ class ClimateDashboardApp {
     const high = Number(b.high) || 0;
     const median = (low + high) / 2;
     if (!Number.isFinite(median) || median <= 0) return "";
-    const range = Math.max(high - low, 0.01);
-    const positionPct = Math.max(0, Math.min(100, Math.round(((total - low) / range) * 100)));
     const medianFmt = median >= 10 ? median.toFixed(0) : median.toFixed(1);
     if (cls === "bench-low") {
-      return `The peer median is ~${medianFmt} tCO2e/yr. You're ${100 - positionPct}% below it — among the lighter-footprint ${Math.max(1, Math.round((1 - total/median) * 100))}% of comparable startups at this stage. (Indicative; range is derived from public per-FTE factors, not measured accounting.)`;
+      const belowMedianPct = Math.max(0, Math.round(((median - total) / median) * 100));
+      return `The peer median is ~${medianFmt} tCO2e/yr and you're ${belowMedianPct}% below it — among the lighter-footprint startups at this stage. (Indicative; range is derived from public per-FTE factors, not measured accounting.)`;
     }
     if (cls === "bench-high") {
-      return `The peer median is ~${medianFmt} tCO2e/yr. You're ${positionPct}% of the way to the upper edge of the typical range — the biggest improvement lever is almost always the top hotspot, not the long tail. (Indicative; replace with measured data for investor-grade claims.)`;
+      const aboveMedianPct = Math.max(0, Math.round(((total - median) / median) * 100));
+      return `The peer median is ~${medianFmt} tCO2e/yr and you're ${aboveMedianPct}% above it. The biggest improvement lever is almost always the top hotspot, not the long tail. (Indicative; replace with measured data for investor-grade claims.)`;
     }
-    return `The peer median is ~${medianFmt} tCO2e/yr, and you're at the ${positionPct}${positionPct === 100 ? "th" : "th"} percentile of the typical range — broadly typical for this stage. (Indicative; per-FTE factor is derived, not measured.)`;
+    const range = Math.max(high - low, 0.01);
+    const positionPct = Math.max(0, Math.min(100, Math.round(((total - low) / range) * 100)));
+    return `The peer median is ~${medianFmt} tCO2e/yr and you're at the ${positionPct}th percentile of the typical range — broadly typical for this stage. (Indicative; per-FTE factor is derived, not measured.)`;
   }
 
   // Impact is not only CO2. Show energy/water/waste (modeled, derived from the
@@ -1206,14 +1228,12 @@ class ClimateDashboardApp {
     const card = document.getElementById("fn-ai-briefing");
     const statusEl = document.getElementById("fn-ai-status");
     const bodyEl = document.getElementById("fn-ai-body");
-    const cta = document.getElementById("fn-enter-dashboard");
     card.classList.remove("hidden");
     statusEl.innerHTML = `<span class="ai-spinner-inline"></span> ${isPreview ? "Generating preview…" : "Generating full report…"}`;
     bodyEl.innerHTML = "";
 
     const finishFull = () => {
       this._readyForDashboard = true;
-      cta.innerText = "Open full dashboard →";
     };
 
     try {

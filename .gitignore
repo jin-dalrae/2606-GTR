@@ -4,3 +4,6 @@ dist/
 .env
 .wrangler/
 .omo/
+.firebaserc
+firebase.json
+.firebase/
