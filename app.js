@@ -523,6 +523,16 @@ class ClimateDashboardApp {
     document.getElementById("fn-share-linkedin").addEventListener("click", () => this.shareToLinkedIn());
     document.getElementById("fn-copy-link").addEventListener("click", () => this.copyShareLink());
     document.getElementById("fn-enter-dashboard").addEventListener("click", () => this.enterDashboard());
+    const shareCardBtn = document.getElementById("fn-share-card");
+    if (shareCardBtn) shareCardBtn.addEventListener("click", () => this.createShareCard());
+    const shareCardCopy = document.getElementById("fn-share-card-copy");
+    if (shareCardCopy) shareCardCopy.addEventListener("click", () => {
+      const input = document.getElementById("fn-share-card-url");
+      if (input && navigator.clipboard) navigator.clipboard.writeText(input.value).then(
+        () => this.showToast("Share link copied"),
+        () => this.showToast(input.value)
+      );
+    });
   }
 
   scrollToLandingMethodology() {
@@ -1280,6 +1290,44 @@ class ClimateDashboardApp {
       );
     } else {
       this.showToast(shareUrl);
+    }
+  }
+
+  async createShareCard() {
+    const a = this.state.assessment;
+    if (!a || !a.snapshot) { this.showToast("Generate a report first."); return; }
+    const btn = document.getElementById("fn-share-card");
+    if (btn) { btn.disabled = true; btn.textContent = "Creating…"; }
+    try {
+      const benchmark = computeBenchmark(a.stage, a.teamSize, a.businessModel || a.inferredBusinessModel);
+      const payload = {
+        assessment: {
+          name: a.name,
+          stage: a.stage,
+          snapshot: a.snapshot,
+          benchmark,
+          maturityLevel: this.state.maturityLevel || 1
+        }
+      };
+      const res = await fetch("/api/share", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const result = document.getElementById("fn-share-card-result");
+      const img = document.getElementById("fn-share-card-img");
+      const urlInput = document.getElementById("fn-share-card-url");
+      if (img) img.src = data.imageUrl;
+      if (urlInput) urlInput.value = data.shareUrl;
+      if (result) result.classList.remove("hidden");
+      this.showToast("Share card ready — grade " + (data.grades && data.grades.impactGrade || ""));
+    } catch (err) {
+      this.showToast("Couldn't create share card. Try again.");
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = "Create a share card"; }
     }
   }
 

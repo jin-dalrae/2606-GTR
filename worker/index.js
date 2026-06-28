@@ -39,6 +39,12 @@ export default {
       return handleMcpRequest(request, env);
     }
 
+    const sharePageMatch = url.pathname.match(/^\/s\/([A-Za-z0-9]{8,40})$/);
+    if (sharePageMatch && request.method === "GET") {
+      const { sharePage } = await import("./share.js");
+      return sharePage(env, request, sharePageMatch[1]);
+    }
+
     if (url.pathname.startsWith("/api/")) {
       try {
         return await handleApi(request, env, url);
@@ -71,6 +77,25 @@ async function handleApi(request, env, url) {
   if (path === "/api/list-activities" && method === "GET") return listActivitiesEndpoint(request, env);
 
   if (path === "/api/generate-report" && method === "POST") return generateReport(request, env);
+
+  if (path === "/api/share" && method === "POST") {
+    const { createShare } = await import("./share.js");
+    return createShare(request, env);
+  }
+  const shareImgMatch = path.match(/^\/api\/share\/([A-Za-z0-9]{8,40})\/image\.png$/);
+  if (shareImgMatch && method === "GET") {
+    const { shareImage } = await import("./share.js");
+    return shareImage(env, request, shareImgMatch[1]);
+  }
+  const shareMatch = path.match(/^\/api\/share\/([A-Za-z0-9]{8,40})$/);
+  if (shareMatch && method === "GET") {
+    const { getShare } = await import("./share.js");
+    return getShare(env, shareMatch[1]);
+  }
+  if (shareMatch && method === "DELETE") {
+    const { deleteShare } = await import("./share.js");
+    return deleteShare(env, shareMatch[1]);
+  }
 
   if (path === "/api/reports" && method === "GET") return listReports(request, env);
   if (path === "/api/reports" && method === "POST") return createReport(request, env);

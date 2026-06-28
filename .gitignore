@@ -7,3 +7,4 @@ dist/
 .firebaserc
 firebase.json
 .firebase/
+.playwright-mcp/
