@@ -508,6 +508,12 @@ class ClimateDashboardApp {
       });
     });
 
+    const teamInput = document.getElementById("fn-team");
+    if (teamInput) teamInput.addEventListener("input", () => this.updateWizardPreview(this._wizardStep));
+    document.querySelectorAll("#fn-onboard .fn-activity-grid input[type='checkbox']").forEach(cb => {
+      cb.addEventListener("change", () => this.updateWizardPreview(this._wizardStep));
+    });
+
     const saveCreateBtn = document.getElementById("fn-save-create-account");
     if (saveCreateBtn) saveCreateBtn.addEventListener("click", () => this.openAuth("signup"));
     const saveSignInBtn = document.getElementById("fn-save-sign-in");
@@ -714,6 +720,27 @@ class ClimateDashboardApp {
       const hasFiles = (deck && deck.files && deck.files.length) || (acct && acct.files && acct.files.length);
       nextBtn.textContent = (n === 4 && !hasFiles) ? "Skip for now →" : "Next step →";
     }
+    this.updateWizardPreview(n);
+  }
+
+  updateWizardPreview(n) {
+    const wrap = document.getElementById("wizard-preview");
+    const valueEl = document.getElementById("wizard-preview-value");
+    if (!wrap || !valueEl) return;
+    if (n < 2 || n > 5) {
+      wrap.classList.add("hidden");
+      return;
+    }
+    const checked = Array.from(document.querySelectorAll("#fn-onboard .fn-activity-grid input[type='checkbox']:checked")).map(c => c.value);
+    const activities = [...new Set([...checked, "scope2-grid", "scope1-direct"])];
+    const teamSize = parseInt((document.getElementById("fn-team") || {}).value, 10) || 0;
+    const snap = this.computeSnapshot(activities, teamSize);
+    const fp = snap.footprintTotal || 0;
+    const hp = snap.handprintPotential || 0;
+    valueEl.textContent = hp > 0
+      ? `~${fp.toFixed(1)} tCO2e/yr footprint · ~${Math.round(hp)} tCO2e/yr avoided`
+      : `~${fp.toFixed(1)} tCO2e/yr modeled footprint`;
+    wrap.classList.remove("hidden");
   }
 
   validateWizardStep(n) {

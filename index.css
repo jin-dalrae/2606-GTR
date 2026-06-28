@@ -2796,6 +2796,44 @@
     color: var(--text-muted);
     font-style: italic;
   }
+  .wizard-preview {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin: 0 0 1.5rem;
+    padding: 0.9rem 1.15rem;
+    background: linear-gradient(135deg, hsla(158, 64%, 52%, 0.08) 0%, hsla(342, 75%, 60%, 0.06) 100%);
+    border: 1px solid var(--accent-handprint);
+    border-radius: var(--radius-md);
+  }
+  .wizard-preview.hidden { display: none; }
+  .wizard-preview-icon {
+    font-size: 1.3rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .wizard-preview-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+  .wizard-preview-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-handprint);
+    font-weight: 600;
+  }
+  .wizard-preview-value {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .wizard-preview-note {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
   .funnel-screen .wizard-step { display: none; }
   .funnel-screen .wizard-step.active { display: block; }
   .wizard-review {
