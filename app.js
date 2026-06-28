@@ -487,6 +487,7 @@ class ClimateDashboardApp {
         } else {
           drop.classList.remove("has-file");
         }
+        if (this._wizardStep === 4) this.showWizardStep(4);
       });
     };
     bindUpload("fn-file-deck", "fn-drop-deck", "fn-deck-name");
@@ -705,6 +706,13 @@ class ClimateDashboardApp {
       actions.classList.remove("on-step-1", "on-step-6");
       if (n === 1) actions.classList.add("on-step-1");
       if (n === 6) actions.classList.add("on-step-6");
+    }
+    const nextBtn = document.getElementById("wizard-next");
+    if (nextBtn) {
+      const deck = document.getElementById("fn-file-deck");
+      const acct = document.getElementById("fn-file-acct");
+      const hasFiles = (deck && deck.files && deck.files.length) || (acct && acct.files && acct.files.length);
+      nextBtn.textContent = (n === 4 && !hasFiles) ? "Skip for now →" : "Next step →";
     }
   }
 

@@ -2672,6 +2672,25 @@
   .upload-drop strong { font-size: 0.9rem; }
   .upload-hint { font-size: 0.75rem; color: var(--text-muted); word-break: break-all; }
   .upload-drop.has-file .upload-hint { color: var(--accent-handprint); font-weight: 600; }
+  .step-optional-banner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-bottom: 1rem;
+    padding: 0.85rem 1rem;
+    background: var(--accent-handprint-glow);
+    border: 1px solid var(--accent-handprint);
+    border-radius: var(--radius-sm);
+  }
+  .step-optional-banner strong {
+    font-size: 0.92rem;
+    color: var(--text-primary);
+  }
+  .step-optional-banner span {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
   .upload-privacy {
     display: flex;
     align-items: center;
