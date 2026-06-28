@@ -2917,6 +2917,39 @@
     padding: 0.85rem 1rem;
     margin: 0;
   }
+  .report-save-cta {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    text-align: left;
+    background: linear-gradient(135deg, hsla(158, 64%, 52%, 0.06) 0%, hsla(342, 75%, 60%, 0.06) 100%);
+    border: 1px solid var(--accent-handprint);
+    border-radius: var(--radius-md);
+  }
+  .save-cta-text h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+  }
+  .save-cta-text p {
+    margin: 0 0 1rem;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .save-cta-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+  .save-cta-actions .btn { flex: 1 1 auto; min-width: 180px; }
+  .save-cta-note {
+    margin: 0;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+  .report-save-cta.hidden { display: none; }
   .report-actions {
     display: flex;
     gap: 0.75rem;

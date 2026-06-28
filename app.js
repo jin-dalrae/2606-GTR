@@ -498,6 +498,20 @@ class ClimateDashboardApp {
       this.runAssessment();
     });
 
+    document.getElementById("wizard-next").addEventListener("click", () => this.wizardNext());
+    document.getElementById("wizard-prev").addEventListener("click", () => this.wizardPrev());
+    document.querySelectorAll("#wizard-progress-steps .wizard-progress-step").forEach(li => {
+      li.addEventListener("click", () => {
+        const target = parseInt(li.dataset.step, 10);
+        if (target <= this._wizardStep) this.wizardGoTo(target);
+      });
+    });
+
+    const saveCreateBtn = document.getElementById("fn-save-create-account");
+    if (saveCreateBtn) saveCreateBtn.addEventListener("click", () => this.openAuth("signup"));
+    const saveSignInBtn = document.getElementById("fn-save-sign-in");
+    if (saveSignInBtn) saveSignInBtn.addEventListener("click", () => this.openAuth("login"));
+
     // Report actions
     document.getElementById("fn-share-linkedin").addEventListener("click", () => this.shareToLinkedIn());
     document.getElementById("fn-copy-link").addEventListener("click", () => this.copyShareLink());
@@ -614,6 +628,9 @@ class ClimateDashboardApp {
       screen.classList.toggle("active", screen.id === `fn-${stage}`);
     });
     this.updateStepIndicator(stage);
+    if (stage === "onboard") {
+      this.showWizardStep(1);
+    }
     if (stage === "report") {
       if (this.state.assessment) {
         this.renderReport();
@@ -644,6 +661,95 @@ class ClimateDashboardApp {
     wrap.classList.remove("hidden");
     pill.textContent = step.label;
     eta.textContent = step.eta;
+  }
+
+  wizardNext() {
+    if (this.validateWizardStep(this._wizardStep || 1)) {
+      this.wizardGoTo((this._wizardStep || 1) + 1);
+    }
+  }
+
+  wizardPrev() {
+    this.wizardGoTo(Math.max(1, (this._wizardStep || 1) - 1));
+  }
+
+  wizardGoTo(n) {
+    if (n === 6) this.buildWizardReview();
+    this.showWizardStep(n);
+  }
+
+  showWizardStep(n) {
+    const WIZARD_ETA = {
+      1: "Step 1 of 6 · ~30 sec · Company",
+      2: "Step 2 of 6 · ~15 sec · Stage",
+      3: "Step 3 of 6 · ~30 sec · Model & team",
+      4: "Step 4 of 6 · ~30 sec · Documents (optional)",
+      5: "Step 5 of 6 · ~1 min · Activity",
+      6: "Step 6 of 6 · ~30 sec · Review & generate"
+    };
+    this._wizardStep = n;
+    document.querySelectorAll(".wizard-step").forEach(el => {
+      el.classList.toggle("active", parseInt(el.dataset.step, 10) === n);
+    });
+    const fill = document.getElementById("wizard-progress-fill");
+    if (fill) fill.style.width = `${(n / 6) * 100}%`;
+    document.querySelectorAll("#wizard-progress-steps .wizard-progress-step").forEach(li => {
+      const s = parseInt(li.dataset.step, 10);
+      li.classList.toggle("active", s === n);
+      li.classList.toggle("done", s < n);
+    });
+    const eta = document.getElementById("wizard-progress-eta");
+    if (eta) eta.textContent = WIZARD_ETA[n] || "";
+    const actions = document.querySelector(".funnel-form-actions");
+    if (actions) {
+      actions.classList.remove("on-step-1", "on-step-6");
+      if (n === 1) actions.classList.add("on-step-1");
+      if (n === 6) actions.classList.add("on-step-6");
+    }
+  }
+
+  validateWizardStep(n) {
+    if (n === 1) {
+      const name = document.getElementById("fn-name");
+      if (name && !name.value.trim()) {
+        name.focus();
+        this.showToast("Company name is required.");
+        return false;
+      }
+    }
+    if (n === 2) {
+      const stage = document.getElementById("fn-stage");
+      if (stage && !stage.value) {
+        stage.focus();
+        this.showToast("Pick a funding stage to continue.");
+        return false;
+      }
+    }
+    return true;
+  }
+
+  buildWizardReview() {
+    const review = document.getElementById("wizard-review");
+    if (!review) return;
+    const name = (document.getElementById("fn-name") || {}).value || "—";
+    const url = (document.getElementById("fn-url") || {}).value || "—";
+    const stage = (document.getElementById("fn-stage") || {}).value || "—";
+    const model = (document.getElementById("fn-model") || {}).value || "Auto-detect";
+    const team = (document.getElementById("fn-team") || {}).value || "Auto (defaults to 10)";
+    const deck = (document.getElementById("fn-file-deck") || {}).files && document.getElementById("fn-file-deck").files[0];
+    const acct = (document.getElementById("fn-file-acct") || {}).files && document.getElementById("fn-file-acct").files[0];
+    const checked = Array.from(document.querySelectorAll("#fn-onboard .fn-activity-grid input[type='checkbox']:checked")).map(c => c.parentElement.querySelector("span").textContent);
+    const notes = ((document.getElementById("fn-notes") || {}).value || "").trim();
+    const rows = [
+      ["Company", name + (url && url !== "—" ? ` (${url})` : "")],
+      ["Stage", stage],
+      ["Business model", model],
+      ["Team size", team],
+      ["Documents", [deck && deck.name, acct && acct.name].filter(Boolean).join(" · ") || "None (files stay local)"],
+      ["Activities", checked.length ? checked.join(", ") : "None selected"],
+      ["Notes", notes || "—"]
+    ];
+    review.innerHTML = rows.map(([k, v]) => `<div><dt>${this.escapeHtml(k)}</dt><dd>${this.escapeHtml(v)}</dd></div>`).join("");
   }
 
   // Collect onboarding inputs, model a snapshot, advance to the report.
@@ -886,6 +992,8 @@ class ClimateDashboardApp {
       clearInterval(ticker);
       loading.classList.add("hidden");
       body.classList.remove("hidden");
+      const saveCta = document.getElementById("fn-report-save-cta");
+      if (saveCta) saveCta.classList.toggle("hidden", !!this.user);
       if (!this.user) this.generateAIReport("preview");
     }, 1400);
   }
