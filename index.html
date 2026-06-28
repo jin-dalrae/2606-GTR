@@ -340,11 +340,26 @@ Auth: none (anonymous)</pre>
           <p class="subtitle">About two minutes. We turn it into an instant snapshot of your carbon footprint, your biggest hotspots, and where to act first.</p>
         </div>
 
+        <div class="wizard-progress" id="wizard-progress" aria-label="Assessment progress">
+          <div class="wizard-progress-track">
+            <div class="wizard-progress-fill" id="wizard-progress-fill"></div>
+          </div>
+          <ol class="wizard-progress-steps" id="wizard-progress-steps">
+            <li class="wizard-progress-step" data-step="1"><span class="wizard-progress-num">1</span><span class="wizard-progress-name">Company</span></li>
+            <li class="wizard-progress-step" data-step="2"><span class="wizard-progress-num">2</span><span class="wizard-progress-name">Stage</span></li>
+            <li class="wizard-progress-step" data-step="3"><span class="wizard-progress-num">3</span><span class="wizard-progress-name">Model</span></li>
+            <li class="wizard-progress-step" data-step="4"><span class="wizard-progress-num">4</span><span class="wizard-progress-name">Docs</span></li>
+            <li class="wizard-progress-step" data-step="5"><span class="wizard-progress-num">5</span><span class="wizard-progress-name">Activity</span></li>
+            <li class="wizard-progress-step" data-step="6"><span class="wizard-progress-num">6</span><span class="wizard-progress-name">Review</span></li>
+          </ol>
+          <p class="wizard-progress-eta" id="wizard-progress-eta" aria-live="polite"></p>
+        </div>
+
         <form id="fn-assess-form" class="card glass-card funnel-form">
 
-          <!-- Section 1: profile -->
-          <div class="funnel-section">
-            <h3 class="funnel-section-title">1 · About your company</h3>
+          <div class="wizard-step" data-step="1">
+            <h3 class="funnel-section-title">1 · Company</h3>
+            <p class="step-desc">Just the basics. You can edit everything later.</p>
             <div class="form-grid">
               <div class="form-group">
                 <label for="fn-name">Company Name <span class="required-tag" aria-label="Required">[Required]</span></label>
@@ -354,16 +369,28 @@ Auth: none (anonymous)</pre>
                 <label for="fn-url">Website URL</label>
                 <input type="text" id="fn-url" inputmode="url" autocomplete="url" autocapitalize="off" placeholder="example.com or https://example.com">
               </div>
-              <div class="form-group">
-                <label for="fn-stage">Funding Stage <span class="required-tag" aria-label="Required">[Required]</span></label>
-                <select id="fn-stage" required>
-                  <option value="" disabled selected>Select stage...</option>
-                  <option value="Pre-seed">Pre-seed</option>
-                  <option value="Seed">Seed</option>
-                  <option value="Series A">Series A</option>
-                  <option value="Series B+">Series B+</option>
-                </select>
-              </div>
+            </div>
+          </div>
+
+          <div class="wizard-step" data-step="2">
+            <h3 class="funnel-section-title">2 · Funding stage</h3>
+            <p class="step-desc">We use this to pick the right peer benchmark.</p>
+            <div class="form-group">
+              <label for="fn-stage">Funding Stage <span class="required-tag" aria-label="Required">[Required]</span></label>
+              <select id="fn-stage" required>
+                <option value="" disabled selected>Select stage...</option>
+                <option value="Pre-seed">Pre-seed</option>
+                <option value="Seed">Seed</option>
+                <option value="Series A">Series A</option>
+                <option value="Series B+">Series B+</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="wizard-step" data-step="3">
+            <h3 class="funnel-section-title">3 · Business model &amp; team</h3>
+            <p class="step-desc">Both are optional. Leave blank to auto-detect.</p>
+            <div class="form-grid">
               <div class="form-group">
                 <label for="fn-model">Business Model <span class="optional-tag">optional — auto-detects if empty</span></label>
                 <select id="fn-model">
@@ -377,9 +404,8 @@ Auth: none (anonymous)</pre>
             </div>
           </div>
 
-          <!-- Section 2: uploads -->
-          <div class="funnel-section">
-            <h3 class="funnel-section-title">2 · Add your documents <span class="optional-tag">optional — keep them local for now</span></h3>
+          <div class="wizard-step" data-step="4">
+            <h3 class="funnel-section-title">4 · Add your documents <span class="optional-tag">optional — keep them local for now</span></h3>
             <p class="step-desc">Use this as a reminder of the evidence you have. The instant report uses your profile, notes, website, and selected activities; you can opt in to store evidence after sign-in.</p>
             <div class="upload-grid">
               <label class="upload-drop" id="fn-drop-deck">
@@ -401,9 +427,8 @@ Auth: none (anonymous)</pre>
             </div>
           </div>
 
-          <!-- Section 3: activities -->
-          <div class="funnel-section">
-            <h3 class="funnel-section-title">3 · Confirm what your company does</h3>
+          <div class="wizard-step" data-step="5">
+            <h3 class="funnel-section-title">5 · What your company does</h3>
             <p class="step-desc">We've ticked the activities most startups like yours have. Add the ones that apply and uncheck the rest — this decides which emissions we estimate.</p>
             <div class="fn-activity-grid">
               <div class="fn-activity-col">
@@ -421,15 +446,23 @@ Auth: none (anonymous)</pre>
                 <label class="fn-chip"><input type="checkbox" value="avoided-material"><span>Low-Carbon Materials</span></label>
               </div>
             </div>
-
             <div class="form-group fn-notes-group">
               <label for="fn-notes">In your own words, what does your company do? <span class="optional-tag">optional, but helps a lot</span></label>
               <textarea id="fn-notes" rows="3" placeholder="e.g. We replace diesel delivery vans with e-cargo bikes for inner-city grocery drops. Anything the checkboxes above don't capture — your product, customers, supply chain."></textarea>
             </div>
           </div>
 
+          <div class="wizard-step" data-step="6">
+            <h3 class="funnel-section-title">6 · Review your answers</h3>
+            <p class="step-desc">Quick check before we run the assessment. Tap any step to edit.</p>
+            <dl class="wizard-review" id="wizard-review"></dl>
+            <p class="wizard-review-note">By generating, you agree this is a directional model. Replace defaults with measured data later to improve accuracy.</p>
+          </div>
+
           <div class="funnel-form-actions">
             <button type="button" class="btn btn-secondary" id="fn-back-landing">&larr; Back</button>
+            <button type="button" class="btn btn-secondary" id="wizard-prev">&larr; Previous step</button>
+            <button type="button" class="btn btn-primary" id="wizard-next">Next step &rarr;</button>
             <button type="submit" class="btn btn-primary btn-lg" id="fn-generate">Generate my assessment &rarr;</button>
           </div>
         </form>

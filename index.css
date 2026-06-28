@@ -2708,6 +2708,118 @@
   .fn-chip:hover { border-color: var(--border-hover); background: hsla(0,0%,100%,0.03); }
   .fn-chip input { accent-color: var(--accent-handprint); width: 16px; height: 16px; }
 
+  .wizard-progress {
+    margin: 0 0 1.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+  }
+  .wizard-progress-track {
+    height: 4px;
+    background: var(--border-color);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 0.85rem;
+  }
+  .wizard-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--accent-handprint);
+    transition: width 0.3s ease;
+  }
+  .wizard-progress-steps {
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 0.25rem;
+  }
+  .wizard-progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    flex: 1;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  .wizard-progress-step:hover { color: var(--text-secondary); }
+  .wizard-progress-num {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+  .wizard-progress-step.active .wizard-progress-num {
+    background: var(--accent-handprint);
+    color: var(--bg-dark);
+    border-color: var(--accent-handprint);
+  }
+  .wizard-progress-step.active { color: var(--text-primary); font-weight: 600; }
+  .wizard-progress-step.done .wizard-progress-num {
+    background: var(--accent-handprint-glow);
+    color: var(--accent-handprint);
+    border-color: var(--accent-handprint);
+  }
+  .wizard-progress-name { display: none; }
+  .wizard-progress-eta {
+    margin: 0.85rem 0 0;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+  .wizard-step { display: none; }
+  .wizard-step.active { display: block; }
+  .wizard-review {
+    margin: 0 0 1rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.4rem 1rem;
+  }
+  .wizard-review > div {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+  }
+  .wizard-review dt {
+    flex: 0 0 7.5rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin: 0;
+  }
+  .wizard-review dd {
+    margin: 0;
+    color: var(--text-primary);
+    flex: 1;
+  }
+  .wizard-review-note {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin: 0.5rem 0 0;
+  }
+  .funnel-form-actions #fn-back-landing { display: none; }
+  .funnel-form-actions.on-step-1 #fn-back-landing { display: none; }
+  .funnel-form-actions.on-step-1 #wizard-prev { visibility: hidden; }
+  .funnel-form-actions.on-step-6 #wizard-next { display: none; }
+  .funnel-form-actions.on-step-6 #fn-generate { display: inline-flex; }
+  .funnel-form-actions:not(.on-step-6) #fn-generate { display: none; }
+  .funnel-form-actions:not(.on-step-1) #fn-back-landing { display: none; }
+  .funnel-form-actions.on-step-1 #fn-back-landing { display: inline-flex; }
+
   .funnel-form-actions {
     display: flex;
     justify-content: space-between;
