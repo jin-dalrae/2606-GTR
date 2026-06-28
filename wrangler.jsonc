@@ -1,10 +1,12 @@
 {
   // Cloudflare Worker config for the Climate Impact Dashboard.
-  // The Worker serves the API (/api/*) and the static SPA (everything else).
+  // The Worker serves the API (/api/*), the MCP server (/mcp), and falls back
+  // to the static SPA for everything else.
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "2606gtr",
   "main": "worker/index.js",
   "compatibility_date": "2026-06-01",
+  "compatibility_flags": ["nodejs_compat"],
   "observability": { "enabled": true },
 
   // Static SPA build output. Non-API paths are served from here.
@@ -34,5 +36,11 @@
       "store_id": "1c0123c07e2b422490e2a73a670a5d25",
       "secret_name": "AI_API_KEY"
     }
-  ]
+  ],
+
+  // Vars passed to the Worker. PUBLIC_ORIGIN is used by the MCP server's
+  // create_dashboard_save_link tool to point founders at the dashboard.
+  "vars": {
+    "PUBLIC_ORIGIN": "https://2606gtr.dalrae-jin-work.workers.dev"
+  }
 }

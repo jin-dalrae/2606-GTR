@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import worker, { buildReportPrompt, buildReportSchema, extractGrounding, extractUsefulText, getClientIp, normalizePublicWebsiteUrl } from './worker/index.js';
+import worker, { extractUsefulText, getClientIp, normalizePublicWebsiteUrl } from './worker/index.js';
+import { buildReportPrompt, buildReportSchema, extractGrounding } from './worker/prompt.js';
 import { buildFactPack, computeImpactProfile, priceFootprint, computeBenchmark } from './data/evidence.js';
 
 // Calculation helper extracted to verify mathematics logic independently

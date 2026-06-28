@@ -78,7 +78,56 @@
         </div>
       </div>
 
+      <!-- Private intake via MCP -->
+      <div class="landing-mcp">
+        <div class="mcp-head">
+          <span class="funnel-kicker">Prefer privacy?</span>
+          <h2>Run the assessment from your own AI client.</h2>
+          <p class="subtitle">We expose the full climate-impact assessment as an MCP server. Add it to Claude Desktop or Cursor, answer the questions in your own AI client, and get the report back without ever uploading a document to this site. Your data stays in your AI client. The dashboard is opt-in.</p>
+        </div>
 
+        <div class="mcp-grid">
+          <div class="card glass-card mcp-step">
+            <div class="mcp-step-num">1</div>
+            <h3>Add the server</h3>
+            <p>Point your MCP client at our remote server. No install, no clone, no env vars.</p>
+            <pre class="mcp-code">URL:
+https://2606gtr.dalrae-jin-work.workers.dev/mcp
+Transport: Streamable HTTP
+Auth: none (anonymous)</pre>
+          </div>
+
+          <div class="card glass-card mcp-step">
+            <div class="mcp-step-num">2</div>
+            <h3>Ask your AI</h3>
+            <p>Tell Claude or Cursor: <em>"Help me do a climate impact assessment for my stealth startup."</em> The AI calls the MCP tools, asks the questions, and builds a snapshot.</p>
+            <pre class="mcp-code">Tools used:
+  list_activities
+  compute_snapshot
+  generate_report
+  list_glossary_terms
+  list_frameworks</pre>
+          </div>
+
+          <div class="card glass-card mcp-step">
+            <div class="mcp-step-num">3</div>
+            <h3>Get the report</h3>
+            <p>You see the full AI-graded report in your AI client — headline, hotspots, peer benchmark, risk radar, cited sources. Save to the dashboard only if you choose to.</p>
+            <pre class="mcp-code">Output: AI briefing in chat
+         Footprint + handprint snapshot
+         Share/dashboard: opt-in only</pre>
+          </div>
+        </div>
+
+        <details class="mcp-config">
+          <summary>Claude Desktop config (claude_desktop_config.json)</summary>
+          <pre class="mcp-code">{ "mcpServers": {
+  "climate-impact": {
+    "url": "https://2606gtr.dalrae-jin-work.workers.dev/mcp"
+  }
+} }</pre>
+        </details>
+      </div>
 
       <!-- Customer stories -->
       <div class="landing-stories">
