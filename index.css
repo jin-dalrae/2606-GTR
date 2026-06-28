@@ -2777,8 +2777,8 @@
     color: var(--text-muted);
     font-style: italic;
   }
-  .wizard-step { display: none; }
-  .wizard-step.active { display: block; }
+  .funnel-screen .wizard-step { display: none; }
+  .funnel-screen .wizard-step.active { display: block; }
   .wizard-review {
     margin: 0 0 1rem;
     display: grid;
