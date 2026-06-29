@@ -524,6 +524,9 @@ class ClimateDashboardApp {
     // Report actions
     document.getElementById("fn-share-linkedin").addEventListener("click", () => this.shareToLinkedIn());
     document.getElementById("fn-copy-link").addEventListener("click", () => this.copyShareLink());
+    document.querySelectorAll("#fn-visibility-panel .visibility-opt").forEach(opt => {
+      opt.addEventListener("click", () => this.setReportVisibility(opt.dataset.visibility));
+    });
     document.getElementById("fn-enter-dashboard").addEventListener("click", () => this.enterDashboard());
     const shareCardBtn = document.getElementById("fn-share-card");
     if (shareCardBtn) shareCardBtn.addEventListener("click", () => this.createShareCard());
@@ -1044,6 +1047,9 @@ class ClimateDashboardApp {
     aiBody.innerHTML = "";
     this._readyForDashboard = false;
 
+    if (!a.visibility) a.visibility = "private";
+    this.renderReportVisibility();
+
     document.getElementById("fn-report-company").innerText = a.name || "Your startup";
     const docNote = a.docs.deck || a.docs.accounting ? " · documents noted" : "";
     const bmDisplay = a.inferredBusinessModel || a.businessModel || "Auto-detecting model...";
@@ -1364,27 +1370,35 @@ class ClimateDashboardApp {
 
   shareToLinkedIn() {
     const a = this.state.assessment;
+    if (!a) return;
+    const level = a.visibility || "private";
+    if (level === "private") {
+      this.showToast("Pick 'Link only' or 'Investor link' before sharing on LinkedIn.");
+      return;
+    }
+
     const fp = a && a.snapshot ? a.snapshot.footprintTotal : null;
-    const hp = a && a.snapshot ? a.snapshot.handprintPotential : 0;
 
     const positiveSummary = this.buildPositiveShareSummary(a);
     const preview = positiveSummary.length > 110 ? positiveSummary.slice(0, 107) + "..." : positiveSummary;
 
     const proceed = window.confirm(
       fp == null
-        ? `Share this report publicly on LinkedIn?\n\nPreview:\n"${preview}"\n\nAnyone with the link will see the full report.`
-        : `Share publicly on LinkedIn?\n\nPreview:\n"${preview}"\n\nTip: We don't share your raw footprint number by default. If you'd rather share privately, close this and use "Copy private link" instead.`
+        ? `Share this report on LinkedIn?\n\nPreview:\n"${preview}"\n\nAnyone with the link will see the full report.`
+        : `Share on LinkedIn?\n\nPreview:\n"${preview}"\n\nWe auto-generate a positive summary (never your raw footprint). Visibility: ${level === "investor" ? "investor link (7-day expiry)" : level}.`
     );
     if (!proceed) {
-      this.showToast("Share cancelled. Your report stays private.");
+      this.showToast("Share cancelled.");
       return;
     }
 
-    const shareUrl = window.location.href.split("#")[0];
+    const shareUrl = level === "investor"
+      ? (this.investorShareUrl() || window.location.href.split("#")[0])
+      : window.location.href.split("#")[0];
     const text = positiveSummary;
     const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}&summary=${encodeURIComponent(text)}`;
     window.open(url, "_blank", "noopener,noreferrer");
-    this.showToast("Opening LinkedIn share…");
+    this.showToast(level === "investor" ? "Opening LinkedIn with 7-day investor link…" : "Opening LinkedIn share…");
   }
 
   buildPositiveShareSummary(a) {
@@ -1410,10 +1424,25 @@ class ClimateDashboardApp {
   }
 
   copyShareLink() {
-    const shareUrl = window.location.href.split("#")[0];
+    const a = this.state.assessment;
+    const level = a && a.visibility || "private";
+    let shareUrl;
+    let toastMsg;
+    if (level === "investor") {
+      const url = this.investorShareUrl();
+      if (!url) { this.showToast("Investor link not minted — re-select visibility."); return; }
+      shareUrl = url;
+      toastMsg = "Investor link copied (expires in 7 days)";
+    } else if (level === "link") {
+      shareUrl = window.location.href.split("#")[0];
+      toastMsg = "Report link copied — anyone with this link can view";
+    } else {
+      shareUrl = window.location.href.split("#")[0];
+      toastMsg = "Report link copied (your report is private; only people you share this link with can view)";
+    }
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(shareUrl).then(
-        () => this.showToast("Report link copied to clipboard"),
+        () => this.showToast(toastMsg),
         () => this.showToast("Couldn't copy — " + shareUrl)
       );
     } else {
@@ -1424,6 +1453,11 @@ class ClimateDashboardApp {
   async createShareCard() {
     const a = this.state.assessment;
     if (!a || !a.snapshot) { this.showToast("Generate a report first."); return; }
+    const level = a.visibility || "private";
+    if (level === "private") {
+      this.showToast("Pick 'Link only' or 'Investor link' before creating a share card.");
+      return;
+    }
     const btn = document.getElementById("fn-share-card");
     if (btn) { btn.disabled = true; btn.textContent = "Creating…"; }
     try {
@@ -1457,6 +1491,81 @@ class ClimateDashboardApp {
     } finally {
       if (btn) { btn.disabled = false; btn.textContent = "Create a share card"; }
     }
+  }
+
+  setReportVisibility(level) {
+    if (!this.state.assessment) return;
+    const valid = ["private", "link", "investor"];
+    if (!valid.includes(level)) return;
+    this.state.assessment.visibility = level;
+
+    if (level === "investor") {
+      const token = this._mintInvestorToken();
+      this.state.assessment.investorToken = token.token;
+      this.state.assessment.investorExpiresAt = token.expiresAt;
+    } else {
+      this.state.assessment.investorToken = null;
+      this.state.assessment.investorExpiresAt = null;
+    }
+
+    this.renderReportVisibility();
+    this.saveState();
+  }
+
+  _mintInvestorToken() {
+    const buf = new Uint8Array(16);
+    (globalThis.crypto || window.crypto).getRandomValues(buf);
+    const token = Array.from(buf).map(b => b.toString(16).padStart(2, "0")).join("");
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+    return { token, expiresAt };
+  }
+
+  renderReportVisibility() {
+    const a = this.state.assessment;
+    if (!a) return;
+    const level = a.visibility || "private";
+    const opts = document.querySelectorAll("#fn-visibility-panel .visibility-opt");
+    opts.forEach(o => {
+      const active = o.dataset.visibility === level;
+      o.setAttribute("aria-checked", active ? "true" : "false");
+    });
+    const labels = {
+      private: "Private",
+      link: "Link only",
+      investor: "Investor link"
+    };
+    const explainers = {
+      private: "LinkedIn and share-card buttons stay disabled until you pick a visibility above.",
+      link: "Anyone with the link can see your full report. It won't appear in any public listing.",
+      investor: "Time-limited link — auto-expires in 7 days. Perfect for due-diligence packets."
+    };
+    const cur = document.getElementById("fn-visibility-current");
+    const exp = document.getElementById("fn-visibility-explainer");
+    if (cur) cur.textContent = labels[level] || "Private";
+    if (exp) exp.textContent = explainers[level] || explainers.private;
+
+    const liBtn = document.getElementById("fn-share-linkedin");
+    const cardBtn = document.getElementById("fn-share-card");
+    const copyBtn = document.getElementById("fn-copy-link");
+    const gateLinkedIn = level === "private";
+    const gateCard = level === "private";
+    if (liBtn) {
+      liBtn.disabled = gateLinkedIn;
+      liBtn.title = gateLinkedIn ? "Pick 'Link only' or 'Investor link' to enable" : "";
+    }
+    if (cardBtn) {
+      cardBtn.disabled = gateCard;
+      cardBtn.title = gateCard ? "Pick 'Link only' or 'Investor link' to enable" : "";
+    }
+    if (copyBtn) {
+      copyBtn.textContent = level === "investor" ? "Copy investor link (7-day)" : "Copy private link";
+    }
+  }
+
+  investorShareUrl() {
+    const a = this.state.assessment;
+    if (!a || !a.investorToken) return null;
+    return `${window.location.origin}/s/${a.investorToken}`;
   }
 
   // Report CTA. Gates account creation, then runs the AI briefing before entry.

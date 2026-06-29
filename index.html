@@ -628,6 +628,29 @@ Auth: none (anonymous)</pre>
             <p class="save-cta-note">No credit card · 30 seconds · Your data stays in your control</p>
           </div>
 
+          <!-- Visibility selector -->
+          <div class="card glass-card report-visibility-panel" id="fn-visibility-panel">
+            <div class="visibility-head">
+              <span class="visibility-eyebrow">Share visibility</span>
+              <span class="visibility-current" id="fn-visibility-current">Private</span>
+            </div>
+            <div class="visibility-segmented" role="radiogroup" aria-label="Report visibility">
+              <button type="button" class="visibility-opt" data-visibility="private" role="radio" aria-checked="true">
+                <span class="visibility-opt-title">Private</span>
+                <span class="visibility-opt-sub">Only you can see this report.</span>
+              </button>
+              <button type="button" class="visibility-opt" data-visibility="link" role="radio" aria-checked="false">
+                <span class="visibility-opt-title">Link only</span>
+                <span class="visibility-opt-sub">Anyone with the link. No public listing.</span>
+              </button>
+              <button type="button" class="visibility-opt" data-visibility="investor" role="radio" aria-checked="false">
+                <span class="visibility-opt-title">Investor link</span>
+                <span class="visibility-opt-sub">Time-limited token · 7 days.</span>
+              </button>
+            </div>
+            <p class="visibility-explainer" id="fn-visibility-explainer">LinkedIn and share-card buttons stay disabled until you pick a visibility above.</p>
+          </div>
+
           <!-- Actions: share + enter dashboard -->
           <div class="report-actions">
             <p class="report-privacy-note">Your report is private by default. Sharing is opt-in.</p>
