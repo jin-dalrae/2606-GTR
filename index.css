@@ -2829,6 +2829,17 @@
   }
   .footprint-text { color: var(--accent-footprint); }
   .handprint-text { color: var(--accent-handprint); }
+  .step-profile-hint {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    background: hsla(210, 100%, 60%, 0.06);
+    border-left: 3px solid var(--accent-neutral);
+    padding: 0.65rem 0.9rem;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    margin: -0.75rem 0 1.25rem;
+    font-style: italic;
+  }
+  .step-profile-hint:empty { display: none; }
   .fn-chip {
     display: flex;
     align-items: center;
@@ -2842,6 +2853,16 @@
     transition: all 0.15s ease;
   }
   .fn-chip:hover { border-color: var(--border-hover); background: hsla(0,0%,100%,0.03); }
+  .fn-chip.is-spotlight {
+    border-color: var(--accent-neutral);
+    background: hsla(210, 100%, 60%, 0.08);
+  }
+  .fn-chip.is-spotlight::after {
+    content: '★';
+    margin-left: auto;
+    color: var(--accent-neutral);
+    font-size: 0.78rem;
+  }
   .fn-chip input { accent-color: var(--accent-handprint); width: 16px; height: 16px; }
 
   .wizard-progress {

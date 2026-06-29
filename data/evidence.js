@@ -579,3 +579,53 @@ export const ENERGY_SOURCES = [
   { id: "on_site_solar",  label: "On-site solar / behind-the-meter", note: "Office PV, charging from rooftop." },
   { id: "other",          label: "Other",                              note: "Use the free-text box to specify." }
 ];
+
+// Per-business-model intake defaults. The IDs match the activity checkbox
+// `value` attributes in the wizard. `promptHint` is shown to the founder on
+// step 5 to explain which activities are highlighted and why.
+export const BUSINESS_MODEL_PROFILES = {
+  saas: {
+    promptHint: "For SaaS, we've focused defaults on cloud spend, headcount, and any tokens you bill against. Deselect anything you don't actually run.",
+    defaultActivities: ["compute", "travel", "vendors", "avoided-grid"],
+    spotlight: ["compute", "vendors"]
+  },
+  foundation_model: {
+    promptHint: "Foundation model / heavy compute: we apply a 1000x compute multiplier automatically. Cloud spend, training/inference jobs, and RLHF/Data Annotation workforce are the dominant factors.",
+    defaultActivities: ["compute", "travel", "vendors", "avoided-grid"],
+    spotlight: ["compute"]
+  },
+  hardware: {
+    promptHint: "Hardware & physical product: we've defaulted to logistics, vendor spend, and the electronics footprint. Tick 'Hardware & Electronics' if you're shipping units.",
+    defaultActivities: ["hardware", "travel", "vendors", "logistics", "avoided-material"],
+    spotlight: ["hardware", "logistics"]
+  },
+  marketplace: {
+    promptHint: "Marketplace / platform: vendor SaaS, FTE travel, and any logistics your listings touch are the dominant levers.",
+    defaultActivities: ["compute", "travel", "vendors"],
+    spotlight: ["compute", "vendors"]
+  },
+  service: {
+    promptHint: "Services / consulting: travel, vendor SaaS, and any low-carbon advisory framing in your handprint.",
+    defaultActivities: ["compute", "travel", "vendors", "avoided-grid"],
+    spotlight: ["travel"]
+  },
+  biotech_materials: {
+    promptHint: "Biotech / low-carbon materials: lab energy, hardware inputs, and the avoided-emissions claim on your alternative material are the dominant levers.",
+    defaultActivities: ["hardware", "compute", "travel", "vendors", "avoided-material"],
+    spotlight: ["hardware", "avoided-material"]
+  },
+  logistics: {
+    promptHint: "Logistics / mobility: fleet fuel, last-mile, and the avoided-emissions claim vs. diesel baselines are the dominant levers.",
+    defaultActivities: ["logistics", "hardware", "travel", "vendors", "avoided-transport"],
+    spotlight: ["logistics", "avoided-transport"]
+  },
+  other: {
+    promptHint: "We've left the defaults general — add or remove anything that fits your actual situation.",
+    defaultActivities: ["compute", "travel", "vendors"],
+    spotlight: []
+  }
+};
+
+export function profileFor(modelId) {
+  return BUSINESS_MODEL_PROFILES[modelId] || BUSINESS_MODEL_PROFILES.other;
+}

@@ -6,7 +6,8 @@ import {
   FACTOR_SOURCES, FRAMEWORKS, CASE_PRECEDENTS,
   computeBenchmark, priceFootprint, computeImpactProfile, sourceLinks,
   BUSINESS_MODEL_OPTIONS,
-  CLOUD_PROVIDERS, HOSTING_REGIONS, PRIMARY_ACTIVITIES, ENERGY_SOURCES
+  CLOUD_PROVIDERS, HOSTING_REGIONS, PRIMARY_ACTIVITIES, ENERGY_SOURCES,
+  BUSINESS_MODEL_PROFILES, profileFor
 } from "./data/evidence.js";
 
 const SOURCE_LINKS = sourceLinks();
@@ -560,6 +561,36 @@ class ClimateDashboardApp {
     this._wireOtherReveal("fn-region", "fn-region-other");
     this._wireOtherReveal("fn-primary", "fn-primary-other");
     this._wireOtherReveal("fn-energy", "fn-energy-other");
+    this._wireModelProfile();
+  }
+
+  _wireModelProfile() {
+    const sel = document.getElementById("fn-model");
+    if (!sel) return;
+    let userTouched = false;
+    sel.addEventListener("change", () => {
+      userTouched = true;
+      this._applyBusinessModelProfile(sel.value, { overwriteCheckboxes: true });
+    });
+    this._applyBusinessModelProfile(sel.value, { overwriteCheckboxes: false });
+  }
+
+  _applyBusinessModelProfile(modelId, { overwriteCheckboxes = false } = {}) {
+    const profile = profileFor(modelId);
+    const hint = document.getElementById("fn-profile-hint");
+    if (hint) hint.textContent = profile.promptHint || "";
+
+    const checkboxes = document.querySelectorAll("#fn-onboard .fn-activity-grid input[type='checkbox']");
+    if (overwriteCheckboxes) {
+      checkboxes.forEach(cb => { cb.checked = profile.defaultActivities.includes(cb.value); });
+    }
+
+    document.querySelectorAll("#fn-onboard .fn-activity-grid .fn-chip").forEach(label => {
+      const cb = label.querySelector("input[type='checkbox']");
+      if (!cb) return;
+      const isSpot = profile.spotlight.includes(cb.value);
+      label.classList.toggle("is-spotlight", isSpot);
+    });
   }
 
   _populateSelect(selectId, options, defaultLabel) {
