@@ -3240,8 +3240,52 @@
   }
 
   /* --- Report methodology disclosure --- */
+  .report-detail-expander {
+    margin-bottom: 1.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-card);
+    overflow: hidden;
+  }
+  .report-detail-expander > summary {
+    cursor: pointer;
+    padding: 0.9rem 1.25rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.85rem;
+    list-style: none;
+    user-select: none;
+  }
+  .report-detail-expander > summary::-webkit-details-marker { display: none; }
+  .report-detail-icon {
+    color: var(--accent-neutral);
+    font-size: 0.85rem;
+    transition: transform 0.2s ease;
+    display: inline-block;
+    width: 1rem;
+    text-align: center;
+  }
+  .report-detail-expander[open] > summary .report-detail-icon { transform: rotate(90deg); }
+  .report-detail-title {
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .report-detail-sub {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-align: right;
+  }
+  .report-detail-expander[open] > summary { border-bottom: 1px solid var(--border-color); }
+  .report-detail-expander > .card,
+  .report-detail-stack > .card { margin: 1rem 1.25rem 1.25rem; }
+  .report-detail-expander > .card:last-child,
+  .report-detail-stack > .card:last-child { margin-bottom: 1.25rem; }
+
   .report-methodology {
-    margin-bottom: 2rem;
+    margin-bottom: 0;
   }
   .methodology-head {
     display: flex;

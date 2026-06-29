@@ -1918,6 +1918,8 @@ class ClimateDashboardApp {
 
   // DOM Events and bindings
   initDOM() {
+    this._initReportDetailExpanders();
+
     // 1. Wizard Buttons
     document.getElementById("btn-next-to-2").addEventListener("click", () => {
       document.getElementById("step-1").classList.add("hidden");
@@ -2824,6 +2826,19 @@ class ClimateDashboardApp {
       const sym = g.status === "Complete" ? "✓" : "●";
       return `<span class="goals-rail-pill ${cls}" title="${this.escapeHtml(g.title || "")}"><span aria-hidden="true">${sym}</span>${this.escapeHtml(g.title || "Untitled goal")}</span>`;
     }).join("") + (active + complete > 0 ? `<span class="goals-rail-empty">${active} active · ${complete} complete</span>` : "");
+  }
+
+  _initReportDetailExpanders() {
+    const expanders = document.querySelectorAll(".report-detail-expander");
+    expanders.forEach(d => {
+      const key = `report_detail_${d.dataset.reportDetail}`;
+      const stored = localStorage.getItem(key);
+      if (stored === "open") d.open = true;
+      else if (stored === "closed") d.open = false;
+      d.addEventListener("toggle", () => {
+        localStorage.setItem(key, d.open ? "open" : "closed");
+      });
+    });
   }
 
   renderGoalsView() {

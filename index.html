@@ -565,12 +565,6 @@ Auth: none (anonymous)</pre>
           <!-- Potential future cost exposure (footprint priced as $) -->
           <div class="card glass-card report-cost" id="fn-report-cost"></div>
 
-          <!-- Relevant precedents (real, cited examples behind the risks) -->
-          <div class="card glass-card report-precedents" id="fn-report-precedents"></div>
-
-          <!-- Operational risks (behavioral and execution guardrails) -->
-          <div class="card glass-card report-operational-risks hidden" id="fn-report-operational-risks"></div>
-
           <!-- AI briefing (populated after sign-up via Gemini) -->
           <div class="card glass-card ai-briefing hidden" id="fn-ai-briefing">
             <div class="ai-briefing-head">
@@ -584,23 +578,42 @@ Auth: none (anonymous)</pre>
             ⚠️ This is a <strong>modeled estimate</strong> from industry defaults and your inputs — a starting point, not certified accounting. Refine it with real data inside the dashboard.
           </p>
 
-          <div class="card glass-card report-methodology">
-            <div class="methodology-head">
-              <h3>Methodology</h3>
-              <span>Modeled, not certified</span>
+          <details class="report-detail-expander" id="fn-report-methodology-expander" data-report-detail="methodology">
+            <summary>
+              <span class="report-detail-icon" aria-hidden="true">▸</span>
+              <span class="report-detail-title">Show methodology</span>
+              <span class="report-detail-sub">Factor sources · scope math · standards we cite</span>
+            </summary>
+            <div class="card glass-card report-methodology">
+              <div class="methodology-head">
+                <h3>Methodology</h3>
+                <span>Modeled, not certified</span>
+              </div>
+              <p>Each selected activity maps to a typical annual emission factor in tCO2e/yr. The estimate sums those factors, groups them by GHG scope, and propagates uncertainty with root-sum-of-squares.</p>
+              <ul class="methodology-points">
+                <li><strong>Inputs:</strong> company profile, business model, team size, website context, founder notes, and selected activities.</li>
+                <li><strong>Evidence level:</strong> document filenames are noted only; source files are not read unless you later opt in to store evidence.</li>
+                <li><strong>Upgrade path:</strong> replace modeled defaults with metered cloud, utility, travel, vendor, and claim evidence inside the dashboard.</li>
+              </ul>
+              <ul id="fn-methodology-list" class="methodology-factor-list"></ul>
+              <div class="methodology-frameworks">
+                <div class="methodology-frameworks-head">Standards &amp; theory this rests on</div>
+                <ul id="fn-frameworks-list" class="methodology-framework-list"></ul>
+              </div>
             </div>
-            <p>Each selected activity maps to a typical annual emission factor in tCO2e/yr. The estimate sums those factors, groups them by GHG scope, and propagates uncertainty with root-sum-of-squares.</p>
-            <ul class="methodology-points">
-              <li><strong>Inputs:</strong> company profile, business model, team size, website context, founder notes, and selected activities.</li>
-              <li><strong>Evidence level:</strong> document filenames are noted only; source files are not read unless you later opt in to store evidence.</li>
-              <li><strong>Upgrade path:</strong> replace modeled defaults with metered cloud, utility, travel, vendor, and claim evidence inside the dashboard.</li>
-            </ul>
-            <ul id="fn-methodology-list" class="methodology-factor-list"></ul>
-            <div class="methodology-frameworks">
-              <div class="methodology-frameworks-head">Standards &amp; theory this rests on</div>
-              <ul id="fn-frameworks-list" class="methodology-framework-list"></ul>
+          </details>
+
+          <details class="report-detail-expander" id="fn-report-evidence-expander" data-report-detail="evidence">
+            <summary>
+              <span class="report-detail-icon" aria-hidden="true">▸</span>
+              <span class="report-detail-title">Show evidence</span>
+              <span class="report-detail-sub">Real precedents · operational risks · benchmark basis</span>
+            </summary>
+            <div class="report-detail-stack">
+              <div class="card glass-card report-precedents" id="fn-report-precedents"></div>
+              <div class="card glass-card report-operational-risks hidden" id="fn-report-operational-risks"></div>
             </div>
-          </div>
+          </details>
 
           <div class="card glass-card report-save-cta" id="fn-report-save-cta">
             <div class="save-cta-text">
