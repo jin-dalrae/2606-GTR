@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import worker, { extractUsefulText, getClientIp, normalizePublicWebsiteUrl } from './worker/index.js';
 import { buildReportPrompt, buildReportSchema, extractGrounding } from './worker/prompt.js';
 import { buildFactPack, computeImpactProfile, priceFootprint, computeBenchmark } from './data/evidence.js';
+import { MATURITY_INSIGHTS, selectInsight, buildInsightContext } from './data/insights.js';
 
 // Calculation helper extracted to verify mathematics logic independently
 function calculateLedgerTotals(state) {
@@ -574,5 +575,114 @@ describe('Multi-dimension impact + cost', () => {
       const dataDelete = await resDelete.json();
       expect(dataDelete.ok).toBe(true);
     });
+  });
+});
+
+describe('Maturity-conditional insights (data/insights.js)', () => {
+  it('has exactly 6 levels covering L0 through L5', () => {
+    expect(MATURITY_INSIGHTS).toHaveLength(6);
+    expect(MATURITY_INSIGHTS.map(i => i.level)).toEqual([0, 1, 2, 3, 4, 5]);
+  });
+
+  it('matches the existing maturity titles (Unmapped..Improved)', () => {
+    const titles = MATURITY_INSIGHTS.map(i => i.title);
+    expect(titles).toEqual(["Unmapped", "Mapped", "Gated", "Metered", "Active", "Improved"]);
+  });
+
+  it('every insight has headline, firstAction, unlocksMilestone, and at least one citation', () => {
+    MATURITY_INSIGHTS.forEach(insight => {
+      expect(typeof insight.headline).toBe('string');
+      expect(insight.headline.length).toBeGreaterThan(20);
+      expect(typeof insight.firstAction).toBe('string');
+      expect(insight.firstAction.length).toBeGreaterThan(10);
+      expect(typeof insight.unlocksMilestone).toBe('string');
+      expect(Array.isArray(insight.evidenceCitations)).toBe(true);
+      expect(insight.evidenceCitations.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('every evidence citation label exists in the evidence library', () => {
+    const allowedLabels = new Set([
+      "GHG Protocol ICT Sector Guidance + Software Carbon Intensity (SCI) spec",
+      "Product Carbon Footprint reports (Apple, Dell) + GHG Protocol capital goods (Cat. 2)",
+      "UK DESNZ/DEFRA GHG Conversion Factors + US EPA GHG Emission Factors Hub",
+      "US EPA USEEIO v2 (spend-based environmentally-extended input-output)",
+      "GLEC Framework (Smart Freight Centre) + DEFRA freight factors",
+      "US EPA eGRID + IEA national grid intensity",
+      "UK DESNZ/DEFRA stationary & mobile combustion factors + IPCC GWP",
+      "GHG Protocol Project Protocol + Project Frame avoided-emissions guidance",
+      "GHG Protocol Corporate + Scope 3 Standard",
+      "Science Based Targets initiative (SBTi)",
+      "Software Carbon Intensity (SCI), ISO/IEC 21031:2024",
+      "Project Frame",
+      "Additionality (GHG Protocol Project Protocol)",
+      "Rebound Effect (Jevons Paradox)",
+      "ISO 14040/14044 (Life Cycle Assessment)",
+      "GHG Protocol Product Life Cycle Standard",
+      "European Commission",
+      "California Air Resources Board",
+      "UK Energy Research Centre (Sorrell)",
+      "European Commission / Project Frame",
+      "US EPA / RCRA"
+    ]);
+    MATURITY_INSIGHTS.forEach(insight => {
+      insight.evidenceCitations.forEach(label => {
+        expect(allowedLabels.has(label), `${label} is not in the evidence library`).toBe(true);
+      });
+    });
+  });
+
+  it('selectInsight returns the right insight for each level 0-5', () => {
+    [0, 1, 2, 3, 4, 5].forEach(level => {
+      const insight = selectInsight({ maturityLevel: level });
+      expect(insight.level).toBe(level);
+    });
+  });
+
+  it('selectInsight clamps out-of-range values to the nearest valid level', () => {
+    expect(selectInsight({ maturityLevel: -1 }).level).toBe(0);
+    expect(selectInsight({ maturityLevel: 99 }).level).toBe(5);
+    expect(selectInsight({ maturityLevel: 'three' }).level).toBe(0);
+    expect(selectInsight({}).level).toBe(0);
+    expect(selectInsight(null).level).toBe(0);
+  });
+
+  it('selectInsight defaults to L0 (Unmapped) when state is missing', () => {
+    expect(selectInsight(undefined).title).toBe('Unmapped');
+  });
+
+  it('buildInsightContext produces a machine-readable block for Gemini', () => {
+    const ctx = buildInsightContext({ maturityLevel: 2, name: 'Acme' });
+    expect(ctx).toContain('Current maturity level: 2 of 5 (Gated)');
+    expect(ctx).toContain('Deterministic headline:');
+    expect(ctx).toContain('Deterministic first action');
+    expect(ctx).toContain('BINDING');
+    expect(ctx).toContain('Citation labels you may use to back this');
+  });
+
+  it('buildReportPrompt injects the maturity insight into the fact pack', () => {
+    const prompt = buildReportPrompt({
+      name: 'Acme',
+      stage: 'Seed',
+      businessModel: 'SaaS',
+      teamSize: 10,
+      activities: ['compute'],
+      maturityLevel: 1,
+      snapshot: { footprintTotal: 15 }
+    }, { asOfDate: '2026-06-13' });
+
+    expect(prompt).toContain('Maturity-conditional insight');
+    expect(prompt).toContain('Current maturity level: 1 of 5 (Mapped)');
+    expect(prompt).toContain('BINDING');
+  });
+
+  it('buildReportPrompt constrains firstAction to align with the deterministic insight', () => {
+    const prompt = buildReportPrompt({
+      name: 'Acme',
+      maturityLevel: 4,
+      snapshot: { footprintTotal: 100 }
+    }, { asOfDate: '2026-06-13' });
+
+    expect(prompt).toContain('your firstAction must align with or elaborate on the deterministic first action');
   });
 });

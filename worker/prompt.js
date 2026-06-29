@@ -6,6 +6,7 @@
    ========================================================================== */
 
 import { buildFactPack } from "../data/evidence.js";
+import { buildInsightContext } from "../data/insights.js";
 
 const WEBSITE_CONTEXT_MAX_CHARS = 1800;
 
@@ -42,6 +43,7 @@ export function buildReportPrompt(assessment, context = {}) {
   const docs = [a.docs && a.docs.deck, a.docs && a.docs.accounting].filter(Boolean).join(", ");
 
   const facts = buildFactPack(a);
+  const insightContext = buildInsightContext(a);
   const factPack = [
     "Curated fact pack (the ONLY facts you may cite; reference each by its source name):",
     "- Emission factor basis:",
@@ -52,7 +54,10 @@ export function buildReportPrompt(assessment, context = {}) {
     "- Frameworks / theory you may invoke:",
     ...facts.frameworks.map(f => `  - ${f}`),
     "- Real precedents you may use as examples:",
-    ...facts.precedents.map(p => `  - ${p}`)
+    ...facts.precedents.map(p => `  - ${p}`),
+    "",
+    "Maturity-conditional insight (DETERMINISTIC; treat as binding context):",
+    ...insightContext.split("\n").map(line => `  ${line}`)
   ].join("\n");
 
   return [
@@ -96,6 +101,7 @@ export function buildReportPrompt(assessment, context = {}) {
     "- If geography, customer segment, suppliers, or revenue thresholds are unknown, make the dependency explicit instead of inventing facts.",
     "- Do not say CSRD, SEC, California SB 253/SB 261, CBAM, EUDR, or zero-emission-zone rules apply directly unless the context or a fact-pack precedent supports it. Prefer conditional language such as 'if selling into EU enterprise customers' or 'if operating urban delivery fleets', and note the precedent's status caveat.",
     "- If the situation is too thin, say the first action is to verify the missing operational data, not to claim precision.",
+    `- If a maturity-conditional insight is provided above, your firstAction must align with or elaborate on the deterministic first action, not contradict it. Use the evidence citation labels from the insight in your citations list.`,
     "",
     mode === "preview"
       ? "Return JSON for a preview only: headline, basis, two material issues, one likely forcing function, the first action, and a citations list naming the fact-pack or web-grounded sources you drew on. Do not include the full risk radar, goals, or methodology notes."

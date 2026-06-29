@@ -9,6 +9,7 @@ import {
   CLOUD_PROVIDERS, HOSTING_REGIONS, PRIMARY_ACTIVITIES, ENERGY_SOURCES,
   BUSINESS_MODEL_PROFILES, profileFor
 } from "./data/evidence.js";
+import { MATURITY_INSIGHTS, selectInsight } from "./data/insights.js";
 
 const SOURCE_LINKS = sourceLinks();
 
@@ -3107,13 +3108,18 @@ class ClimateDashboardApp {
   }
 
   renderGoalsRecommendations() {
+    // Status insight is the deterministic, status-aware half of the hybrid
+    // insight model; the AI briefing in buildReportPrompt() is given the same
+    // context and is constrained to align with it. Both layers are intentional.
+    this.renderStatusInsight();
+
     const container = document.getElementById("recommendations-container");
     container.innerHTML = "";
-    
+
     // Suggest goals corresponding to active activities that do NOT already exist
     const activeActs = this.state.company.activities || [];
     let sugCount = 0;
-    
+
     activeActs.forEach(actKey => {
       const template = GOAL_TEMPLATES[actKey];
       if (template) {
@@ -3130,16 +3136,16 @@ class ClimateDashboardApp {
               <button class="rec-add-btn" data-act="${actKey}">+ Add Board</button>
             </div>
           `;
-          
+
           card.querySelector(".rec-add-btn").addEventListener("click", () => {
             this.addGoalFromRecommendation(template.title, actKey);
           });
-          
+
           container.appendChild(card);
         }
       }
     });
-    
+
     if (sugCount === 0) {
       container.innerHTML = `
         <div style="text-align: center; color: var(--text-muted); padding: 1rem; font-style: italic; font-size: 0.75rem;">
@@ -3147,6 +3153,57 @@ class ClimateDashboardApp {
         </div>
       `;
     }
+  }
+
+  // Renders the deterministic, status-conditional insight for the current
+  // maturity level. Headline + first action are looked up from MATURITY_INSIGHTS;
+  // citation labels are resolved to real URLs via SOURCE_LINKS so the widget
+  // links to actual evidence, not invented citations.
+  renderStatusInsight() {
+    const container = document.getElementById("status-insight-container");
+    if (!container) return;
+    container.innerHTML = "";
+
+    const insight = selectInsight(this.state);
+    const level = insight.level;
+    const nextLevel = Math.min(MATURITY_INSIGHTS.length - 1, level + 1);
+    const isMaxLevel = level >= MATURITY_INSIGHTS.length - 1;
+
+    const citationsHtml = insight.evidenceCitations.map(label => {
+      const url = SOURCE_LINKS[label];
+      const safeLabel = this.escapeHtml(label);
+      if (url) {
+        return `<a class="status-insight-citation" href="${this.escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${safeLabel}</a>`;
+      }
+      return `<span class="status-insight-citation">${safeLabel}</span>`;
+    }).join(" · ");
+
+    const nextLabel = isMaxLevel
+      ? `<span class="status-insight-next-level">You're at the top of the ladder. Keep accumulating verifier sign-off.</span>`
+      : `<span class="status-insight-next-level">Next: <strong>${this.escapeHtml(MATURITY_INSIGHTS[nextLevel].title)}</strong> (Level ${nextLevel})</span>`;
+
+    const unlocksHtml = isMaxLevel ? "" : `<div class="status-insight-unlocks">Unlocks at Level ${nextLevel}: ${this.escapeHtml(insight.unlocksMilestone)}</div>`;
+
+    const card = document.createElement("div");
+    card.className = `status-insight-card status-insight-l${level}`;
+    card.dataset.level = String(level);
+    card.innerHTML = `
+      <div class="status-insight-header">
+        <span class="status-insight-level-badge">Level ${level} · ${this.escapeHtml(insight.title)}</span>
+        <span class="status-insight-tag">Status insight</span>
+      </div>
+      <div class="status-insight-headline">${this.escapeHtml(insight.headline)}</div>
+      <div class="status-insight-first-action">
+        <span class="status-insight-first-action-label">First action</span>
+        <span class="status-insight-first-action-body">${this.escapeHtml(insight.firstAction)}</span>
+      </div>
+      <div class="status-insight-citations">${citationsHtml}</div>
+      <div class="status-insight-footer">
+        ${nextLabel}
+        ${unlocksHtml}
+      </div>
+    `;
+    container.appendChild(card);
   }
 
   addGoalFromRecommendation(title, actKey) {

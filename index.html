@@ -1163,6 +1163,15 @@ Auth: none (anonymous)</pre>
           </div>
           
           <div class="goals-sidebar">
+            <!-- Status-Conditional Insight (deterministic, status-aware) -->
+            <div class="card glass-card sidebar-status-insight-card">
+              <h3>Where You Are</h3>
+              <p class="desc">Your next move is determined by your current maturity level. The AI briefing below will elaborate on this same direction.</p>
+              <div id="status-insight-container">
+                <!-- Populated by app.js renderStatusInsight() -->
+              </div>
+            </div>
+
             <!-- Recommendations Sidebar -->
             <div class="card glass-card sidebar-recommend-card">
               <h3>Recommended Goals</h3>
