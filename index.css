@@ -520,6 +520,18 @@
     gap: 0.5rem;
     margin-bottom: 1.25rem;
   }
+
+  .other-specify {
+    margin-top: 0.35rem;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.9rem;
+    background: hsla(210, 100%, 60%, 0.05);
+    border: 1px dashed var(--accent-neutral);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+  }
+  .other-specify::placeholder { color: var(--text-muted); font-style: italic; }
+  .other-specify.hidden { display: none; }
   
   label {
     font-size: 0.85rem;

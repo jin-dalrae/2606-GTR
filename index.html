@@ -398,17 +398,46 @@ Auth: none (anonymous)</pre>
 
           <div class="wizard-step" data-step="3">
             <h3 class="funnel-section-title">3 · Business model &amp; team</h3>
-            <p class="step-desc">Both are optional. Leave blank to auto-detect.</p>
+            <p class="step-desc">Most fields are optional. Leave blank to use smart defaults. Pick "Other" to write your own.</p>
             <div class="form-grid">
               <div class="form-group">
                 <label for="fn-model">Business Model <span class="optional-tag">optional — auto-detects if empty</span></label>
                 <select id="fn-model">
                   <option value="">Auto-detect (recommended)</option>
                 </select>
+                <input type="text" id="fn-model-other" class="other-specify hidden" placeholder="Describe in 1-2 sentences…">
               </div>
               <div class="form-group">
                 <label for="fn-team">Team Size (FTEs)</label>
                 <input type="number" id="fn-team" min="1" placeholder="e.g. 15">
+              </div>
+              <div class="form-group">
+                <label for="fn-cloud">Cloud / Compute Provider <span class="optional-tag">optional</span></label>
+                <select id="fn-cloud">
+                  <option value="">Not sure / not applicable</option>
+                </select>
+                <input type="text" id="fn-cloud-other" class="other-specify hidden" placeholder="Name your provider…">
+              </div>
+              <div class="form-group">
+                <label for="fn-region">Primary Hosting Region <span class="optional-tag">optional — affects grid carbon</span></label>
+                <select id="fn-region">
+                  <option value="">Don't know / multi-region</option>
+                </select>
+                <input type="text" id="fn-region-other" class="other-specify hidden" placeholder="e.g. Sao Paulo, Brazil">
+              </div>
+              <div class="form-group">
+                <label for="fn-primary">Primary Activity <span class="optional-tag">optional — sharpens the footprint model</span></label>
+                <select id="fn-primary">
+                  <option value="">Auto-detect</option>
+                </select>
+                <input type="text" id="fn-primary-other" class="other-specify hidden" placeholder="What's your team actually doing day-to-day?">
+              </div>
+              <div class="form-group">
+                <label for="fn-energy">Energy Source <span class="optional-tag">optional — affects electricity intensity</span></label>
+                <select id="fn-energy">
+                  <option value="">Standard grid (don't know)</option>
+                </select>
+                <input type="text" id="fn-energy-other" class="other-specify hidden" placeholder="e.g. Office powered by geothermal PPA">
               </div>
             </div>
           </div>

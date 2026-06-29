@@ -531,3 +531,51 @@ export const BUSINESS_MODEL_OPTIONS = [
 ];
 
 export const FUNDING_STAGES = ["Pre-Seed", "Seed", "Series A", "Series B", "Series C+"];
+
+export const CLOUD_PROVIDERS = [
+  { id: "aws",     label: "Amazon Web Services (AWS)",  note: "Major regions US-East, US-West, EU." },
+  { id: "gcp",     label: "Google Cloud Platform (GCP)", note: "Carbon-neutral since 2007 (claim by provider)." },
+  { id: "azure",   label: "Microsoft Azure",             note: "Carbon-negative by 2030 (provider commitment)." },
+  { id: "oci",     label: "Oracle Cloud Infrastructure", note: "" },
+  { id: "alibaba", label: "Alibaba Cloud / Tencent",     note: "Common for APAC operations." },
+  { id: "hetzner", label: "Hetzner / OVH / Bare-metal",  note: "Often lower-carbon per kWh in EU." },
+  { id: "self",    label: "Self-hosted / Colocation",    note: "On-prem or rented racks; bring your own grid mix." },
+  { id: "other",   label: "Other",                        note: "Use the free-text box to specify." }
+];
+
+export const HOSTING_REGIONS = [
+  { id: "us-east",      label: "United States",                note: "Grid mix varies ~0.35-0.45 kgCO2/kWh." },
+  { id: "us-west",      label: "United States (West Coast)",   note: "Often cleaner grid (CA, WA hydro/wind)." },
+  { id: "canada",       label: "Canada",                        note: "Hydro-heavy, ~0.13 kgCO2/kWh." },
+  { id: "eu-west",      label: "Europe (Western)",              note: "Mixed; France low, Germany moderate." },
+  { id: "eu-nordics",   label: "Europe (Nordics)",              note: "Very low-carbon, mostly hydro/wind." },
+  { id: "uk",           label: "United Kingdom",                note: "Rapidly decarbonizing grid." },
+  { id: "apac",         label: "Asia-Pacific (SG/JP/AU)",       note: "Mixed; Singapore high-carbon, Australia cleaner." },
+  { id: "india",        label: "India",                         note: "Coal-heavy, ~0.7 kgCO2/kWh." },
+  { id: "china",        label: "China",                         note: "Coal-heavy but rapidly adding renewables." },
+  { id: "mena",         label: "Middle East / Africa",          note: "Often high-carbon grid; check local factor." },
+  { id: "latam",        label: "Latin America",                 note: "Brazil ~0.08 (hydro); varies widely." },
+  { id: "global",       label: "Multi-region / Don't know",     note: "Use the world-average factor as fallback." },
+  { id: "other",        label: "Other",                          note: "Use the free-text box to specify." }
+];
+
+export const PRIMARY_ACTIVITIES = [
+  { id: "compute_ml",    label: "Cloud / ML training & inference", note: "GPU/TPU workloads; the dominant cost for SaaS/AI." },
+  { id: "manufacturing", label: "Manufacturing / assembly",         note: "Factories, contract manufacturers, hardware lines." },
+  { id: "lab_research",  label: "Lab / wet-lab research",           note: "Bench scientists, consumables, fume hoods." },
+  { id: "field_ops",     label: "Field operations / installations", note: "On-site deployments, technicians, vehicles." },
+  { id: "software_dev",  label: "Software development",              note: "Coding, QA, dev tooling — mostly compute + laptops." },
+  { id: "sales_growth",  label: "Sales / marketing / GTM",          note: "Travel-heavy, events, paid acquisition." },
+  { id: "advisory",      label: "Advisory / consulting delivery",   note: "Billed hours, project work, travel to client." },
+  { id: "logistics_fleet", label: "Logistics / fleet operations",   note: "Delivery, freight, last-mile." },
+  { id: "other",         label: "Other",                              note: "Use the free-text box to specify." }
+];
+
+export const ENERGY_SOURCES = [
+  { id: "grid_default",   label: "Standard grid (don't know)",       note: "We use the world-average grid intensity (~0.48 kgCO2/kWh)." },
+  { id: "grid_clean",     label: "Clean grid (hydro / wind / solar heavy)", note: "Use the regional clean-grid factor if available." },
+  { id: "grid_dirty",     label: "Coal/gas-heavy grid",              note: "Use the higher end of regional factor." },
+  { id: "renewable_ppa",  label: "Renewable PPA / 100% match",        note: "Provider-claimed; we'll flag as unverified." },
+  { id: "on_site_solar",  label: "On-site solar / behind-the-meter", note: "Office PV, charging from rooftop." },
+  { id: "other",          label: "Other",                              note: "Use the free-text box to specify." }
+];

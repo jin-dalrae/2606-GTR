@@ -5,7 +5,8 @@
 import {
   FACTOR_SOURCES, FRAMEWORKS, CASE_PRECEDENTS,
   computeBenchmark, priceFootprint, computeImpactProfile, sourceLinks,
-  BUSINESS_MODEL_OPTIONS
+  BUSINESS_MODEL_OPTIONS,
+  CLOUD_PROVIDERS, HOSTING_REGIONS, PRIMARY_ACTIVITIES, ENERGY_SOURCES
 } from "./data/evidence.js";
 
 const SOURCE_LINKS = sourceLinks();
@@ -549,23 +550,50 @@ class ClimateDashboardApp {
   }
 
   populateBusinessModelSelect() {
-    const sel = document.getElementById("fn-model");
-    if (!sel || !Array.isArray(BUSINESS_MODEL_OPTIONS) || BUSINESS_MODEL_OPTIONS.length === 0) return;
+    this._populateSelect("fn-model", BUSINESS_MODEL_OPTIONS, "Auto-detect (recommended)");
+    this._populateSelect("fn-cloud", CLOUD_PROVIDERS, "Not sure / not applicable");
+    this._populateSelect("fn-region", HOSTING_REGIONS, "Don't know / multi-region");
+    this._populateSelect("fn-primary", PRIMARY_ACTIVITIES, "Auto-detect");
+    this._populateSelect("fn-energy", ENERGY_SOURCES, "Standard grid (don't know)");
+    this._wireOtherReveal("fn-model", "fn-model-other");
+    this._wireOtherReveal("fn-cloud", "fn-cloud-other");
+    this._wireOtherReveal("fn-region", "fn-region-other");
+    this._wireOtherReveal("fn-primary", "fn-primary-other");
+    this._wireOtherReveal("fn-energy", "fn-energy-other");
+  }
+
+  _populateSelect(selectId, options, defaultLabel) {
+    const sel = document.getElementById(selectId);
+    if (!sel || !Array.isArray(options) || options.length === 0) return;
     const previousValue = sel.value;
     sel.innerHTML = "";
-    const auto = document.createElement("option");
-    auto.value = "";
-    auto.textContent = "Auto-detect (recommended)";
-    sel.appendChild(auto);
-    for (const opt of BUSINESS_MODEL_OPTIONS) {
+    const def = document.createElement("option");
+    def.value = "";
+    def.textContent = defaultLabel;
+    sel.appendChild(def);
+    for (const opt of options) {
       const o = document.createElement("option");
-      o.value = opt.label;
+      o.value = opt.id;
       o.textContent = opt.label;
+      if (opt.note) o.title = opt.note;
       sel.appendChild(o);
     }
     if (previousValue && [...sel.options].some(o => o.value === previousValue)) {
       sel.value = previousValue;
     }
+  }
+
+  _wireOtherReveal(selectId, otherInputId) {
+    const sel = document.getElementById(selectId);
+    const other = document.getElementById(otherInputId);
+    if (!sel || !other) return;
+    const toggle = () => {
+      const isOther = sel.value === "other";
+      other.classList.toggle("hidden", !isOther);
+      if (isOther) other.focus();
+    };
+    sel.addEventListener("change", toggle);
+    toggle();
   }
 
   goFunnelStage(stage) {
@@ -779,8 +807,23 @@ class ClimateDashboardApp {
     const name = (document.getElementById("fn-name") || {}).value || "—";
     const url = (document.getElementById("fn-url") || {}).value || "—";
     const stage = (document.getElementById("fn-stage") || {}).value || "—";
-    const model = (document.getElementById("fn-model") || {}).value || "Auto-detect";
+    const modelSel = document.getElementById("fn-model");
+    const modelVal = modelSel && modelSel.value ? modelSel.options[modelSel.selectedIndex].text : "";
+    const modelOther = ((document.getElementById("fn-model-other") || {}).value || "").trim();
+    const model = modelVal || "Auto-detect";
     const team = (document.getElementById("fn-team") || {}).value || "Auto (defaults to 10)";
+    const cloudSel = document.getElementById("fn-cloud");
+    const cloudVal = cloudSel && cloudSel.value ? cloudSel.options[cloudSel.selectedIndex].text : "";
+    const cloudOther = ((document.getElementById("fn-cloud-other") || {}).value || "").trim();
+    const regionSel = document.getElementById("fn-region");
+    const regionVal = regionSel && regionSel.value ? regionSel.options[regionSel.selectedIndex].text : "";
+    const regionOther = ((document.getElementById("fn-region-other") || {}).value || "").trim();
+    const primarySel = document.getElementById("fn-primary");
+    const primaryVal = primarySel && primarySel.value ? primarySel.options[primarySel.selectedIndex].text : "";
+    const primaryOther = ((document.getElementById("fn-primary-other") || {}).value || "").trim();
+    const energySel = document.getElementById("fn-energy");
+    const energyVal = energySel && energySel.value ? energySel.options[energySel.selectedIndex].text : "";
+    const energyOther = ((document.getElementById("fn-energy-other") || {}).value || "").trim();
     const deck = (document.getElementById("fn-file-deck") || {}).files && document.getElementById("fn-file-deck").files[0];
     const acct = (document.getElementById("fn-file-acct") || {}).files && document.getElementById("fn-file-acct").files[0];
     const checked = Array.from(document.querySelectorAll("#fn-onboard .fn-activity-grid input[type='checkbox']:checked")).map(c => c.parentElement.querySelector("span").textContent);
@@ -788,8 +831,12 @@ class ClimateDashboardApp {
     const rows = [
       ["Company", name + (url && url !== "—" ? ` (${url})` : "")],
       ["Stage", stage],
-      ["Business model", model],
+      ["Business model", model + (modelOther ? ` — ${modelOther}` : "")],
       ["Team size", team],
+      ["Cloud provider", cloudVal ? cloudVal + (cloudOther ? ` — ${cloudOther}` : "") : "Not specified"],
+      ["Hosting region", regionVal ? regionVal + (regionOther ? ` — ${regionOther}` : "") : "Not specified"],
+      ["Primary activity", primaryVal ? primaryVal + (primaryOther ? ` — ${primaryOther}` : "") : "Auto-detect"],
+      ["Energy source", energyVal ? energyVal + (energyOther ? ` — ${energyOther}` : "") : "Standard grid"],
       ["Documents", [deck && deck.name, acct && acct.name].filter(Boolean).join(" · ") || "None (files stay local)"],
       ["Activities", checked.length ? checked.join(", ") : "None selected"],
       ["Notes", notes || "—"]
@@ -815,21 +862,39 @@ class ClimateDashboardApp {
     let url = this.normalizeWebsiteInput(document.getElementById("fn-url").value);
     let stage = document.getElementById("fn-stage").value;
     let businessModel = document.getElementById("fn-model").value.trim();
+    let businessModelOther = (document.getElementById("fn-model-other") || {}).value.trim();
     let teamSize = parseInt(document.getElementById("fn-team").value) || 0;
+    let cloudProvider = (document.getElementById("fn-cloud") || {}).value || "";
+    let cloudProviderOther = ((document.getElementById("fn-cloud-other") || {}).value || "").trim();
+    let hostingRegion = (document.getElementById("fn-region") || {}).value || "";
+    let hostingRegionOther = ((document.getElementById("fn-region-other") || {}).value || "").trim();
+    let primaryActivity = (document.getElementById("fn-primary") || {}).value || "";
+    let primaryActivityOther = ((document.getElementById("fn-primary-other") || {}).value || "").trim();
+    let energySource = (document.getElementById("fn-energy") || {}).value || "";
+    let energySourceOther = ((document.getElementById("fn-energy-other") || {}).value || "").trim();
 
     this.state.assessment = {
       name,
       url,
       stage,
       businessModel,
+      businessModelOther,
       teamSize,
+      cloudProvider,
+      cloudProviderOther,
+      hostingRegion,
+      hostingRegionOther,
+      primaryActivity,
+      primaryActivityOther,
+      energySource,
+      energySourceOther,
       activities: uniqueActivities,
       notes: notes,
       docs: {
         deck: deckFile ? deckFile.name : null,
         accounting: acctFile ? acctFile.name : null
       },
-      snapshot: this.computeSnapshot(uniqueActivities, teamSize),
+      snapshot: this.computeSnapshot(uniqueActivities, teamSize, { energySource, hostingRegion }),
       createdAt: new Date().toISOString()
     };
 
@@ -854,16 +919,18 @@ class ClimateDashboardApp {
   }
 
   // Build a modeled footprint snapshot from activity defaults.
-  computeSnapshot(activities, teamSize = 0) {
+  computeSnapshot(activities, teamSize = 0, context = {}) {
     const footprintItems = [];
     let footprintTotal = 0;
     let uncSumSq = 0;
     const scaleFactor = this.teamScaleFactor(teamSize);
+    const gridMultiplier = this._gridMultiplier(context);
 
     activities.forEach(key => {
       const db = ACTIVITIES_DB[key];
       if (db && db.scope !== "avoided") {
         let value = db.defaultVal * scaleFactor;
+        if (this._isGridActivity(key)) value *= gridMultiplier;
         footprintTotal += value;
         const uncAbs = value * (db.defaultUnc / 100);
         uncSumSq += Math.pow(uncAbs, 2);
@@ -893,10 +960,40 @@ class ClimateDashboardApp {
       breakdown: footprintItems.sort((a, b) => b.value - a.value),
       handprintPotential,
       scaleFactor,
+      gridMultiplier,
+      context: {
+        energySource: context.energySource || "",
+        hostingRegion: context.hostingRegion || ""
+      },
       scalingBasis: teamSize > 0
         ? `Scaled from a ${DEFAULT_MODEL_TEAM_SIZE}-FTE default model to ${teamSize.toLocaleString()} FTEs.`
         : `Using the ${DEFAULT_MODEL_TEAM_SIZE}-FTE default model because team size was not supplied.`
     };
+  }
+
+  _isGridActivity(key) {
+    return key === "compute" || key === "scope2-grid";
+  }
+
+  // Multiplier applied to electricity/grid-related emissions based on
+  // the founder's energy + region selection. World-average grid ~0.48 kg/kWh
+  // is the baseline = 1.0. Clean grid / Nordic regions reduce; coal-heavy
+  // regions increase. Provider claims (PPAs) still apply a small haircut
+  // because they're unverified.
+  _gridMultiplier({ energySource = "", hostingRegion = "" } = {}) {
+    let m = 1.0;
+    if (energySource === "grid_clean") m *= 0.55;
+    else if (energySource === "grid_dirty") m *= 1.45;
+    else if (energySource === "renewable_ppa") m *= 0.75;
+    else if (energySource === "on_site_solar") m *= 0.60;
+
+    if (hostingRegion === "eu-nordics" || hostingRegion === "canada" || hostingRegion === "latam") m *= 0.70;
+    else if (hostingRegion === "us-west" || hostingRegion === "uk" || hostingRegion === "eu-west") m *= 0.90;
+    else if (hostingRegion === "apac") m *= 1.05;
+    else if (hostingRegion === "india" || hostingRegion === "china") m *= 1.55;
+    else if (hostingRegion === "mena") m *= 1.35;
+
+    return Math.round(m * 100) / 100;
   }
 
   renderReport() {
