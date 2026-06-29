@@ -771,6 +771,110 @@
   /* ==========================================================================
      2. IMPACT LEDGER (+/-)
      ========================================================================== */
+  .ledger-goals-rail {
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .goals-rail-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.85rem;
+  }
+  .goals-rail-head h4 { margin: 0; font-size: 1rem; }
+  .goals-rail-link { font-size: 0.85rem; }
+  .goals-rail-body {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .goals-rail-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.85rem;
+    border-radius: 999px;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+  }
+  .goals-rail-pill.complete { border-color: var(--accent-handprint); color: var(--accent-handprint); }
+  .goals-rail-pill.active   { border-color: var(--accent-neutral);   color: var(--accent-neutral); }
+  .goals-rail-empty { font-size: 0.85rem; color: var(--text-muted); font-style: italic; margin: 0; }
+
+  .ledger-snapshot-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  .ledger-snapshot-card {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .ledger-snapshot-card::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+  }
+  .ledger-snapshot-footprint::before { background: var(--accent-footprint); }
+  .ledger-snapshot-handprint::before { background: var(--accent-handprint); }
+  .ledger-snapshot-maturity::before  { background: var(--accent-neutral); }
+  .ledger-snapshot-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .ledger-snapshot-value {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  .ledger-snapshot-footprint .ledger-snapshot-value { color: var(--accent-footprint); }
+  .ledger-snapshot-handprint .ledger-snapshot-value { color: var(--accent-handprint); }
+  .ledger-snapshot-maturity  .ledger-snapshot-value { color: var(--accent-neutral); }
+  .ledger-snapshot-meta { font-size: 0.8rem; color: var(--text-muted); }
+
+  .ledger-details-expander {
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-card);
+    overflow: hidden;
+  }
+  .ledger-details-expander > summary {
+    cursor: pointer;
+    padding: 0.85rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    user-select: none;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .ledger-details-expander > summary::-webkit-details-marker { display: none; }
+  .ledger-details-expander > summary::before {
+    content: '▸';
+    margin-right: 0.65rem;
+    color: var(--accent-neutral);
+    transition: transform 0.2s ease;
+    display: inline-block;
+  }
+  .ledger-details-expander[open] > summary::before { transform: rotate(90deg); }
+  .ledger-details-preview { font-weight: 400; font-size: 0.82rem; color: var(--text-muted); }
+  .ledger-details-body { padding: 0 1.25rem 1.25rem; }
+
   .net-impact-banner {
     background: linear-gradient(135deg, var(--bg-card), hsla(224, 32%, 15%, 0.8));
     border: 1px solid var(--border-color);
@@ -2085,6 +2189,7 @@
     .net-impact-banner {
       grid-template-columns: 1fr;
     }
+    .ledger-snapshot-row { grid-template-columns: 1fr; }
     .net-banner-info {
       border-right: none;
       border-bottom: 1px solid var(--border-color);

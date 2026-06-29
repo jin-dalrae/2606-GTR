@@ -933,19 +933,55 @@ Auth: none (anonymous)</pre>
             Add Avoided Claim (+)
           </button>
         </div>
-        
-        <!-- Derived Net Impact Banner -->
-        <div class="net-impact-banner card">
-          <div class="net-banner-info">
-            <div class="net-label"><span class="glossary-term" data-term="net">DERIVED NET IMPACT</span></div>
-            <div class="net-value" id="ledger-net-value">Calculating...</div>
-            <div class="net-uncertainty" id="ledger-net-uncertainty">Uncertainty: --</div>
+
+        <div class="card glass-card ledger-goals-rail" id="ledger-goals-rail">
+          <div class="goals-rail-head">
+            <h4><span class="glossary-term" data-term="goal">Goals &amp; milestones</span></h4>
+            <a href="#goals" class="link-button goals-rail-link">Manage goals &rarr;</a>
           </div>
-          <div class="net-banner-description">
-            <span class="warning-tag">IMPORTANT DISCLOSURE</span>
-            <p>This is a <strong class="glossary-term" data-term="net">derived context figure</strong>, not a certified accounting <span class="glossary-term" data-term="offset">offset</span>. Your <span class="glossary-term" data-term="footprint">footprint</span> inventory (−) represents real physical emissions. Your <span class="glossary-term" data-term="handprint">handprint</span> (+) represents emissions avoided vs. a <span class="glossary-term" data-term="baseline">baseline</span> reference scenario. They use different methodologies and cannot be directly mathematically netted to claim zero physical emissions.</p>
+          <div class="goals-rail-body" id="ledger-goals-rail-body">
+            <!-- populated by renderLedgerView() -->
           </div>
         </div>
+
+        <div class="ledger-snapshot-row">
+          <div class="card glass-card ledger-snapshot-card ledger-snapshot-footprint">
+            <span class="ledger-snapshot-label"><span class="glossary-term" data-term="footprint">Footprint (−)</span></span>
+            <div class="ledger-snapshot-value" id="ledger-snapshot-footprint">— <small>tCO2e/yr</small></div>
+            <span class="ledger-snapshot-meta">Real emissions from your operations</span>
+          </div>
+          <div class="card glass-card ledger-snapshot-card ledger-snapshot-handprint">
+            <span class="ledger-snapshot-label"><span class="glossary-term" data-term="handprint">Handprint (+)</span></span>
+            <div class="ledger-snapshot-value" id="ledger-snapshot-handprint">— <small>tCO2e/yr</small></div>
+            <span class="ledger-snapshot-meta">Avoided via additionality-gated claims</span>
+          </div>
+          <div class="card glass-card ledger-snapshot-card ledger-snapshot-maturity">
+            <span class="ledger-snapshot-label"><span class="glossary-term" data-term="maturity">Maturity</span></span>
+            <div class="ledger-snapshot-value" id="ledger-snapshot-maturity">L1 · Mapped</div>
+            <span class="ledger-snapshot-meta" id="ledger-snapshot-maturity-meta">Add claims to reach L2</span>
+          </div>
+        </div>
+
+        <details class="ledger-details-expander">
+          <summary>
+            <span>Details</span>
+            <span class="ledger-details-preview" id="ledger-details-preview">Net impact &amp; disclosure</span>
+          </summary>
+          <div class="ledger-details-body">
+            <!-- Derived Net Impact Banner -->
+            <div class="net-impact-banner card">
+              <div class="net-banner-info">
+                <div class="net-label"><span class="glossary-term" data-term="net">DERIVED NET IMPACT</span></div>
+                <div class="net-value" id="ledger-net-value">Calculating...</div>
+                <div class="net-uncertainty" id="ledger-net-uncertainty">Uncertainty: --</div>
+              </div>
+              <div class="net-banner-description">
+                <span class="warning-tag">IMPORTANT DISCLOSURE</span>
+                <p>This is a <strong class="glossary-term" data-term="net">derived context figure</strong>, not a certified accounting <span class="glossary-term" data-term="offset">offset</span>. Your <span class="glossary-term" data-term="footprint">footprint</span> inventory (−) represents real physical emissions. Your <span class="glossary-term" data-term="handprint">handprint</span> (+) represents emissions avoided vs. a <span class="glossary-term" data-term="baseline">baseline</span> reference scenario. They use different methodologies and cannot be directly mathematically netted to claim zero physical emissions.</p>
+              </div>
+            </div>
+          </div>
+        </details>
 
         <!-- Footprint and Handprint Verification Guide -->
         <div class="card glass-card impact-guide-card" id="fn-impact-guide">

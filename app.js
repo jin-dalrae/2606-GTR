@@ -2678,7 +2678,36 @@ class ClimateDashboardApp {
     
     document.getElementById("ledger-net-value").innerText = `${netSign}${netVal.toFixed(1)} tCO2e/yr`;
     document.getElementById("ledger-net-uncertainty").innerText = `Propagated Uncertainty Range: ±${totals.netUncertaintyAbs.toFixed(1)} tCO2e`;
-    
+
+    const snapFoot = document.getElementById("ledger-snapshot-footprint");
+    const snapHand = document.getElementById("ledger-snapshot-handprint");
+    const snapMat  = document.getElementById("ledger-snapshot-maturity");
+    const snapMatMeta = document.getElementById("ledger-snapshot-maturity-meta");
+    if (snapFoot) snapFoot.innerHTML = `${totals.footprintTotal.toFixed(1)} <small>tCO2e/yr</small>`;
+    if (snapHand) snapHand.innerHTML = `${totals.handprintTotal.toFixed(1)} <small>tCO2e/yr</small>`;
+    if (snapMat) {
+      const lvl = this.state.maturityLevel || 0;
+      const lvlLabels = ["—", "L1 · Mapped", "L2 · Claimed", "L3 · Metered", "L4 · Owned", "L5 · Verified"];
+      snapMat.innerText = lvlLabels[lvl] || `L${lvl}`;
+    }
+    if (snapMatMeta) {
+      const lvl = this.state.maturityLevel || 0;
+      const nextHints = {
+        0: "Finish intake to reach L1",
+        1: "Add a gated claim to reach L2",
+        2: "Replace a modeled source with metered data to reach L3",
+        3: "Assign owners to 3 goals to reach L4",
+        4: "Mark 2 goals complete with evidence to reach L5",
+        5: "All gates passed — share or re-test"
+      };
+      snapMatMeta.innerText = nextHints[lvl] || "";
+    }
+
+    const preview = document.getElementById("ledger-details-preview");
+    if (preview) preview.innerText = `Net ${netSign}${netVal.toFixed(1)} tCO2e/yr · ±${totals.netUncertaintyAbs.toFixed(1)} tCO2e`;
+
+    this._renderGoalsRail();
+
     // Dynamic totals
     document.getElementById("footprint-total").innerText = `${totals.footprintTotal.toFixed(1)} tCO2e/yr`;
     document.getElementById("handprint-total").innerText = `${totals.handprintTotal.toFixed(1)} tCO2e/yr`;
@@ -2771,6 +2800,30 @@ class ClimateDashboardApp {
         claimList.appendChild(row);
       });
     }
+  }
+
+  _renderGoalsRail() {
+    const body = document.getElementById("ledger-goals-rail-body");
+    if (!body) return;
+    const goals = Array.isArray(this.state.goals) ? this.state.goals : [];
+    if (goals.length === 0) {
+      body.innerHTML = `<p class="goals-rail-empty">No goals yet. <a href="#goals" class="link-button">Set your first goal &rarr;</a></p>`;
+      return;
+    }
+    const active = goals.filter(g => g.status === "Active" || g.status === "In Progress").length;
+    const complete = goals.filter(g => g.status === "Complete").length;
+    const top = goals
+      .slice()
+      .sort((a, b) => {
+        const order = { "Active": 0, "In Progress": 1, "Complete": 2, "Paused": 3, "Abandoned": 4 };
+        return (order[a.status] ?? 9) - (order[b.status] ?? 9);
+      })
+      .slice(0, 5);
+    body.innerHTML = top.map(g => {
+      const cls = g.status === "Complete" ? "complete" : "active";
+      const sym = g.status === "Complete" ? "✓" : "●";
+      return `<span class="goals-rail-pill ${cls}" title="${this.escapeHtml(g.title || "")}"><span aria-hidden="true">${sym}</span>${this.escapeHtml(g.title || "Untitled goal")}</span>`;
+    }).join("") + (active + complete > 0 ? `<span class="goals-rail-empty">${active} active · ${complete} complete</span>` : "");
   }
 
   renderGoalsView() {
