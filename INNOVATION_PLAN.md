@@ -3,6 +3,17 @@
 > **Source:** Aggregated findings + follow-up clarifications from five founder test sessions.
 > **Status:** Active roadmap. Quick wins (Q1–Q4) ship in this iteration. The rest is sequenced.
 
+---
+
+## Shipped since plan revision
+
+> **Not in the original 5-session feedback set** — these shipped from direct founder-product conversations and architecture decisions that came out of using the system.
+
+- **Maturity-conditional insights (L0–L5)** — *commit `85d8cb5`*
+  - New `data/insights.js` table (Unmapped → Improved) selects a deterministic headline + first action + evidence citations keyed to the user's current maturity level. The dashboard's *"Where You Are"* widget renders this directly; the Gemini report prompt receives the same context and is constrained to align its `firstAction` with it (no LLM drift on the level's required direction). Adds the **hybrid insight model**: deterministic layer for direction, AI layer for elaboration.
+
+---
+
 The feedback surfaced 15 distinct observations. They cluster into four themes, and most of them are **structural** — the underlying flow (assessment → report → dashboard) needs reordering, not just restyling. Quick wins touch the small, low-risk items first so we can re-test the big ones on a tighter, more honest base.
 
 ---

@@ -35,9 +35,10 @@ app.js              SPA application logic (state, funnel, dashboard, report rend
 index.html          SPA markup (landing funnel + dashboard shell)
 index.css           Styles
 data/evidence.js    Shared, curated evidence library (imported by BOTH frontend + worker)
+data/insights.js    Maturity-conditional insight table L0-L5 (deterministic + hybrid AI grounding)
 worker/index.js     Worker API: auth, state, documents, AI report generation
 migrations/         D1 schema migrations
-app.test.js         Vitest suite (math, AI grounding, impact/cost helpers)
+app.test.js         Vitest suite (math, AI grounding, impact/cost helpers, insights)
 wrangler.jsonc      Worker config + bindings (D1, R2, Secrets Store, static assets)
 dist/               Vite build output (served as static assets; git-ignored)
 ```
@@ -60,6 +61,37 @@ are always labelled modeled, never measured; benchmarks state they are derived
 ranges; regulatory precedents carry a status/date because regulation moves; and
 the AI is constrained to cite **only** sources from the fact pack — never to invent
 a citation, statistic, or URL.
+
+### `data/insights.js` — the maturity-conditional insight table
+
+A status-aware insight layer that pairs with `data/evidence.js`. Where the
+evidence library answers *"what is true and where does it come from?"*, the
+insight table answers *"what should this user do next, given their maturity?"*
+
+- **`MATURITY_INSIGHTS`** — six deterministic rows, one per maturity level (L0 Unmapped → L5 Improved). Each row carries a `headline`, a `firstAction`, an `unlocksMilestone` (the in-app event that promotes the user to the next level), and a list of `evidenceCitations` resolved against real URLs via `sourceLinks()`.
+- **`selectInsight(state)`** — clamps `state.maturityLevel` to `[0,5]` and returns the matching row.
+- **`buildInsightContext(state)`** — emits a machine-readable block the AI prompt embeds verbatim, with the deterministic `firstAction` flagged as binding.
+
+**Hybrid mode (deterministic + AI):** the dashboard's *"Where You Are"* widget
+renders the deterministic headline + first action directly from this table —
+no LLM involvement, no drift. The Gemini report prompt receives the same
+context and is instructed to align its `firstAction` with the deterministic
+one (not contradict it), so the AI briefing elaborates on the level's required
+evidence instead of improvising a new direction.
+
+| Level | Title | First action (binding) | Evidence anchor |
+|---|---|---|---|
+| L0 | Unmapped | Pick the activity that represents your largest expected emission to anchor your first snapshot | GHG Protocol Corporate + Scope 3 Standard |
+| L1 | Mapped | Replace one modeled input with measured data (utility bill, cloud kWh, travel receipts) | GHG Protocol ICT + SCI spec |
+| L2 | Gated | Commit to a 1.5°C-aligned reduction target investors recognize (typically SBTi) | Science Based Targets initiative |
+| L3 | Metered | Verify your top hotspot with a full lifecycle methodology (ISO 14040/14044 or GHG Protocol Product Standard) | ISO 14040/14044 + GHG Protocol Product Standard |
+| L4 | Active | Gate handprint claims on additionality — the test that the reduction would not have happened anyway | Additionality + Project Frame |
+| L5 | Improved | Get external verification before publishing any avoided-emissions or net-positive claim | EU Green Claims Directive / Project Frame |
+
+**Honesty rules baked in:** every citation label resolves to a real URL via
+`sourceLinks()`; first actions reference existing in-app milestones so the
+promotion to the next level is observable, not aspirational; and the AI is
+explicitly forbidden from contradicting the deterministic headline.
 
 ### Foundation Model / Enterprise AI Handling
 
@@ -102,6 +134,12 @@ issues, recent news, and analogous peer-company incidents. Search queries and
 web sources are surfaced in the AI briefing when Gemini returns grounding
 metadata.
 
+**Maturity-conditional grounding:** the report also receives the user's current
+maturity-level insight from `data/insights.js` and is constrained to align its
+`firstAction` with the deterministic recommendation (not contradict it). The
+dashboard's *"Where You Are"* widget shows the same insight deterministically,
+independent of whether the AI briefing has been generated.
+
 ---
 
 ## Product flow
@@ -115,6 +153,10 @@ metadata.
 - The report shows: modeled footprint + hotspots, **impact beyond carbon**, a
   **peer benchmark** band, a **cost-exposure** estimate, **relevant precedents**,
   a sourced **methodology** breakdown, and an **AI briefing** with cited sources.
+- The Goals view surfaces a **"Where You Are"** widget — the maturity-conditional
+  insight from `data/insights.js` — that selects a deterministic headline + first
+  action + evidence citations keyed to the user's current maturity level. The AI
+  briefing elaborates on this same direction rather than improvising its own.
 - **Report History:** Users can save, delete, and open historical report snapshots of their startup's assessments directly inside the dashboard.
 
 
