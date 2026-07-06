@@ -482,9 +482,9 @@ function IntroPage() {
           title="The report turns GTR into a climate startup product"
           summary="The research report is the core document in the archive. It explains why the project narrowed from broad startup climate support into a climate startup +/- impact dashboard, why that wedge is credible, and what has to be tested before the product expands."
           links={[
-            ["/slides/docs/fieldwork-report/", "Fieldwork report"],
-            ["/slides/docs/stage-1/", "Stage 1 PRD"],
-            ["/slides/slides/climate-goal-platform/", "Product deck"],
+            ["/gtr/docs/fieldwork-report/", "Fieldwork report"],
+            ["/gtr/docs/stage-1/", "Stage 1 PRD"],
+            ["/gtr/slides/climate-goal-platform/", "Product deck"],
           ]}
         />
 
@@ -622,8 +622,8 @@ function IntroPage() {
             <li>Whether AI-assisted labels and clusters remain source-linked and reversible in practice.</li>
           </ul>
           <div className="report-next-links">
-            <a href="/slides/docs/fieldwork-report/">Open the fieldwork report <span>→</span></a>
-            <a href="/slides/docs/stage-1/">Read Stage 1 PRD <span>→</span></a>
+            <a href="/gtr/docs/fieldwork-report/">Open the fieldwork report <span>→</span></a>
+            <a href="/gtr/docs/stage-1/">Read Stage 1 PRD <span>→</span></a>
           </div>
         </section>
       </div>
@@ -641,10 +641,10 @@ function DocsOverviewPage() {
           title="The docs are where the product logic lives"
           summary="These pages explain the project direction in report form: the fieldwork report, the Stage 1 PRD, and the Stage 2 PRD. The research report lives in Overview. The point is not to compress them into a pitch, but to preserve the reasoning."
           links={[
-            ["/slides/", "Research report"],
-            ["/slides/docs/fieldwork-report/", "Fieldwork report"],
-            ["/slides/docs/stage-1/", "Stage 1 PRD"],
-            ["/slides/docs/stage-2/", "Stage 2 PRD"],
+            ["/gtr/", "Research report"],
+            ["/gtr/docs/fieldwork-report/", "Fieldwork report"],
+            ["/gtr/docs/stage-1/", "Stage 1 PRD"],
+            ["/gtr/docs/stage-2/", "Stage 2 PRD"],
           ]}
         />
 
@@ -686,10 +686,10 @@ function DocsOverviewPage() {
           <span className="report-number">2.3</span>
           <h2>Go deeper</h2>
           <div className="report-next-links">
-            <a href="/slides/docs/fieldwork-report/">Fieldwork report <span>→</span></a>
-            <a href="/slides/">Read the report <span>→</span></a>
-            <a href="/slides/docs/stage-1/">Stage 1 PRD <span>→</span></a>
-            <a href="/slides/docs/stage-2/">Stage 2 PRD <span>→</span></a>
+            <a href="/gtr/docs/fieldwork-report/">Fieldwork report <span>→</span></a>
+            <a href="/gtr/">Read the report <span>→</span></a>
+            <a href="/gtr/docs/stage-1/">Stage 1 PRD <span>→</span></a>
+            <a href="/gtr/docs/stage-2/">Stage 2 PRD <span>→</span></a>
           </div>
         </section>
       </div>
@@ -707,9 +707,9 @@ function FieldworkReportPage() {
           title="Prototype testing for a climate impact platform for startups"
           summary="The journey storyboard defined the founder experience first. From it, the team built and tested two A/B pairs—Assessment 1 vs 2 and Report 1 vs 2—plus a dashboard concept for continued use."
           links={[
-            ["/slides/docs/fieldwork-report/feedback/", "Presentation feedback"],
-            ["/slides/", "Research report"],
-            ["/slides/docs/stage-1/", "Stage 1 PRD"],
+            ["/gtr/docs/fieldwork-report/feedback/", "Presentation feedback"],
+            ["/gtr/", "Research report"],
+            ["/gtr/docs/stage-1/", "Stage 1 PRD"],
           ]}
         />
 
@@ -733,9 +733,9 @@ function FieldworkReportPage() {
           <p>The team began with an eight-stage journey storyboard: discovery at demo day, referral, mobile entry, assessment, instant report, dashboard use, team access, and extended use. The prototypes were built around that journey. Assessment 1 and Assessment 2 tested two intake structures; Report 1 and Report 2 tested two result formats; the dashboard explored what continued use could look like after the instant report. Five participants completed the founder-role walkthrough, and their feedback was captured in the provided transcript.</p>
           <aside className="report-note"><b>Study boundary</b><p>All five participants were asked to act as a startup founder. Ted was the only actual founder; the other four brought technical, investment, peer-design, and accessibility perspectives to the founder scenario. The study supports prototype and comprehension decisions, not product-market-fit or calculation-accuracy claims.</p></aside>
           <div className="report-next-links">
-            <a href="/slides/docs/fieldwork-report/slides/">Present fieldwork slides <span>→</span></a>
-            <a href="/slides/docs/fieldwork-report/feedback/">Presentation feedback <span>→</span></a>
-            <a href="/slides/">Research report <span>→</span></a>
+            <a href="/gtr/docs/fieldwork-report/slides/">Present fieldwork slides <span>→</span></a>
+            <a href="/gtr/docs/fieldwork-report/feedback/">Presentation feedback <span>→</span></a>
+            <a href="/gtr/">Research report <span>→</span></a>
           </div>
         </section>
 
@@ -747,7 +747,7 @@ function FieldworkReportPage() {
           <h3>1. Storyboard defined the experience</h3>
           <p><code>storyboard.jpeg</code> mapped the founder journey from initial awareness through assessment, instant results, dashboard use, team access, and longer-term use. It gave the sessions a shared scenario and determined which prototype moments needed to be built.</p>
           <FieldworkFigure
-            src="/assets/images/slides/fieldwork/user-journey-storyboard.jpg"
+            src="/assets/images/gtr/fieldwork/user-journey-storyboard.jpg"
             alt="Eight-panel founder journey storyboard"
             caption="storyboard.jpeg: discovery at demo day → referral → mobile assessment → instant report → dashboard → team access → extended use."
             label="Storyboard"
@@ -773,31 +773,31 @@ function FieldworkReportPage() {
           <p>Paper and screen prototypes shown in sessions. Sample company in printed materials: pre-seed hardware and clean-energy startup.</p>
           <div className="prototype-grid">
             <FieldworkFigure
-              src="/assets/images/slides/fieldwork/onboarding-sheets.jpg"
+              src="/assets/images/gtr/fieldwork/onboarding-sheets.jpg"
               alt="Continuous handwritten free impact assessment"
               caption="2A · Assessment 1 / assessment1.jpeg: continuous long-form assessment."
               label="Fig. 2A"
             />
             <FieldworkFigure
-              src="/assets/images/slides/fieldwork/onboarding-flow-4up.jpg"
+              src="/assets/images/gtr/fieldwork/onboarding-flow-4up.jpg"
               alt="Four hand-drawn screens for Assessment 2"
               caption="2B · Assessment 2 / assessment2-mobile.jpeg: four-screen mobile flow with progress, Back, and Next controls."
               label="Fig. 2B"
             />
             <FieldworkFigure
-              src="/assets/images/slides/fieldwork/assessment-report-print.jpg"
+              src="/assets/images/gtr/fieldwork/assessment-report-print.jpg"
               alt="Printed two-page instant impact assessment report"
               caption="3A · Report 1 / report1-information.jpeg: information-led result with footprint, handprint, hotspots, comparison, cost exposure, methodology, and share actions."
               label="Fig. 3A"
             />
             <FieldworkFigure
-              src="/assets/images/slides/fieldwork/assessment-report-sketch.jpg"
+              src="/assets/images/gtr/fieldwork/assessment-report-sketch.jpg"
               alt="Visual infographic instant impact report"
               caption="3B · Report 2 / report2-infographic.jpeg: infographic result with metric cards, gauge, and charts."
               label="Fig. 3B"
             />
             <FieldworkFigure
-              src="/assets/images/slides/fieldwork/dashboard-sketch.jpg"
+              src="/assets/images/gtr/fieldwork/dashboard-sketch.jpg"
               alt="Hand-drawn dashboard overview sketch"
               caption="4 · dashboard.jpeg: continued-use concept with footprint, handprint, derived net, maturity, goals, milestones, and projection."
               label="Fig. 4"
@@ -915,8 +915,8 @@ function FieldworkReportPage() {
           </ol>
           <aside className="report-note"><b>Changes &amp; Future Direction conclusion</b><p>The next prototype should be a narrower hybrid, not a larger feature set. Its job is to prove that founders understand the value, trust the data request, complete the assessment without help, and understand the visual result before the dashboard expands.</p></aside>
           <div className="report-next-links">
-            <a href="/slides/docs/fieldwork-report/slides/">Present fieldwork slides <span>→</span></a>
-            <a href="/slides/docs/stage-1/">Stage 1 PRD <span>→</span></a>
+            <a href="/gtr/docs/fieldwork-report/slides/">Present fieldwork slides <span>→</span></a>
+            <a href="/gtr/docs/stage-1/">Stage 1 PRD <span>→</span></a>
           </div>
         </section>
 
@@ -1038,7 +1038,7 @@ function FieldworkReportPage() {
           <h3>Journey storyboard — built first</h3>
           <p>The storyboard established the founder scenario before the interface variants were made. It connected discovery, assessment, instant results, dashboard use, team access, and extended use into one testable journey.</p>
           <FieldworkFigure
-            src="/assets/images/slides/fieldwork/user-journey-storyboard.jpg"
+            src="/assets/images/gtr/fieldwork/user-journey-storyboard.jpg"
             alt="Hand-drawn eight-panel user journey storyboard from demo day awareness through assessment, report sharing, dashboard use, and extended use"
             caption="storyboard.jpeg: eight-stage founder journey used to define the Assessment 1/2, Report 1/2, and dashboard prototypes."
           />
@@ -1061,12 +1061,12 @@ function FieldworkReportPage() {
             ))}
           </div>
           <FieldworkFigure
-            src="/assets/images/slides/fieldwork/onboarding-flow-4up.jpg"
+            src="/assets/images/gtr/fieldwork/onboarding-flow-4up.jpg"
             alt="Four hand-drawn screens for Assessment 2"
             caption="Assessment 2 / assessment2-mobile.jpeg: four screens for company profile, optional local documents, EMITS/AVOIDS activity selection, free-text description, and generate assessment."
           />
           <FieldworkFigure
-            src="/assets/images/slides/fieldwork/onboarding-sheets.jpg"
+            src="/assets/images/gtr/fieldwork/onboarding-sheets.jpg"
             alt="Five handwritten paper sheets showing the free impact assessment intake flow"
             caption="Assessment 1 / assessment1.jpeg: continuous long-form layout with business model, team size, evidence prompts, activity selection, and generate-assessment CTA."
           />
@@ -1083,7 +1083,7 @@ function FieldworkReportPage() {
             </table>
           </div>
           <FieldworkFigure
-            src="/assets/images/slides/fieldwork/funding-stages.jpg"
+            src="/assets/images/gtr/fieldwork/funding-stages.jpg"
             alt="Handwritten funding stage list: Pre-Seed, Seed, Series A, Series B plus"
             caption="Investment-stage choices in Assessment 1 (A)."
             label=""
@@ -1094,19 +1094,19 @@ function FieldworkReportPage() {
           <h3>Report 1 (A) / Report 2 (B)</h3>
           <p><b>Report 1</b> (<code>report1-information.jpeg</code>) was information-led: footprint and handprint values, ranked hotspot bars, peer range, cost exposure, methodology, impact beyond carbon, and share/account actions. <b>Report 2</b> (<code>report2-infographic.jpeg</code>) presented the same assessment as visual cards: handprint, maturity gauge, footprint, donut charts for hotspots, and energy/water/waste cards.</p>
           <FieldworkFigure
-            src="/assets/images/slides/fieldwork/assessment-report-print.jpg"
+            src="/assets/images/gtr/fieldwork/assessment-report-print.jpg"
             alt="Printed two-page instant impact assessment report with footprint, handprint, hotspots, peer comparison, and methodology"
             caption="Report 1 / report1-information.jpeg: information-led assessment with footprint, handprint, hotspots, peer comparison, cost exposure, methodology, and share actions."
           />
           <FieldworkFigure
-            src="/assets/images/slides/fieldwork/assessment-report-sketch.jpg"
+            src="/assets/images/gtr/fieldwork/assessment-report-sketch.jpg"
             alt="Pencil sketch of the instant impact assessment report layout"
             caption="Report 2 / report2-infographic.jpeg: infographic assessment with metric cards, maturity gauge, hotspot charts, and impact-beyond-carbon cards."
           />
           <h3>Dashboard concept</h3>
           <p>Dashboard sketch: footprint, handprint, derived net, maturity gauge, climate goals, milestones, impact projection. Sample values differ from instant report (footprint 42.6, handprint 108, net -65.4 tCO₂e on sketch vs 10.7 / ~20 on report). Participants asked to define impact projection, milestone diagram, net impact, and maturity levels.</p>
           <FieldworkFigure
-            src="/assets/images/slides/fieldwork/dashboard-sketch.jpg"
+            src="/assets/images/gtr/fieldwork/dashboard-sketch.jpg"
             alt="Hand-drawn dashboard overview sketch with footprint, handprint, net impact, maturity level, climate goals, milestones, and impact projection"
             caption="dashboard.jpeg: separate footprint and handprint, derived net, maturity, goals, milestones, and impact projection."
           />
@@ -1145,8 +1145,8 @@ function Stage1Page() {
           title="The MVP is a climate startup impact dashboard"
           summary="Stage 1 defines the first shippable product: a two-sided dashboard for climate startups that tracks positive and negative impact separately, applies integrity gates, and turns the result into weekly action."
           links={[
-            ["/slides/", "Back to the report"],
-            ["/slides/docs/stage-2/", "Read Stage 2"],
+            ["/gtr/", "Back to the report"],
+            ["/gtr/docs/stage-2/", "Read Stage 2"],
           ]}
         />
 
@@ -1218,9 +1218,9 @@ function Stage2OverviewPage() {
           title="Stage 2 ships a working web app"
           summary="Stage 2 turned the Stage 1 PRD into a deployed Cloudflare Workers product. The full breakdown — the cross-cutting goals, what changed from Stage 1, the auth / storage stack, the non-goals, the open questions, and all eleven sub-PRDs (Onboarding A, Onboarding B, Report A, Dashboard A, Report + Dashboard Connected, Insights, The Model, Auth & Access, Foundation-Model Handling, Multi-Sector Reports, Admin & Platform) — is on this single page. Scroll, or use the contents below."
           links={[
-            ["/slides/docs/stage-1/", "Review Stage 1 PRD"],
-            ["/slides/docs/fieldwork-report/", "Fieldwork report"],
-            ["/slides/docs/fieldwork-report/feedback/", "Presentation feedback"],
+            ["/gtr/docs/stage-1/", "Review Stage 1 PRD"],
+            ["/gtr/docs/fieldwork-report/", "Fieldwork report"],
+            ["/gtr/docs/fieldwork-report/feedback/", "Presentation feedback"],
           ]}
         />
 
@@ -1767,11 +1767,11 @@ function Stage2OverviewPage() {
 }
 
 function isDocsIndex(path) {
-  return path === "/slides/docs" || path === "/slides/docs/" || path.endsWith("/slides/docs/index.html");
+  return path === "/gtr/docs" || path === "/gtr/docs/" || path.endsWith("/gtr/docs/index.html");
 }
 
 function isLegacySlidesPath(path) {
-  return path.includes("/slides/slides/");
+  return path.includes("/gtr/slides/");
 }
 
 function isLegacyResearchReportPath(path) {
@@ -1783,12 +1783,12 @@ function App() {
 
   useEffect(() => {
     if (isDocsIndex(path)) {
-      window.location.replace("/slides/docs/fieldwork-report/");
+      window.location.replace("/gtr/docs/fieldwork-report/");
     } else if (isLegacySlidesPath(path)) {
-      window.location.replace("/slides/docs/fieldwork-report/slides/");
+      window.location.replace("/gtr/docs/fieldwork-report/slides/");
     } else if (isLegacyResearchReportPath(path)) {
       const hash = window.location.hash || "";
-      window.location.replace(`/slides/${hash}`);
+      window.location.replace(`/gtr/${hash}`);
     }
   }, [path]);
 

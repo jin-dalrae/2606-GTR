@@ -1,17 +1,17 @@
 export const gtrPages = [
-  ["intro", "0", "Overview", "/slides/"],
-  ["first-prototype", "1", "First Prototype", "/slides/docs/stage-1/"],
-  ["second-prototype", "2", "Second Prototype", "/slides/docs/stage-2/"],
+  ["intro", "0", "Overview", "/gtr/"],
+  ["first-prototype", "1", "First Prototype", "/gtr/docs/stage-1/"],
+  ["second-prototype", "2", "Second Prototype", "/gtr/docs/stage-2/"],
 ];
 
 export const firstPrototypeChildren = [
-  ["stage-1", "1.1", "Stage 1 PRD", "/slides/docs/stage-1/"],
-  ["fieldwork-report", "1.2", "Fieldwork Report", "/slides/docs/fieldwork-report/"],
-  ["fieldwork-feedback", "1.3", "Presentation Feedback", "/slides/docs/fieldwork-report/feedback/"],
+  ["stage-1", "1.1", "Stage 1 PRD", "/gtr/docs/stage-1/"],
+  ["fieldwork-report", "1.2", "Fieldwork Report", "/gtr/docs/fieldwork-report/"],
+  ["fieldwork-feedback", "1.3", "Presentation Feedback", "/gtr/docs/fieldwork-report/feedback/"],
 ];
 
 export const secondPrototypeChildren = [
-  ["stage-2", "2.1", "Stage 2 PRD", "/slides/docs/stage-2/"],
+  ["stage-2", "2.1", "Stage 2 PRD", "/gtr/docs/stage-2/"],
 ];
 
 export const stage2PrdChildren = [];
@@ -19,14 +19,14 @@ export const stage2PrdChildren = [];
 export const fieldworkSlide = {
   id: "fieldwork-slides",
   label: "Fieldwork slides",
-  path: "/slides/docs/fieldwork-report/slides/",
+  path: "/gtr/docs/fieldwork-report/slides/",
   slug: "gtr-fieldwork-week",
 };
 
 export const fieldworkFeedback = {
   id: "fieldwork-feedback",
   label: "Presentation feedback",
-  path: "/slides/docs/fieldwork-report/feedback/",
+  path: "/gtr/docs/fieldwork-report/feedback/",
 };
 
 export const fieldworkSubnav = [fieldworkSlide];
@@ -48,7 +48,7 @@ export function GTRHeader({ meta = "Docs archive · 2026" }) {
   const [open, setOpen] = React.useState(false);
   return (
     <header className="site-header">
-      <a className="wordmark" href="/slides/" aria-label="GTR home">
+      <a className="wordmark" href="/gtr/" aria-label="GTR home">
         <GTRMark /> GTR
       </a>
       <button className="menu-button" onClick={() => setOpen(!open)} aria-expanded={open}>Menu</button>
@@ -133,7 +133,7 @@ export function GTRSidebar({ active, subActive }) {
     <aside className="chapter-rail" aria-label="GTR archive">
       <nav>
         <p>Index</p>
-        <a className={active === "intro" ? "active" : ""} href="/slides/">
+        <a className={active === "intro" ? "active" : ""} href="/gtr/">
           <span>0</span><b>Overview</b><i>→</i>
         </a>
 
@@ -183,7 +183,7 @@ export function GTRSidebar({ active, subActive }) {
           <React.Fragment>
             <a
               className={`rail-item--depth-1 ${active === "second-prototype" && subActive === "stage-2" ? "active" : ""}`}
-              href="/slides/docs/stage-2/"
+              href="/gtr/docs/stage-2/"
             >
               <span>2.1</span><b>Stage 2 PRD</b><i>→</i>
             </a>
