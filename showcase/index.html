@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Climate Startup Impact Dashboard | GTR Handprint</title>
+  <meta name="description" content="A gamified, two-sided environmental impact dashboard tracking positive handprints and negative footprints with rigorous additionality gates for climate startups.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/index.css">
+</head>
+<body>
+
+  <div class="showcase-bar">
+    <div class="showcase-brand">
+      <span class="showcase-badge">SHOWCASE</span>
+    </div>
+    <div class="showcase-nav-links">
+      <a href="/" class="showcase-nav-btn active">Main Showcase</a>
+      <a href="/prototype0" class="showcase-nav-btn">Prototype 0</a>
+      <a href="/prototype1" class="showcase-nav-btn">Prototype 1</a>
+    </div>
+    <div class="showcase-selector-container">
+      <label for="showcase-page-select" class="showcase-label">Jump to:</label>
+      <select id="showcase-page-select" class="showcase-select" onchange="window.app.showcaseNavigate(this.value)">
+        <optgroup label="Marketing Funnel">
+          <option value="landing">1. Landing Page</option>
+          <option value="methodology">2. Methodology Detail</option>
+          <option value="onboard">3. Onboarding Wizard</option>
+          <option value="report">4. Instant AI Report</option>
+        </optgroup>
+        <optgroup label="Founder Dashboard">
+          <option value="ledger">5. Live Carbon Ledger</option>
+          <option value="goals">6. Goal Board &amp; Maturity</option>
+          <option value="radar">7. Environmental Risk Radar</option>
+          <option value="share">8. Investor Diligence Share</option>
+          <option value="extend">9. Team &amp; next steps</option>
+          <option value="history">10. Snapshot History</option>
+          <option value="admin">11. Platform Administration</option>
+          <option value="game">12. Interactive Climate Game</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="showcase-nav-links">
+      <a href="/slides/" class="showcase-nav-btn showcase-slides-btn" target="_blank">Research Slides</a>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       PRE-LOGIN FUNNEL (Storyboard steps 3-5: Enter -> Engage -> Engage)
+       Landing  ->  Free Assessment Onboarding  ->  Instant Shareable Report
+       ====================================================================== -->
+  <div id="funnel" class="funnel-root">
+
+    <!-- Shared lightweight top bar -->
+    <header class="funnel-topbar">
+      <div class="logo-container">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+        <span class="logo-text">GTR Handprint</span>
+      </div>
+      <div class="funnel-step-indicator" id="fn-step-indicator" aria-live="polite">
+        <span class="fn-step-pill" id="fn-step-pill"></span>
+        <span class="fn-step-eta" id="fn-step-eta"></span>
+      </div>
+      <div class="funnel-topbar-links">
+        <a href="#landing-methodology" class="funnel-methodology-link" data-scroll-target="landing-methodology">Methodology</a>
+        <a href="#" class="funnel-invite-link" id="fn-invite-link">Have an invite?</a>
+        <a href="#" class="funnel-login-link btn-topbar-login" id="fn-login-link">Log in</a>
+      </div>
+    </header>
+
+    <!-- 3. ENTER — Landing -->
+    <section class="funnel-screen active" id="fn-landing">
+      <div class="landing-hero">
+        <div class="landing-eyebrow">
+          <span class="live-dot animate-pulse"></span>
+          For Seed–Series B climate-tech founders · Self-serve · No consultants
+        </div>
+        <h1 class="landing-title">Model your startup's<br><span class="grad-handprint">real climate impact</span> in one report.</h1>
+        <p class="landing-sub">A self-serve climate impact assessment built for early-stage climate startups. Answer 6 questions; get an investor-grade snapshot of your footprint, your avoided emissions, and your data maturity — without spreadsheets, consultants, or jargon.</p>
+        <div class="landing-cta-row">
+          <button class="btn btn-primary btn-lg" id="fn-cta-start">Get your free assessment</button>
+          <a href="#landing-methodology" class="landing-methodology-link" data-scroll-target="landing-methodology">View methodology</a>
+          <span class="landing-cta-note">Free · No credit card · ~3 minutes · Your data stays private</span>
+        </div>
+
+        <div class="landing-steps">
+          <div class="landing-step">
+            <div class="landing-step-num">1</div>
+            <div>
+              <strong>Answer 6 questions</strong>
+              <span>Headcount, cloud spend, business model, energy, travel. Dropdowns — no free text.</span>
+            </div>
+          </div>
+          <div class="landing-step-arrow">&rarr;</div>
+          <div class="landing-step">
+            <div class="landing-step-num">2</div>
+            <div>
+              <strong>Get your instant report</strong>
+              <span>Footprint, hotspots, peer benchmark, and an AI briefing grounded in real sources.</span>
+            </div>
+          </div>
+          <div class="landing-step-arrow">&rarr;</div>
+          <div class="landing-step">
+            <div class="landing-step-num">3</div>
+            <div>
+              <strong>Open the dashboard</strong>
+              <span>Track goals, milestones, and improvement over time. Share only if you choose to.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Private intake via MCP -->
+      <div class="landing-mcp">
+        <div class="mcp-head">
+          <span class="funnel-kicker">Prefer privacy?</span>
+          <h2>Run the assessment from your own AI client.</h2>
+          <p class="subtitle">We expose the full climate-impact assessment as an MCP server. Add it to Claude Desktop or Cursor, answer the questions in your own AI client, and get the report back without ever uploading a document to this site. Your data stays in your AI client. The dashboard is opt-in.</p>
+        </div>
+
+        <div class="mcp-grid">
+          <div class="card glass-card mcp-step">
+            <div class="mcp-step-num">1</div>
+            <h3>Add the server</h3>
+            <p>Point your MCP client at our remote server. No install, no clone, no env vars.</p>
+            <pre class="mcp-code">URL:
+https://2606gtr.dalrae-jin-work.workers.dev/mcp
+Transport: Streamable HTTP
+Auth: none (anonymous)</pre>
+          </div>
+
+          <div class="card glass-card mcp-step">
+            <div class="mcp-step-num">2</div>
+            <h3>Ask your AI</h3>
+            <p>Tell Claude or Cursor: <em>"Help me do a climate impact assessment for my stealth startup."</em> The AI calls the MCP tools, asks the questions, and builds a snapshot.</p>
+            <pre class="mcp-code">Tools used:
+  list_activities
+  compute_snapshot
+  generate_report
+  list_glossary_terms
+  list_frameworks</pre>
+          </div>
+
+          <div class="card glass-card mcp-step">
+            <div class="mcp-step-num">3</div>
+            <h3>Get the report</h3>
+            <p>You see the full AI-graded report in your AI client — headline, hotspots, peer benchmark, risk radar, cited sources. Save to the dashboard only if you choose to.</p>
+            <pre class="mcp-code">Output: AI briefing in chat
+         Footprint + handprint snapshot
+         Share/dashboard: opt-in only</pre>
+          </div>
+        </div>
+
+        <details class="mcp-config">
+          <summary>Claude Desktop config (claude_desktop_config.json)</summary>
+          <pre class="mcp-code">{ "mcpServers": {
+  "climate-impact": {
+    "url": "https://2606gtr.dalrae-jin-work.workers.dev/mcp"
+  }
+} }</pre>
+        </details>
+      </div>
+
+      <!-- Customer stories -->
+      <div class="landing-stories">
+        <div class="stories-head">
+          <span class="funnel-kicker">How we help</span>
+          <h2>What founders walk in not knowing — and leave with</h2>
+          <p class="subtitle">Two startups, two blind spots we surfaced, and what we helped them do about it.</p>
+        </div>
+
+        <div class="stories-grid">
+
+          <!-- Story 1: RAG SaaS -->
+          <article class="story-card card glass-card">
+            <div class="story-card-head">
+              <div class="story-icon story-icon-saas">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              </div>
+              <div>
+                <h3>Verba AI</h3>
+                <span class="story-tag">RAG SaaS · Seed</span>
+              </div>
+            </div>
+            <p class="story-business"><strong>A 12-person AI startup</strong> building an assistant that answers staff questions over a company's internal documents. They came to us sure their footprint was tiny — small team, no office, all cloud.</p>
+
+            <div class="story-row">
+              <span class="story-row-label">What we showed them</span>
+              <p>In 15 minutes our assessment pinned <strong>cloud compute as most of their footprint</strong> — the part they'd assumed was free. It also flagged the disclosure rules their enterprise customers already report under, which would soon land on Verba's desk.</p>
+            </div>
+            <div class="story-row">
+              <span class="story-row-label handprint-text">How we helped them act</span>
+              <p>The dashboard now tracks their compute month to month, so the number stops being a guess. We also matched them with an advisor to set up <strong>verified cloud-emissions data</strong> before their next enterprise deal asked for it.</p>
+            </div>
+            <div class="story-row">
+              <span class="story-row-label">What they walked away with</span>
+              <p>A clear, shareable picture of where they stand, a plan their team owns, and an answer ready when a buyer asks — instead of a scramble.</p>
+            </div>
+          </article>
+
+          <!-- Story 2: Pet service -->
+          <article class="story-card card glass-card">
+            <div class="story-card-head">
+              <div class="story-icon story-icon-pet">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="4" r="2"></circle><circle cx="18" cy="8" r="2"></circle><circle cx="4" cy="8" r="2"></circle><circle cx="6.5" cy="14" r="2"></circle><circle cx="15.5" cy="14" r="2"></circle><path d="M8 18a4 4 0 0 1 8 0c0 2-2 3-4 3s-4-1-4-3z"></path></svg>
+              </div>
+              <div>
+                <h3>Trottr</h3>
+                <span class="story-tag">Pet services · Series A</span>
+              </div>
+            </div>
+            <p class="story-business"><strong>A Series A pet-care company</strong> delivering fresh, refrigerated meals and on-demand dog walking. They thought the app was their impact, and wanted a number for an upcoming raise.</p>
+
+            <div class="story-row">
+              <span class="story-row-label">What we showed them</span>
+              <p>The report pointed somewhere they hadn't looked: <strong>their food ingredients and cold delivery</strong>, not the app, carried almost all of it. It also put a date on a new EU rule heading straight for their suppliers.</p>
+            </div>
+            <div class="story-row">
+              <span class="story-row-label handprint-text">How we helped them act</span>
+              <p>The dashboard turned that into owned tasks with deadlines, and the Risk Radar gave them a countdown to the rule. We brought in a <strong>supply-chain specialist</strong> to get their sourcing compliant before the deadline.</p>
+            </div>
+            <div class="story-row">
+              <span class="story-row-label">What they walked away with</span>
+              <p>An investor-ready impact story, a team that knows what to fix first, and a head start on a regulation that caught their competitors off guard.</p>
+            </div>
+          </article>
+
+        </div>
+        <p class="stories-foot">Illustrative composites of the founders we work with. Your assessment finds the version of this story hiding in <em>your</em> numbers.</p>
+      </div>
+
+      <!-- Data security & trust -->
+      <div class="landing-trust">
+        <div class="trust-inner">
+          <div class="trust-lead">
+            <span class="funnel-kicker">Security &amp; privacy</span>
+            <h2>Your numbers never leave your control</h2>
+            <p class="subtitle">Handing over a deck and financials is a real leap of faith. Here is exactly what happens to them.</p>
+          </div>
+          <div class="trust-points">
+            <div class="trust-point">
+              <div class="trust-ic" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              </div>
+              <strong>We don't keep your files</strong>
+              <p>Your deck and accounts are read in your browser to build the assessment — the files never reach our servers. We keep the insights, not the documents.</p>
+            </div>
+            <div class="trust-point">
+              <div class="trust-ic" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </div>
+              <strong>Encrypted and locked to you</strong>
+              <p>Your dashboard is stored encrypted and tied to your account. Only you and the teammates you invite can open it.</p>
+            </div>
+            <div class="trust-point">
+              <div class="trust-ic" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17.94 17.94A10 10 0 0 1 12 20c-7 0-11-8-11-8a18 18 0 0 1 5.06-5.94M9.9 4.24A9 9 0 0 1 12 4c7 0 11 8 11 8a18 18 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              </div>
+              <strong>Never sold, never trained on</strong>
+              <p>We never sell or share your data, and we don't use it to train AI. We don't open your workspace for testing or any other reason.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing -->
+      <div class="landing-pricing">
+        <div class="pricing-head">
+          <span class="funnel-kicker">Pricing</span>
+          <h2>Start free. Upgrade when you're ready to prove it.</h2>
+        </div>
+        <div class="pricing-grid">
+          <div class="price-card">
+            <span class="price-name">Free</span>
+            <div class="price-amount">$0</div>
+            <ul class="price-feats">
+              <li>Instant impact assessment</li>
+              <li>Live dashboard &amp; goal board</li>
+              <li>Invite your team</li>
+            </ul>
+            <button class="btn btn-secondary w-full" id="fn-price-free" type="button">Get started</button>
+          </div>
+          <div class="price-card price-card-pro">
+            <span class="price-flag">✦ Free for a limited time</span>
+            <span class="price-name">Pro</span>
+            <div class="price-amount"><s>$490</s> <span class="price-now">$0</span><small>/mo</small></div>
+            <ul class="price-feats">
+              <li>Everything in Free</li>
+              <li>AI briefing &amp; document analysis</li>
+              <li>Verified data connections (cloud, utility, accounting)</li>
+              <li>Investor-grade diligence export</li>
+            </ul>
+            <button class="btn btn-primary w-full" id="fn-price-pro" type="button">Claim Pro free</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dedicated Methodology screen -->
+    <section class="funnel-screen" id="fn-methodology">
+      <div class="funnel-narrow">
+        <div style="margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between;">
+          <button class="btn btn-secondary" id="fn-methodology-back" type="button" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 500;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Back to Landing
+          </button>
+          <button class="btn btn-primary" id="fn-methodology-start" type="button">
+            Get your free assessment &rarr;
+          </button>
+        </div>
+
+        <div class="landing-methodology" id="landing-methodology" style="margin-top: 0; padding-top: 0;">
+          <div class="methodology-landing-head">
+            <span class="funnel-kicker">Methodology</span>
+            <h2>How the assessment is modeled</h2>
+            <p class="subtitle">The first report is a directional model. It is designed to surface the likely hotspots and evidence gaps fast, then improve as you replace defaults with measured data.</p>
+            <p class="methodology-audience"><strong>Built for</strong> Seed–Series B climate-tech founders modeling their first investor-grade snapshot. <strong>Not built for</strong> mature enterprise sustainability teams that already have audited Scope 1–3 data, or for pre-revenue hobby projects without a clear operating footprint.</p>
+          </div>
+          <div class="methodology-landing-grid">
+            <div class="methodology-landing-item">
+              <span>01</span>
+              <h3>Context</h3>
+              <p>We use your company profile, business model, team size, website text, founder notes, and selected activities to understand the operating situation.</p>
+            </div>
+            <div class="methodology-landing-item">
+              <span>02</span>
+              <h3>Footprint Model</h3>
+              <p>Each activity maps to a modeled annual emission factor in tCO2e, grouped across Scope 1, Scope 2, and Scope 3 categories.</p>
+            </div>
+            <div class="methodology-landing-item">
+              <span>03</span>
+              <h3>Uncertainty</h3>
+              <p>Every modeled factor carries an uncertainty range. The report combines those ranges with root-sum-of-squares propagation.</p>
+            </div>
+            <div class="methodology-landing-item">
+              <span>04</span>
+              <h3>Verification</h3>
+              <p>After login, the dashboard turns the preview into goals, Risk Radar items, evidence gaps, and a path to replace estimates with metered sources.</p>
+            </div>
+          </div>
+          <div class="card glass-card report-methodology landing-methodology-detail">
+            <div class="methodology-head">
+              <h3>Detailed Factor Methodology</h3>
+              <span>Public model</span>
+            </div>
+            <p>These are the default factors available to the instant assessment before measured data is connected. A company-specific report shows only the activities selected for that startup.</p>
+            <ul class="methodology-points">
+              <li><strong>Inputs:</strong> company profile, business model, team size, website context, founder notes, and selected activities.</li>
+              <li><strong>Evidence level:</strong> defaults are modelled estimates until replaced with metered cloud, utility, travel, vendor, logistics, or source-document data.</li>
+              <li><strong>Uncertainty:</strong> every modelled factor carries an uncertainty range that propagates into the footprint total.</li>
+            </ul>
+            <ul id="landing-methodology-list" class="methodology-factor-list"></ul>
+            <div class="methodology-frameworks">
+              <div class="methodology-frameworks-head">Standards &amp; theory this rests on</div>
+              <ul id="landing-frameworks-list" class="methodology-framework-list"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. ENGAGE — Assessment onboarding (upload + questions) -->
+    <section class="funnel-screen" id="fn-onboard">
+      <div class="funnel-narrow">
+        <div class="funnel-screen-head">
+          <span class="funnel-kicker">Free Impact Assessment</span>
+          <h2>Tell us about your startup</h2>
+          <p class="subtitle">About two minutes. We turn it into an instant snapshot of your carbon footprint, your biggest hotspots, and where to act first.</p>
+        </div>
+
+        <div class="wizard-progress" id="wizard-progress" aria-label="Assessment progress">
+          <div class="wizard-progress-track">
+            <div class="wizard-progress-fill" id="wizard-progress-fill"></div>
+          </div>
+          <ol class="wizard-progress-steps" id="wizard-progress-steps">
+            <li class="wizard-progress-step" data-step="1"><span class="wizard-progress-num">1</span><span class="wizard-progress-name">Company</span></li>
+            <li class="wizard-progress-step" data-step="2"><span class="wizard-progress-num">2</span><span class="wizard-progress-name">Stage</span></li>
+            <li class="wizard-progress-step" data-step="3"><span class="wizard-progress-num">3</span><span class="wizard-progress-name">Model</span></li>
+            <li class="wizard-progress-step" data-step="4"><span class="wizard-progress-num">4</span><span class="wizard-progress-name">Docs</span></li>
+            <li class="wizard-progress-step" data-step="5"><span class="wizard-progress-num">5</span><span class="wizard-progress-name">Activity</span></li>
+            <li class="wizard-progress-step" data-step="6"><span class="wizard-progress-num">6</span><span class="wizard-progress-name">Review</span></li>
+          </ol>
+          <p class="wizard-progress-eta" id="wizard-progress-eta" aria-live="polite"></p>
+        </div>
+
+        <div class="wizard-preview hidden" id="wizard-preview" aria-live="polite">
+          <div class="wizard-preview-icon">⚡</div>
+          <div class="wizard-preview-text">
+            <span class="wizard-preview-label">Live preview</span>
+            <span class="wizard-preview-value" id="wizard-preview-value">—</span>
+            <span class="wizard-preview-note">Modeled so far — sharpens as you add detail. Your full report is free at the end.</span>
+          </div>
+        </div>
+
+        <form id="fn-assess-form" class="card glass-card funnel-form">
+
+          <div class="wizard-step" data-step="1">
+            <h3 class="funnel-section-title">1 · Company</h3>
+            <p class="step-desc">Just the basics. You can edit everything later.</p>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="fn-name">Company Name <span class="required-tag" aria-label="Required">[Required]</span></label>
+                <input type="text" id="fn-name" required placeholder="e.g. Climatico">
+              </div>
+              <div class="form-group">
+                <label for="fn-url">Website URL</label>
+                <input type="text" id="fn-url" inputmode="url" autocomplete="url" autocapitalize="off" placeholder="example.com or https://example.com">
+              </div>
+            </div>
+          </div>
+
+          <div class="wizard-step" data-step="2">
+            <h3 class="funnel-section-title">2 · Funding stage</h3>
+            <p class="step-desc">We use this to pick the right peer benchmark.</p>
+            <div class="form-group">
+              <label for="fn-stage">Funding Stage <span class="required-tag" aria-label="Required">[Required]</span></label>
+              <select id="fn-stage" required>
+                <option value="" disabled selected>Select stage...</option>
+                <option value="Pre-seed">Pre-seed</option>
+                <option value="Seed">Seed</option>
+                <option value="Series A">Series A</option>
+                <option value="Series B+">Series B+</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="wizard-step" data-step="3">
+            <h3 class="funnel-section-title">3 · Business model &amp; team</h3>
+            <p class="step-desc">Most fields are optional. Leave blank to use smart defaults. Pick "Other" to write your own.</p>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="fn-model">Business Model <span class="optional-tag">optional — auto-detects if empty</span></label>
+                <select id="fn-model">
+                  <option value="">Auto-detect (recommended)</option>
+                </select>
+                <input type="text" id="fn-model-other" class="other-specify hidden" placeholder="Describe in 1-2 sentences…">
+              </div>
+              <div class="form-group">
+                <label for="fn-team">Team Size (FTEs)</label>
+                <input type="number" id="fn-team" min="1" placeholder="e.g. 15">
+              </div>
+              <div class="form-group">
+                <label for="fn-cloud">Cloud / Compute Provider <span class="optional-tag">optional</span></label>
+                <select id="fn-cloud">
+                  <option value="">Not sure / not applicable</option>
+                </select>
+                <input type="text" id="fn-cloud-other" class="other-specify hidden" placeholder="Name your provider…">
+              </div>
+              <div class="form-group">
+                <label for="fn-region">Primary Hosting Region <span class="optional-tag">optional — affects grid carbon</span></label>
+                <select id="fn-region">
+                  <option value="">Don't know / multi-region</option>
+                </select>
+                <input type="text" id="fn-region-other" class="other-specify hidden" placeholder="e.g. Sao Paulo, Brazil">
+              </div>
+              <div class="form-group">
+                <label for="fn-primary">Primary Activity <span class="optional-tag">optional — sharpens the footprint model</span></label>
+                <select id="fn-primary">
+                  <option value="">Auto-detect</option>
+                </select>
+                <input type="text" id="fn-primary-other" class="other-specify hidden" placeholder="What's your team actually doing day-to-day?">
+              </div>
+              <div class="form-group">
+                <label for="fn-energy">Energy Source <span class="optional-tag">optional — affects electricity intensity</span></label>
+                <select id="fn-energy">
+                  <option value="">Standard grid (don't know)</option>
+                </select>
+                <input type="text" id="fn-energy-other" class="other-specify hidden" placeholder="e.g. Office powered by geothermal PPA">
+              </div>
+            </div>
+          </div>
+
+          <div class="wizard-step" data-step="4">
+            <h3 class="funnel-section-title">4 · Add your documents <span class="optional-tag">optional</span></h3>
+            <div class="step-optional-banner">
+              <strong>This step is optional — most founders skip it.</strong>
+              <span>Your instant report is built entirely from your profile, notes, website, and selected activities. You don't need to upload anything to get the full report. Skip now and add evidence later, after sign-in, on a trusted path.</span>
+            </div>
+            <p class="step-desc">If you'd like, use the drop zones below as a private reminder of the evidence you already have. Nothing is required here.</p>
+            <div class="upload-grid">
+              <label class="upload-drop" id="fn-drop-deck">
+                <input type="file" id="fn-file-deck" accept=".pdf,.ppt,.pptx,.key" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <strong>Pitch deck</strong>
+                <span class="upload-hint" id="fn-deck-name">Tells us what you build · PDF, PPTX</span>
+              </label>
+              <label class="upload-drop" id="fn-drop-acct">
+                <input type="file" id="fn-file-acct" accept=".pdf,.csv,.xls,.xlsx" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 17V7m4 10V11m4 6V9"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                <strong>Recent accounts</strong>
+                <span class="upload-hint" id="fn-acct-name">P&amp;L or spend export · CSV, XLSX, PDF</span>
+              </label>
+            </div>
+            <div class="upload-privacy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span>Your files stay in your browser to build the assessment — they're never uploaded to our servers.</span>
+            </div>
+          </div>
+
+          <div class="wizard-step" data-step="5">
+            <h3 class="funnel-section-title">5 · What your company does</h3>
+            <p class="step-desc">We've ticked the activities most startups like yours have. Add the ones that apply and uncheck the rest — this decides which emissions we estimate.</p>
+            <p class="step-profile-hint" id="fn-profile-hint"></p>
+            <div class="fn-activity-grid">
+              <div class="fn-activity-col">
+                <span class="fn-activity-col-title footprint-text">Emits (−) Footprint</span>
+                <label class="fn-chip"><input type="checkbox" value="compute" checked><span>Cloud &amp; AI Compute</span></label>
+                <label class="fn-chip"><input type="checkbox" value="hardware"><span>Hardware &amp; Electronics</span></label>
+                <label class="fn-chip"><input type="checkbox" value="travel" checked><span>FTE Travel &amp; Commutes</span></label>
+                <label class="fn-chip"><input type="checkbox" value="vendors"><span>Key Vendors &amp; SaaS</span></label>
+                <label class="fn-chip"><input type="checkbox" value="logistics"><span>Logistics &amp; Distribution</span></label>
+              </div>
+              <div class="fn-activity-col">
+                <span class="fn-activity-col-title handprint-text">Avoids (+) Handprint</span>
+                <label class="fn-chip"><input type="checkbox" value="avoided-grid" checked><span>Grid Decarbonization</span></label>
+                <label class="fn-chip"><input type="checkbox" value="avoided-transport"><span>Transport Avoidance</span></label>
+                <label class="fn-chip"><input type="checkbox" value="avoided-material"><span>Low-Carbon Materials</span></label>
+              </div>
+            </div>
+            <div class="form-group fn-notes-group">
+              <label for="fn-notes">In your own words, what does your company do? <span class="optional-tag">optional, but helps a lot</span></label>
+              <textarea id="fn-notes" rows="3" placeholder="e.g. We replace diesel delivery vans with e-cargo bikes for inner-city grocery drops. Anything the checkboxes above don't capture — your product, customers, supply chain."></textarea>
+            </div>
+          </div>
+
+          <div class="wizard-step" data-step="6">
+            <h3 class="funnel-section-title">6 · Review your answers</h3>
+            <p class="step-desc">Quick check before we run the assessment. Tap any step to edit.</p>
+            <dl class="wizard-review" id="wizard-review"></dl>
+            <p class="wizard-review-note">By generating, you agree this is a directional model. Replace defaults with measured data later to improve accuracy.</p>
+          </div>
+
+          <div class="funnel-form-actions">
+            <button type="button" class="btn btn-secondary" id="fn-back-landing">&larr; Back</button>
+            <button type="button" class="btn btn-secondary" id="wizard-prev">&larr; Previous step</button>
+            <button type="button" class="btn btn-primary" id="wizard-next">Next step &rarr;</button>
+            <button type="submit" class="btn btn-primary btn-lg" id="fn-generate">Generate my assessment &rarr;</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- 5. ENGAGE — Instant shareable report -->
+    <section class="funnel-screen" id="fn-report">
+      <div class="funnel-narrow">
+
+        <!-- Loading shimmer (brief, sells the "instant analysis" moment) -->
+        <div class="report-loading" id="fn-report-loading">
+          <div class="report-spinner"></div>
+          <h3 id="fn-loading-text">Analyzing your inputs…</h3>
+          <p class="subtitle">Mapping activities to GHG scopes and modeling your footprint.</p>
+        </div>
+
+        <!-- Actual report -->
+        <div class="report-body hidden" id="fn-report-body">
+          <div class="funnel-screen-head report-head">
+            <span class="funnel-kicker">Your instant impact snapshot</span>
+            <h2 id="fn-report-company">Climatico</h2>
+            <p class="subtitle" id="fn-report-meta">Seed · SaaS · Modeled estimate</p>
+          </div>
+
+          <!-- Headline footprint -->
+          <div class="card glass-card report-headline">
+            <div class="report-headline-main">
+              <span class="report-headline-label">Estimated annual footprint</span>
+              <div class="report-headline-value" id="fn-report-footprint">— <small>tCO2e/yr</small></div>
+              <span class="report-headline-unc" id="fn-report-unc">±— tCO2e modeled uncertainty</span>
+            </div>
+            <div class="report-headline-side">
+              <div class="report-side-stat">
+                <span class="report-side-label"><span class="glossary-term" data-term="handprint">Handprint potential (+)</span></span>
+                <span class="report-side-val handprint-text" id="fn-report-handprint">— tCO2e/yr</span>
+              </div>
+              <div class="report-side-stat">
+                <span class="report-side-label"><span class="glossary-term" data-term="maturity">Impact maturity</span></span>
+                <span class="report-side-val glossary-term" data-term="maturity" id="fn-report-maturity">Level 1 · Mapped</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hotspots -->
+          <div class="card glass-card report-hotspots">
+            <h3>Top emission hotspots we found</h3>
+            <p class="step-desc">Where your modeled footprint concentrates — your highest-leverage places to act.</p>
+            <div id="fn-report-hotspots" class="hotspot-list"></div>
+          </div>
+
+          <!-- Impact beyond carbon (energy, water, waste, land/biodiversity) -->
+          <div class="card glass-card report-dimensions" id="fn-report-dimensions"></div>
+
+          <!-- Peer benchmark (how you compare; derived, sourced range) -->
+          <div class="card glass-card report-benchmark" id="fn-report-benchmark"></div>
+
+          <!-- Potential future cost exposure (footprint priced as $) -->
+          <div class="card glass-card report-cost" id="fn-report-cost"></div>
+
+          <!-- AI briefing (populated after sign-up via Gemini) -->
+          <div class="card glass-card ai-briefing hidden" id="fn-ai-briefing">
+            <div class="ai-briefing-head">
+              <span class="ai-badge">✦ AI briefing</span>
+              <span class="ai-briefing-status" id="fn-ai-status"></span>
+            </div>
+            <div class="ai-briefing-body" id="fn-ai-body"></div>
+          </div>
+
+          <p class="report-disclosure">
+            ⚠️ This is a <strong>modeled estimate</strong> from industry defaults and your inputs — a starting point, not certified accounting. Refine it with real data inside the dashboard.
+          </p>
+
+          <details class="report-detail-expander" id="fn-report-methodology-expander" data-report-detail="methodology">
+            <summary>
+              <span class="report-detail-icon" aria-hidden="true">▸</span>
+              <span class="report-detail-title">Show methodology</span>
+              <span class="report-detail-sub">Factor sources · scope math · standards we cite</span>
+            </summary>
+            <div class="card glass-card report-methodology">
+              <div class="methodology-head">
+                <h3>Methodology</h3>
+                <span>Modeled, not certified</span>
+              </div>
+              <p>Each selected activity maps to a typical annual emission factor in tCO2e/yr. The estimate sums those factors, groups them by GHG scope, and propagates uncertainty with root-sum-of-squares.</p>
+              <ul class="methodology-points">
+                <li><strong>Inputs:</strong> company profile, business model, team size, website context, founder notes, and selected activities.</li>
+                <li><strong>Evidence level:</strong> document filenames are noted only; source files are not read unless you later opt in to store evidence.</li>
+                <li><strong>Upgrade path:</strong> replace modeled defaults with metered cloud, utility, travel, vendor, and claim evidence inside the dashboard.</li>
+              </ul>
+              <ul id="fn-methodology-list" class="methodology-factor-list"></ul>
+              <div class="methodology-frameworks">
+                <div class="methodology-frameworks-head">Standards &amp; theory this rests on</div>
+                <ul id="fn-frameworks-list" class="methodology-framework-list"></ul>
+              </div>
+            </div>
+          </details>
+
+          <details class="report-detail-expander" id="fn-report-evidence-expander" data-report-detail="evidence">
+            <summary>
+              <span class="report-detail-icon" aria-hidden="true">▸</span>
+              <span class="report-detail-title">Show evidence</span>
+              <span class="report-detail-sub">Real precedents · operational risks · benchmark basis</span>
+            </summary>
+            <div class="report-detail-stack">
+              <div class="card glass-card report-precedents" id="fn-report-precedents"></div>
+              <div class="card glass-card report-operational-risks hidden" id="fn-report-operational-risks"></div>
+            </div>
+          </details>
+
+          <div class="card glass-card report-save-cta" id="fn-report-save-cta">
+            <div class="save-cta-text">
+              <h3>Save this report to track progress over time</h3>
+              <p>Your report is available right now without an account. Create a free account to save it, compare against future snapshots, and open the dashboard.</p>
+            </div>
+            <div class="save-cta-actions">
+              <button type="button" class="btn btn-primary" id="fn-save-create-account">Create free account</button>
+              <button type="button" class="btn btn-secondary" id="fn-save-sign-in">I already have an account</button>
+            </div>
+            <p class="save-cta-note">No credit card · 30 seconds · Your data stays in your control</p>
+          </div>
+
+          <!-- Visibility selector -->
+          <div class="card glass-card report-visibility-panel" id="fn-visibility-panel">
+            <div class="visibility-head">
+              <span class="visibility-eyebrow">Share visibility</span>
+              <span class="visibility-current" id="fn-visibility-current">Private</span>
+            </div>
+            <div class="visibility-segmented" role="radiogroup" aria-label="Report visibility">
+              <button type="button" class="visibility-opt" data-visibility="private" role="radio" aria-checked="true">
+                <span class="visibility-opt-title">Private</span>
+                <span class="visibility-opt-sub">Only you can see this report.</span>
+              </button>
+              <button type="button" class="visibility-opt" data-visibility="link" role="radio" aria-checked="false">
+                <span class="visibility-opt-title">Link only</span>
+                <span class="visibility-opt-sub">Anyone with the link. No public listing.</span>
+              </button>
+              <button type="button" class="visibility-opt" data-visibility="investor" role="radio" aria-checked="false">
+                <span class="visibility-opt-title">Investor link</span>
+                <span class="visibility-opt-sub">Time-limited token · 7 days.</span>
+              </button>
+            </div>
+            <p class="visibility-explainer" id="fn-visibility-explainer">LinkedIn and share-card buttons stay disabled until you pick a visibility above.</p>
+          </div>
+
+          <!-- Actions: share + enter dashboard -->
+          <div class="report-actions">
+            <p class="report-privacy-note">Your report is private by default. Sharing is opt-in.</p>
+            <button class="btn btn-primary" id="fn-copy-link">Copy private link</button>
+            <button class="btn btn-secondary btn-share-li" id="fn-share-linkedin">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+              Share on LinkedIn
+            </button>
+            <button class="btn btn-secondary" id="fn-share-card">Create a share card</button>
+          </div>
+          <div class="share-card-result hidden" id="fn-share-card-result">
+            <p class="share-card-result-head">Your shareable card is ready. It shows your grade and bands — never your raw numbers.</p>
+            <img class="share-card-preview" id="fn-share-card-img" alt="Your climate impact grade card">
+            <div class="share-card-link-row">
+              <input type="text" id="fn-share-card-url" readonly aria-label="Shareable link">
+              <button type="button" class="btn btn-primary" id="fn-share-card-copy">Copy link</button>
+            </div>
+          </div>
+          <p class="report-dashboard-note">Want to track goals, milestones, and improvement over time? <button type="button" class="link-button" id="fn-enter-dashboard">Open the dashboard &rarr;</button> <span class="dashboard-privacy-inline">Opt-in. Your data stays in this browser unless you sign in.</span></p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Toast for share / copy feedback -->
+  <div class="fn-toast" id="fn-toast" role="status" aria-live="polite"></div>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <div class="logo-container">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          <span class="logo-text">GTR Handprint</span>
+        </div>
+        <div class="app-badge">Impact MVP</div>
+      </div>
+      
+      <!-- Company Profile Widget -->
+      <div class="company-widget" id="sidebar-company-widget">
+        <div class="avatar">C</div>
+        <div class="details">
+          <h4 id="sidebar-company-name">Configure Startup</h4>
+          <p id="sidebar-company-stage">Stage 1 Intake</p>
+        </div>
+      </div>
+      
+      <!-- Navigation Links -->
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="#intake" class="nav-link active" id="nav-intake" data-view="intake">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+              <span>1. Intake Wizard</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ledger" class="nav-link" id="nav-ledger" data-view="ledger">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="9"></line><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="15" y2="17"></line></svg>
+              <span>2. Impact Ledger (+/-)</span>
+            </a>
+          </li>
+          <li>
+            <a href="#goals" class="nav-link" id="nav-goals" data-view="goals">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <span>3. Goal Board</span>
+            </a>
+          </li>
+          <li>
+            <a href="#game" class="nav-link" id="nav-game" data-view="game">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              <span>4. Game Center</span>
+            </a>
+          </li>
+          <li>
+            <a href="#share" class="nav-link" id="nav-share" data-view="share">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+              <span>5. Diligence Share</span>
+            </a>
+          </li>
+          <li>
+            <a href="#radar" class="nav-link" id="nav-radar" data-view="radar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+              <span>6. Risk Radar</span>
+            </a>
+          </li>
+          <li>
+            <a href="#extend" class="nav-link" id="nav-extend" data-view="extend">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              <span>7. Team &amp; Next Steps</span>
+            </a>
+          </li>
+          <li>
+            <a href="#history" class="nav-link" id="nav-history" data-view="history">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span>8. Report History</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link" id="nav-glossary-trigger">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              <span>📚 Climate Glossary</span>
+            </a>
+          </li>
+          <li id="sidebar-admin-item" class="hidden">
+            <a href="#admin" class="nav-link" id="nav-admin" data-view="admin">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              <span>🛠️ Admin Stats</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <!-- Sidebar Footer / Live Widget -->
+      <div class="sidebar-footer">
+        <div class="live-signal-widget">
+          <div class="signal-header">
+            <span class="live-dot animate-pulse"></span>
+            <span class="signal-title">WATTTIME GRID SIGNAL</span>
+          </div>
+          <div class="signal-body">
+            <div class="signal-value" id="live-grid-intensity">-- lbs/MWh</div>
+            <div class="signal-desc" id="live-grid-region">Simulated Marginal Em. (CAISO)</div>
+          </div>
+        </div>
+        <div class="game-mini-status">
+          <div class="status-row">
+            <span>Maturity</span>
+            <span class="badge" id="mini-maturity-level">Level 0</span>
+          </div>
+          <div class="status-row">
+            <span>Update Streak</span>
+            <span class="streak-val" id="mini-streak-val">🔥 0w</span>
+          </div>
+        </div>
+        <div class="account-widget" id="sidebar-account">
+          <div class="account-info">
+            <span class="account-status" id="account-status">Working offline</span>
+            <span class="account-email" id="account-email">Not signed in</span>
+          </div>
+          <button class="account-action" id="account-action" type="button">Sign in</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="app-main">
+      
+      <!-- 1. INTAKE WIZARD VIEW -->
+      <section id="view-intake" class="app-view active">
+        <div class="view-header">
+          <div>
+            <h1>Activity Map Intake</h1>
+            <p class="subtitle">Complete this initial mapping to structure your two-sided impact ledger in less than 15 minutes.</p>
+          </div>
+        </div>
+        
+        <div class="card glass-card wizard-card">
+          <div class="wizard-steps-indicator">
+            <div class="step-indicator active" id="indicator-step-1">1. Company Profile</div>
+            <div class="step-indicator" id="indicator-step-2">2. Impact Activities</div>
+            <div class="step-indicator" id="indicator-step-3">3. Materiality Ranking</div>
+          </div>
+          
+          <form id="intake-form">
+            <!-- Step 1 Content -->
+            <div class="wizard-step" id="step-1">
+              <h3>Tell us about your startup</h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="company-name">Company Name <span class="required-tag" aria-label="Required">[Required]</span></label>
+                  <input type="text" id="company-name" required placeholder="e.g. Climatico">
+                </div>
+                <div class="form-group">
+                  <label for="company-url">Website URL <span class="required-tag" aria-label="Required">[Required]</span></label>
+                  <input type="url" id="company-url" required placeholder="https://example.com">
+                </div>
+                <div class="form-group">
+                  <label for="company-stage">Funding / Growth Stage <span class="required-tag" aria-label="Required">[Required]</span></label>
+                  <select id="company-stage" required>
+                    <option value="" disabled selected>Select stage...</option>
+                    <option value="Pre-seed">Pre-seed</option>
+                    <option value="Seed">Seed</option>
+                    <option value="Series A">Series A</option>
+                    <option value="Series B+">Series B+</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="business-model">Business Model <span class="optional-tag">optional — auto-detects if empty</span></label>
+                  <input type="text" id="business-model" placeholder="e.g. SaaS, Pet Services, or leave blank to auto-detect">
+                </div>
+                <div class="form-group">
+                  <label for="team-size">Team Size (FTEs)</label>
+                  <input type="number" id="team-size" min="1" placeholder="e.g. 15">
+                </div>
+              </div>
+              <div class="wizard-actions">
+                <button type="button" class="btn btn-primary" id="btn-next-to-2">Next: Select Activities &rarr;</button>
+              </div>
+            </div>
+            
+            <!-- Step 2 Content -->
+            <div class="wizard-step hidden" id="step-2">
+              <h3>Select Startup-Relevant Activities</h3>
+              <p class="step-desc">Check the activities that apply to your operations. This builds your two-sided footprint (-) and handprint (+) framework.</p>
+              
+              <div class="activity-checkbox-grid">
+                <div class="activity-category-card">
+                  <h4>Footprint (-) Direct/Indirect Activities</h4>
+                  
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="act-compute" value="compute" checked>
+                    <div class="checkbox-label">
+                      <strong>Cloud & AI Compute</strong>
+                      <span>Data center hosting, cloud APIs, GPU compute servers</span>
+                    </div>
+                  </label>
+                  
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="act-hardware" value="hardware">
+                    <div class="checkbox-label">
+                      <strong>Hardware & Electronics</strong>
+                      <span>Office laptops, servers, physical prototyping components</span>
+                    </div>
+                  </label>
+                  
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="act-travel" value="travel" checked>
+                    <div class="checkbox-label">
+                      <strong>FTE Travel & Commutes</strong>
+                      <span>Flights, hotel stays, daily office commutes</span>
+                    </div>
+                  </label>
+                  
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="act-vendors" value="vendors">
+                    <div class="checkbox-label">
+                      <strong>Key Vendors & SaaS</strong>
+                      <span>Corporate services, external design labs, SaaS subscriptions</span>
+                    </div>
+                  </label>
+                  
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="act-logistics" value="logistics">
+                    <div class="checkbox-label">
+                      <strong>Logistics & Distribution</strong>
+                      <span>Physical product shipping, supplier transport</span>
+                    </div>
+                  </label>
+                </div>
+                
+                <div class="activity-category-card handprint-bg">
+                  <h4>Handprint (+) Avoided/Enabled Emissions</h4>
+                  
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="act-avoided-grid" value="avoided-grid" checked>
+                    <div class="checkbox-label">
+                      <strong>Grid Decarbonization</strong>
+                      <span>Displacing fossil fuels with renewable energy or efficiency</span>
+                    </div>
+                  </label>
+                  
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="act-avoided-transport" value="avoided-transport">
+                    <div class="checkbox-label">
+                      <strong>Transport & Mobility Avoidance</strong>
+                      <span>Substituting high-carbon logistics with electrified or optimized solutions</span>
+                    </div>
+                  </label>
+                  
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="act-avoided-material" value="avoided-material">
+                    <div class="checkbox-label">
+                      <strong>Low-Carbon Materials</strong>
+                      <span>Displacing concrete, steel, or plastics with green alternatives</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+              
+              <div class="wizard-actions">
+                <button type="button" class="btn btn-secondary" id="btn-back-to-1">&larr; Back</button>
+                <button type="button" class="btn btn-primary" id="btn-next-to-3">Next: Rank Materiality &rarr;</button>
+              </div>
+            </div>
+            
+            <!-- Step 3 Content -->
+            <div class="wizard-step hidden" id="step-3">
+              <h3>Rank Likely Materiality</h3>
+              <p class="step-desc">Rank the checked activities from highest expected emissions to lowest. This helps us prioritize the right goals for you.</p>
+              
+              <div class="ranking-container" id="materiality-rank-list">
+                <!-- Dynamically populated via JS -->
+              </div>
+              
+              <div class="wizard-actions">
+                <button type="button" class="btn btn-secondary" id="btn-back-to-2">&larr; Back</button>
+                <button type="submit" class="btn btn-success" id="btn-submit-intake">Complete Setup & Initialize Ledger</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- 2. IMPACT LEDGER VIEW -->
+      <section id="view-ledger" class="app-view">
+        <div class="view-header flex-header">
+          <div>
+            <h1>Impact Ledger (+/-)</h1>
+            <p class="subtitle">Two-sided environmental tracking. Avoided claims (+) are counterfactual and distinct from actual Footprint (-).</p>
+          </div>
+          <button class="btn btn-primary btn-icon" id="btn-trigger-claim-modal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Add Avoided Claim (+)
+          </button>
+        </div>
+
+        <div class="card glass-card ledger-goals-rail" id="ledger-goals-rail">
+          <div class="goals-rail-head">
+            <h4><span class="glossary-term" data-term="goal">Goals &amp; milestones</span></h4>
+            <a href="#goals" class="link-button goals-rail-link">Manage goals &rarr;</a>
+          </div>
+          <div class="goals-rail-body" id="ledger-goals-rail-body">
+            <!-- populated by renderLedgerView() -->
+          </div>
+        </div>
+
+        <div class="ledger-snapshot-row">
+          <div class="card glass-card ledger-snapshot-card ledger-snapshot-footprint">
+            <span class="ledger-snapshot-label"><span class="glossary-term" data-term="footprint">Footprint (−)</span></span>
+            <div class="ledger-snapshot-value" id="ledger-snapshot-footprint">— <small>tCO2e/yr</small></div>
+            <span class="ledger-snapshot-meta">Real emissions from your operations</span>
+          </div>
+          <div class="card glass-card ledger-snapshot-card ledger-snapshot-handprint">
+            <span class="ledger-snapshot-label"><span class="glossary-term" data-term="handprint">Handprint (+)</span></span>
+            <div class="ledger-snapshot-value" id="ledger-snapshot-handprint">— <small>tCO2e/yr</small></div>
+            <span class="ledger-snapshot-meta">Avoided via additionality-gated claims</span>
+          </div>
+          <div class="card glass-card ledger-snapshot-card ledger-snapshot-maturity">
+            <span class="ledger-snapshot-label"><span class="glossary-term" data-term="maturity">Maturity</span></span>
+            <div class="ledger-snapshot-value" id="ledger-snapshot-maturity">L1 · Mapped</div>
+            <span class="ledger-snapshot-meta" id="ledger-snapshot-maturity-meta">Add claims to reach L2</span>
+          </div>
+        </div>
+
+        <details class="ledger-details-expander">
+          <summary>
+            <span>Details</span>
+            <span class="ledger-details-preview" id="ledger-details-preview">Net impact &amp; disclosure</span>
+          </summary>
+          <div class="ledger-details-body">
+            <!-- Derived Net Impact Banner -->
+            <div class="net-impact-banner card">
+              <div class="net-banner-info">
+                <div class="net-label"><span class="glossary-term" data-term="net">DERIVED NET IMPACT</span></div>
+                <div class="net-value" id="ledger-net-value">Calculating...</div>
+                <div class="net-uncertainty" id="ledger-net-uncertainty">Uncertainty: --</div>
+              </div>
+              <div class="net-banner-description">
+                <span class="warning-tag">IMPORTANT DISCLOSURE</span>
+                <p>This is a <strong class="glossary-term" data-term="net">derived context figure</strong>, not a certified accounting <span class="glossary-term" data-term="offset">offset</span>. Your <span class="glossary-term" data-term="footprint">footprint</span> inventory (−) represents real physical emissions. Your <span class="glossary-term" data-term="handprint">handprint</span> (+) represents emissions avoided vs. a <span class="glossary-term" data-term="baseline">baseline</span> reference scenario. They use different methodologies and cannot be directly mathematically netted to claim zero physical emissions.</p>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- Footprint and Handprint Verification Guide -->
+        <div class="card glass-card impact-guide-card" id="fn-impact-guide">
+          <div class="guide-header">
+            <h4>💡 Footprint &amp; Handprint Verification Guide</h4>
+            <button class="btn-close-guide" id="btn-close-guide" type="button" aria-label="Dismiss guide">&times;</button>
+          </div>
+          <div class="guide-grid">
+            <div class="guide-column">
+              <h5>Physical Footprint (−)</h5>
+              <p class="guide-col-desc">Emissions your company physically causes. Goal: replace modeled estimates with metered data.</p>
+              <ul>
+                <li><strong>Cloud Compute:</strong> Replace default calculations with real emissions telemetry from your AWS/GCP/Azure sustainability dashboards.</li>
+                <li><strong>FTE Travel:</strong> Replace flat estimates with actual flight segments, passenger class, and hotel room nights.</li>
+                <li><strong>General Waste:</strong> Replace defaults with actual waste bin counts, organic compost records, or recycling manifests.</li>
+              </ul>
+            </div>
+            <div class="guide-column">
+              <h5>Avoided Handprint (+)</h5>
+              <p class="guide-col-desc">Emissions avoided by customers choosing you. Goal: verify additionality and baseline math.</p>
+              <ul>
+                <li><strong>Establish the Baseline:</strong> Document the conventional alternative (e.g. diesel delivery vans, coal grid energy, virgin materials).</li>
+                <li><strong>Pass Additionality Gates:</strong> Prove the carbon reduction isn't already mandated by regulations or happening anyway.</li>
+                <li><strong>Track Displacement:</strong> Multiply verified avoided emissions per unit sold by your actual shipment volume.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Two-Sided Panels -->
+        <div class="ledger-panels-container">
+          
+          <!-- Footprint Panel (-) -->
+          <div class="ledger-panel card glass-card border-footprint">
+            <div class="panel-header">
+              <div class="title-with-icon">
+                <div class="icon-circle footprint-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-2-4-3.5c-.5 1.5-2 2-4 3.5S5 13 5 15a7 7 0 0 0 7 7z"></path></svg>
+                </div>
+                <h3>Physical Footprint (−)</h3>
+              </div>
+              <div class="panel-total" id="footprint-total">-- tCO2e/yr</div>
+            </div>
+            
+            <p class="panel-desc">Operational greenhouse gas emissions according to GHG Protocol scope definitions.</p>
+            
+            <div class="ledger-section">
+              <div class="section-title">Scope 1 & 2 (Direct / Purchased Energy)</div>
+              <div class="ledger-items" id="footprint-scope-1-2-list">
+                <!-- Scope 1/2 elements -->
+              </div>
+            </div>
+            
+            <div class="ledger-section">
+              <div class="section-title">Scope 3 (Value Chain - Startup Relevant)</div>
+              <div class="ledger-items" id="footprint-scope-3-list">
+                <!-- Scope 3 elements -->
+              </div>
+            </div>
+            
+            <!-- Quick Add Metric Form inside Footprint -->
+            <div class="ledger-add-inline">
+              <h4>Update Metric Estimate</h4>
+              <form id="form-update-metric" class="inline-form">
+                <div class="input-row">
+                  <select id="metric-select-name" required>
+                    <!-- Options populated by active activities -->
+                  </select>
+                  <input type="number" id="metric-input-value" required step="any" placeholder="Value">
+                  <select id="metric-input-unit" required>
+                    <option value="tCO2e/yr">tCO2e/yr</option>
+                    <option value="kWh/yr">kWh/yr</option>
+                  </select>
+                </div>
+                <div class="input-row">
+                  <select id="metric-input-type" required>
+                    <option value="modeled">Modeled (Estimate)</option>
+                    <option value="metered">Metered (Real-time/Direct)</option>
+                  </select>
+                  <input type="number" id="metric-input-uncertainty" min="0" max="100" placeholder="Uncertainty ±%">
+                  <button type="submit" class="btn btn-secondary">Update</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          
+          <!-- Handprint Panel (+) -->
+          <div class="ledger-panel card glass-card border-handprint">
+            <div class="panel-header">
+              <div class="title-with-icon">
+                <div class="icon-circle handprint-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
+                </div>
+                <h3>Avoided & Enabled Handprint (+)</h3>
+              </div>
+              <div class="panel-total" id="handprint-total">-- tCO2e/yr</div>
+            </div>
+            
+            <p class="panel-desc">Estimated greenhouse gas emissions avoided or displaced by customer use of startup solutions compared to baseline.</p>
+            
+            <div class="ledger-section">
+              <div class="section-title">Gated Avoided Emissions Claims</div>
+              <div class="ledger-items" id="handprint-claims-list">
+                <!-- Claims list dynamically populated -->
+              </div>
+            </div>
+            
+            <div class="handprint-info-footer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              <span>Avoided emissions are strictly gated behind additionality checks. Claims failing additionality do not sum into the Handprint.</span>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+
+      <!-- 3. GOAL BOARD VIEW -->
+      <section id="view-goals" class="app-view">
+        <div class="view-header">
+          <h1>Goal Board</h1>
+          <p class="subtitle">Set targets for high-materiality activities, link evidence, and drive weekly operational improvements.</p>
+        </div>
+        
+        <div class="goals-layout">
+          <div class="goals-content">
+            <!-- Active Goals List -->
+            <div class="section-header-row">
+              <h3>Active Goals</h3>
+              <div class="filter-controls">
+                <select id="filter-goal-status">
+                  <option value="all">All Statuses</option>
+                  <option value="Not Started">Not Started</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Complete">Complete</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="goals-grid" id="goals-list-container">
+              <!-- Dynamically populated via JS -->
+            </div>
+          </div>
+          
+          <div class="goals-sidebar">
+            <!-- Status-Conditional Insight (deterministic, status-aware) -->
+            <div class="card glass-card sidebar-status-insight-card">
+              <h3>Where You Are</h3>
+              <p class="desc">Your next move is determined by your current maturity level. The AI briefing below will elaborate on this same direction.</p>
+              <div id="status-insight-container">
+                <!-- Populated by app.js renderStatusInsight() -->
+              </div>
+            </div>
+
+            <!-- Recommendations Sidebar -->
+            <div class="card glass-card sidebar-recommend-card">
+              <h3>Recommended Goals</h3>
+              <p class="desc">Suggested actions derived from your highest materiality activities and impact gaps.</p>
+              <div id="recommendations-container" class="recs-list">
+                <!-- Dynamically populated via JS -->
+              </div>
+            </div>
+            
+            <!-- Quick Add Custom Goal -->
+            <div class="card glass-card sidebar-quick-goal">
+              <h3>Create Custom Goal</h3>
+              <form id="form-create-goal">
+                <div class="form-group">
+                  <label for="goal-title">Goal Title</label>
+                  <input type="text" id="goal-title" required placeholder="e.g. 20% compute reduction">
+                </div>
+                <div class="form-group">
+                  <label for="goal-owner">Owner</label>
+                  <select id="goal-owner" required>
+                    <!-- Populated via members list -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="goal-deadline">Deadline</label>
+                  <input type="date" id="goal-deadline" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-full">Add Goal</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. GAME CENTER VIEW -->
+      <section id="view-game" class="app-view">
+        <div class="view-header">
+          <h1>Cooperative Progress Game</h1>
+          <p class="subtitle">Drive impact integrity together. No public rankings — just team milestones, streaks, and validation levels.</p>
+        </div>
+        
+        <div class="game-dashboard-layout">
+          <!-- Left: Maturity Levels -->
+          <div class="card glass-card maturity-card">
+            <h3>Impact Maturity Level</h3>
+            <div class="maturity-meter-container">
+              <div class="maturity-gauge">
+                <div class="gauge-center">
+                  <div class="gauge-level" id="game-maturity-level">Level 0</div>
+                  <div class="gauge-title" id="game-maturity-title">Unmapped</div>
+                </div>
+                <!-- Dynamic SVG SVG Ring representing 0-5 -->
+                <svg class="gauge-ring" viewBox="0 0 100 100">
+                  <circle class="ring-bg" cx="50" cy="50" r="40" fill="transparent" stroke-width="8"></circle>
+                  <circle class="ring-fill" id="game-maturity-ring-fill" cx="50" cy="50" r="40" fill="transparent" stroke-width="8" stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle>
+                </svg>
+              </div>
+              <div class="maturity-checklist">
+                <div class="check-item" id="check-level-1">
+                  <span class="icon"></span>
+                  <div class="check-details">
+                    <strong>Level 1: Mapped</strong>
+                    <span>Complete the initial Activity Map Intake wizard.</span>
+                  </div>
+                </div>
+                <div class="check-item" id="check-level-2">
+                  <span class="icon"></span>
+                  <div class="check-details">
+                    <strong>Level 2: Gated</strong>
+                    <span>Answer baseline, displacement, and additionality checks for positive claims.</span>
+                  </div>
+                </div>
+                <div class="check-item" id="check-level-3">
+                  <span class="icon"></span>
+                  <div class="check-details">
+                    <strong>Level 3: Metered</strong>
+                    <span>Integrate at least one metered/real-time footprint data source.</span>
+                  </div>
+                </div>
+                <div class="check-item" id="check-level-4">
+                  <span class="icon"></span>
+                  <div class="check-details">
+                    <strong>Level 4: Active</strong>
+                    <span>Select at least 3 material company-wide goals and assign owners.</span>
+                  </div>
+                </div>
+                <div class="check-item" id="check-level-5">
+                  <span class="icon"></span>
+                  <div class="check-details">
+                    <strong>Level 5: Improved</strong>
+                    <span>Attach validated evidence to complete at least 2 active goals.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right: Streak and Evidence Points -->
+          <div class="game-stats-grid">
+            <div class="card glass-card streak-card">
+              <div class="streak-icon">🔥</div>
+              <h3>Team Streak</h3>
+              <div class="stat-number" id="game-streak-count">0 Weeks</div>
+              <p class="desc">Keep metrics updated or goals progressing weekly. Updates refresh every Monday.</p>
+              <div class="streak-btn-container">
+                <button class="btn btn-secondary w-full" id="btn-simulate-week-update">Update Log (Simulate Weekly Activity)</button>
+              </div>
+            </div>
+            
+            <div class="card glass-card points-card">
+              <div class="points-icon">🛡️</div>
+              <h3>Evidence Points</h3>
+              <div class="stat-number" id="game-evidence-points">0</div>
+              <p class="desc">Earned by attaching links or documents verifying carbon footprint entries or avoided handprints.</p>
+              <div class="recent-events">
+                <h4>Recent Point Logs</h4>
+                <ul id="game-events-log">
+                  <li class="empty-log">No points earned yet. Add evidence to goals or claims!</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. SHARE PAGE / INVESTOR VIEW -->
+      <section id="view-share" class="app-view">
+        <div class="view-header flex-header">
+          <div>
+            <h1>Investor Diligence Share</h1>
+            <p class="subtitle">A VC-ready view showing footprint, gated handprints, and <span class="glossary-term" data-term="net">derived net impact</span> while strictly preserving uncertainty.</p>
+          </div>
+          <div class="share-toggle-controls">
+            <span class="label">Audience View:</span>
+            <div class="toggle-group">
+              <button class="btn btn-toggle active" id="btn-toggle-internal">Internal View</button>
+              <button class="btn btn-toggle" id="btn-toggle-external">Investor View</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="share-main-container">
+          
+          <!-- Public Header Info (Always Visible) -->
+          <div class="share-profile-card card glass-card">
+            <div class="share-meta">
+              <h2 id="share-company-title">Climatico Impact Profile</h2>
+              <div class="meta-row">
+                <span class="tag" id="share-company-stage-badge">Seed</span>
+                <span class="tag" id="share-company-model-badge">SaaS</span>
+                <span class="tag-date" id="share-freshness-date">Freshness: --</span>
+              </div>
+            </div>
+            <div class="two-axis-widget">
+              <h4>TWO-AXIS IMPACT EVALUATION</h4>
+              <div class="matrix-container">
+                <div class="matrix-grid">
+                  <div class="matrix-cell label-cell">Scaling Readiness (Climate Brick)</div>
+                  <div class="matrix-cell label-cell">Impact Integrity Scored Axis</div>
+                  <div class="matrix-plot-area">
+                    <!-- Graph visual -->
+                    <div class="matrix-grid-lines">
+                      <div class="line horizontal" style="bottom: 20%;"></div>
+                      <div class="line horizontal" style="bottom: 40%;"></div>
+                      <div class="line horizontal" style="bottom: 60%;"></div>
+                      <div class="line horizontal" style="bottom: 80%;"></div>
+                      <div class="line vertical" style="left: 20%;"></div>
+                      <div class="line vertical" style="left: 40%;"></div>
+                      <div class="line vertical" style="left: 60%;"></div>
+                      <div class="line vertical" style="left: 80%;"></div>
+                    </div>
+                    <div class="matrix-point" id="matrix-dot"></div>
+                  </div>
+                </div>
+                <div class="matrix-labels">
+                  <div class="label-x">Scale Stage &rarr;</div>
+                  <div class="label-y">Integrity &rarr;</div>
+                </div>
+              </div>
+              <div class="matrix-description" id="matrix-explanation">
+                Loading assessment...
+              </div>
+            </div>
+          </div>
+          
+          <!-- Derived Net Impact View (Same as ledger but visually tailored for external eyes) -->
+          <div class="card glass-card share-impact-summary">
+            <h3><span class="glossary-term" data-term="net">Net Impact</span> Overview</h3>
+            <div class="net-derived-visual">
+              <div class="axis-display">
+                <div class="axis-side left-side">
+                  <span class="title">Footprint Inventory (−)</span>
+                  <span class="value" id="share-footprint-value">-- tCO2e</span>
+                </div>
+                <div class="divider">vs</div>
+                <div class="axis-side right-side">
+                  <span class="title">Gated Handprint (+)</span>
+                  <span class="value" id="share-handprint-value">-- tCO2e</span>
+                </div>
+              </div>
+              <div class="derived-band-container">
+                <div class="band-label"><span class="glossary-term" data-term="net">Derived Net Impact</span> Uncertainty Range</div>
+                <div class="band-visualization">
+                  <div class="band-limit left-limit" id="share-band-min">-- tCO2e</div>
+                  <div class="band-bar">
+                    <div class="band-fill" id="share-band-fill" style="left: 30%; width: 40%;"></div>
+                    <div class="band-marker" id="share-band-center" style="left: 50%;"></div>
+                  </div>
+                  <div class="band-limit right-limit" id="share-band-max">-- tCO2e</div>
+                </div>
+              </div>
+              <p class="net-disclosure">
+                ⚠️ **Uncertainty Warning**: Avoided emissions claims are counterfactual models with standard deviation margins. The bars above show 95% confidence intervals based on individual model inputs. Do not assume handprints directly offset scope footprint.
+              </p>
+            </div>
+          </div>
+          
+          <!-- Diligence Checklist & Integrity Gate Disclosures (Critical for VCs) -->
+          <div class="card glass-card share-diligence-list">
+            <h3>Investor Diligence Checklist (Claims Gated)</h3>
+            <p class="desc">Review the baseline, displacement, and additionality checks protecting each claim from greenwashing risk.</p>
+            <div class="diligence-table-container">
+              <table class="diligence-table">
+                <thead>
+                  <tr>
+                    <th>Avoided Claim</th>
+                    <th>Annual Estimate</th>
+                    <th>Additionality Status</th>
+                    <th>Grid Signal Used</th>
+                    <th>Diligence Status</th>
+                  </tr>
+                </thead>
+                <tbody id="share-diligence-tbody">
+                  <!-- Dynamically populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. RISK RADAR VIEW (regulatory + second-order foresight, tracked) -->
+      <section id="view-radar" class="app-view">
+        <div class="view-header">
+          <h1>Regulatory Risk Radar</h1>
+          <p class="subtitle">The rules and ripple effects heading for a company like yours — turned into dated, owned tasks before they become emergencies.</p>
+        </div>
+        <div class="radar-grid" id="radar-grid"></div>
+      </section>
+
+      <!-- 7. TEAM & NEXT STEPS VIEW (Storyboard steps 7-8: Exit -> Extend) -->
+      <section id="view-extend" class="app-view">
+        <div class="view-header">
+          <h1>Team &amp; Next Steps</h1>
+          <p class="subtitle">Bring in your team to fill the gaps, then turn your assessment into action.</p>
+        </div>
+
+        <div class="extend-layout">
+          <!-- STEP 7: Share & invite contributors -->
+          <div class="card glass-card">
+            <div class="section-header-row">
+              <h3>Your impact team</h3>
+              <span class="data-coverage-badge" id="extend-coverage">Data coverage: --%</span>
+            </div>
+            <p class="desc">Invite teammates to verify metrics, own goals, and fill in what's missing.</p>
+
+            <div class="team-members-list" id="extend-members-list">
+              <!-- Populated via JS -->
+            </div>
+
+            <form id="form-invite-member" class="invite-form">
+              <div class="invite-row">
+                <input type="email" id="invite-email" required placeholder="teammate@company.com">
+                <select id="invite-role" required>
+                  <option value="Contributor">Contributor</option>
+                  <option value="Data Owner">Data Owner</option>
+                  <option value="Advisor / Investor">Advisor / Investor</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Send invite</button>
+              </div>
+              <p class="invite-hint">Invitees receive an email link to the dashboard. (Preview: invite is recorded locally, no email sent.)</p>
+            </form>
+
+            <div class="share-link-box">
+              <span class="share-link-label">Or share a read-only dashboard link</span>
+              <div class="share-link-row">
+                <input type="text" id="extend-share-link" readonly>
+                <button class="btn btn-secondary" id="btn-copy-dashboard-link" type="button">Copy</button>
+              </div>
+            </div>
+
+            <div class="documents-box">
+              <span class="share-link-label">Evidence files <span class="optional-tag">optional</span></span>
+              <p class="invite-hint" id="documents-hint">Sign in to keep diligence evidence (LCA reports, utility bills) here. Stored only because you chose to — delete anytime.</p>
+              <div class="documents-list" id="documents-list"></div>
+              <label class="btn btn-secondary doc-upload-btn" id="doc-upload-label">
+                <input type="file" id="doc-upload-input" accept=".pdf,.csv,.xls,.xlsx,.ppt,.pptx,.png,.jpg" hidden>
+                + Add an evidence file
+              </label>
+            </div>
+          </div>
+
+          <!-- STEP 8: Extend — consulting & initiatives -->
+          <div class="card glass-card extend-cta-card">
+            <span class="funnel-kicker">Ready to go deeper?</span>
+            <h3>Turn your snapshot into real reductions</h3>
+            <p class="desc">Your modeled assessment shows where to act. These guided tracks help you close the gap with verified data and expert support.</p>
+
+            <div class="extend-options" id="extend-options">
+              <!-- Populated via JS -->
+            </div>
+
+            <div class="extend-readiness" id="extend-readiness">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+      </section>
+
+      <!-- 8. REPORT HISTORY VIEW -->
+      <section id="view-history" class="app-view">
+        <div class="view-header flex-header">
+          <div>
+            <h1>Report History</h1>
+            <p class="subtitle">Open, review, and generate historical snapshots of your startup's climate impact reports.</p>
+          </div>
+          <div>
+            <button class="btn btn-primary" id="btn-generate-history-report" type="button">
+              ✦ Generate New Report Snapshot
+            </button>
+          </div>
+        </div>
+        
+        <div class="card glass-card">
+          <h3>All Generated Reports</h3>
+          <p class="step-desc">Click on any past report to view the full details, carbon footprint metrics, benchmarks, and AI briefings.</p>
+          
+          <div class="history-list-container" id="history-list">
+            <div class="history-loading">Loading report history...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. ADMIN DASHBOARD VIEW -->
+      <section id="view-admin" class="app-view">
+        <div class="view-header">
+          <h1>🛠️ Administrator Dashboard</h1>
+          <p class="subtitle">Monitor system-wide statistics, active workspaces, and Gemini API token usage/costs.</p>
+        </div>
+
+        <div class="admin-grid">
+          <!-- Stats Cards -->
+          <div class="card glass-card admin-stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-info">
+              <span class="stat-label">Total Users</span>
+              <h2 id="admin-stat-users" class="stat-value">-</h2>
+            </div>
+          </div>
+          <div class="card glass-card admin-stat-card">
+            <div class="stat-icon">💼</div>
+            <div class="stat-info">
+              <span class="stat-label">Workspaces</span>
+              <h2 id="admin-stat-workspaces" class="stat-value">-</h2>
+            </div>
+          </div>
+          <div class="card glass-card admin-stat-card">
+            <div class="stat-icon">📄</div>
+            <div class="stat-info">
+              <span class="stat-label">Documents</span>
+              <h2 id="admin-stat-documents" class="stat-value">-</h2>
+            </div>
+          </div>
+          <div class="card glass-card admin-stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-info">
+              <span class="stat-label">Reports Generated</span>
+              <h2 id="admin-stat-reports" class="stat-value">-</h2>
+            </div>
+          </div>
+        </div>
+
+        <!-- Token Usage & Cost Card -->
+        <div class="card glass-card text-left" style="margin-top: 1.5rem;">
+          <div class="methodology-head">
+            <h3>Gemini API Token Consumption</h3>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">gemini-3.1-flash-lite-preview</span>
+          </div>
+          
+          <div class="admin-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-top: 1.25rem;">
+            <div class="token-detail">
+              <span class="token-label">Prompt Tokens</span>
+              <h3 id="admin-tokens-prompt" style="font-family: 'Space Grotesk', sans-serif;">-</h3>
+            </div>
+            <div class="token-detail">
+              <span class="token-label">Completion Tokens</span>
+              <h3 id="admin-tokens-completion" style="font-family: 'Space Grotesk', sans-serif;">-</h3>
+            </div>
+            <div class="token-detail">
+              <span class="token-label">Total Tokens</span>
+              <h3 id="admin-tokens-total" style="font-family: 'Space Grotesk', sans-serif;">-</h3>
+            </div>
+            <div class="token-detail cost-highlight">
+              <span class="token-label">Estimated AI Cost</span>
+              <h2 id="admin-tokens-cost" style="color: var(--emerald-neon); font-family: 'Space Grotesk', sans-serif; font-size: 2.25rem; font-weight: 700; margin-top: 0.25rem;">$0.00</h2>
+            </div>
+          </div>
+        </div>
+
+        <!-- Historical Token Logs Table -->
+        <div class="card glass-card text-left" style="margin-top: 1.5rem;">
+          <h3>Historical Report Logs</h3>
+          <p class="step-desc" style="margin-bottom: 1.25rem;">List of recent AI report assessments, associated user accounts, and token usage details.</p>
+          
+          <div style="overflow-x: auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>User Email</th>
+                  <th>Report Name</th>
+                  <th>Prompt Tokens</th>
+                  <th>Completion Tokens</th>
+                  <th>Total Tokens</th>
+                  <th>Est. Cost</th>
+                </tr>
+              </thead>
+              <tbody id="admin-logs-tbody">
+                <tr>
+                  <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading logs...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- NATIVE MODALS (DIALOG TAGS) -->
+  
+  <!-- HISTORICAL REPORT VIEW MODAL -->
+  <dialog id="dialog-report-view" closedby="any" aria-labelledby="historyModalTitle">
+    <div class="modal-wrapper report-modal-wrapper" style="max-width: 900px; width: 90%;">
+      <div class="modal-header">
+        <h2 id="historyModalTitle">Climate Impact Report</h2>
+        <button class="btn-close-modal" id="btn-close-report-view-modal" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body scrollable-body" id="history-modal-body" style="padding: 1.5rem;">
+        <!-- Dynamic rendering of report content goes here -->
+      </div>
+    </div>
+  </dialog>
+
+  <!-- 1. GATED HANDPRINT CLAIM MODAL -->
+  <dialog id="dialog-claim" closedby="any" aria-labelledby="claimModalTitle">
+    <div class="modal-wrapper">
+      <div class="modal-header">
+        <h2 id="claimModalTitle">New Avoided Emissions Claim (+)</h2>
+        <button class="btn-close-modal" id="btn-close-claim-modal" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      
+      <form id="form-claim-gate">
+        <div class="modal-body scrollable-body">
+          <div class="alert alert-info">
+            <strong><span class="glossary-term" data-term="additionality">Additionality</span> Gate Active</strong>: Gating <span class="glossary-term" data-term="baseline">baseline scenario</span> and counterfactuals prevents overclaiming. A claim cannot be published without completing these fields.
+          </div>
+          
+          <div class="form-group">
+            <label for="claim-name">Claim Title <span class="required-tag" aria-label="Required">[Required]</span></label>
+            <input type="text" id="claim-name" required placeholder="e.g. Electric Vehicle fleet grid displacement">
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="claim-value">Estimated Avoided Value <span class="required-tag" aria-label="Required">[Required]</span></label>
+              <div class="input-unit-group">
+                <input type="number" id="claim-value" required step="any" placeholder="e.g. 150">
+                <span class="unit">tCO2e/yr</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="claim-uncertainty">Value Uncertainty (± %) <span class="required-tag" aria-label="Required">[Required]</span></label>
+              <input type="number" id="claim-uncertainty" required min="1" max="100" placeholder="e.g. 20">
+            </div>
+          </div>
+          
+          <hr class="modal-divider">
+          
+          <div class="integrity-section">
+            <h3>Integrity Gating Requirements</h3>
+            
+            <div class="form-group">
+              <label for="claim-baseline">Baseline Counterfactual Scenario <span class="required-tag" aria-label="Required">[Required]</span></label>
+              <textarea id="claim-baseline" required placeholder="Describe what emissions would occur in the absence of your startup's solution (e.g. Average US diesel fleet cargo logistics)..."></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="claim-displacement">Displacement Mechanism <span class="required-tag" aria-label="Required">[Required]</span></label>
+              <textarea id="claim-displacement" required placeholder="Describe how your solution replaces the baseline (e.g. Displaces 100k diesel transport miles with solar-charged logistics)..."></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="claim-additionality"><span class="glossary-term" data-term="additionality">Additionality Status</span> <span class="required-tag" aria-label="Required">[Required]</span></label>
+              <select id="claim-additionality" required>
+                <option value="" disabled selected>Select additionality type...</option>
+                <option value="Strong">Strong Additionality (Financial/regulatory barrier overcome; would not exist without us)</option>
+                <option value="Moderate">Moderate Additionality (Speeds up market transition that was happening slowly)</option>
+                <option value="None">No Additionality (Would have happened anyway / baseline gaming)</option>
+              </select>
+              <div class="field-tip warning hidden" id="additionality-warning-text">
+                ⚠️ **Warning**: Selecting "No Additionality" means this claim is auto-flagged. The Handprint value will be treated as 0 in net ledger equations.
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>Grid Signal Assumption <span class="required-tag" aria-label="Required">[Required]</span></label>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" name="grid-signal" value="marginal" checked>
+                  <div class="radio-custom-box">
+                    <strong><span class="glossary-term" data-term="marginal">Marginal (WattTime MOER)</span></strong>
+                    <span>(Recommended) Evaluates actual incremental grid change. Required for claims.</span>
+                  </div>
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="grid-signal" value="average">
+                  <div class="radio-custom-box">
+                    <strong><span class="glossary-term" data-term="average">Average (Electricity Maps)</span></strong>
+                    <span>Not recommended for displacement. Context only.</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="claim-rebound"><span class="glossary-term" data-term="rebound">Rebound / Jevons Paradox Check</span></label>
+              <textarea id="claim-rebound" placeholder="Does your solution lower prices in a way that will increase overall consumption volume? Describe rebound mitigation efforts..."></textarea>
+            </div>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-claim">Cancel</button>
+          <button type="submit" class="btn btn-success" id="btn-save-claim">Publish & Gate Claim</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+  
+  <!-- 2. EVIDENCE UPLOAD MODAL -->
+  <dialog id="dialog-evidence" closedby="any" aria-labelledby="evidenceModalTitle">
+    <div class="modal-wrapper">
+      <div class="modal-header">
+        <h2 id="evidenceModalTitle">Attach Diligence Evidence</h2>
+        <button class="btn-close-modal" id="btn-close-evidence-modal" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      
+      <form id="form-evidence">
+        <input type="hidden" id="evidence-ref-id" value="">
+        <input type="hidden" id="evidence-ref-type" value=""> <!-- 'goal' or 'claim' -->
+        
+        <div class="modal-body">
+          <p class="evidence-intro">Evidence is reviewed by climate advisors and investors, and unlocks your next maturity level.</p>
+          
+          <div class="form-group">
+            <label for="evidence-type">Evidence Type <span class="required-tag" aria-label="Required">[Required]</span></label>
+            <select id="evidence-type" required>
+              <option value="link">Public Web Link (Git repo, billing dashboard, WattTime API logs)</option>
+              <option value="doc">Document PDF/XLSX (LCA report, utility bill file)</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="evidence-ref">File Upload or Link URL <span class="required-tag" aria-label="Required">[Required]</span></label>
+            <input type="text" id="evidence-ref" required placeholder="https://... or path/to/document.pdf">
+          </div>
+          
+          <div class="form-group">
+            <label for="evidence-note">Verification Note / Context</label>
+            <textarea id="evidence-note" placeholder="Provide context about what this file or URL proves (e.g. AWS Customer Carbon Footprint screenshot showing Q1 2026 usage)..."></textarea>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-evidence">Cancel</button>
+          <button type="submit" class="btn btn-primary">Attach Evidence (+10 pts)</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- 4. AUTH MODAL (sign up / log in) -->
+  <dialog id="dialog-auth" closedby="any" aria-labelledby="authModalTitle">
+    <div class="modal-wrapper">
+      <div class="modal-header">
+        <h2 id="authModalTitle">Create your account</h2>
+        <button class="btn-close-modal" id="btn-close-auth-modal" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="auth-intro" id="auth-intro">Save your assessment and unlock your live dashboard — it stays here every time you return.</p>
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="auth-tab-signup" type="button">Sign up</button>
+          <button class="auth-tab" id="auth-tab-login" type="button">Log in</button>
+        </div>
+        <form id="form-auth">
+          <div class="form-group">
+            <label for="auth-email">Work email</label>
+            <input type="email" id="auth-email" required placeholder="you@company.com" autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="auth-password">Password</label>
+            <input type="password" id="auth-password" required minlength="8" placeholder="At least 8 characters" autocomplete="current-password">
+          </div>
+          <div class="auth-error hidden" id="auth-error"></div>
+          <button type="submit" class="btn btn-primary w-full" id="btn-auth-submit">Create account &amp; continue</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- 3. EDUCATIONAL GLOSSARY MODAL -->
+  <dialog id="dialog-glossary" closedby="any" aria-labelledby="glossaryModalTitle">
+    <div class="modal-wrapper">
+      <div class="modal-header">
+        <h2 id="glossaryModalTitle">📚 Climate & Impact Glossary</h2>
+        <button class="btn-close-modal" id="btn-close-glossary-modal" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      
+      <div class="modal-body scrollable-body">
+        <div class="form-group">
+          <label for="glossary-search">Search Glossary Terms</label>
+          <input type="text" id="glossary-search" placeholder="Search terms (e.g. additionality, scope)...">
+        </div>
+        
+        <div class="glossary-list" id="glossary-list-container">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btn-close-glossary-footer">Close</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Script entry -->
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

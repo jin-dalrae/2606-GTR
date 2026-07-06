@@ -8,12 +8,267 @@ import {
   BUSINESS_MODEL_OPTIONS,
   CLOUD_PROVIDERS, HOSTING_REGIONS, PRIMARY_ACTIVITIES, ENERGY_SOURCES,
   BUSINESS_MODEL_PROFILES, profileFor
-} from "./data/evidence.js";
-import { MATURITY_INSIGHTS, selectInsight } from "./data/insights.js";
+} from "../data/evidence.js";
+import { MATURITY_INSIGHTS, selectInsight } from "../data/insights.js";
 
 const SOURCE_LINKS = sourceLinks();
 
-// Default State Configuration
+const CARDINAL_STATE = {
+  company: {
+    name: "Cardinal Climate",
+    url: "https://cardinalclimate.com",
+    stage: "Series A",
+    businessModel: "SaaS",
+    teamSize: 24,
+    activities: ["compute", "hardware", "travel", "vendors", "scope2-grid", "scope1-direct", "avoided-grid", "avoided-transport"],
+    materiality: ["land-biodiversity", "water", "waste"],
+    isInitialized: true,
+    scalingReference: "Climate Brick Stage Reference"
+  },
+  members: [
+    { id: "rae", name: "Rae Jin", role: "Founder / CEO" },
+    { id: "sam", name: "Sam Green", role: "Head of Operations" },
+    { id: "vc_analyst", name: "Partner (Carbon Capital)", role: "Lead Advisor" }
+  ],
+  metrics: [
+    { id: "compute", value: 20.4, uncertainty: 30, source_type: "metered", measured_at: new Date().toISOString() },
+    { id: "hardware", value: 7.68, uncertainty: 40, source_type: "modeled" },
+    { id: "travel", value: 11.52, uncertainty: 25, source_type: "modeled" },
+    { id: "vendors", value: 5.04, uncertainty: 50, source_type: "modeled" },
+    { id: "scope2-grid", value: 13.44, uncertainty: 15, source_type: "metered", measured_at: new Date().toISOString() },
+    { id: "scope1-direct", value: 3.6, uncertainty: 20, source_type: "modeled" }
+  ],
+  claims: [
+    { id: "claim-1", title: "Cloud Optimization Avoided Emissions", value: 45.0, uncertainty: 15, additionality_status: "Strong", status: "active", framework: "ghgp-product" },
+    { id: "claim-2", title: "Remote Work commute displacement", value: 15.0, uncertainty: 20, additionality_status: "Medium", status: "active", framework: "sci" }
+  ],
+  goals: [
+    { id: "g1", title: "Implement SCI Method for Cloud/AI Compute", activity: "compute", owner_id: "rae", status: "Complete", evidence: [{ id: "ev1", name: "SCI-audit-2026.pdf" }] },
+    { id: "g2", title: "Source 100% refurbished laptops & hardware", activity: "hardware", owner_id: "sam", status: "Complete", evidence: [{ id: "ev2", name: "refurbished-invoices.pdf" }] },
+    { id: "g3", title: "Perform Hourly Marginal Emissions Matching", activity: "avoided-grid", owner_id: "vc_analyst", status: "In Progress", evidence: [] }
+  ],
+  streak: {
+    count: 8,
+    lastUpdate: new Date().toISOString()
+  },
+  maturityLevel: 5,
+  evidencePoints: 150,
+  evidenceLogs: [
+    { id: "log-1", date: new Date().toISOString(), text: "Verified 'Cloud & AI Compute' with SCI Audit evidence (SCI-audit-2026.pdf)" },
+    { id: "log-2", date: new Date().toISOString(), text: "Uploaded proof of purchase for 100% refurbished hardware (refurbished-invoices.pdf)" }
+  ],
+  funnelStage: "done",
+  assessment: {
+    name: "Cardinal Climate",
+    url: "https://cardinalclimate.com",
+    stage: "Series A",
+    businessModel: "SaaS",
+    teamSize: 24,
+    cloudProvider: "aws",
+    hostingRegion: "us-east-1",
+    primaryActivity: "compute",
+    energySource: "grid-mix",
+    activities: ["compute", "hardware", "travel", "vendors", "scope2-grid", "scope1-direct", "avoided-grid", "avoided-transport"],
+    notes: "Building high-performance API routers with zero-latency caching, optimized for low energy per query.",
+    docs: {
+      deck: "Cardinal-Climate-SeriesA-Deck.pdf",
+      accounting: "accounting-report-q1.csv"
+    },
+    snapshot: {
+      footprintTotal: 61.68,
+      uncertaintyAbs: 8.52,
+      handprintPotential: 60.0,
+      handprintTotal: 60.0,
+      handprintUncertaintyAbs: 7.42,
+      netUncertaintyAbs: 11.3,
+      hotspots: [
+        { id: "compute", name: "Cloud & AI Compute", scope: 3, value: 20.4, pct: 100 },
+        { id: "scope2-grid", name: "Purchased Electricity (Scope 2)", scope: 2, value: 13.44, pct: 66 },
+        { id: "travel", name: "FTE Travel & Commutes", scope: 3, value: 11.52, pct: 56 },
+        { id: "hardware", name: "Hardware & Electronics", scope: 3, value: 7.68, pct: 38 }
+      ],
+      breakdown: [
+        { id: "compute", name: "Cloud & AI Compute", scope: 3, value: 20.4, unc: 30 },
+        { id: "hardware", name: "Hardware & Electronics", scope: 3, value: 7.68, unc: 40 },
+        { id: "travel", name: "FTE Travel & Commutes", scope: 3, value: 11.52, unc: 25 },
+        { id: "vendors", name: "Key Vendors & SaaS", scope: 3, value: 5.04, unc: 50 },
+        { id: "scope2-grid", name: "Purchased Electricity (Scope 2)", scope: 2, value: 13.44, unc: 15 },
+        { id: "scope1-direct", name: "Direct Emissions (Scope 1)", scope: 1, value: 3.6, unc: 20 }
+      ]
+    },
+    aiPreview: {
+      headline: "Cardinal Climate demonstrates strong alignment with SBTi carbon reductions and high-integrity avoided emissions pathways.",
+      basis: "Based on their Series A team (24 FTEs) and cloud SaaS-driven workflows.",
+      executiveSummary: "Cardinal Climate operates a highly optimized green cloud platform. Their principal hotspot is cloud compute (Scope 3). However, through innovative Rust-based algorithmic routing and green region selection, they deliver substantial avoided emissions for customers.",
+      issues: [
+        { title: "Algorithmic Efficiency", detail: "Transitioning core indexing scripts from Python to compiled languages (Rust) reduced CPU hours per search request by 91%." },
+        { title: "Hosting Decarbonization", detail: "Hosting 100% of compute services in US-East (N. Virginia) represents a key hotspot. Spreading loads or utilizing green hosting zones (e.g., AWS us-east-2 or EU-central-1) can reduce compute footprints by over 80%." }
+      ],
+      regulation: "Upcoming corporate sustainability guidelines (such as CSRD in the EU and SB 253 in California) will require audited Scope 1-3 tracking by 2026/2027.",
+      unexpected: "Rebound effect: Dropping cloud bills could incentivize engineering teams to run 10x more continuous tests, accidentally increasing total net emissions (Jevons Paradox).",
+      firstAction: "Perform Hourly Marginal Emissions Matching",
+      evidenceGaps: [
+        "Scope 3 Category 1 SaaS vendor emissions currently use raw industry averages.",
+        "No external third-party verification has been completed for the avoided emissions model."
+      ],
+      methodologyNotes: [
+        "Avoided emissions are modeled against standard counterfactual server setups.",
+        "FTE-based commute factors are scaled to 100% remote-first workspace profiles."
+      ],
+      nextSteps: [
+        "Configure real-time cloud usage monitoring in us-east-1.",
+        "Establish structured emission tracking using actual utility electricity bills for office locations."
+      ],
+      risks: [
+        { title: "Regulatory Compliance", timing: "2026", severity: "High", action: "Implement verified Scope 1-3 automated ledger" },
+        { title: "Additionality Gating Risks", timing: "2027", severity: "Medium", action: "Commission independent Life Cycle Assessment (LCA) audit" }
+      ],
+      citations: [
+        "GHG Protocol Corporate + Scope 3 Standard",
+        "Science Based Targets initiative (SBTi)",
+        "Software Carbon Intensity (SCI), ISO/IEC 21031:2024"
+      ],
+      webSources: [
+        { title: "SBTi Corporate Manual 2026", url: "https://sciencebasedtargets.org" },
+        { title: "ISO 21031 Software Efficiency Specification", url: "https://www.iso.org" }
+      ],
+      webSearchQueries: [
+        "SaaS company emission factor benchmarks",
+        "Rust vs Python cloud compute carbon footprint"
+      ]
+    },
+    aiReport: {
+      headline: "Cardinal Climate demonstrates strong alignment with SBTi carbon reductions and high-integrity avoided emissions pathways.",
+      basis: "Based on their Series A team (24 FTEs) and cloud SaaS-driven workflows.",
+      executiveSummary: "Cardinal Climate operates a highly optimized green cloud platform. Their principal hotspot is cloud compute (Scope 3). However, through innovative Rust-based algorithmic routing and green region selection, they deliver substantial avoided emissions for customers.",
+      issues: [
+        { title: "Algorithmic Efficiency", detail: "Transitioning core indexing scripts from Python to compiled languages (Rust) reduced CPU hours per search request by 91%." },
+        { title: "Hosting Decarbonization", detail: "Hosting 100% of compute services in US-East (N. Virginia) represents a key hotspot. Spreading loads or utilizing green hosting zones (e.g., AWS us-east-2 or EU-central-1) can reduce compute footprints by over 80%." }
+      ],
+      regulation: "Upcoming corporate sustainability guidelines (such as CSRD in the EU and SB 253 in California) will require audited Scope 1-3 tracking by 2026/2027.",
+      unexpected: "Rebound effect: Dropping cloud bills could incentivize engineering teams to run 10x more continuous tests, accidentally increasing total net emissions (Jevons Paradox).",
+      firstAction: "Perform Hourly Marginal Emissions Matching",
+      evidenceGaps: [
+        "Scope 3 Category 1 SaaS vendor emissions currently use raw industry averages.",
+        "No external third-party verification has been completed for the avoided emissions model."
+      ],
+      methodologyNotes: [
+        "Avoided emissions are modeled against standard counterfactual server setups.",
+        "FTE-based commute factors are scaled to 100% remote-first workspace profiles."
+      ],
+      nextSteps: [
+        "Configure real-time cloud usage monitoring in us-east-1.",
+        "Establish structured emission tracking using actual utility electricity bills for office locations."
+      ],
+      risks: [
+        { title: "Regulatory Compliance", timing: "2026", severity: "High", action: "Implement verified Scope 1-3 automated ledger" },
+        { title: "Additionality Gating Risks", timing: "2027", severity: "Medium", action: "Commission independent Life Cycle Assessment (LCA) audit" }
+      ],
+      citations: [
+        "GHG Protocol Corporate + Scope 3 Standard",
+        "Science Based Targets initiative (SBTi)",
+        "Software Carbon Intensity (SCI), ISO/IEC 21031:2024"
+      ],
+      webSources: [
+        { title: "SBTi Corporate Manual 2026", url: "https://sciencebasedtargets.org" },
+        { title: "ISO 21031 Software Efficiency Specification", url: "https://www.iso.org" }
+      ],
+      webSearchQueries: [
+        "SaaS company emission factor benchmarks",
+        "Rust vs Python cloud compute carbon footprint"
+      ]
+    },
+    createdAt: new Date().toISOString()
+  },
+  invites: []
+};
+
+const isShowcaseActive = window.location.hostname === "gtr1.web.app" || window.location.search.includes("showcase");
+
+if (isShowcaseActive) {
+  const originalFetch = window.fetch;
+  window.fetch = async function(url, options) {
+    const urlStr = typeof url === 'string' ? url : url.url;
+    if (urlStr.includes("/api/me")) {
+      return new Response(JSON.stringify({ email: "founder@cardinalclimate.com", id: "cardinal-user" }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+    if (urlStr.includes("/api/state")) {
+      if (options && options.method === "PUT") {
+        return new Response(JSON.stringify({ success: true }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+      return new Response(JSON.stringify({ state: CARDINAL_STATE }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+    if (urlStr.includes("/api/generate-report")) {
+      return new Response(JSON.stringify({
+        report: CARDINAL_STATE.assessment.aiReport,
+        snapshot: CARDINAL_STATE.assessment.snapshot
+      }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+    if (urlStr.includes("/api/reports")) {
+      const match = urlStr.match(/\/api\/reports\/([a-zA-Z0-9_-]+)/);
+      if (match) {
+        return new Response(JSON.stringify({ state_json: JSON.stringify(CARDINAL_STATE) }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+      return new Response(JSON.stringify([
+        { id: "rep-init", name: "Initial Baseline Snapshot", created_at: "2026-03-01T10:00:00.000Z" },
+        { id: "rep-q1", name: "Q1 2026 Continuous Audit", created_at: "2026-06-15T14:30:00.000Z" }
+      ]), {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+    if (urlStr.includes("/api/documents")) {
+      return new Response(JSON.stringify([
+        { id: "doc-1", kind: "deck", name: "Cardinal-Climate-SeriesA-Deck.pdf", size: 4200100 },
+        { id: "doc-2", kind: "accounting", name: "accounting-report-q1.csv", size: 128400 }
+      ]), {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+    if (urlStr.includes("/api/admin/stats")) {
+      return new Response(JSON.stringify({
+        users: 142,
+        workspaces: 118,
+        documents: 384,
+        reports: 512,
+        tokens: { prompt: 1420500, completion: 412200, total: 1832700 }
+      }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+    if (urlStr.includes("/api/admin/token-logs")) {
+      return new Response(JSON.stringify({
+        logs: [
+          { created_at: "2026-06-28T18:30:00.000Z", user_id: "founder@cardinalclimate.com", prompt_tokens: 1240, completion_tokens: 580, total_tokens: 1820 },
+          { created_at: "2026-06-28T14:15:00.000Z", user_id: "rae@verba.ai", prompt_tokens: 1420, completion_tokens: 620, total_tokens: 2040 },
+          { created_at: "2026-06-27T09:45:00.000Z", user_id: "sam@greenops.com", prompt_tokens: 1150, completion_tokens: 490, total_tokens: 1640 }
+        ]
+      }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+    return originalFetch.call(window, url, options);
+  };
+}
+
 const DEFAULT_STATE = {
   company: {
     name: "",
@@ -167,18 +422,31 @@ const GOAL_TEMPLATES = {
 
 class ClimateDashboardApp {
   constructor() {
-    this.state = this.loadState();
-    this.currentView = "intake";
-    this.wattTimeIntensity = 432; // base simulated intensity
-
-    // Backend / auth state
-    this.user = null;                 // signed-in email, or null (offline draft)
-    this.authMode = "signup";         // "signup" | "login"
-    this._authOnSuccess = null;       // callback after successful auth
-    this._statePushTimer = null;      // debounce handle for PUT /api/state
+    const isShowcase = window.location.hostname === "gtr1.web.app" || window.location.search.includes("showcase");
+    
+    if (isShowcase) {
+      this.state = JSON.parse(JSON.stringify(CARDINAL_STATE));
+      this.user = "founder@cardinalclimate.com";
+      const hash = window.location.hash.replace("#", "");
+      const isFunnelView = ["landing", "methodology", "onboard", "report"].includes(hash);
+      this.showFunnel = isFunnelView || !hash;
+      if (this.showFunnel) {
+        this.state.funnelStage = hash || "landing";
+      } else {
+        this.currentView = hash || "ledger";
+      }
+    } else {
+      this.state = this.loadState();
+      this.currentView = "intake";
+      this.user = null;
+    }
+    
+    this.wattTimeIntensity = 432;
+    this.authMode = "signup";
+    this._authOnSuccess = null;
+    this._statePushTimer = null;
     this._rootLanding = !window.location.hash;
 
-    // Bind DOM events
     this.initDOM();
     this.initFunnelDOM();
     this.initAuthDOM();
@@ -187,144 +455,37 @@ class ClimateDashboardApp {
     this.renderLandingMethodology();
     this.populateBusinessModelSelect();
 
-    // An ?invite= link entitles the visitor to the free assessment, never a
-    // direct drop into a dashboard.
     this._inviteParam = new URLSearchParams(window.location.search).has("invite");
 
-    // Decide whether to show the pre-login funnel or the dashboard shell.
-    // A bare "/" is always the public landing. Dashboard routes use hashes.
-    if (this._rootLanding) this.state.funnelStage = "landing";
-    this.showFunnel = this._rootLanding || this._inviteParam || (!this.state.company.isInitialized && this.state.funnelStage !== "done");
+    if (!isShowcase) {
+      if (this._rootLanding) this.state.funnelStage = "landing";
+      this.showFunnel = this._rootLanding || this._inviteParam || (!this.state.company.isInitialized && this.state.funnelStage !== "done");
+    }
+    
     this.applyShell();
+    
     if (this._inviteParam) {
       this.startInvitedAssessment();
     } else if (this.showFunnel) {
       this.renderFunnel();
     }
 
-    // Render initial state (offline-first), then reconcile with the backend.
     this.render();
-    this.syncSession();
-    this.initShowcaseHeader();
+    
+    if (!isShowcase) {
+      this.syncSession();
+    } else {
+      const select = document.getElementById("showcase-page-select");
+      if (select) {
+        const hash = window.location.hash.replace("#", "");
+        select.value = hash || (this.showFunnel ? this.state.funnelStage : this.currentView);
+      }
+    }
   }
 
   // ==========================================================================
   // BACKEND SYNC & AUTH
   // ==========================================================================
-
-  initShowcaseHeader() {
-    const isShowcase = window.location.hostname === "gtr1.web.app" || window.location.search.includes("showcase") || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-    if (!isShowcase) return;
-    
-    if (document.querySelector(".showcase-bar")) return;
-
-    const bar = document.createElement("div");
-    bar.className = "showcase-bar";
-    
-    const isP0 = window.location.pathname.includes("/prototype0");
-    const isP1 = window.location.pathname.includes("/prototype1");
-    const isMain = !isP0 && !isP1;
-
-    let dropdownHtml = "";
-    if (isP1) {
-      dropdownHtml = `
-        <optgroup label="Mobile Standalone Questionnaire">
-          <option value="landing">Step 1: Welcome & Profile</option>
-          <option value="step2">Step 2: Team & Location</option>
-          <option value="step3">Step 3: Energy & Operations</option>
-          <option value="step4">Step 4: Digital Compute</option>
-          <option value="step5">Step 5: Travel & Logistics</option>
-          <option value="step6">Step 6: Avoided Emissions</option>
-          <option value="step7">Step 7: Final Assessment Report</option>
-        </optgroup>
-      `;
-    } else {
-      dropdownHtml = `
-        <optgroup label="Marketing Funnel">
-          <option value="landing">1. Landing Page</option>
-          <option value="methodology">2. Methodology Detail</option>
-          <option value="onboard">3. Onboarding Wizard</option>
-          <option value="report">4. Instant AI Report</option>
-        </optgroup>
-        <optgroup label="Founder Dashboard">
-          <option value="ledger">5. Live Carbon Ledger</option>
-          <option value="goals">6. Goal Board &amp; Maturity</option>
-          <option value="radar">7. Environmental Risk Radar</option>
-          <option value="share">8. Investor Diligence Share</option>
-          <option value="extend">9. Team &amp; next steps</option>
-          <option value="history">10. Snapshot History</option>
-          <option value="admin">11. Platform Administration</option>
-          <option value="game">12. Interactive Climate Game</option>
-        </optgroup>
-      `;
-    }
-
-    bar.innerHTML = `
-      <div class="showcase-brand">
-        <span class="showcase-badge">SHOWCASE</span>
-      </div>
-      <div class="showcase-nav-links">
-        <a href="/" class="showcase-nav-btn ${isMain ? 'active' : ''}">Main Showcase</a>
-        <a href="/prototype0" class="showcase-nav-btn ${isP0 ? 'active' : ''}">Prototype 0</a>
-        <a href="/prototype1" class="showcase-nav-btn ${isP1 ? 'active' : ''}">Prototype 1</a>
-      </div>
-      <div class="showcase-selector-container">
-        <label for="showcase-page-select" class="showcase-label">Jump to:</label>
-        <select id="showcase-page-select" class="showcase-select">
-          ${dropdownHtml}
-        </select>
-      </div>
-      <div class="showcase-nav-links">
-        <a href="/slides/" class="showcase-nav-btn showcase-slides-btn" target="_blank">Research Slides</a>
-      </div>
-    `;
-
-    document.body.prepend(bar);
-
-    const select = bar.querySelector("#showcase-page-select");
-    if (select) {
-      select.addEventListener("change", (e) => {
-        if (isP1) {
-          const val = e.target.value;
-          const stepIndexMap = {
-            "landing": 0, "step2": 1, "step3": 2, "step4": 3, "step5": 4, "step6": 5, "step7": 6
-          };
-          const targetStep = stepIndexMap[val];
-          if (targetStep !== undefined) {
-            window.dispatchEvent(new CustomEvent("showcase-jump", { detail: { step: targetStep } }));
-          }
-        } else {
-          this.showcaseNavigate(e.target.value);
-        }
-      });
-    }
-
-    setTimeout(() => {
-      const hash = window.location.hash.replace("#", "");
-      if (select && hash) {
-        select.value = hash;
-      }
-    }, 100);
-  }
-
-  showcaseNavigate(viewId) {
-    if (["landing", "methodology", "onboard", "report"].includes(viewId)) {
-      this.showFunnel = true;
-      this.state.funnelStage = viewId;
-      this.applyShell();
-      this.renderFunnel();
-      window.location.hash = `#${viewId}`;
-    } else {
-      this.showFunnel = false;
-      this.state.company.isInitialized = true;
-      this.applyShell();
-      window.location.hash = `#${viewId}`;
-      this.currentView = viewId;
-      this.render();
-    }
-    const select = document.getElementById("showcase-page-select");
-    if (select) select.value = viewId;
-  }
 
   // On load: if a valid session exists, hydrate dashboard state from the server.
   async syncSession() {
@@ -513,7 +674,7 @@ class ClimateDashboardApp {
 
     const adminItem = document.getElementById("sidebar-admin-item");
     if (adminItem) {
-      const isEmailAdmin = this.user && (this.user.startsWith("admin@") || this.user === "rae@sociallab.com");
+      const isEmailAdmin = this.user && (this.user.startsWith("admin@") || this.user === "rae@sociallab.com" || isShowcaseActive);
       if (isEmailAdmin) {
         adminItem.classList.remove("hidden");
       } else {
@@ -2062,6 +2223,25 @@ class ClimateDashboardApp {
   }
 
   // State Persistence
+  showcaseNavigate(viewId) {
+    if (["landing", "methodology", "onboard", "report"].includes(viewId)) {
+      this.showFunnel = true;
+      this.state.funnelStage = viewId;
+      this.applyShell();
+      this.renderFunnel();
+      window.location.hash = `#${viewId}`;
+    } else {
+      this.showFunnel = false;
+      this.state.company.isInitialized = true;
+      this.applyShell();
+      window.location.hash = `#${viewId}`;
+      this.currentView = viewId;
+      this.render();
+    }
+    const select = document.getElementById("showcase-page-select");
+    if (select) select.value = viewId;
+  }
+
   loadState() {
     const data = localStorage.getItem("climate_dashboard_state");
     if (data) {
@@ -2138,7 +2318,22 @@ class ClimateDashboardApp {
     const handleRoute = () => {
       const hash = window.location.hash.replace("#", "") || "intake";
       
-      // Force intake if not initialized
+      const isShowcase = window.location.hostname === "gtr1.web.app" || window.location.search.includes("showcase");
+      if (isShowcase) {
+        if (["landing", "methodology", "onboard", "report"].includes(hash)) {
+          this.showFunnel = true;
+          this.state.funnelStage = hash;
+          this.applyShell();
+          this.renderFunnel();
+          const select = document.getElementById("showcase-page-select");
+          if (select) select.value = hash;
+          return;
+        } else {
+          this.showFunnel = false;
+          this.applyShell();
+        }
+      }
+      
       if (!this.state.company.isInitialized && hash !== "intake") {
         window.location.hash = "#intake";
         return;
@@ -2146,7 +2341,6 @@ class ClimateDashboardApp {
       
       this.currentView = hash;
       
-      // Update sidebar highlight
       document.querySelectorAll(".nav-link").forEach(link => {
         if (link.dataset.view === hash) {
           link.classList.add("active");
@@ -2155,7 +2349,6 @@ class ClimateDashboardApp {
         }
       });
       
-      // Toggle views
       document.querySelectorAll(".app-view").forEach(view => {
         if (view.id === `view-${hash}`) {
           view.classList.add("active");
@@ -2165,6 +2358,9 @@ class ClimateDashboardApp {
       });
       
       this.renderViewSpecifics(hash);
+      
+      const select = document.getElementById("showcase-page-select");
+      if (select) select.value = hash;
     };
     
     window.addEventListener("hashchange", handleRoute);
