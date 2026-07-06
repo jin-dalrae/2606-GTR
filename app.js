@@ -223,19 +223,25 @@ class ClimateDashboardApp {
     
     const isP0 = window.location.pathname.includes("/prototype0");
     const isP1 = window.location.pathname.includes("/prototype1");
-    const isMain = !isP0 && !isP1;
+    const isP2 = window.location.pathname.includes("/prototype2");
+    const isMain = !isP0 && !isP1 && !isP2;
 
     let dropdownHtml = "";
     if (isP1) {
       dropdownHtml = `
         <optgroup label="Mobile Standalone Questionnaire">
-          <option value="landing">Step 1: Welcome & Profile</option>
-          <option value="step2">Step 2: Team & Location</option>
-          <option value="step3">Step 3: Energy & Operations</option>
-          <option value="step4">Step 4: Digital Compute</option>
-          <option value="step5">Step 5: Travel & Logistics</option>
-          <option value="step6">Step 6: Avoided Emissions</option>
-          <option value="step7">Step 7: Final Assessment Report</option>
+          <option value="1">Step 1: Startup Profile</option>
+          <option value="2">Step 2: Digital Baseline &amp; Cloud</option>
+          <option value="3">Step 3: Scope Activities &amp; Decarbonization</option>
+          <option value="4">Step 4: AI Briefing &amp; Notes</option>
+          <option value="5">Step 5: Final Impact Report</option>
+        </optgroup>
+      `;
+    } else if (isP2) {
+      dropdownHtml = `
+        <optgroup label="Mobile Standalone Dashboard">
+          <option value="ledger">Tab 1: Impact Ledger</option>
+          <option value="goals">Tab 2: Startup Goal Board</option>
         </optgroup>
       `;
     } else {
@@ -267,6 +273,7 @@ class ClimateDashboardApp {
         <a href="/" class="showcase-nav-btn ${isMain ? 'active' : ''}">Main Showcase</a>
         <a href="/prototype0" class="showcase-nav-btn ${isP0 ? 'active' : ''}">Prototype 0</a>
         <a href="/prototype1" class="showcase-nav-btn ${isP1 ? 'active' : ''}">Prototype 1</a>
+        <a href="/prototype2" class="showcase-nav-btn ${isP2 ? 'active' : ''}">Prototype 2</a>
       </div>
       <div class="showcase-selector-container">
         <label for="showcase-page-select" class="showcase-label">Jump to:</label>
@@ -285,13 +292,14 @@ class ClimateDashboardApp {
     if (select) {
       select.addEventListener("change", (e) => {
         if (isP1) {
+          const val = Number(e.target.value);
+          if (window.app && typeof window.app.setState === "function") {
+            window.app.setState({ page: val });
+          }
+        } else if (isP2) {
           const val = e.target.value;
-          const stepIndexMap = {
-            "landing": 0, "step2": 1, "step3": 2, "step4": 3, "step5": 4, "step6": 5, "step7": 6
-          };
-          const targetStep = stepIndexMap[val];
-          if (targetStep !== undefined) {
-            window.dispatchEvent(new CustomEvent("showcase-jump", { detail: { step: targetStep } }));
+          if (typeof window.switchTab === "function") {
+            window.switchTab(val);
           }
         } else {
           this.showcaseNavigate(e.target.value);

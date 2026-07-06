@@ -124,10 +124,26 @@ body {
 .deck-stage {
   position: relative;
   display: flex;
-  align-items: stretch;
+  align-items: flex-start;
   justify-content: center;
-  padding: var(--slide-pad) var(--gutter);
-  overflow: hidden;
+  padding: clamp(28px, 5vh, 80px) var(--gutter) clamp(48px, 6vh, 96px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+}
+
+.deck-stage::-webkit-scrollbar {
+  width: 8px;
+}
+.deck-stage::-webkit-scrollbar-track {
+  background: transparent;
+}
+.deck-stage::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 4px;
+}
+.deck-stage::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
 }
 
 .slide {
@@ -431,6 +447,163 @@ body {
 
 .title-meta dd {
   margin: 0;
+}
+
+/* ============================================================
+   Doc slide — section divider (centered, chapter break)
+   ============================================================ */
+.slide.doc-divider {
+  max-width: 880px;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding-top: 0;
+  padding-bottom: 0;
+  text-align: center;
+}
+
+.slide-title.doc-title-divider {
+  font-size: clamp(36px, 5.5vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+/* ============================================================
+   Doc slide — verbatim long-form content
+   ============================================================ */
+.slide.doc-slide {
+  max-width: 760px;
+  margin: 0 auto;
+  gap: clamp(16px, 2vh, 28px);
+  padding-top: clamp(8px, 2vh, 24px);
+  padding-bottom: clamp(32px, 6vh, 80px);
+}
+
+.slide-title.doc-title {
+  font-size: clamp(28px, 3.6vw, 44px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+  border: 0;
+  padding: 0;
+}
+
+.doc-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 16.5px;
+  line-height: 1.7;
+  color: var(--ink);
+  max-width: 100%;
+}
+
+.doc-body p,
+.doc-body .doc-p {
+  margin: 0;
+}
+
+.doc-body .doc-h3 {
+  font-family: "Fraunces", serif;
+  font-weight: 600;
+  font-size: 19px;
+  line-height: 1.35;
+  letter-spacing: -0.005em;
+  margin: 18px 0 4px;
+  color: var(--ink);
+}
+
+.doc-body .doc-h4 {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 600;
+  font-size: 16.5px;
+  line-height: 1.4;
+  margin: 0 0 4px;
+  color: var(--ink);
+}
+
+.doc-body strong {
+  font-weight: 600;
+}
+
+.doc-body .doc-list {
+  margin: 4px 0 4px;
+  padding-left: 24px;
+  list-style-position: outside;
+}
+
+.doc-body .doc-list[data-style="num"] {
+  list-style: decimal;
+}
+
+.doc-body .doc-list[data-style="bullet"] {
+  list-style: disc;
+}
+
+.doc-body .doc-list[data-style="letter"] {
+  list-style: upper-alpha;
+}
+
+.doc-body .doc-list[data-style="roman"] {
+  list-style: upper-roman;
+}
+
+.doc-body .doc-list-item {
+  margin: 10px 0;
+  line-height: 1.65;
+}
+
+.doc-body .doc-list-item-heading {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 600;
+  font-size: 16.5px;
+  margin: 0 0 4px;
+  color: var(--ink);
+}
+
+.doc-body .doc-list-item-body > p {
+  margin: 6px 0;
+}
+
+.doc-body .doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8px 0 4px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  table-layout: fixed;
+}
+
+.doc-body .doc-table th,
+.doc-body .doc-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 10px 12px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.doc-body .doc-table th {
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+  background: transparent;
+  border-top: 0;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.doc-body .doc-table tr:last-child td {
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.doc-body .doc-table th + th,
+.doc-body .doc-table td + td {
+  border-left: 0;
 }
 
 /* ============================================================

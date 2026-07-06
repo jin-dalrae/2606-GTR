@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GTR Handprint | Standalone Mobile Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #dedcd5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow: hidden;
+      padding: 24px;
+    }
+    
+    .bezel-container {
+      background: #1f1f1f;
+      padding: 12px;
+      border-radius: 42px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .device-bezel {
+      position: relative;
+      width: 380px;
+      height: 760px;
+      background: #fbfaf7;
+      border: 1px solid #e6e4dd;
+      border-radius: 32px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .device-notch {
+      position: absolute;
+      top: 9px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 118px;
+      height: 6px;
+      background: #1f1f1f;
+      border-radius: 4px;
+      z-index: 60;
+    }
+
+    /* Standalone Bezel Navigation Header */
+    .bezel-header {
+      flex: none;
+      padding: 26px 20px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-bottom: 1px solid #efeee9;
+      background: #fff;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .brand-logo svg {
+      width: 18px;
+      height: 18px;
+      color: #0fb981;
+    }
+
+    .dashboard-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+    }
+
+    .bezel-tab-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: #f3f4f6;
+      padding: 4px;
+      border-radius: 8px;
+    }
+
+    .bezel-tab-btn {
+      padding: 8px;
+      background: none;
+      border: none;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #4b5563;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .bezel-tab-btn.active {
+      background: #fff;
+      color: #111827;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    .bezel-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      background: #fbfaf7;
+    }
+
+    .tab-section {
+      display: none;
+    }
+
+    .tab-section.active {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Core Card styling */
+    .dashboard-card {
+      background: #fff;
+      border: 1.5px solid #e6e4dd;
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 12px;
+    }
+
+    .card-meta {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+
+    /* Metrics Grid & Overview list styles */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .metric-bubble {
+      text-align: left;
+    }
+
+    .metric-bubble-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+
+    .metric-bubble-val {
+      font-size: 24px;
+      font-weight: 800;
+      color: #111827;
+      line-height: 1;
+    }
+
+    .metric-bubble-unit {
+      font-size: 10px;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+
+    /* Impact List & Bar style */
+    .ledger-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .ledger-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .ledger-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .ledger-row-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .ledger-row-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .ledger-row-val {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .metered-badge {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 1px 4px;
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+      border-radius: 3px;
+      margin-left: 6px;
+    }
+
+    .modeled-badge {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 1px 4px;
+      background: #f3f4f6;
+      color: #4b5563;
+      border: 1px solid #e5e7eb;
+      border-radius: 3px;
+      margin-left: 6px;
+    }
+
+    .claim-badge-strong {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 1px 4px;
+      background: #eef2ff;
+      color: #4338ca;
+      border: 1px solid #c7d2fe;
+      border-radius: 3px;
+      margin-left: 6px;
+    }
+
+    .claim-badge-medium {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 1px 4px;
+      background: #fffbeb;
+      color: #b45309;
+      border: 1px solid #fde68a;
+      border-radius: 3px;
+      margin-left: 6px;
+    }
+
+    .progress-bar-bg {
+      height: 6px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      overflow: hidden;
+      margin-top: 2px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+    }
+
+    .progress-fill-footprint {
+      background: #f43f5e;
+    }
+
+    .progress-fill-handprint {
+      background: #10b981;
+    }
+
+    /* Beyond Carbon Icons Row */
+    .beyond-carbon-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+
+    .beyond-carbon-item {
+      border: 1px solid #f0efea;
+      border-radius: 10px;
+      padding: 10px 4px;
+      text-align: center;
+      background: #fff;
+    }
+
+    .beyond-carbon-icon {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    .beyond-carbon-val {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .beyond-carbon-unit {
+      font-size: 10px;
+      color: #9ca3af;
+      margin-top: 1px;
+    }
+
+    .beyond-carbon-label {
+      font-size: 10px;
+      color: #4b5563;
+      margin-top: 3px;
+    }
+
+    /* Goals / Maturity styles */
+    .maturity-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .maturity-circle-svg {
+      width: 44px;
+      height: 44px;
+      flex: none;
+    }
+
+    .maturity-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .maturity-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    .maturity-action-block {
+      background: #f4f3ee;
+      border: 1px solid #e6e4dd;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-top: 10px;
+    }
+
+    .maturity-action-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6b6a64;
+      margin-bottom: 4px;
+    }
+
+    .maturity-action-text {
+      font-size: 12.5px;
+      color: #111827;
+      line-height: 1.4;
+      font-weight: 600;
+    }
+
+    .goal-list-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .goal-list-item:last-child {
+      border-bottom: none;
+    }
+
+    .goal-row-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .goal-text-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #111827;
+      line-height: 1.4;
+    }
+
+    .goal-status-badge {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .status-completed {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+
+    .status-progress {
+      background: #fffbeb;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+
+    .goal-evidence-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #6b7280;
+      background: #f9fafb;
+      padding: 4px 8px;
+      border-radius: 4px;
+      width: fit-content;
+    }
+
+    .goal-evidence-row svg {
+      width: 12px;
+      height: 12px;
+      color: #9ca3af;
+    }
+
+    .goal-evidence-filename {
+      font-weight: 500;
+      color: #4b5563;
+    }
+
+    /* Device footer */
+    .device-footer {
+      flex: none;
+      padding: 12px 18px 14px;
+      border-top: 1px solid #efeee9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fbfaf7;
+    }
+
+    .footer-detail {
+      font-size: 11px;
+      color: #8a8983;
+      font-family: ui-monospace, monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bezel-container">
+    <div class="device-notch"></div>
+    <div class="device-bezel">
+      
+      <!-- Device Header containing Tabs -->
+      <div class="bezel-header">
+        <div class="brand-row">
+          <div class="brand-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+            <span>Cardinal Climate</span>
+          </div>
+          <span class="dashboard-badge">Dashboard</span>
+        </div>
+        
+        <div class="bezel-tab-bar">
+          <button class="bezel-tab-btn active" onclick="switchTab('ledger')">Impact Ledger</button>
+          <button class="bezel-tab-btn" onclick="switchTab('goals')">Goal Board</button>
+        </div>
+      </div>
+
+      <!-- Scrollable Device Content Area -->
+      <div class="bezel-content">
+        
+        <!-- ==================== LEDGER TAB ==================== -->
+        <div class="tab-section active" id="sec-ledger">
+          
+          <!-- Summary Metrics -->
+          <div class="dashboard-card overview-grid">
+            <div class="metric-bubble">
+              <div class="metric-bubble-label">Est. Footprint</div>
+              <div class="metric-bubble-val">61.7</div>
+              <div class="metric-bubble-unit">tCO₂e / yr</div>
+            </div>
+            <div class="metric-bubble" style="border-left: 1.5px solid #efeee9; padding-left: 14px;">
+              <div class="metric-bubble-label">Positive Impact</div>
+              <div class="metric-bubble-val">60.0</div>
+              <div class="metric-bubble-unit">tCO₂e avoidable</div>
+            </div>
+          </div>
+
+          <!-- Carbon Metrics Ledger list -->
+          <div class="dashboard-card">
+            <div class="card-title">Carbon Operational Footprint</div>
+            <div class="ledger-list">
+              <div class="ledger-row">
+                <div class="ledger-row-header">
+                  <span class="ledger-row-title">Cloud & AI Compute<span class="metered-badge">Metered</span></span>
+                  <span class="ledger-row-val">20.4 tCO₂e</span>
+                </div>
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill progress-fill-footprint" style="width: 100%;"></div>
+                </div>
+              </div>
+              <div class="ledger-row">
+                <div class="ledger-row-header">
+                  <span class="ledger-row-title">Purchased Grid Electricity<span class="metered-badge">Metered</span></span>
+                  <span class="ledger-row-val">13.4 tCO₂e</span>
+                </div>
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill progress-fill-footprint" style="width: 66%;"></div>
+                </div>
+              </div>
+              <div class="ledger-row">
+                <div class="ledger-row-header">
+                  <span class="ledger-row-title">FTE Travel & Commutes<span class="modeled-badge">Modeled</span></span>
+                  <span class="ledger-row-val">11.5 tCO₂e</span>
+                </div>
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill progress-fill-footprint" style="width: 56%;"></div>
+                </div>
+              </div>
+              <div class="ledger-row">
+                <div class="ledger-row-header">
+                  <span class="ledger-row-title">Hardware & Electronics<span class="modeled-badge">Modeled</span></span>
+                  <span class="ledger-row-val">7.7 tCO₂e</span>
+                </div>
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill progress-fill-footprint" style="width: 38%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Avoided Claims list -->
+          <div class="dashboard-card">
+            <div class="card-title">Avoided Emissions (Handprint)</div>
+            <div class="ledger-list">
+              <div class="ledger-row">
+                <div class="ledger-row-header">
+                  <span class="ledger-row-title">Cloud Optimization Claim<span class="claim-badge-strong">Strong</span></span>
+                  <span class="ledger-row-val">45.0 tCO₂e</span>
+                </div>
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill progress-fill-handprint" style="width: 100%;"></div>
+                </div>
+              </div>
+              <div class="ledger-row">
+                <div class="ledger-row-header">
+                  <span class="ledger-row-title">Commute Displacement Claim<span class="claim-badge-medium">Medium</span></span>
+                  <span class="ledger-row-val">15.0 tCO₂e</span>
+                </div>
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill progress-fill-handprint" style="width: 33%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Price bands card -->
+          <div class="dashboard-card">
+            <div class="card-title">Carbon Cost Exposure</div>
+            <div class="metric-bubble-val" style="font-size: 26px;">$4,626 – $11,719 / yr</div>
+            <div class="card-meta">Calculated based on your operational footprint of 61.7 tCO₂e/yr. Budget for this cost band before your next raise.</div>
+          </div>
+
+          <!-- Beyond Carbon Multi-dimension card -->
+          <div class="dashboard-card">
+            <div class="card-title">Impact Beyond Carbon</div>
+            <div class="beyond-carbon-grid">
+              <div class="beyond-carbon-item">
+                <div class="beyond-carbon-icon">⚡</div>
+                <div class="beyond-carbon-val">67,436</div>
+                <div class="beyond-carbon-unit">kWh/yr</div>
+                <div class="beyond-carbon-label">Energy</div>
+              </div>
+              <div class="beyond-carbon-item">
+                <div class="beyond-carbon-icon">〜</div>
+                <div class="beyond-carbon-val">110</div>
+                <div class="beyond-carbon-unit">m³/yr</div>
+                <div class="beyond-carbon-label">Water</div>
+              </div>
+              <div class="beyond-carbon-item">
+                <div class="beyond-carbon-icon">♻</div>
+                <div class="beyond-carbon-val">401</div>
+                <div class="beyond-carbon-unit">kg/yr</div>
+                <div class="beyond-carbon-label">Waste</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ==================== GOALS TAB ==================== -->
+        <div class="tab-section" id="sec-goals">
+          
+          <!-- Scored Impact Maturity status -->
+          <div class="dashboard-card">
+            <div class="card-title">Impact Maturity Tracker</div>
+            <div class="maturity-header">
+              <svg class="maturity-circle-svg" viewBox="0 0 100 65">
+                <path d="M10,58 A40,40 0 0,0 90,58" fill="none" stroke="#e6e4dd" stroke-width="10" stroke-linecap="round"/>
+                <path d="M10,58 A40,40 0 0,0 90,58" fill="none" stroke="#0fb981" stroke-width="10" stroke-linecap="round" stroke-dasharray="125.6 251.2"/>
+                <circle cx="50" cy="58" r="3" fill="#2b2b2b"/>
+              </svg>
+              <div>
+                <div class="maturity-title">Level 5 · Audited / Verified</div>
+                <span class="maturity-badge">Highest Integrity</span>
+              </div>
+            </div>
+            
+            <div class="maturity-action-block">
+              <div class="maturity-action-title">First Action (Binding)</div>
+              <div class="maturity-action-text">Get external verification before publishing avoided claims</div>
+            </div>
+            <div class="card-meta" style="margin-top: 10px;">Anchor Standard: EU Green Claims Directive / Project Frame</div>
+          </div>
+
+          <!-- Active Goals List -->
+          <div class="dashboard-card">
+            <div class="card-title">Startup Goal Board</div>
+            <div class="ledger-list">
+              
+              <div class="goal-list-item">
+                <div class="goal-row-header">
+                  <span class="goal-text-title">Implement SCI Method for Cloud/AI Compute</span>
+                  <span class="goal-status-badge status-completed">Complete</span>
+                </div>
+                <div class="goal-evidence-row">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
+                  </svg>
+                  <span class="goal-evidence-filename">SCI-audit-2026.pdf</span>
+                </div>
+              </div>
+
+              <div class="goal-list-item">
+                <div class="goal-row-header">
+                  <span class="goal-text-title">Source 100% refurbished laptops &amp; hardware</span>
+                  <span class="goal-status-badge status-completed">Complete</span>
+                </div>
+                <div class="goal-evidence-row">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
+                  </svg>
+                  <span class="goal-evidence-filename">refurbished-invoices.pdf</span>
+                </div>
+              </div>
+
+              <div class="goal-list-item">
+                <div class="goal-row-header">
+                  <span class="goal-text-title">Perform Hourly Marginal Grid Emissions Matching</span>
+                  <span class="goal-status-badge status-progress">In Progress</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Device Footer mimicking Smartphone -->
+      <div class="device-footer">
+        <div class="footer-detail">GTR Mobile Dashboard · Prototype 2</div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tabId) {
+      // Toggle tab buttons
+      const buttons = document.querySelectorAll('.bezel-tab-btn');
+      buttons.forEach(btn => {
+        if (btn.innerText.toLowerCase().includes(tabId)) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      
+      // Toggle tab content sections
+      const sections = document.querySelectorAll('.tab-section');
+      sections.forEach(sec => {
+        if (sec.id === 'sec-' + tabId) {
+          sec.classList.add('active');
+        } else {
+          sec.classList.remove('active');
+        }
+      });
+
+      // Synchronize the dropdown select value in showcase header
+      const select = document.getElementById("showcase-page-select");
+      if (select) select.value = tabId;
+    }
+
+    function injectShowcaseHeader() {
+      const isShowcase = window.location.hostname === "gtr1.web.app" || window.location.search.includes("showcase") || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+      if (!isShowcase) return;
+      
+      if (document.querySelector(".showcase-bar")) return;
+
+      const style = document.createElement("style");
+      style.textContent = `
+        .showcase-bar {
+          position: relative;
+          width: 100%;
+          z-index: 100000;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 10px 24px;
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border: none;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+          border-radius: 0;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+          font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+          transition: all 0.3s ease;
+        }
+        .showcase-brand {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .showcase-badge {
+          display: inline-flex;
+          align-items: center;
+          padding: 3px 8px;
+          background: #111827;
+          color: #ffffff;
+          font-family: inherit;
+          font-weight: 700;
+          font-size: 0.65rem;
+          letter-spacing: 0.05em;
+          border-radius: 0;
+        }
+        .showcase-selector-container {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          border-left: 1px solid rgba(0, 0, 0, 0.08);
+          padding-left: 16px;
+        }
+        .showcase-label {
+          color: #6b7280;
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          font-weight: 600;
+        }
+        .showcase-select {
+          background: #f3f4f6;
+          color: #111827;
+          border: 1px solid rgba(0, 0, 0, 0.08);
+          border-radius: 0;
+          padding: 4px 12px;
+          font-size: 0.82rem;
+          font-weight: 600;
+          cursor: pointer;
+          outline: none;
+          transition: all 0.2s ease;
+        }
+        .showcase-nav-links {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          border-left: 1px solid rgba(0, 0, 0, 0.08);
+          padding-left: 16px;
+        }
+        .showcase-nav-btn {
+          color: #4b5563;
+          font-size: 0.8rem;
+          font-weight: 600;
+          text-decoration: none;
+          padding: 4px 12px;
+          border-radius: 0;
+          transition: all 0.2s ease;
+        }
+        .showcase-nav-btn:hover {
+          color: #111827;
+          background: rgba(0, 0, 0, 0.04);
+        }
+        .showcase-nav-btn.active {
+          color: #ffffff;
+          background: #111827;
+        }
+        .showcase-slides-btn {
+          border: 1px solid rgba(0, 0, 0, 0.15);
+          color: #111827;
+        }
+        .showcase-slides-btn:hover {
+          background: rgba(0, 0, 0, 0.04);
+          border-color: #111827;
+        }
+      `;
+      document.head.appendChild(style);
+
+      const bar = document.createElement("div");
+      bar.className = "showcase-bar";
+      bar.innerHTML = `
+        <div class="showcase-brand">
+          <span class="showcase-badge">SHOWCASE</span>
+        </div>
+        <div class="showcase-nav-links">
+          <a href="/" class="showcase-nav-btn">Main Showcase</a>
+          <a href="/prototype0" class="showcase-nav-btn">Prototype 0</a>
+          <a href="/prototype1" class="showcase-nav-btn">Prototype 1</a>
+          <a href="/prototype2" class="showcase-nav-btn active">Prototype 2</a>
+        </div>
+        <div class="showcase-selector-container">
+          <label for="showcase-page-select" class="showcase-label">Jump to:</label>
+          <select id="showcase-page-select" class="showcase-select">
+            <optgroup label="Mobile Standalone Dashboard">
+              <option value="ledger">Tab 1: Impact Ledger</option>
+              <option value="goals">Tab 2: Startup Goal Board</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="showcase-nav-links">
+          <a href="/slides/" class="showcase-nav-btn showcase-slides-btn" target="_blank">Research Slides</a>
+        </div>
+      `;
+
+      document.body.prepend(bar);
+
+      const select = bar.querySelector("#showcase-page-select");
+      if (select) {
+        select.addEventListener("change", (e) => {
+          switchTab(e.target.value);
+        });
+      }
+    }
+
+    injectShowcaseHeader();
+  </script>
+</body>
+</html>

@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && cp -R slides dist/slides && cp -R research dist/research && mkdir -p dist/prototype1 && cp \"Onboarding Assessment Standalone.html\" dist/prototype1/index.html",
+    "build": "vite build && cp -R slides dist/slides && cp -R research dist/research && mkdir -p dist/prototype1 && cp \"Onboarding Assessment Standalone.html\" dist/prototype1/index.html && mkdir -p dist/prototype2 && cp \"Dashboard Standalone.html\" dist/prototype2/index.html",
     "preview": "vite preview",
     "test": "vitest run",
     "dev:showcase": "vite showcase",
-    "build:showcase": "vite build && vite build showcase && cp -R slides showcase/dist/slides && cp -R research showcase/dist/research && mkdir -p showcase/dist/prototype0 && cp dist/index.html showcase/dist/prototype0/index.html && cp -R dist/assets/* showcase/dist/assets/ && mkdir -p showcase/dist/prototype1 && cp \"Onboarding Assessment Standalone.html\" showcase/dist/prototype1/index.html"
+    "build:showcase": "vite build && vite build showcase && cp -R slides showcase/dist/slides && cp -R research showcase/dist/research && mkdir -p showcase/dist/prototype0 && cp dist/index.html showcase/dist/prototype0/index.html && cp -R dist/assets/* showcase/dist/assets/ && mkdir -p showcase/dist/prototype1 && cp \"Onboarding Assessment Standalone.html\" showcase/dist/prototype1/index.html && mkdir -p showcase/dist/prototype2 && cp \"Dashboard Standalone.html\" showcase/dist/prototype2/index.html"
   },
   "devDependencies": {
     "vite": "^6.0.0",
