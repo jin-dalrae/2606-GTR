@@ -63,6 +63,11 @@ function rewriteText(text) {
 
 function rewriteTree(dir) {
   for (const file of walk(dir)) {
+    // Never rewrite self-contained prototype bundles — base64/JSON breaks easily
+    // and they resolve paths at runtime via midterm-aware injectShowcaseHeader.
+    const rel = relative(MID, file).replace(/\\/g, "/");
+    if (rel.startsWith("prototype1/") || rel.startsWith("prototype2/")) continue;
+
     if (!/\.(html?|js|css|jsx|json|md|svg)$/i.test(file)) continue;
     const before = readFileSync(file, "utf8");
     const after = rewriteText(before);

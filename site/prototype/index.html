@@ -4,22 +4,181 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Prototype — GTR Handprint</title>
-  <meta name="description" content="Walk Prototype 1 step by step: free climate impact assessment for early-stage startups." />
+  <meta name="description" content="Try Prototype 1 (assessment) and Prototype 2 (dashboard) — live HTML prototypes." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/site.css" />
+  <style>
+    /* Prototype workspace — full-height embed, no double phone chrome */
+    .proto-workspace {
+      display: grid;
+      grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+      min-height: calc(100vh - var(--nav-h));
+      border-top: 1px solid var(--line);
+      background: var(--bg);
+    }
+    .proto-side {
+      border-right: 1px solid var(--line);
+      background: var(--bg-elevated);
+      padding: 1.35rem 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-height: calc(100vh - var(--nav-h));
+      overflow: auto;
+    }
+    .proto-side h1 {
+      font-family: var(--font-display);
+      font-size: 1.55rem;
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
+    .proto-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+    .proto-tabs button {
+      border: 1px solid var(--line);
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 0.75rem 0.65rem;
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--ink-2);
+    }
+    .proto-tabs button.active {
+      background: var(--hand-soft);
+      border-color: rgba(31, 138, 91, 0.35);
+      color: var(--hand-deep);
+    }
+    .proto-steps {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.45rem;
+    }
+    .proto-steps button {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--line);
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 0.75rem 0.85rem;
+      cursor: pointer;
+      font: inherit;
+      color: var(--ink);
+    }
+    .proto-steps button.active {
+      border-color: rgba(31, 138, 91, 0.35);
+      background: var(--hand-soft);
+    }
+    .proto-steps .step-title {
+      display: block;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .proto-steps .step-desc {
+      display: block;
+      margin-top: 0.15rem;
+      color: var(--ink-2);
+      font-size: 0.8rem;
+      line-height: 1.4;
+    }
+    .proto-detail h2 {
+      margin: 0 0 0.4rem;
+      font-size: 1rem;
+    }
+    .proto-detail p {
+      margin: 0 0 0.85rem;
+      color: var(--ink-2);
+      font-size: 0.92rem;
+    }
+    .proto-main {
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - var(--nav-h));
+      min-width: 0;
+      background: #e8e6df;
+    }
+    .proto-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.65rem 1rem;
+      background: rgba(255,255,255,0.85);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+      flex-wrap: wrap;
+    }
+    .proto-toolbar strong { font-size: 0.9rem; }
+    .proto-embed {
+      flex: 1;
+      min-height: 0;
+      position: relative;
+    }
+    .proto-embed iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #dedcd5;
+    }
+    .proto-empty {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 2rem;
+      text-align: center;
+      color: var(--ink-2);
+    }
+    @media (max-width: 900px) {
+      .proto-workspace {
+        grid-template-columns: 1fr;
+      }
+      .proto-side {
+        max-height: none;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .proto-main {
+        min-height: 75vh;
+      }
+      .proto-embed {
+        min-height: 70vh;
+        position: relative;
+      }
+      .proto-embed iframe {
+        position: absolute;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="site-shell">
     <header class="site-nav" id="site-nav"></header>
 
-    <div class="proto-shell">
-      <aside class="proto-rail">
+    <div class="proto-workspace">
+      <aside class="proto-side">
         <div>
-          <p class="eyebrow" style="margin-bottom:0.5rem"><span class="dot"></span> Prototype 1</p>
-          <h1>Guided assessment</h1>
-          <p class="lead">Follow the steps on the left while you try the live prototype on the right. ~3 minutes. No account required for a first snapshot.</p>
+          <p class="eyebrow" style="margin-bottom:0.5rem"><span class="dot"></span> Live HTML prototypes</p>
+          <h1>Try the product</h1>
+          <p class="lead" style="font-size:0.95rem;margin:0.5rem 0 0">
+            Prototype 1 is the free assessment. Prototype 2 is the founder dashboard.
+            Both are real HTML builds — open full screen if the embed feels tight.
+          </p>
+        </div>
+
+        <div class="proto-tabs" role="tablist" aria-label="Which prototype">
+          <button type="button" id="tab-p1" class="active" role="tab" aria-selected="true">1 · Assessment</button>
+          <button type="button" id="tab-p2" role="tab" aria-selected="false">2 · Dashboard</button>
         </div>
 
         <ol class="proto-steps" id="proto-steps"></ol>
@@ -32,23 +191,25 @@
             <button type="button" class="btn btn-primary" id="proto-next">Next step</button>
           </div>
           <p class="muted" style="margin:1rem 0 0;font-size:0.82rem">
-            Prefer the full product? <a href="../app/">Open the complete demo</a>
-            · Dashboard: <a href="../prototype2/">Prototype 2</a>
+            Full product SPA: <a href="../app/">Open app demo</a>
           </p>
         </div>
       </aside>
 
-      <section class="proto-stage" aria-label="Live prototype">
-        <div class="proto-stage-bar">
-          <strong id="proto-stage-label">Step 1 of 6</strong>
-          <a class="btn btn-secondary" href="../prototype1/" target="_blank" rel="noopener" style="padding:0.5rem 0.9rem;font-size:0.85rem">Open full screen ↗</a>
+      <section class="proto-main" aria-label="Live prototype">
+        <div class="proto-toolbar">
+          <strong id="proto-stage-label">Prototype 1 · Assessment</strong>
+          <div class="btn-row" style="margin:0">
+            <a class="btn btn-secondary" id="proto-open" href="../prototype1/" target="_blank" rel="noopener" style="padding:0.5rem 0.9rem;font-size:0.85rem">Open full screen ↗</a>
+          </div>
         </div>
-        <div class="proto-frame-wrap">
+        <div class="proto-embed">
           <iframe
-            class="proto-frame"
-            title="GTR Onboarding Assessment Prototype"
+            id="proto-frame"
+            title="GTR prototype"
             src="../prototype1/index.html"
             loading="eager"
+            allow="clipboard-write"
           ></iframe>
         </div>
       </section>

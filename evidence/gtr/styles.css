@@ -1,9 +1,89 @@
-@import url("/cosmos/styles.css");
+/* Relative import works for both /gtr and /midterm/gtr when cosmos sits next to gtr */
+@import url("../cosmos/styles.css");
 
 /* GTR readability: cosmos archive defaults are compact (11–14px) for dense research layouts. */
 body {
   font-size: 16px;
   line-height: 1.6;
+}
+
+/* Restructured always-open chapter rail */
+.chapter-rail {
+  overflow-y: auto;
+}
+
+.rail-intro {
+  padding-bottom: 24px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.rail-intro p {
+  margin: 0 0 10px;
+  color: var(--pink);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.rail-intro h2 {
+  margin: 0 0 8px;
+  font-family: var(--serif);
+  font-size: 34px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.rail-intro > span {
+  display: block;
+  max-width: 200px;
+  color: var(--muted);
+  font-family: var(--serif);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.rail-home-link {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--navy);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.rail-home-link:hover {
+  border-bottom-color: var(--pink);
+  color: var(--pink);
+}
+
+.rail-section-label {
+  margin: 18px 0 6px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  color: var(--muted) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  min-height: 0 !important;
+  display: block !important;
+  grid-template-columns: none !important;
+}
+
+.rail-subnav--always {
+  padding: 0 0 4px;
+  border-bottom: 0;
+}
+
+.chapter-rail nav {
+  margin-top: 12px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .chapter-rail a {

@@ -1,6 +1,26 @@
-import { GTRHeader, GTRSidebar, fieldworkSlide, fieldworkFeedback } from "./shell.jsx";
+import {
+  GTRHeader,
+  GTRSidebar,
+  fieldworkSlide,
+  fieldworkFeedback,
+  gtrHref,
+  gtrBase,
+} from "./shell.jsx";
 
 const { useEffect, useState } = React;
+
+/** Prefix absolute archive / asset paths for midterm hosting */
+function withBase(url) {
+  if (!url) return url;
+  if (url.startsWith("/assets/")) {
+    const root = gtrBase().startsWith("/midterm") ? "/midterm" : "";
+    return root + url;
+  }
+  if (url.startsWith("/gtr/") || url === "/gtr") {
+    return gtrHref(url.replace(/^\/gtr/, "") || "/");
+  }
+  return url;
+}
 
 const testParticipants = [
   ["Amali", "Data engineer met at a networking event", "Role-played founder; technical and data perspective"],
@@ -454,7 +474,9 @@ function PageIntro({ eyebrow, title, summary, links = [] }) {
       <p>{summary}</p>
       {links.length > 0 && (
         <div className="report-next-links">
-          {links.map(([href, label]) => <a key={href} href={href}>{label} <span>→</span></a>)}
+          {links.map(([path, label]) => (
+            <a key={path} href={withBase(path)}>{label} <span>→</span></a>
+          ))}
         </div>
       )}
     </header>
@@ -465,7 +487,7 @@ function FieldworkFigure({ src, alt, caption, label = "Fig.", compact = false })
   return (
     <figure className={`prototype-figure${compact ? " prototype-figure--compact" : ""}`}>
       <div className="figure-image">
-        <img src={src} alt={alt} />
+        <img src={withBase(src)} alt={alt} />
       </div>
       <figcaption>{label && <span>{label}</span>}<p>{caption}</p></figcaption>
     </figure>
@@ -622,8 +644,8 @@ function IntroPage() {
             <li>Whether AI-assisted labels and clusters remain source-linked and reversible in practice.</li>
           </ul>
           <div className="report-next-links">
-            <a href="/gtr/docs/fieldwork-report/">Open the fieldwork report <span>→</span></a>
-            <a href="/gtr/docs/stage-1/">Read Stage 1 PRD <span>→</span></a>
+            <a href={withBase("/gtr/docs/fieldwork-report/")}>Open the fieldwork report <span>→</span></a>
+            <a href={withBase("/gtr/docs/stage-1/")}>Read Stage 1 PRD <span>→</span></a>
           </div>
         </section>
       </div>
@@ -686,10 +708,10 @@ function DocsOverviewPage() {
           <span className="report-number">2.3</span>
           <h2>Go deeper</h2>
           <div className="report-next-links">
-            <a href="/gtr/docs/fieldwork-report/">Fieldwork report <span>→</span></a>
-            <a href="/gtr/">Read the report <span>→</span></a>
-            <a href="/gtr/docs/stage-1/">Stage 1 PRD <span>→</span></a>
-            <a href="/gtr/docs/stage-2/">Stage 2 PRD <span>→</span></a>
+            <a href={withBase("/gtr/docs/fieldwork-report/")}>Fieldwork report <span>→</span></a>
+            <a href={withBase("/gtr/")}>Read the report <span>→</span></a>
+            <a href={withBase("/gtr/docs/stage-1/")}>Stage 1 PRD <span>→</span></a>
+            <a href={withBase("/gtr/docs/stage-2/")}>Stage 2 PRD <span>→</span></a>
           </div>
         </section>
       </div>
@@ -733,9 +755,9 @@ function FieldworkReportPage() {
           <p>The team began with an eight-stage journey storyboard: discovery at demo day, referral, mobile entry, assessment, instant report, dashboard use, team access, and extended use. The prototypes were built around that journey. Assessment 1 and Assessment 2 tested two intake structures; Report 1 and Report 2 tested two result formats; the dashboard explored what continued use could look like after the instant report. Five participants completed the founder-role walkthrough, and their feedback was captured in the provided transcript.</p>
           <aside className="report-note"><b>Study boundary</b><p>All five participants were asked to act as a startup founder. Ted was the only actual founder; the other four brought technical, investment, peer-design, and accessibility perspectives to the founder scenario. The study supports prototype and comprehension decisions, not product-market-fit or calculation-accuracy claims.</p></aside>
           <div className="report-next-links">
-            <a href="/gtr/docs/fieldwork-report/slides/">Present fieldwork slides <span>→</span></a>
-            <a href="/gtr/docs/fieldwork-report/feedback/">Presentation feedback <span>→</span></a>
-            <a href="/gtr/">Research report <span>→</span></a>
+            <a href={withBase("/gtr/docs/fieldwork-report/slides/")}>Present fieldwork slides <span>→</span></a>
+            <a href={withBase("/gtr/docs/fieldwork-report/feedback/")}>Presentation feedback <span>→</span></a>
+            <a href={withBase("/gtr/")}>Research report <span>→</span></a>
           </div>
         </section>
 
@@ -747,7 +769,7 @@ function FieldworkReportPage() {
           <h3>1. Storyboard defined the experience</h3>
           <p><code>storyboard.jpeg</code> mapped the founder journey from initial awareness through assessment, instant results, dashboard use, team access, and longer-term use. It gave the sessions a shared scenario and determined which prototype moments needed to be built.</p>
           <FieldworkFigure
-            src="/assets/images/gtr/fieldwork/user-journey-storyboard.jpg"
+            src={withBase("/assets/images/gtr/fieldwork/user-journey-storyboard.jpg")}
             alt="Eight-panel founder journey storyboard"
             caption="storyboard.jpeg: discovery at demo day → referral → mobile assessment → instant report → dashboard → team access → extended use."
             label="Storyboard"
@@ -773,31 +795,31 @@ function FieldworkReportPage() {
           <p>Paper and screen prototypes shown in sessions. Sample company in printed materials: pre-seed hardware and clean-energy startup.</p>
           <div className="prototype-grid">
             <FieldworkFigure
-              src="/assets/images/gtr/fieldwork/onboarding-sheets.jpg"
+              src={withBase("/assets/images/gtr/fieldwork/onboarding-sheets.jpg")}
               alt="Continuous handwritten free impact assessment"
               caption="2A · Assessment 1 / assessment1.jpeg: continuous long-form assessment."
               label="Fig. 2A"
             />
             <FieldworkFigure
-              src="/assets/images/gtr/fieldwork/onboarding-flow-4up.jpg"
+              src={withBase("/assets/images/gtr/fieldwork/onboarding-flow-4up.jpg")}
               alt="Four hand-drawn screens for Assessment 2"
               caption="2B · Assessment 2 / assessment2-mobile.jpeg: four-screen mobile flow with progress, Back, and Next controls."
               label="Fig. 2B"
             />
             <FieldworkFigure
-              src="/assets/images/gtr/fieldwork/assessment-report-print.jpg"
+              src={withBase("/assets/images/gtr/fieldwork/assessment-report-print.jpg")}
               alt="Printed two-page instant impact assessment report"
               caption="3A · Report 1 / report1-information.jpeg: information-led result with footprint, handprint, hotspots, comparison, cost exposure, methodology, and share actions."
               label="Fig. 3A"
             />
             <FieldworkFigure
-              src="/assets/images/gtr/fieldwork/assessment-report-sketch.jpg"
+              src={withBase("/assets/images/gtr/fieldwork/assessment-report-sketch.jpg")}
               alt="Visual infographic instant impact report"
               caption="3B · Report 2 / report2-infographic.jpeg: infographic result with metric cards, gauge, and charts."
               label="Fig. 3B"
             />
             <FieldworkFigure
-              src="/assets/images/gtr/fieldwork/dashboard-sketch.jpg"
+              src={withBase("/assets/images/gtr/fieldwork/dashboard-sketch.jpg")}
               alt="Hand-drawn dashboard overview sketch"
               caption="4 · dashboard.jpeg: continued-use concept with footprint, handprint, derived net, maturity, goals, milestones, and projection."
               label="Fig. 4"
@@ -915,8 +937,8 @@ function FieldworkReportPage() {
           </ol>
           <aside className="report-note"><b>Changes &amp; Future Direction conclusion</b><p>The next prototype should be a narrower hybrid, not a larger feature set. Its job is to prove that founders understand the value, trust the data request, complete the assessment without help, and understand the visual result before the dashboard expands.</p></aside>
           <div className="report-next-links">
-            <a href="/gtr/docs/fieldwork-report/slides/">Present fieldwork slides <span>→</span></a>
-            <a href="/gtr/docs/stage-1/">Stage 1 PRD <span>→</span></a>
+            <a href={withBase("/gtr/docs/fieldwork-report/slides/")}>Present fieldwork slides <span>→</span></a>
+            <a href={withBase("/gtr/docs/stage-1/")}>Stage 1 PRD <span>→</span></a>
           </div>
         </section>
 
@@ -1038,7 +1060,7 @@ function FieldworkReportPage() {
           <h3>Journey storyboard — built first</h3>
           <p>The storyboard established the founder scenario before the interface variants were made. It connected discovery, assessment, instant results, dashboard use, team access, and extended use into one testable journey.</p>
           <FieldworkFigure
-            src="/assets/images/gtr/fieldwork/user-journey-storyboard.jpg"
+            src={withBase("/assets/images/gtr/fieldwork/user-journey-storyboard.jpg")}
             alt="Hand-drawn eight-panel user journey storyboard from demo day awareness through assessment, report sharing, dashboard use, and extended use"
             caption="storyboard.jpeg: eight-stage founder journey used to define the Assessment 1/2, Report 1/2, and dashboard prototypes."
           />
@@ -1061,12 +1083,12 @@ function FieldworkReportPage() {
             ))}
           </div>
           <FieldworkFigure
-            src="/assets/images/gtr/fieldwork/onboarding-flow-4up.jpg"
+            src={withBase("/assets/images/gtr/fieldwork/onboarding-flow-4up.jpg")}
             alt="Four hand-drawn screens for Assessment 2"
             caption="Assessment 2 / assessment2-mobile.jpeg: four screens for company profile, optional local documents, EMITS/AVOIDS activity selection, free-text description, and generate assessment."
           />
           <FieldworkFigure
-            src="/assets/images/gtr/fieldwork/onboarding-sheets.jpg"
+            src={withBase("/assets/images/gtr/fieldwork/onboarding-sheets.jpg")}
             alt="Five handwritten paper sheets showing the free impact assessment intake flow"
             caption="Assessment 1 / assessment1.jpeg: continuous long-form layout with business model, team size, evidence prompts, activity selection, and generate-assessment CTA."
           />
@@ -1083,7 +1105,7 @@ function FieldworkReportPage() {
             </table>
           </div>
           <FieldworkFigure
-            src="/assets/images/gtr/fieldwork/funding-stages.jpg"
+            src={withBase("/assets/images/gtr/fieldwork/funding-stages.jpg")}
             alt="Handwritten funding stage list: Pre-Seed, Seed, Series A, Series B plus"
             caption="Investment-stage choices in Assessment 1 (A)."
             label=""
@@ -1094,19 +1116,19 @@ function FieldworkReportPage() {
           <h3>Report 1 (A) / Report 2 (B)</h3>
           <p><b>Report 1</b> (<code>report1-information.jpeg</code>) was information-led: footprint and handprint values, ranked hotspot bars, peer range, cost exposure, methodology, impact beyond carbon, and share/account actions. <b>Report 2</b> (<code>report2-infographic.jpeg</code>) presented the same assessment as visual cards: handprint, maturity gauge, footprint, donut charts for hotspots, and energy/water/waste cards.</p>
           <FieldworkFigure
-            src="/assets/images/gtr/fieldwork/assessment-report-print.jpg"
+            src={withBase("/assets/images/gtr/fieldwork/assessment-report-print.jpg")}
             alt="Printed two-page instant impact assessment report with footprint, handprint, hotspots, peer comparison, and methodology"
             caption="Report 1 / report1-information.jpeg: information-led assessment with footprint, handprint, hotspots, peer comparison, cost exposure, methodology, and share actions."
           />
           <FieldworkFigure
-            src="/assets/images/gtr/fieldwork/assessment-report-sketch.jpg"
+            src={withBase("/assets/images/gtr/fieldwork/assessment-report-sketch.jpg")}
             alt="Pencil sketch of the instant impact assessment report layout"
             caption="Report 2 / report2-infographic.jpeg: infographic assessment with metric cards, maturity gauge, hotspot charts, and impact-beyond-carbon cards."
           />
           <h3>Dashboard concept</h3>
           <p>Dashboard sketch: footprint, handprint, derived net, maturity gauge, climate goals, milestones, impact projection. Sample values differ from instant report (footprint 42.6, handprint 108, net -65.4 tCO₂e on sketch vs 10.7 / ~20 on report). Participants asked to define impact projection, milestone diagram, net impact, and maturity levels.</p>
           <FieldworkFigure
-            src="/assets/images/gtr/fieldwork/dashboard-sketch.jpg"
+            src={withBase("/assets/images/gtr/fieldwork/dashboard-sketch.jpg")}
             alt="Hand-drawn dashboard overview sketch with footprint, handprint, net impact, maturity level, climate goals, milestones, and impact projection"
             caption="dashboard.jpeg: separate footprint and handprint, derived net, maturity, goals, milestones, and impact projection."
           />
@@ -1816,7 +1838,7 @@ function FieldworkSlidePage() {
             </table>
           </div>
           <div className="report-next-links">
-            <a href="/gtr/docs/fieldwork-report/#fieldwork-findings">Open full findings table <span>→</span></a>
+            <a href={withBase("/gtr/docs/fieldwork-report/#fieldwork-findings")}>Open full findings table <span>→</span></a>
           </div>
         </section>
       </div>
@@ -1868,9 +1890,9 @@ function FieldworkFeedbackPage() {
             <li>The research report (Overview) remains the strategic “why climate startups first” document.</li>
           </ul>
           <div className="report-next-links">
-            <a href="/gtr/docs/stage-1/">Stage 1 PRD <span>→</span></a>
-            <a href="/gtr/docs/stage-2/">Stage 2 PRD <span>→</span></a>
-            <a href="/gtr/">Research report <span>→</span></a>
+            <a href={withBase("/gtr/docs/stage-1/")}>Stage 1 PRD <span>→</span></a>
+            <a href={withBase("/gtr/docs/stage-2/")}>Stage 2 PRD <span>→</span></a>
+            <a href={withBase("/gtr/")}>Research report <span>→</span></a>
           </div>
         </section>
       </div>
@@ -1953,7 +1975,7 @@ function PartnersDeckPage() {
 }
 
 function isDocsIndex(path) {
-  return path === "/gtr/docs" || path === "/gtr/docs/" || path.endsWith("/gtr/docs/index.html");
+  return /\/gtr\/docs\/?$/.test(path) || path.endsWith("/gtr/docs/index.html");
 }
 
 function isLegacyResearchReportPath(path) {
@@ -1962,17 +1984,19 @@ function isLegacyResearchReportPath(path) {
 
 function App() {
   const path = window.location.pathname;
+  const fwSlide = fieldworkSlide();
+  const fwFeedback = fieldworkFeedback();
 
   useEffect(() => {
     if (isDocsIndex(path)) {
-      window.location.replace("/gtr/docs/fieldwork-report/");
+      window.location.replace(gtrHref("/docs/fieldwork-report/"));
     } else if (isLegacyResearchReportPath(path)) {
       const hash = window.location.hash || "";
-      window.location.replace(`/gtr/${hash}`);
-    } else if (path.includes("/gtr/slides/fieldwork-week")) {
-      window.location.replace("/gtr/docs/fieldwork-report/slides/");
-    } else if (path === "/gtr/slides/" || path === "/gtr/slides") {
-      window.location.replace("/gtr/");
+      window.location.replace(gtrHref("/") + hash);
+    } else if (path.includes("/slides/fieldwork-week")) {
+      window.location.replace(gtrHref("/docs/fieldwork-report/slides/"));
+    } else if (/\/gtr\/slides\/?$/.test(path)) {
+      window.location.replace(gtrHref("/"));
     }
   }, [path]);
 
@@ -1990,9 +2014,9 @@ function App() {
 
   let docsPage = null;
   if (path.includes("/docs/fieldwork-report/slides") || path.includes("/slides/fieldwork-week")) {
-    docsPage = fieldworkSlide.id;
+    docsPage = fwSlide.id;
   } else if (path.includes("/docs/fieldwork-report/feedback")) {
-    docsPage = fieldworkFeedback.id;
+    docsPage = fwFeedback.id;
   } else if (path.includes("/docs/fieldwork-report")) {
     docsPage = "fieldwork-report";
   } else if (path.includes("/docs/stage-1")) {
