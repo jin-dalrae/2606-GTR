@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prototype — GTR Handprint</title>
+  <meta name="description" content="Walk Prototype 1 step by step: free climate impact assessment for early-stage startups." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/site.css" />
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-nav" id="site-nav"></header>
+
+    <div class="proto-shell">
+      <aside class="proto-rail">
+        <div>
+          <p class="eyebrow" style="margin-bottom:0.5rem"><span class="dot"></span> Prototype 1</p>
+          <h1>Guided assessment</h1>
+          <p class="lead">Follow the steps on the left while you try the live prototype on the right. ~3 minutes. No account required for a first snapshot.</p>
+        </div>
+
+        <ol class="proto-steps" id="proto-steps"></ol>
+
+        <div class="proto-detail">
+          <h2 id="proto-detail-title">Step</h2>
+          <p id="proto-detail-body">Loading…</p>
+          <div class="btn-row" style="margin-top:0">
+            <button type="button" class="btn btn-secondary" id="proto-prev">Previous</button>
+            <button type="button" class="btn btn-primary" id="proto-next">Next step</button>
+          </div>
+          <p class="muted" style="margin:1rem 0 0;font-size:0.82rem">
+            Prefer the full product? <a href="../app/">Open the complete demo</a>
+            · Dashboard: <a href="../prototype2/">Prototype 2</a>
+          </p>
+        </div>
+      </aside>
+
+      <section class="proto-stage" aria-label="Live prototype">
+        <div class="proto-stage-bar">
+          <strong id="proto-stage-label">Step 1 of 6</strong>
+          <a class="btn btn-secondary" href="../prototype1/" target="_blank" rel="noopener" style="padding:0.5rem 0.9rem;font-size:0.85rem">Open full screen ↗</a>
+        </div>
+        <div class="proto-frame-wrap">
+          <iframe
+            class="proto-frame"
+            title="GTR Onboarding Assessment Prototype"
+            src="../prototype1/index.html"
+            loading="eager"
+          ></iframe>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script src="../js/site.js"></script>
+  <script src="../js/prototype.js"></script>
+</body>
+</html>

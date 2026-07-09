@@ -218,6 +218,254 @@ class ClimateDashboardApp {
     
     if (document.querySelector(".showcase-bar")) return;
 
+    // Inject Unified Sidebar Styles
+    const style = document.createElement("style");
+    style.textContent = `
+      .showcase-bar {
+        position: relative;
+        width: 100%;
+        z-index: 100000;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 24px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        transition: all 0.3s ease;
+      }
+      .showcase-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .showcase-menu-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #111827;
+        border-radius: 4px;
+        transition: background-color 0.2s, opacity 0.2s;
+      }
+      .showcase-menu-toggle:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+      .showcase-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 3px 8px;
+        background: #111827;
+        color: #ffffff;
+        font-family: inherit;
+        font-weight: 700;
+        font-size: 0.65rem;
+        letter-spacing: 0.05em;
+        border-radius: 0;
+      }
+      .showcase-selector-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-left: 1px solid rgba(0, 0, 0, 0.08);
+        padding-left: 16px;
+      }
+      .showcase-label {
+        color: #6b7280;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+      }
+      .showcase-select {
+        background: #f3f4f6;
+        color: #111827;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 0;
+        padding: 4px 12px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.2s ease;
+      }
+      .showcase-nav-links {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-left: 1px solid rgba(0, 0, 0, 0.08);
+        padding-left: 16px;
+      }
+      .showcase-nav-btn {
+        color: #4b5563;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-decoration: none;
+        padding: 4px 12px;
+        border-radius: 0;
+        transition: all 0.2s ease;
+      }
+      .showcase-nav-btn:hover {
+        color: #111827;
+        background: rgba(0, 0, 0, 0.04);
+      }
+      .showcase-nav-btn.active {
+        color: #ffffff;
+        background: #111827;
+      }
+      .showcase-slides-btn {
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        color: #111827;
+      }
+      .showcase-slides-btn:hover {
+        background: rgba(0, 0, 0, 0.04);
+        border-color: #111827;
+      }
+
+      /* Slide-out Left Sidebar */
+      .showcase-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 300px;
+        background: #ffffff;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+        z-index: 100002;
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        box-sizing: border-box;
+      }
+      .showcase-sidebar.is-open {
+        transform: translateX(0);
+      }
+      .showcase-sidebar-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        z-index: 100001;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+      .showcase-sidebar-overlay.is-open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .showcase-sidebar-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 24px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        background: #fbfaf7;
+      }
+      .showcase-sidebar-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .showcase-sidebar-logo {
+        width: 18px;
+        height: 18px;
+        color: #0fb981;
+      }
+      .showcase-sidebar-title {
+        font-size: 13.5px;
+        font-weight: 700;
+        color: #111827;
+        letter-spacing: -0.01em;
+      }
+      .showcase-sidebar-close {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #6b7280;
+        padding: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        transition: background-color 0.2s, color 0.2s;
+      }
+      .showcase-sidebar-close:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+        color: #111827;
+      }
+      .showcase-sidebar-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px 16px;
+      }
+      .showcase-sidebar-section {
+        margin-bottom: 24px;
+      }
+      .showcase-sidebar-section-title {
+        font-size: 10.5px;
+        font-weight: 700;
+        color: #9ca3af;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 8px;
+        padding-left: 12px;
+      }
+      .showcase-sidebar-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .showcase-sidebar-item {
+        display: block;
+      }
+      .showcase-sidebar-item a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        color: #4b5563;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+      }
+      .showcase-sidebar-item a:hover {
+        color: #111827;
+        background: #f3f4f6;
+      }
+      .showcase-sidebar-item.active a {
+        color: #ffffff;
+        background: #111827;
+      }
+      .showcase-sidebar-icon {
+        width: 16px;
+        height: 16px;
+        opacity: 0.7;
+        flex-shrink: 0;
+      }
+      .showcase-sidebar-item.active .showcase-sidebar-icon {
+        opacity: 1;
+        color: #ffffff;
+      }
+    `;
+    document.head.appendChild(style);
+
     const bar = document.createElement("div");
     bar.className = "showcase-bar";
     
@@ -267,6 +515,13 @@ class ClimateDashboardApp {
 
     bar.innerHTML = `
       <div class="showcase-brand">
+        <button class="showcase-menu-toggle" aria-label="Toggle Sidebar Menu">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
         <span class="showcase-badge">SHOWCASE</span>
       </div>
       <div class="showcase-nav-links">
@@ -286,7 +541,127 @@ class ClimateDashboardApp {
       </div>
     `;
 
+    // Create Collapsible Left Sidebar & Overlay
+    const sidebarOverlay = document.createElement("div");
+    sidebarOverlay.className = "showcase-sidebar-overlay";
+    
+    const sidebar = document.createElement("div");
+    sidebar.className = "showcase-sidebar";
+    sidebar.innerHTML = `
+      <div class="showcase-sidebar-header">
+        <div class="showcase-sidebar-brand">
+          <svg class="showcase-sidebar-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          <span class="showcase-sidebar-title">GTR Handprint</span>
+        </div>
+        <button class="showcase-sidebar-close" aria-label="Close menu">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="showcase-sidebar-content">
+        <div class="showcase-sidebar-section">
+          <span class="showcase-sidebar-section-title">Prototypes</span>
+          <ul class="showcase-sidebar-list">
+            <li class="showcase-sidebar-item ${isMain ? 'active' : ''}">
+              <a href="/">
+                <svg class="showcase-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+                <span>Main Desktop Showcase</span>
+              </a>
+            </li>
+            <li class="showcase-sidebar-item ${isP0 ? 'active' : ''}">
+              <a href="/prototype0">
+                <svg class="showcase-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+                <span>Prototype 0 (Funnel)</span>
+              </a>
+            </li>
+            <li class="showcase-sidebar-item ${isP1 ? 'active' : ''}">
+              <a href="/prototype1">
+                <svg class="showcase-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <span>Prototype 1 (Onboarding)</span>
+              </a>
+            </li>
+            <li class="showcase-sidebar-item ${isP2 ? 'active' : ''}">
+              <a href="/prototype2">
+                <svg class="showcase-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="9" y1="9" x2="15" y2="9"></line>
+                  <line x1="9" y1="13" x2="15" y2="13"></line>
+                  <line x1="9" y1="17" x2="15" y2="17"></line>
+                </svg>
+                <span>Prototype 2 (Dashboard)</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="showcase-sidebar-section">
+          <span class="showcase-sidebar-section-title">Resources</span>
+          <ul class="showcase-sidebar-list">
+            <li class="showcase-sidebar-item">
+              <a href="/research/" target="_blank">
+                <svg class="showcase-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+                <span>Research Notes</span>
+              </a>
+            </li>
+            <li class="showcase-sidebar-item">
+              <a href="/slides/" target="_blank">
+                <svg class="showcase-sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                  <path d="M8 21h8"></path>
+                  <path d="M12 17v4"></path>
+                  <path d="M12 7v5"></path>
+                </svg>
+                <span>Research Slides</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    `;
+
+    document.body.prepend(sidebar);
+    document.body.prepend(sidebarOverlay);
     document.body.prepend(bar);
+
+    // Event listener for opening sidebar
+    const menuBtn = bar.querySelector(".showcase-menu-toggle");
+    if (menuBtn) {
+      menuBtn.addEventListener("click", () => {
+        sidebar.classList.add("is-open");
+        sidebarOverlay.classList.add("is-open");
+      });
+    }
+
+    // Event listeners for closing sidebar
+    const closeBtn = sidebar.querySelector(".showcase-sidebar-close");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        sidebar.classList.remove("is-open");
+        sidebarOverlay.classList.remove("is-open");
+      });
+    }
+    sidebarOverlay.addEventListener("click", () => {
+      sidebar.classList.remove("is-open");
+      sidebarOverlay.classList.remove("is-open");
+    });
 
     const select = bar.querySelector("#showcase-page-select");
     if (select) {
