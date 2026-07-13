@@ -8,3 +8,5 @@
 | 4 · Program director | `Program Director Dashboard.html` | `/midterm/prototype4/` |
 
 Guided shell: `/midterm/prototype/`
+
+| 5 · Leaderboard | `site/leaderboard/index.html` | `/midterm/prototype/?tab=p5` (embed `/midterm/leaderboard/`) |

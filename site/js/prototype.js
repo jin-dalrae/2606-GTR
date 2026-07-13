@@ -1,5 +1,5 @@
-/* Midterm prototype shell — Jul 12 multi-role set
-   1 Assessment · 2 Founder dashboard · 3 Investor · 4 Program director */
+/* Midterm prototype shell — multi-role set
+   1 Assessment · 2 Dashboard · 3 Investor · 4 Program · 5 Leaderboard */
 (function () {
   const PROTOS = {
     p1: {
@@ -194,9 +194,44 @@
         },
       ],
     },
+    p5: {
+      id: "p5",
+      label: "5 · Leaderboard",
+      stageLabel: "Prototype 5 · Leaderboard",
+      openLabel: "Open leaderboard ↗",
+      src: "../leaderboard/",
+      full: "../leaderboard/",
+      device: false,
+      steps: [
+        {
+          title: "1 · Pick a cohort",
+          short: "Stage, size, revenue",
+          detail:
+            "Filter by funding stage, team size, and revenue band so Seed companies are not ranked against Series B giants.",
+        },
+        {
+          title: "2 · Sort the board",
+          short: "EI/Revenue and more",
+          detail:
+            "Default rank is best (lowest) EI per $1M ARR. Also sort by improving intensity, maturity, revenue, or team size.",
+        },
+        {
+          title: "3 · Read intensity",
+          short: "Footprint vs handprint",
+          detail:
+            "Each row shows EI/$1M, absolute footprint, handprint, maturity level, and YoY intensity trend — illustrative portfolio data.",
+        },
+        {
+          title: "4 · Cohort summary",
+          short: "Medians and leaders",
+          detail:
+            "Cards below the table show cohort median team, average intensity, and the intensity leader for the filters in view.",
+        },
+      ],
+    },
   };
 
-  const ORDER = ["p1", "p2", "p3", "p4"];
+  const ORDER = ["p1", "p2", "p3", "p4", "p5"];
 
   let proto = "p1";
   let device = "desktop"; // for p2: desktop = interactive mockup, mobile = phone shell
@@ -381,7 +416,7 @@
       }
       const i = ORDER.indexOf(proto);
       if (i < ORDER.length - 1) setProto(ORDER[i + 1]);
-      else window.location.href = "../leaderboard/";
+      else window.location.href = "../vision/";
     });
 
     setFrame();

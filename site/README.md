@@ -17,7 +17,8 @@ Public multipage site served under **`/midterm/`**.
 | `/midterm/prototype3/` | Investor portfolio board |
 | `/midterm/prototype4/` | Program director cohort board |
 | `/midterm/vision/` | Next vision |
-| `/midterm/leaderboard/` | Stage/size/revenue leaderboard prototype |
+| `/midterm/prototype/?tab=p5` | Leaderboard (inside guided prototype) |
+| `/midterm/leaderboard/` | Leaderboard full-page (also iframe target) |
 | `/midterm/app/` | Full product demo |
 
 ## Commands

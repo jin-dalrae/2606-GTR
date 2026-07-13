@@ -281,6 +281,26 @@
       }
     }
   </style>
+
+  <style>
+    body.embed-mode .site-nav,
+    body.embed-mode .site-footer,
+    body.embed-mode .lb-hero > .container > .btn-row { display: none !important; }
+    body.embed-mode .lb-hero { padding-top: 1rem; }
+    body.embed-mode { background: var(--bg); }
+  </style>
+  <script>
+    (function () {
+      try {
+        if (window.self !== window.top) {
+          document.documentElement.classList.add("embed-pending");
+          document.addEventListener("DOMContentLoaded", function () {
+            document.body.classList.add("embed-mode");
+          });
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   <div class="site-shell">
@@ -289,7 +309,7 @@
     <main>
       <section class="lb-hero">
         <div class="container">
-          <p class="eyebrow"><span class="dot"></span> Prototype · Portfolio leaderboard</p>
+          <p class="eyebrow"><span class="dot"></span> Prototype 5 · Portfolio leaderboard</p>
           <h1 class="display">Compare startups by stage, size &amp; intensity</h1>
           <p class="lead" style="margin-top:1rem;max-width:62ch">
             Rank companies within a fair cohort — same funding stage, similar headcount and revenue —
@@ -392,9 +412,9 @@
           </div>
 
           <div class="btn-row" style="margin-bottom:2.5rem">
-            <a class="btn btn-primary" href="../prototype/">Back to guided prototype</a>
-            <a class="btn btn-secondary" href="../vision/">Vision · national index</a>
-            <a class="btn btn-secondary" href="../prototype2/desktop/">Desktop dashboard</a>
+            <a class="btn btn-primary" href="../prototype/?tab=p5">Open in guided prototype</a>
+            <a class="btn btn-secondary" href="../prototype/">All prototypes</a>
+            <a class="btn btn-secondary" href="../vision/">Vision</a>
           </div>
         </div>
       </section>
