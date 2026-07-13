@@ -219,16 +219,21 @@
       overflow: hidden;
       border: 1.5px solid var(--line);
       background: var(--panel);
-      min-height: 0;
-      height: 100%;
+      min-height: 1.65in;
+      height: 1.65in;
+      width: 100%;
     }
 
     .fig img {
       width: 100%;
       height: 100%;
+      min-height: 1.65in;
       object-fit: cover;
       object-position: center top;
       display: block;
+      /* Force images to ink when printing (not treated as optional chrome) */
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
 
     .fig .cap {
@@ -436,6 +441,10 @@
     }
 
     @media print {
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
       .print-stage {
         width: auto !important;
         height: auto !important;
@@ -449,17 +458,42 @@
         width: 17in;
         height: 11in;
         min-height: 0 !important;
-        -webkit-print-color-adjust: economy;
-        print-color-adjust: economy;
       }
       .chrome { display: none !important; }
       .poster {
-        width: 17in;
-        height: 11in;
-        box-shadow: none;
-        margin: 0;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        width: 17in !important;
+        height: 11in !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+      }
+      /* Explicit figure sizes so cols 2–3 images don’t collapse in print engines */
+      .panel {
+        grid-template-rows: 1.65in 1fr !important;
+        height: 100% !important;
+      }
+      .fig {
+        height: 1.65in !important;
+        min-height: 1.65in !important;
+        max-height: 1.65in !important;
+        width: 100% !important;
+        overflow: hidden !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      .fig img {
+        width: 100% !important;
+        height: 1.65in !important;
+        min-height: 1.65in !important;
+        max-height: 1.65in !important;
+        object-fit: cover !important;
+        object-position: center top !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+      }
+      .fig .cap {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
     }
   </style>
@@ -474,9 +508,9 @@
     <header class="head">
       <div>
         <div class="topbar">
-          <span>Climatico news · Tech &amp; climate</span>
-          <span><span class="dot" aria-hidden="true"></span>San Francisco · It’s getting personal</span>
-        </div>
+        <span>Leaderboard · 2028</span>
+        <span><span class="dot" aria-hidden="true"></span>CCA MDes IxD · Social Lab 2 · Team GTR · Climatico · July 13, 2026</span>
+      </div>
         <div class="rule" aria-hidden="true"></div>
         <div class="kicker">Hypothetical dispatch · 2028</div>
         <h1>In 2028 San Francisco, Startups Are Now Competing on the Climatico Leaderboard — and It’s Getting Personal</h1>
@@ -494,7 +528,7 @@
       <!-- Col 1 · Lead + dual dashboards cartoon -->
       <section class="panel">
         <figure class="fig">
-          <img src="./assets/dual-dashboards.jpg" alt="Cartoon dual laptops: revenue growth and leaderboard podium" />
+          <img src="./assets/dual-dashboards.jpg" alt="Cartoon dual laptops: revenue growth and leaderboard podium" width="1280" height="720" loading="eager" decoding="sync" />
           <figcaption class="cap">Two dashboards · Growth + rank</figcaption>
         </figure>
         <div class="body">
@@ -524,7 +558,7 @@
       <!-- Col 2 · Investors + rank climb cartoon -->
       <section class="panel">
         <figure class="fig">
-          <img src="./assets/rank-climb.jpg" alt="Cartoon mascots racing up the leaderboard ladder" />
+          <img src="./assets/rank-climb.jpg" alt="Cartoon mascots racing up the leaderboard ladder" width="1024" height="1024" loading="eager" decoding="sync" />
           <figcaption class="cap">The climb · 47 → 19</figcaption>
         </figure>
         <div class="body">
@@ -553,7 +587,7 @@
       <!-- Col 3 · Hackathons + hackathon cartoon -->
       <section class="panel">
         <figure class="fig">
-          <img src="./assets/hackathon.jpg" alt="Cartoon EI Reduction Hackathon high-five with oat milk trophy" />
+          <img src="./assets/hackathon.jpg" alt="Cartoon EI Reduction Hackathon high-five with oat milk trophy" width="1152" height="864" loading="eager" decoding="sync" />
           <figcaption class="cap">Mission · EI Reduction Hackathon</figcaption>
         </figure>
         <div class="body">
@@ -600,8 +634,8 @@
     </section>
 
     <footer class="foot">
-      <span>Climatico · News desk · March 15, 2028</span>
-      <span><strong>Tech &amp; climate · San Francisco</strong></span>
+      <span>Leaderboard · Climatico</span>
+      <span>CCA MDes IxD · Social Lab 2 · Team GTR · Climatico · July 13, 2026</span>
     </footer>
   </article>
   <script src="../print-preview.js"></script>

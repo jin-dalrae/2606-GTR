@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Actionable Insights from an EI Dashboard — Landscape · Climatico</title>
+  <meta name="description" content="Landscape 17×11: full actionable insights from an EI dashboard — Operate, Track, Story." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: oklch(0.976 0.008 85);
+      --panel: oklch(0.948 0.01 85);
+      --ink: oklch(0.24 0.02 255);
+      --ink-soft: oklch(0.42 0.016 255);
+      --line: oklch(0.85 0.012 90);
+      --accent: oklch(0.56 0.11 155);
+      --accent-deep: oklch(0.4 0.07 160);
+      --clay: oklch(0.56 0.11 55);
+      --clay-deep: oklch(0.42 0.08 55);
+      --ocean: oklch(0.52 0.1 230);
+      --ocean-deep: oklch(0.4 0.08 235);
+      --serif: "Newsreader", Georgia, serif;
+      --sans: "IBM Plex Sans", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+      --poster-w: 17in;
+      --poster-h: 11in;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    @page { size: 17in 11in; margin: 0; }
+
+    html, body {
+      background: #d8d4cb;
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem 1rem 2rem;
+      overflow-x: auto;
+    }
+
+    .chrome {
+      width: 17in;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .chrome a {
+      color: var(--accent-deep);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .print-stage {
+      display: flex;
+      justify-content: center;
+      margin: 0 auto;
+      overflow: visible;
+    }
+
+    .poster {
+      width: var(--poster-w);
+      height: var(--poster-h);
+      flex-shrink: 0;
+      background: var(--paper);
+      box-shadow: 0 22px 55px rgba(18, 24, 22, 0.14);
+      padding: 0.22in 0.26in 0.16in;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 0.1in;
+      overflow: hidden;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 10pt;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .topbar .dot {
+      width: 0.11in;
+      height: 0.11in;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+      margin-right: 0.08in;
+      vertical-align: middle;
+    }
+
+    .rule {
+      width: 100%;
+      height: 2.5px;
+      background: var(--ink);
+      margin-top: 0.05in;
+    }
+
+    .mast-row {
+      display: grid;
+      grid-template-columns: 1.55fr 0.95fr;
+      gap: 0.18in;
+      align-items: stretch;
+    }
+
+    .masthead h1 {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 22pt;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+    }
+
+    .hook {
+      font-family: var(--mono);
+      font-size: 10.5pt;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      margin-top: 0.05in;
+    }
+
+    .intro {
+      font-size: 12.5pt;
+      line-height: 1.35;
+      color: var(--ink-soft);
+      margin-top: 0.07in;
+    }
+
+    .intro strong { color: var(--ink); font-weight: 600; }
+
+    .flow {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      gap: 0.06in;
+      align-items: center;
+      background: var(--panel);
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      padding: 0.12in 0.14in;
+      height: 100%;
+    }
+
+    .flow .node { text-align: center; }
+
+    .flow .node .k {
+      font-family: var(--mono);
+      font-size: 10pt;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .flow .node strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 17pt;
+      font-weight: 500;
+      margin-top: 0.03in;
+    }
+
+    .flow .arr {
+      font-family: var(--mono);
+      color: var(--accent-deep);
+      font-size: 18pt;
+    }
+
+    .tri {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.12in;
+      min-height: 0;
+      height: 100%;
+    }
+
+    .band {
+      display: flex;
+      flex-direction: column;
+      gap: 0.09in;
+      min-height: 0;
+      height: 100%;
+      background: var(--panel);
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      padding: 0.12in 0.12in 0.11in;
+      overflow: hidden;
+    }
+
+    .band.operate { border-top: 5px solid var(--clay); }
+    .band.track { border-top: 5px solid var(--accent); }
+    .band.story { border-top: 5px solid var(--ocean); }
+
+    .band-head {
+      flex-shrink: 0;
+      padding-bottom: 0.07in;
+      border-bottom: 1.5px solid var(--line);
+    }
+
+    .band-head .k {
+      font-family: var(--mono);
+      font-size: 10.5pt;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .band.operate .band-head .k { color: var(--clay-deep); }
+    .band.track .band-head .k { color: var(--accent-deep); }
+    .band.story .band-head .k { color: var(--ocean-deep); }
+
+    .band-head h2 {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 15pt;
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+      margin-top: 0.04in;
+    }
+
+    .band-head .hint {
+      font-size: 11pt;
+      color: var(--ink-soft);
+      font-style: italic;
+      font-family: var(--serif);
+      margin-top: 0.03in;
+    }
+
+    .cards {
+      display: flex;
+      flex-direction: column;
+      gap: 0.09in;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .card {
+      background: white;
+      border: 1.5px solid var(--line);
+      border-radius: 8px;
+      padding: 0.11in 0.12in;
+      display: flex;
+      flex-direction: column;
+      gap: 0.07in;
+      flex: 1 1 0;
+      min-height: 0;
+    }
+
+    /* Story has 2 cards — let them share height evenly (same as 3-card columns) */
+    .band.story .card {
+      flex: 1 1 0;
+    }
+
+    .card .num {
+      font-family: var(--mono);
+      font-size: 11pt;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .band.operate .card .num { color: var(--clay-deep); }
+    .band.track .card .num { color: var(--accent-deep); }
+    .band.story .card .num { color: var(--ocean-deep); }
+
+    .card h3 {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 13.5pt;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+    }
+
+    .card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.05in;
+      flex: 1;
+    }
+
+    .card li {
+      font-size: 11.5pt;
+      line-height: 1.32;
+      color: var(--ink-soft);
+      padding-left: 0.15in;
+      position: relative;
+    }
+
+    .card li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.3em;
+      width: 0.065in;
+      height: 0.065in;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .band.operate .card li::before { background: var(--clay); }
+    .band.story .card li::before { background: var(--ocean); }
+
+    .card .action {
+      font-size: 11.5pt;
+      line-height: 1.3;
+      font-weight: 600;
+      color: var(--ink);
+      padding-top: 0.07in;
+      border-top: 1.5px solid var(--line);
+      margin-top: auto;
+    }
+
+    .card .action span {
+      font-family: var(--mono);
+      font-size: 10pt;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 0.025in;
+    }
+
+    .band.operate .card .action span { color: var(--clay-deep); }
+    .band.track .card .action span { color: var(--accent-deep); }
+    .band.story .card .action span { color: var(--ocean-deep); }
+
+    .hotspot {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0.08in 0.09in 0.07in;
+      flex-shrink: 0;
+    }
+
+    .hotspot .cap {
+      font-family: var(--mono);
+      font-size: 9pt;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 0.05in;
+    }
+
+    .hotspot .bars {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.05in;
+      align-items: end;
+      height: 0.62in;
+    }
+
+    .hotspot .col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.03in;
+      height: 100%;
+      justify-content: flex-end;
+    }
+
+    .hotspot .bar {
+      width: 100%;
+      border-radius: 3px 3px 0 0;
+      background: color-mix(in oklab, var(--clay) 40%, var(--line));
+      min-height: 0.08in;
+    }
+
+    .hotspot .bar.hi { background: var(--clay); }
+
+    .hotspot .lab {
+      font-family: var(--mono);
+      font-size: 8.5pt;
+      color: var(--ink-soft);
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 10.5pt;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      border-top: 1.5px solid var(--line);
+      padding-top: 0.08in;
+    }
+
+    .foot strong { color: var(--accent-deep); font-weight: 500; }
+
+    @media print {
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      html, body {
+        background: #fff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 17in;
+        height: 11in;
+      }
+      .chrome { display: none !important; }
+      .print-stage { width: auto !important; height: auto !important; }
+      .poster {
+        width: 17in !important;
+        height: 11in !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="chrome">
+    <a href="../">← Portrait version</a>
+    <a href="../../">All posters</a>
+    <span>17 × 11 landscape tabloid · Fixed print size</span>
+  </div>
+
+  <article class="poster" aria-label="Actionable insights from an EI dashboard — landscape">
+    <div>
+      <div class="topbar">
+        <span>Actionable insights · Landscape</span>
+        <span><span class="dot" aria-hidden="true"></span>CCA MDes IxD · Social Lab 2 · Team GTR · Climatico · July 13, 2026</span>
+      </div>
+      <div class="rule" aria-hidden="true"></div>
+    </div>
+
+    <div class="mast-row">
+      <header class="masthead">
+        <h1>Actionable Insights Startups Can Get from an EI Dashboard</h1>
+        <p class="hook">Climatico · what founders actually use the dashboard for</p>
+        <p class="intro">
+          An effective EI dashboard (like the one used in GTR Partners) doesn’t just show numbers — it helps founders make better decisions.
+          Here are the key types of actionable insights early-stage startups typically get:
+        </p>
+      </header>
+      <div class="flow" aria-label="How founders use insights">
+        <div class="node">
+          <div class="k">01 · See</div>
+          <strong>Operate</strong>
+        </div>
+        <div class="arr" aria-hidden="true">→</div>
+        <div class="node">
+          <div class="k">02 · Decide</div>
+          <strong>Track</strong>
+        </div>
+        <div class="arr" aria-hidden="true">→</div>
+        <div class="node">
+          <div class="k">03 · Prove</div>
+          <strong>Story</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="tri">
+      <!-- Band A · Operate — full portrait copy -->
+      <section class="band operate">
+        <div class="band-head">
+          <span class="k">Band A · Operate</span>
+          <h2>Where impact is — and what to change</h2>
+          <p class="hint">01 · 03 · 07</p>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <div class="num">01</div>
+            <h3>Hotspot Identification (Where Your Impact Is Coming From)</h3>
+            <div class="hotspot" aria-hidden="true">
+              <div class="cap">Example sources · biggest bar = prioritize first</div>
+              <div class="bars">
+                <div class="col"><div class="bar" style="height:38%"></div><span class="lab">Cloud</span></div>
+                <div class="col"><div class="bar hi" style="height:100%"></div><span class="lab">Supply</span></div>
+                <div class="col"><div class="bar" style="height:52%"></div><span class="lab">Ship</span></div>
+                <div class="col"><div class="bar" style="height:32%"></div><span class="lab">Office</span></div>
+                <div class="col"><div class="bar" style="height:62%"></div><span class="lab">Use</span></div>
+              </div>
+            </div>
+            <ul>
+              <li>Which part of your business contributes the most to your environmental impact (e.g., cloud computing, supplier manufacturing, shipping, office operations, or product usage).</li>
+              <li>Specific suppliers or materials that are driving high emissions.</li>
+            </ul>
+            <p class="action"><span>Action</span>Prioritize which area to tackle first instead of guessing.</p>
+          </article>
+          <article class="card">
+            <div class="num">03</div>
+            <h3>Scenario &amp; Decision Support</h3>
+            <ul>
+              <li>Compare the environmental impact of different choices before making them, such as:</li>
+              <li>Choosing between two suppliers</li>
+              <li>Selecting different packaging or shipping methods</li>
+              <li>Deciding between cloud providers or data centers</li>
+            </ul>
+            <p class="action"><span>Action</span>Make lower-impact decisions during product development and operations.</p>
+          </article>
+          <article class="card">
+            <div class="num">07</div>
+            <h3>Resource Prioritization</h3>
+            <ul>
+              <li>Clear view of which initiatives will deliver the biggest environmental improvement relative to effort and cost.</li>
+              <li>Helps small teams avoid wasting time on low-impact activities.</li>
+            </ul>
+            <p class="action"><span>Action</span>Focus limited resources on changes that actually move the needle.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Band B · Track — full portrait copy -->
+      <section class="band track">
+        <div class="band-head">
+          <span class="k">Band B · Track</span>
+          <h2>Efficiency, targets, and early warnings</h2>
+          <p class="hint">02 · 04 · 06</p>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <div class="num">02</div>
+            <h3>EI Intensity Benchmarking</h3>
+            <ul>
+              <li>Your company’s EI per dollar of revenue compared to industry averages or similar-stage startups.</li>
+              <li>Whether your environmental impact is growing faster or slower than your revenue.</li>
+            </ul>
+            <p class="action"><span>Action</span>Understand if you’re becoming more or less efficient as you scale.</p>
+          </article>
+          <article class="card">
+            <div class="num">04</div>
+            <h3>Progress Tracking Against Targets</h3>
+            <ul>
+              <li>Clear visibility into whether you’re on track to meet your EI reduction goals.</li>
+              <li>Month-over-month or quarter-over-quarter trends in your EI intensity.</li>
+            </ul>
+            <p class="action"><span>Action</span>Know when to double down on initiatives or change strategy.</p>
+          </article>
+          <article class="card">
+            <div class="num">06</div>
+            <h3>Early Risk Signals</h3>
+            <ul>
+              <li>Early warnings if certain activities (e.g., rapid scaling, new suppliers, or entering new markets) are significantly increasing your environmental impact.</li>
+              <li>Identification of potential future regulatory or customer risks.</li>
+            </ul>
+            <p class="action"><span>Action</span>Address issues before they become expensive problems.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Band C · Story — full portrait copy -->
+      <section class="band story">
+        <div class="band-head">
+          <span class="k">Band C · Story</span>
+          <h2>Investors and the whole team</h2>
+          <p class="hint">05 · 08</p>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <div class="num">05</div>
+            <h3>Fundraising &amp; Investor-Ready Insights</h3>
+            <ul>
+              <li>Clean, credible data to show investors how your environmental performance is improving.</li>
+              <li>Ability to demonstrate that you’re managing risk and building a more resilient business.</li>
+            </ul>
+            <p class="action"><span>Action</span>Use real numbers in pitch decks and investor updates instead of vague statements.</p>
+          </article>
+          <article class="card">
+            <div class="num">08</div>
+            <h3>Internal Alignment &amp; Culture</h3>
+            <ul>
+              <li>Simple visuals that make it easy to explain environmental performance to the whole team.</li>
+              <li>Helps turn EI from “one person’s job” into a shared team responsibility.</li>
+            </ul>
+            <p class="action"><span>Action</span>Build a culture where environmental impact is discussed alongside growth metrics.</p>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <footer class="foot">
+      <span>Actionable insights · Climatico</span>
+      <span>CCA MDes IxD · Social Lab 2 · Team GTR · Climatico · July 13, 2026</span>
+    </footer>
+  </article>
+  <script src="../../print-preview.js"></script>
+</body>
+</html>
