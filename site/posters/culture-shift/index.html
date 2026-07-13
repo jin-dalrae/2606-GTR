@@ -325,15 +325,15 @@
       overflow: hidden;
       border: 1.5px solid var(--line);
       background: var(--panel);
-      flex: 1.15 1 0;
-      min-height: 2.1in;
+      flex: 0 0 2.05in;
+      height: 2.05in;
     }
 
     .sidebar .fig img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center;
+      object-position: center top;
       display: block;
     }
 
@@ -342,11 +342,11 @@
       left: 0;
       right: 0;
       bottom: 0;
-      padding: 0.08in 0.1in;
+      padding: 0.07in 0.1in;
       background: linear-gradient(transparent, rgba(18, 22, 20, 0.78));
       color: #fff;
       font-family: var(--mono);
-      font-size: 9.5pt;
+      font-size: 9pt;
       letter-spacing: 0.06em;
       text-transform: uppercase;
       line-height: 1.25;
@@ -356,15 +356,16 @@
       background: var(--panel);
       border: 1.5px solid var(--line);
       border-radius: 10px;
-      padding: 0.12in 0.14in;
+      padding: 0.1in 0.11in;
       display: flex;
       flex-direction: column;
-      gap: 0.07in;
+      gap: 0.06in;
     }
 
     .panel.grow {
-      flex: 1;
+      flex: 1 1 auto;
       min-height: 0;
+      overflow: visible;
     }
 
     .panel .kicker {
@@ -464,20 +465,26 @@
       text-align: center;
     }
 
-    /* Clear labeled metrics (no cut-off SVG) */
+    /* Compact scoreboard — fits narrow sidebar under the FiDi art */
     .metric-table {
       width: 100%;
+      table-layout: fixed;
       border-collapse: collapse;
       background: white;
       border: 1.5px solid var(--line);
       border-radius: 8px;
       overflow: hidden;
-      font-size: 11.5pt;
+      font-size: 10.5pt;
     }
+
+    .metric-table col.col-fund { width: 28%; }
+    .metric-table col.col-ei { width: 30%; }
+    .metric-table col.col-roi { width: 24%; }
+    .metric-table col.col-rank { width: 18%; }
 
     .metric-table th,
     .metric-table td {
-      padding: 0.09in 0.09in;
+      padding: 0.07in 0.05in;
       text-align: center;
       border-bottom: 1px solid var(--line);
       vertical-align: middle;
@@ -485,9 +492,9 @@
 
     .metric-table th {
       font-family: var(--mono);
-      font-size: 9.5pt;
+      font-size: 8pt;
       font-weight: 500;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
       color: var(--ink-soft);
       background: color-mix(in oklab, var(--panel) 80%, white);
@@ -498,7 +505,7 @@
       text-align: left;
       font-weight: 600;
       color: var(--ink);
-      white-space: nowrap;
+      padding-left: 0.08in;
     }
 
     .metric-table tr:last-child th,
@@ -506,22 +513,29 @@
       border-bottom: none;
     }
 
+    .metric-table .fund-name {
+      display: block;
+      font-size: 11pt;
+      line-height: 1.15;
+    }
+
     .metric-table .val {
       font-family: var(--serif);
       font-weight: 500;
-      font-size: 14.5pt;
+      font-size: 15pt;
       color: var(--ink);
-      line-height: 1.1;
+      line-height: 1.05;
     }
 
     .metric-table .unit {
       display: block;
       font-family: var(--mono);
-      font-size: 8.5pt;
+      font-size: 7.5pt;
       font-weight: 400;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
       color: var(--ink-soft);
-      margin-top: 0.02in;
+      margin-top: 0.015in;
+      white-space: nowrap;
     }
 
     .metric-table .row-ei .val { color: var(--accent-deep); }
@@ -538,10 +552,25 @@
       color: var(--clay-deep);
     }
 
+    .metric-table .badge-1 {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 8pt;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.02in 0.06in;
+      border-radius: 999px;
+      border: 1.5px solid color-mix(in oklab, var(--accent) 45%, var(--line));
+      background: color-mix(in oklab, var(--accent) 12%, white);
+      color: var(--accent-deep);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
     .metric-call {
-      margin-top: 0.08in;
-      font-size: 11pt;
-      line-height: 1.35;
+      margin-top: 0.04in;
+      font-size: 10.5pt;
+      line-height: 1.3;
       color: var(--ink-soft);
     }
 
@@ -729,40 +758,46 @@
         <div class="panel grow">
           <div class="kicker">Public scoreboard · Big Three peer set</div>
           <h3>GTRock ranks #1 on both</h3>
-          <p class="note">From GTR consulting’s open estimated-EI + return comparison (illustrative 2030 ranking).</p>
+          <p class="note">Illustrative 2030 open estimated-EI + return ranking.</p>
           <table class="metric-table" aria-label="Fund ranking on EI intensity and ROI">
+            <colgroup>
+              <col class="col-fund" />
+              <col class="col-ei" />
+              <col class="col-roi" />
+              <col class="col-rank" />
+            </colgroup>
             <thead>
               <tr>
                 <th scope="col">Fund</th>
-                <th scope="col">EI intensity</th>
+                <th scope="col">EI / $M</th>
                 <th scope="col">ROI</th>
                 <th scope="col">Rank</th>
               </tr>
             </thead>
             <tbody>
               <tr class="row-ei rank-1">
-                <td>GTRock<br/><span class="unit">this book</span></td>
-                <td><span class="val">48</span><span class="unit">tCO₂e / $M · lowest</span></td>
-                <td><span class="val">16%</span><span class="unit">net annualized</span></td>
-                <td><span class="badge-1">#1 both</span></td>
+                <td><span class="fund-name">GTRock</span><span class="unit">this book</span></td>
+                <td><span class="val">48</span><span class="unit">lowest</span></td>
+                <td><span class="val">16%</span><span class="unit">net</span></td>
+                <td><span class="badge-1">#1</span></td>
               </tr>
               <tr class="row-ret">
-                <td>Peer fund A<br/><span class="unit">Big Three set</span></td>
-                <td><span class="val">67</span><span class="unit">tCO₂e / $M</span></td>
-                <td><span class="val">14%</span><span class="unit">net annualized</span></td>
+                <td><span class="fund-name">Peer A</span><span class="unit">Big Three</span></td>
+                <td><span class="val">67</span><span class="unit">tCO₂e</span></td>
+                <td><span class="val">14%</span><span class="unit">net</span></td>
                 <td><span class="arrow flat">#2</span></td>
               </tr>
               <tr class="row-ret">
-                <td>Peer fund B<br/><span class="unit">Big Three set</span></td>
-                <td><span class="val">79</span><span class="unit">tCO₂e / $M</span></td>
-                <td><span class="val">13%</span><span class="unit">net annualized</span></td>
+                <td><span class="fund-name">Peer B</span><span class="unit">Big Three</span></td>
+                <td><span class="val">79</span><span class="unit">tCO₂e</span></td>
+                <td><span class="val">13%</span><span class="unit">net</span></td>
                 <td><span class="arrow flat">#3</span></td>
               </tr>
             </tbody>
           </table>
           <p class="metric-call">
-            <strong>Read as:</strong> under the same public yardstick, GTRock leads on
-            <strong>lower EI intensity and higher ROI</strong> — not a green trade-off story.
+            <strong>Read as:</strong> same yardstick — GTRock leads on
+            <strong>lower EI intensity and higher ROI</strong>.
           </p>
         </div>
       </aside>
