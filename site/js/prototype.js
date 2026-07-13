@@ -1,4 +1,4 @@
-/* Guided walkthrough + prototype 1/2 switcher */
+/* Guided walkthrough + prototype 1/2 switcher + P2 mobile/desktop */
 (function () {
   const STEPS_P1 = [
     {
@@ -39,12 +39,12 @@
     },
   ];
 
-  const STEPS_P2 = [
+  const STEPS_P2_MOBILE = [
     {
       title: "1 · Overview",
       short: "Live impact snapshot",
       detail:
-        "Prototype 2 is the founder dashboard. Start on Overview: estimated footprint, handprint potential, and maturity at a glance.",
+        "Mobile Prototype 2 is the founder dashboard in a phone shell. Start on Overview: estimated footprint, handprint potential, and maturity at a glance.",
     },
     {
       title: "2 · Footprint",
@@ -72,19 +72,70 @@
     },
   ];
 
+  const STEPS_P2_DESKTOP = [
+    {
+      title: "1 · Snapshot header",
+      short: "Company + share actions",
+      detail:
+        "Desktop dashboard wireframe: company strip with copy link, download, and LinkedIn share — the operator surface after assessment.",
+    },
+    {
+      title: "2 · Overview",
+      short: "Emit, avoid, net, trend",
+      detail:
+        "Four cards: CO₂ you emit, CO₂ you help avoid, overall impact, and trend — plus a simple maturity ring (Level 1 of 5).",
+    },
+    {
+      title: "3 · Climate goals",
+      short: "Progress & milestones",
+      detail:
+        "Owned goals with progress bars and a milestone track (Past → Now → Next → Target) so founders see the path, not just a number.",
+    },
+    {
+      title: "4 · How to improve",
+      short: "Recommendations",
+      detail:
+        "Opportunity list with add/remove levers (energy supplier, packaging, travel) and rough tonnes/yr impact tags.",
+    },
+    {
+      title: "5 · Why it matters",
+      short: "Outlook + footer",
+      detail:
+        "Right column explains investor/partner trust, a 6-month outlook sketch, and a footer strip with active goals and average progress.",
+    },
+  ];
+
   let proto = "p1";
+  let device = "desktop";
   let index = 0;
 
   function steps() {
-    return proto === "p1" ? STEPS_P1 : STEPS_P2;
+    if (proto === "p1") return STEPS_P1;
+    return device === "desktop" ? STEPS_P2_DESKTOP : STEPS_P2_MOBILE;
   }
 
   function frameSrc() {
-    return proto === "p1" ? "../prototype1/index.html" : "../prototype2/index.html";
+    if (proto === "p1") return "../prototype1/index.html";
+    return device === "desktop"
+      ? "../prototype2/desktop/index.html"
+      : "../prototype2/index.html";
   }
 
   function fullHref() {
-    return proto === "p1" ? "../prototype1/" : "../prototype2/";
+    if (proto === "p1") return "../prototype1/";
+    return device === "desktop" ? "../prototype2/desktop/" : "../prototype2/";
+  }
+
+  function setFrameIfNeeded(wanted) {
+    const frame = document.getElementById("proto-frame");
+    if (!frame) return;
+    try {
+      const cur = new URL(frame.src, window.location.href).pathname;
+      const nextPath = new URL(wanted, window.location.href).pathname;
+      if (cur !== nextPath) frame.src = wanted;
+    } catch {
+      frame.src = wanted;
+    }
   }
 
   function render() {
@@ -94,10 +145,12 @@
     const bar = document.getElementById("proto-stage-label");
     const prev = document.getElementById("proto-prev");
     const next = document.getElementById("proto-next");
-    const frame = document.getElementById("proto-frame");
     const open = document.getElementById("proto-open");
     const tab1 = document.getElementById("tab-p1");
     const tab2 = document.getElementById("tab-p2");
+    const deviceRow = document.getElementById("proto-device-row");
+    const tabMobile = document.getElementById("tab-device-mobile");
+    const tabDesktop = document.getElementById("tab-device-desktop");
     if (!list || !title || !body) return;
 
     const S = steps();
@@ -118,32 +171,24 @@
     title.textContent = step.title;
     body.textContent = step.detail;
 
-    const label =
-      proto === "p1"
-        ? `Prototype 1 · Assessment · Step ${index + 1}/${S.length}`
-        : `Prototype 2 · Dashboard · Step ${index + 1}/${S.length}`;
+    let label;
+    if (proto === "p1") {
+      label = `Prototype 1 · Assessment · Step ${index + 1}/${S.length}`;
+    } else {
+      const mode = device === "desktop" ? "Desktop" : "Mobile";
+      label = `Prototype 2 · Dashboard · ${mode} · Step ${index + 1}/${S.length}`;
+    }
     if (bar) bar.textContent = label;
     if (prev) prev.disabled = index === 0;
     if (next) next.textContent = index === S.length - 1 ? "Done" : "Next step";
 
-    if (frame) {
-      const wanted = frameSrc();
-      // Only reload when switching prototypes — keep in-progress assessment state
-      const absWanted = new URL(wanted, window.location.href).href;
-      if (frame.src !== absWanted && !frame.src.endsWith(wanted.replace("../", "/"))) {
-        // Compare path ends
-        try {
-          const cur = new URL(frame.src).pathname;
-          const nextPath = new URL(wanted, window.location.href).pathname;
-          if (cur !== nextPath) frame.src = wanted;
-        } catch {
-          frame.src = wanted;
-        }
-      }
-    }
+    setFrameIfNeeded(frameSrc());
+
     if (open) {
       open.href = fullHref();
-      open.textContent = proto === "p1" ? "Open assessment ↗" : "Open dashboard ↗";
+      if (proto === "p1") open.textContent = "Open assessment ↗";
+      else if (device === "desktop") open.textContent = "Open desktop dashboard ↗";
+      else open.textContent = "Open mobile dashboard ↗";
     }
 
     if (tab1 && tab2) {
@@ -151,6 +196,16 @@
       tab2.classList.toggle("active", proto === "p2");
       tab1.setAttribute("aria-selected", proto === "p1" ? "true" : "false");
       tab2.setAttribute("aria-selected", proto === "p2" ? "true" : "false");
+    }
+
+    if (deviceRow) {
+      deviceRow.hidden = proto !== "p2";
+    }
+    if (tabMobile && tabDesktop) {
+      tabMobile.classList.toggle("active", device === "mobile");
+      tabDesktop.classList.toggle("active", device === "desktop");
+      tabMobile.setAttribute("aria-selected", device === "mobile" ? "true" : "false");
+      tabDesktop.setAttribute("aria-selected", device === "desktop" ? "true" : "false");
     }
 
     list.querySelectorAll("button").forEach((btn) => {
@@ -165,6 +220,16 @@
     if (proto === next) return;
     proto = next;
     index = 0;
+    if (proto === "p2") device = "desktop";
+    const frame = document.getElementById("proto-frame");
+    if (frame) frame.src = frameSrc();
+    render();
+  }
+
+  function setDevice(next) {
+    if (device === next || proto !== "p2") return;
+    device = next;
+    index = 0;
     const frame = document.getElementById("proto-frame");
     if (frame) frame.src = frameSrc();
     render();
@@ -173,6 +238,8 @@
   document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("tab-p1")?.addEventListener("click", () => setProto("p1"));
     document.getElementById("tab-p2")?.addEventListener("click", () => setProto("p2"));
+    document.getElementById("tab-device-mobile")?.addEventListener("click", () => setDevice("mobile"));
+    document.getElementById("tab-device-desktop")?.addEventListener("click", () => setDevice("desktop"));
     document.getElementById("proto-prev")?.addEventListener("click", () => {
       index = Math.max(0, index - 1);
       render();
@@ -189,7 +256,6 @@
       }
     });
 
-    // Force initial load of prototype1 with absolute path for reliability
     const frame = document.getElementById("proto-frame");
     if (frame) frame.src = "../prototype1/index.html";
     render();

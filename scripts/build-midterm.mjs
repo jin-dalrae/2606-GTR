@@ -102,6 +102,12 @@ cpSync(
   join(ROOT, "Dashboard Standalone.html"),
   join(MID, "prototype2", "index.html")
 );
+// Desktop dashboard wireframe (midterm prototype · 2 · Dashboard · Desktop)
+mkdirSync(join(MID, "prototype2", "desktop"), { recursive: true });
+cpSync(
+  join(ROOT, "dashboard-wireframe-polished.html"),
+  join(MID, "prototype2", "desktop", "index.html")
+);
 
 // 5) Evidence archive + cosmos styles + images
 cpSync(join(ROOT, "evidence", "gtr"), join(MID, "gtr"), { recursive: true });

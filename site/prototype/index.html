@@ -55,6 +55,37 @@
       border-color: rgba(31, 138, 91, 0.35);
       color: var(--hand-deep);
     }
+    .proto-device {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+    .proto-device[hidden] { display: none !important; }
+    .proto-device button {
+      border: 1px solid var(--line);
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 0.55rem 0.65rem;
+      font: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--ink-2);
+    }
+    .proto-device button.active {
+      background: var(--hand-soft);
+      border-color: rgba(31, 138, 91, 0.35);
+      color: var(--hand-deep);
+    }
+    .proto-device-label {
+      margin: 0;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+    }
+
     .proto-steps {
       list-style: none;
       margin: 0;
@@ -171,14 +202,22 @@
           <p class="eyebrow" style="margin-bottom:0.5rem"><span class="dot"></span> Live HTML prototypes</p>
           <h1>Try the product</h1>
           <p class="lead" style="font-size:0.95rem;margin:0.5rem 0 0">
-            Prototype 1 is the free assessment. Prototype 2 is the founder dashboard.
-            Both are real HTML builds — open full screen if the embed feels tight.
+            Prototype 1 is the free assessment. Prototype 2 is the founder dashboard
+            (desktop wireframe + mobile shell). Both are real HTML builds — open full screen if the embed feels tight.
           </p>
         </div>
 
         <div class="proto-tabs" role="tablist" aria-label="Which prototype">
           <button type="button" id="tab-p1" class="active" role="tab" aria-selected="true">1 · Assessment</button>
           <button type="button" id="tab-p2" role="tab" aria-selected="false">2 · Dashboard</button>
+        </div>
+
+        <div id="proto-device-row" hidden>
+          <p class="proto-device-label">Device</p>
+          <div class="proto-device" role="tablist" aria-label="Dashboard device">
+            <button type="button" id="tab-device-desktop" class="active" role="tab" aria-selected="true">Desktop</button>
+            <button type="button" id="tab-device-mobile" role="tab" aria-selected="false">Mobile</button>
+          </div>
         </div>
 
         <ol class="proto-steps" id="proto-steps"></ol>
