@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collaboration &amp; feedback session — Climatico Research</title>
+  <meta name="description" content="Recording transcript: collaboration session with Meme co-founders Sam and Srividiya (University of Cincinnati) and the Climatico team at CCA." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/site.css" />
+  <style>
+    .person-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin: 1.25rem 0 1.75rem;
+    }
+    @media (max-width: 720px) {
+      .person-grid { grid-template-columns: 1fr; }
+    }
+    .person-card {
+      background: var(--panel, oklch(0.96 0.01 85));
+      border: 1px solid var(--line, oklch(0.88 0.01 90));
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+    }
+    .person-name {
+      font-family: var(--serif, "Newsreader", Georgia, serif);
+      font-weight: 600;
+      font-size: 1.05rem;
+      margin-bottom: 0.25rem;
+    }
+    .person-role {
+      font-size: 0.92rem;
+      line-height: 1.4;
+      color: var(--ink-soft, oklch(0.45 0.02 255));
+      margin: 0;
+    }
+    .turn {
+      display: grid;
+      grid-template-columns: 6.5rem 1fr;
+      gap: 0.75rem 1rem;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid color-mix(in oklab, var(--line, #ddd) 80%, transparent);
+    }
+    @media (max-width: 640px) {
+      .turn { grid-template-columns: 1fr; gap: 0.25rem; }
+    }
+    .turn .speaker {
+      font-family: var(--mono, "IBM Plex Mono", monospace);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent-deep, oklch(0.4 0.07 160));
+      padding-top: 0.15rem;
+    }
+    .turn p {
+      margin: 0;
+      font-size: 1.02rem;
+      line-height: 1.55;
+      color: var(--ink-soft, oklch(0.38 0.02 255));
+    }
+    .report-body .turn p { margin: 0; }
+    .transcript-note {
+      background: var(--panel, oklch(0.96 0.01 85));
+      border-left: 4px solid var(--accent, oklch(0.56 0.11 155));
+      border-radius: 0 8px 8px 0;
+      padding: 0.85rem 1rem;
+      margin: 0 0 1.5rem;
+      font-size: 0.98rem;
+      line-height: 1.45;
+      color: var(--ink-soft, oklch(0.42 0.02 255));
+    }
+  </style>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-nav" id="site-nav"></header>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <p class="eyebrow"><span class="dot"></span> Fieldwork · Transcript</p>
+          <h1 class="display">Collaboration &amp; feedback session</h1>
+          <p class="lead">
+            Recording transcript with Sam and Srividiya (co-founders of <em>Meme</em>, University of Cincinnati)
+            and the Climatico team at CCA — introductions, prototype walkthrough, compliance, monetization, and feedback.
+          </p>
+        </div>
+      </section>
+      <section class="section-sm" style="padding-top:0">
+        <div class="container report-layout">
+          <aside class="report-toc" aria-label="On this page">
+            <h2>On this page</h2>
+            <ol>
+              <li><a href="#participants">Participants</a></li>
+              <li><a href="#introductions-project-backgrounds">Part 1: Introductions &amp; Project Backgrounds</a></li>
+              <li><a href="#prototype-walkthrough-technical-frameworks">Part 2: Prototype Walkthrough &amp; Technical Frameworks</a></li>
+              <li><a href="#regulatory-challenges-compliance-competitor-analysis">Part 3: Regulatory Challenges, Compliance, &amp; Competitor Analysis</a></li>
+              <li><a href="#feedback-on-b2b-dashboard-revenue-models">Part 4: Feedback on B2B Dashboard &amp; Revenue Models</a></li>
+              <li><a href="#monetization-collaborative-opportunities">Part 5: Monetization &amp; Collaborative Opportunities</a></li>
+              <li><a href="#informal-discussion-networking">Part 6: Informal Discussion &amp; Networking</a></li>
+            </ol>
+          </aside>
+          <article class="report-body">
+            <p class="transcript-note">
+              Lightly formatted from the session recording for readability. Speakers and wording preserved.
+              Informal networking (Part 6) is included for completeness.
+            </p>
+
+            <h2 id="participants">Participants</h2>
+            <div class="person-grid">
+            <div class="person-card">
+              <div class="person-name">Sam (Sam)</div>
+              <p class="person-role">Cybersecurity Engineering Sophomore, University of Cincinnati (Co-founder of <em>Meme</em>, a micro-impact climate investing fintech platform; also co-founder of <em>Sentinel</em>, a hardware predictive maintenance startup)</p>
+            </div>
+            <div class="person-card">
+              <div class="person-name">Srividiya</div>
+              <p class="person-role">Environmental Studies Sophomore, University of Cincinnati (Co-founder of <em>Meme</em>, a micro-impact climate investing fintech platform)</p>
+            </div>
+            <div class="person-card">
+              <div class="person-name">Rae</div>
+              <p class="person-role">Master&#x27;s Student in Interaction Design, California College of the Arts (CCA) (Former IT consultant at PwC)</p>
+            </div>
+            <div class="person-card">
+              <div class="person-name">Tej</div>
+              <p class="person-role">Master&#x27;s Student in Interaction Design, California College of the Arts (CCA) (Former Associate UX Designer at TCS in India)</p>
+            </div>
+            <div class="person-card">
+              <div class="person-name">Gabriel</div>
+              <p class="person-role">Master&#x27;s Student in Interaction Design, California College of the Arts (CCA)</p>
+            </div>
+            </div>
+
+          <h2 id="introductions-project-backgrounds">Part 1: Introductions &amp; Project Backgrounds</h2>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Hi, I&#x27;m a cybersecurity engineering sophomore, usually in Cincinnati. I&#x27;m helping to rebuild our startup, Meme. It&#x27;s essentially like a fintech platform where you&#x27;re focusing on impact change with financial change. It&#x27;s mostly geared toward Gen Z, given this current change in hands of the current financial transfer from the millennials to Gen Z, which is in the billions. So it&#x27;s a bigger opportunity. And I handle the tech and financing side of things to look for.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>Oh, but so you&#x27;re from the financial sector? Are you working on this together with friends?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Yeah, so back in India, my father owns a few startups and I helped him out with a few things. I also own one back in India. So I kind of have my wheelhouse in tech plus whatever department might be needed—more of a floating concern in those departments. Yep.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>Awesome. Thank you.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>We&#x27;ve been... we started college together. We were in the same major.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>You were in the same major? So now it&#x27;s different?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>Yeah, I&#x27;m in environmental studies now, and he&#x27;s in cybersecurity.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>Oh, I see.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>And I can introduce myself again, so I&#x27;m okay with you. I&#x27;m a sophomore at the University of Cincinnati. I do environmental studies. A little bit more about me from what he explained: it&#x27;s a micro-impact investing fintech platform that we&#x27;re gearing towards Gen Z and the younger crowd, so that they can put their money towards causes that really matter and see both the impact and the financial returns as well. So that&#x27;s what we&#x27;re exploring right now.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>That&#x27;s awesome. Thank you. We can introduce ourselves now. Me first? Yeah? Okay, so I&#x27;m Rae. Oh, okay. I have been consulting—my last workplace was PwC. So, like, it&#x27;s not really about accounting. It&#x27;s more about IT consulting. Maybe these days they call it like digitally deployed engineering, you know, going to a bank. Actually, my industry focus was also financial services, so banks, credit cards, or securities firms. I go there and, like, take a look at their data systems and make recommendations or prediction models if they want, like, if they need some features around it, yeah. Yeah, that&#x27;s really nice. Thank you. Right now, we are at CCA doing our Master&#x27;s, which is about interaction design—a little bit more creative, but still very technological, especially these days. Yeah, so we are thinking about new systems which are giving social impact.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>Hi, my name is Tej. So, I&#x27;m Rae&#x27;s classmate. I&#x27;m also doing interaction design. Back in India, I was an associate UX designer in TCS. Everywhere was there. The learning curve is crazy.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>You were working as a UX designer before.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>Yeah, so about 2 years I was in that IT consultancy firm over there in India. I see. So I worked with it. Then I came over here for the Master&#x27;s, and I can give you a brief about our project, what we are doing.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>Yes, that would be good.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>So, we are currently designing a platform for a dashboard—any kind of software for early-stage startup founders where they can see their environmental impacts, what their startup is bringing on the environment. So instead of focusing solely on money or investment, that can still be a focus, but this can be an add-on for them where they can see all the impacts and also learn how to improve their footprints.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>This is like one of our original ideas, partly, you know, from our own prompts and helping people look at their financial health, with feedback from our mentors from time to time. Startups, by themselves, are not deeply established in the industry as of now. If we want them to be able to do this, you need to build up that capacity. Yeah.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>So it&#x27;s financial security. It&#x27;s, as you said, it&#x27;s kind of an add-on. But, okay, so how do you present your metrics? In my opinion, that is one of the key questions on that side, right? Do you guys have a name, a proof of concept, or anything?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>Yes. Okay.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>So, because our course is basically about interaction design and experience design, designing the dashboard or application was majorly our focus. Yeah, but our instructor, the professor, is urging us to be more, how can I say, courageous? Like ambitious? Yeah, rather than just changing behavior with the platform, they want to see systemic change. A paradigm shift, cultural shift should be there.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>I got to say, I love the realistic sticker collection. Oh my god.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>Oh. You also have some sticker collection?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Yeah, no, I had to remove some to make space for my whole set. I just bought one and, like, yeah, it&#x27;s very nice. Yeah, something glad.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>I think we can, like, see what their dashboard has.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>Yes. I think you guys can help us, like, figure out what they&#x27;re missing as well because it&#x27;s literally the same thing.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>Totally.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>What we show to our consumers is like the impacts on the metrics. So we wanted to see, is there anything in-depth we could go, or are we being like very vague about something like that? So I was more interested in doing that exchange. Thank you so much. Yeah.</p>
+            </div>
+
+          <h2 id="prototype-walkthrough-technical-frameworks">Part 2: Prototype Walkthrough &amp; Technical Frameworks</h2>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>Oh, basically, ah, this is your part of the prototype, right? Giving the external insight and tracking climate goals.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>Yeah, I tried to, like, do the same thing over climate goals. And the feedback from our mentors was like: give them the steps on how they can improve, and explain why does it matter.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>I know there is... I don&#x27;t know, like, I&#x27;m not liking white space, but I&#x27;m trying to work with it, you know, in white spaces. I think it makes sense. Like, you are considering this as mobile or tablet?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>Yeah, that&#x27;s about tablets. I see. Okay.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>Oh, so, like, I think we can show, like, the 1st landing page that we had—not changed yet—and Gabriel&#x27;s onboarding flow.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>Oh, yeah, he is here.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>Oh, Gabriel, guys.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Gabriel</div>
+              <p>Oh, really? Nice to meet you. Thank you.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>Sorry, I&#x27;m Rae. Great, great. So we have introduced each other. Maybe you could, yeah, share what did you guys see, what we do, and the experience of what we did.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Gabriel</div>
+              <p>Okay, so I&#x27;m in the same class and we&#x27;re all in the same school program. I also go to the University of Cincinnati, and we&#x27;re just out in SF working on our startup. It&#x27;s a micro-impact investing fintech platform for climate projects. So we&#x27;re more geared towards the youth and Gen Z and getting them to invest in these projects.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>Is it okay if I can ask, like, how did you guys start?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Well, for both of us, we became friends and, of course, went for this. And then my father owns a few startups back home, so I always wanted to do something entrepreneurial. She comes from a similar background as well, so we were like, you know, sitting one day: &quot;You know what? We should do something.&quot; Why not do this? So, this is like one of our coming projects—I think the second or third.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>Because, like, I&#x27;m personally passionate about the planet and sustainability. I did my high school focusing on that as well. So right now, I went into science, and he is in cybersecurity engineering.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>Ah.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>So, where this idea came from was that I was personally frustrated by the fact that I didn&#x27;t have many options to invest in, or that most of the green funds out there were either vague or remote. And I was like, okay, even if I do want to support this, my money is still not going to the right cause. So what way is there to tackle that? And so we decided to just build it ourselves.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>That&#x27;s awesome. And how long have you guys been working on it?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Oh, so we&#x27;ve been working on it for about 6 months, 6 months, yeah. This is more alongside another college startup. Of course, it&#x27;s on how they approach it with us. Yeah, so it&#x27;s like we are in the validation phase right now. So we&#x27;re having interviews with other people that our target audience caters to. And then some more tech founders as well to figure out like: is this a standalone product or just integrated into traditional financial services? We met a venture partner who was interested in the idea as a whole. He said the investment mechanics might change, but it depends on how people are using it in their situations. There are good services out there, but it depends on how we adapt it to those situations.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>That&#x27;s also something we&#x27;re really curious about because I spoke to a lot of founders as well. And then maybe one of the things that felt like hadn&#x27;t been considered as much—and maybe you guys can also jump in as well—is the exact impact on climate.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>Oh, yeah.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>Yeah, so I think that&#x27;s kind of like the main goal of what we&#x27;re trying to do. So I think it&#x27;s really awesome that we have this chance to speak here.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>It is. Thank you so much. For us, too. Because we&#x27;re trying to do the same thing: calculating the impact metrics. I wanted to figure out what framework you guys are using and if you could guide us on what work is going to be. So maybe we can collaborate.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Yeah, absolutely. I&#x27;m a little familiar with that. The Midwest is an area where startups are mostly VC-backed. We have a hub called the United Innovation House. It is filled with venture partners, all the people out there. So it&#x27;s a close-knit group. There&#x27;s a good possibility that they would support it. I have been participating in pitch competitions, actually, so it&#x27;s been a very positive experience for us. Yep.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>That&#x27;s awesome. So we were going to show you our prototypes. Yeah, so I was thinking of starting with the landing page. I just made it in the light theme. And then onboarding and your dashboard.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>I need some time to set up.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>Oh yeah, sure. Oh, you have changes? We have your code here too.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>Yeah, yeah. Okay, we can open it on your laptop. I think so.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>Yeah, we can try. If it doesn&#x27;t work, yeah, we can troubleshoot. Actually, we have a lot of things to say about this prototype, but maybe you could just try it and just give your thoughts, like, yeah.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Yeah, absolutely. Wait, let me...</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>And, like, if you say anything, are you recording this?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>Oh, yeah, yeah, it&#x27;s fine, yeah.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>So don&#x27;t feel burdened.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>Oh, yeah. Yeah. It&#x27;s like... Oh, so these two are already published, I guess. Let&#x27;s try the questionnaire.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>How are you building the models that you guys use for the footprint? What does that process entail?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>Currently, we are relying on research databases, but we also double-check and run the data through AI-driven models to verify.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Is that something you are using? I guess, yeah, technically. That&#x27;s what I was thinking because our models are more... At this point, depending on external datasets and standards, we&#x27;re not developing anything in-house as of yet. I don&#x27;t know how it might go. If existing external standards are fine, we might end up using that. If not, we might build our own models as well.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>Oh, so you mean you are currently using other external verification methods?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Yeah, yeah. As in like what verification methods are already there, like the standards. We can show you ours as well. We&#x27;re just exploring this. And because it&#x27;s an investment platform, is your platform only about traditional stocks, or does it operate on a dividend model?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>It goes more like dividends. Because they&#x27;re early-stage projects and early-stage startups that might not be regulated directly, it operates as a long-term investment. So you get returns based on a yearly basis. That&#x27;s how we&#x27;ve been planning and thinking of it.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Do you guys want to see our methodology? We have the methodology, like what impact and metrics we use to give them the score as well, like how we calculate if a project is worth investing in and if it really fulfills the cause that you wanted to support.</p>
+            </div>
+
+          <h2 id="regulatory-challenges-compliance-competitor-analysis">Part 3: Regulatory Challenges, Compliance, &amp; Competitor Analysis</h2>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>You mentioned you are in the verification stage?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>Yes, very early stage.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>So you have been testing your mapping.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>Yes. We have a few friends in the business college who we gave it to, and we asked, &quot;What would you want from a financial aspect of investing in something? What are the things that you might require?&quot; They gave us feedback on that, and we incorporated it. Then I went to my tech friends and asked, &quot;If you&#x27;re into the green tech space, what are you missing?&quot; So we did a survey of about 15 to 20 people from different backgrounds and integrated that.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>Within your criteria, how small can a company or project be to be listed on your platform?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>I think anything from Seed to Series A. We avoid pre-seed or pre-revenue because listing pre-seed companies on our platform would require us to go through complex regulatory models, and that would function more like a donation at that point since you can&#x27;t reliably expect financial returns. So I think from Seed to Series A that are backed by VCs, or at least have 50% non-dilutive funding.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>Does that include climate projects like grid decarbonization, transport avoidance, and low-carbon materials?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>Yes, those are our primary categories.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>What is the biggest hurdle you see moving forward?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>I think the main challenge that we will face is the compliance and regulatory action that might be taken. That is the main roadblock in our project because building apps and everything is straightforward for me. It&#x27;s about how we stay compliant with the financial system while doing this new thing. It&#x27;s like Uber in a new generation, but in terms of fintech, because they could do it, but the regulatory hurdles are the main thing keeping them at bay.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>You&#x27;re right. Compliance is critical. So right now, you focus on startups from Series A that are backed by accelerators or investors already?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Yes, from Seed to Series A.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>How do you handle reporting changes in a startup&#x27;s environmental performance over time?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>We provide status updates on their progress and the methodologies they use. The description details the specific methods they employ to ensure the project remains green and impactful. We plan to check in with them every 6 to 12 months to verify if their metrics are maintaining the baseline or improving.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>So you track their historical data. Do you have features to project future expectations?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Not yet, not as of now. We haven&#x27;t developed metrics for that. While setting future expectations is valuable, if they don&#x27;t meet it, it becomes problematic. Personally, I prefer to display historical, verified data rather than predictions because startups have too many volatile variables. A founder might leave, VC backing might fall through, or operational dynamics can change overnight. I would not want predictive modeling to be a front-facing feature.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>The platform helps users decide whether to invest. How are you managing the actual distribution of returns?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>We can look at this project as an example. They process agricultural residue into stable biochar to help small farms become sustainable. We display the environmental benefits alongside the ROI. We align with fintech regulations and standards. In the long run, when a user backs a project and inputs their investment amount, the system illustrates exactly how that capital supports that specific project. If they hit their milestone, the investor receives returns.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>In cash, correct?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Yes, distributed as dividends.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>Is that guaranteed or variable?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>It carries an inherent risk, but the return structure will be determined based on the specific tier of the startup.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>Should we take a look at our prototype now?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Yes, definitely.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>We brought some chocolates for you guys.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Oh, thank you so much! You didn&#x27;t have to do that.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>We have two versions of our design. The first one is the desktop website, and we also have a mobile version for startup onboarding. The scenario is that we might meet startup founders at networking events, tell them about our project, and send them this link to complete the onboarding process if they are interested. We would love for you to try it out.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Yeah, let&#x27;s do it. I was testing it earlier with test data, but let&#x27;s input our actual details.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>Let us know if anything is confusing or if you want to dig deeper into any part of it.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>To contrast our platform with yours: we focus on the consumer-retail side, whereas you guys are building a B2B platform geared directly toward the founders. That distinction makes perfect sense.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>Exactly. The founders use our dashboard to track their handprints and footprints, and plan strategies to improve their startup&#x27;s environmental performance.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>I see. What school do you go to?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>California College of the Arts (CCA).</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Oh, okay. I heard &quot;CCA&quot; earlier but couldn&#x27;t place the name. I was at a meeting downtown with a friend from UC Berkeley, and we were talking about art. He recommended I visit CCA, but I didn&#x27;t know where the campus was.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>We are actually hosting our exhibition today. Sadly, it is our last day here before we leave.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Ah, it&#x27;s your last day in SF. We are flying back to Cincinnati tomorrow. I work with the Center for Entrepreneurship at our college, and we sponsor a hacker house in the Marina District. We host 3 to 5 startup teams throughout the summer. I was here to compile a report for them, and since we are part of the program, we also worked on our own startup. We fly back tomorrow at 1:00 PM.</p>
+            </div>
+
+          <h2 id="feedback-on-b2b-dashboard-revenue-models">Part 4: Feedback on B2B Dashboard &amp; Revenue Models</h2>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>This is the dashboard screen generated after entering the onboarding details.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>How do you feel about this overall experience?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>It is highly accessible and straightforward. We would definitely use this for *Sentinel*, our other startup. It is a hardware startup focused on predictive maintenance for industrial equipment, helping companies reduce machine downtime. This dashboard would be incredibly useful for us because a major factor in attracting modern investors is demonstrating that your startup is sustainable and utilizes low-carbon materials. Hiring traditional ESG consultants is incredibly expensive, so having a frictionless, accessible way to verify our green metrics is highly valuable.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Srividiya</div>
+              <p>Yes, it is frictionless. We don&#x27;t have to manually input massive spreadsheets of data.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Dealing with data spreadsheets over the last few months has been a nightmare.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>We are also exploring how we can expand this.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Our platform is aimed at Gen Z retail investors, typically aged 20 to 35, who find traditional climate investing jargon-heavy, complex, or locked behind high minimums. We are lowering the barrier of entry by allowing users to start investing with as little as $5.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>Do you act as the broker for these transactions?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Yes, exactly. We are positioning ourselves at a unique intersection. While there have been other attempts in this space, many failed because the market wasn&#x27;t ready or they didn&#x27;t execute at the right time. If we were to compare our scale and model to broader platforms, it would be similar to a climate-focused Robinhood, Acorns, or crowdfunding apps. Our direct competitors are startups that offer localized ESG funds, but those are often locked behind high minimums—like $500—and heavy financial jargon. We want to democratize access to these private, early-stage climate projects.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>When you invest, do you receive equity or shares before the company goes IPO?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>These companies will not go IPO for a long time. It functions more like angel investing. You are backing projects you believe in because of their environmental impact, with financial returns acting as a beneficial byproduct rather than the sole driver.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>How do dividends work in that case?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>The projects typically run for 3 to 5 years to achieve their objectives. For example, a biochar project needs to complete several operational phases to succeed. At the end of that period, investors receive returns. Throughout the project, they receive regular impact reports.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>How are shares managed if there is no public market?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>It is structured similarly to a SAFE (Simple Agreement for Future Equity) or angel syndicates. Investors hold a right to future equity or profit-sharing. If the startup generates a profit, dividends are distributed. If they don&#x27;t, there are no dividends. It is angel investing.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>You are supporting projects that struggle to get traditional funding. Often, they have 50% non-dilutive funding from government grants but need the remaining 50% to execute. Retail investors fill that gap, and once the project succeeds, they receive their returns.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>What framework do you use to evaluate these startups?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>We utilize the Verra Verified Carbon Standard as our baseline. It is the gold standard used by major corporations to verify offsets and footprints. Since early-stage startups don&#x27;t operate on a massive scale, this baseline works well for our models. Startups work with ESG consultants to verify their metrics, and we translate that data into our standardized baseline to ensure consistency across the platform.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>Let&#x27;s look at our desktop version.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>Here is the dashboard overview. It shows avoided emissions, emissions trends, and the environmental maturity level of the startup. It also displays 6-month targets, actionable steps, and explains why those steps matter.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>This is highly valuable. It would help us keep track of our environmental metrics in one place without having to manage external spreadsheets and undergo constant reverification.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>How do we keep founders engaged with the dashboard if they are not a pure climate-tech startup, but a traditional tech startup that is simply curious about their footprint?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>If a founder is not naturally climate-conscious, they won&#x27;t actively seek this out. You can&#x27;t rely on passive engagement or social-media-style loops. You have to provide clear incentives. For *Sentinel*, we maintain engagement by sending bi-weekly check-ins, asking how things are going, and showing them how optimizing their operations can reduce costs. It functions like customer relationship management.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>In your case, the incentive to maintain accurate metrics on our dashboard could be eligibility to list on your investment platform.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Exactly. Traditional brokerages and platforms charge massive listing fees, which we do not do. That is a powerful incentive.</p>
+            </div>
+
+          <h2 id="monetization-collaborative-opportunities">Part 5: Monetization &amp; Collaborative Opportunities</h2>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>I think there are immense synergies between our B2B model and your B2C platform. We could build a collaborative pipeline. If you onboard startups that want funding but lack verified environmental metrics, they can use your platform to analyze their footprint. Once verified, they can be listed on our investment marketplace. It would create a standardized ecosystem.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>What is the biggest hurdle if we offer this verification service for free? Would founders trust a free tool over a professional consultant?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Trust and perceived authority are challenges with free tools. People naturally associate high costs with professional quality. If you want to monetize and build trust, you should introduce a tiered pricing model. A basic scorecard can be free, but you charge a reasonable fee—say $50 to $100—for advanced features, such as generating official investor-ready PDF reports. You could also charge a small fee per investor document share. Another highly valuable feature founders would pay for is actionable vendor replacement. If your dashboard tells me to switch to a sustainable supplier and provides their direct contact info and pricing, that saves me hours of research. I would absolutely pay for that kind of direct value.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>So, a sliding scale model based on company size or funding stage?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Yes, a sliding scale is perfect. For example, $10 for solo founders, and $25 to $50 for teams of 2 to 5. You keep the basic reporting free, but charge for premium, actionable insights and investor-sharing capabilities.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>That makes a lot of sense.</p>
+            </div>
+
+          <h2 id="informal-discussion-networking">Part 6: Informal Discussion &amp; Networking</h2>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>We have a classmate from Singapore. Gabriel, right?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Gabriel</div>
+              <p>Yes, I&#x27;m from Singapore.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Oh, Singapore! Are you doing your Master&#x27;s or Bachelor&#x27;s?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Gabriel</div>
+              <p>Master&#x27;s.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Are you all in the same class?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>Yes, the same class.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Wow, we are literally kids compared to you guys, not going to lie.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>No, your age is the best time to start a company. How has San Francisco been for you?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>It is incredibly expensive. But the startup ecosystem here is unmatched; there are networking events happening every day. It is expensive, but the opportunities make it worth it. Where in India are you from, Tej?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>Mumbai.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Mumbai! Which area?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>Borivali.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>My uncle lives in Navi Mumbai.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>Oh, Navi Mumbai. That&#x27;s a bit far, but still part of the region.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>When you first used the BART here, did you compare it to the Mumbai local trains?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Tej</div>
+              <p>It has some similarities, but the local trains in Mumbai are much cheaper and, in their own way, more efficient for the volume they handle.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>For context, the local trains in Mumbai have open doors and no AC, so the natural ventilation is great. The trains don&#x27;t fully stop at every station, so you have to jump on and off while they are moving. You need a running start. I lived in Mumbai for a good portion of my life, so seeing the BART was an interesting comparison.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>I actually traveled to India for three weeks.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Where did you go?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>Delhi, Agra, Hyderabad, Hampi, Pune, Ahmedabad, and Goa. It was a massive trip.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>You skipped Mumbai! I am originally from Lucknow.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>I was a bit intimidated because I heard Mumbai is incredibly massive and complicated.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>It is chaotic, but it is organized chaos. It is the New York of India. The sheer volume of people using public transit is unbelievable. I really want to visit Singapore.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Gabriel</div>
+              <p>It is beautiful. It&#x27;s very easy to get a visa, and the overall experience is fantastic.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>I am from South Korea.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Anas</div>
+              <p>Oh, South Korea! My sister is obsessed with K-pop, especially BTS.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>Singapore has the best airport in the world—Changi.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Since you are studying in Cincinnati, you are used to seeing green parks everywhere, but Changi&#x27;s indoor gardens are on another level. I also like K-pop, specifically NCT.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>Oh, I know NCT. Have they disbanded?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>No, they are still active, though some members are currently serving in the military. I am planning to visit Korea in the future.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Rae</div>
+              <p>I&#x27;ve been a fan of K-pop since 2007. It&#x27;s amazing how popular Korean culture has become in India.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Sam</div>
+              <p>Yeah, it has a massive following now. Before, I didn&#x27;t listen to much K-pop, but now...</p>
+            </div>
+
+            <nav class="report-nav">
+              <a class="btn btn-secondary" href="../">← All research</a>
+              <a class="btn btn-primary" href="../../gtr/docs/fieldwork-report/">Fieldwork report →</a>
+            </nav>
+          </article>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer" id="site-footer"></footer>
+  </div>
+  <script src="../../js/site.js"></script>
+</body>
+</html>
