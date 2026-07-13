@@ -73,7 +73,6 @@
         <span class="nav-mark">C</span>
         <span class="nav-brand-text">
           <strong>Climatico</strong>
-          <span>gtr1.web.app</span>
         </span>
       </a>
       <button class="nav-toggle" type="button" aria-label="Open menu" id="nav-toggle"><span></span></button>
