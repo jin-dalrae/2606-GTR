@@ -4,11 +4,149 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Next vision — GTR Handprint</title>
-  <meta name="description" content="If GTR succeeds: system change, culture change, and a paradigm where environmental impact ratios compete with revenue and GDP." />
+  <meta name="description" content="Company-wise environmental impact and EI/Revenue ratios — from one startup ledger to a world where national indices broadcast resource depletion alongside growth." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/site.css" />
+  <style>
+    .concept-strip {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 1.5rem;
+      align-items: stretch;
+      margin-top: 1.5rem;
+    }
+    .concept-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 1.35rem 1.4rem;
+    }
+    .concept-card h3 {
+      margin: 0 0 0.55rem;
+      font-size: 1.1rem;
+    }
+    .concept-card p {
+      margin: 0;
+      color: var(--ink-2);
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .formula-box {
+      background: #16201c;
+      color: #f2f4f2;
+      border-radius: 18px;
+      padding: 1.4rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.85rem;
+    }
+    .formula-box .eyebrow {
+      color: rgba(125, 222, 179, 0.9);
+    }
+    .formula-main {
+      font-family: var(--font-display);
+      font-size: clamp(1.45rem, 2.6vw, 1.9rem);
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+    }
+    .formula-main em {
+      font-style: italic;
+      color: #7ddeb3;
+    }
+    .formula-sub {
+      font-size: 0.9rem;
+      color: rgba(242, 244, 242, 0.72);
+      line-height: 1.5;
+    }
+    .broadcast-hero {
+      margin-top: 1.25rem;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(1200px 280px at 10% 0%, rgba(31, 138, 91, 0.12), transparent 60%),
+        var(--bg-elevated);
+      padding: 1.6rem 1.6rem 1.4rem;
+      overflow: hidden;
+    }
+    .broadcast-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--hand-deep);
+      background: var(--hand-soft);
+      border: 1px solid rgba(31, 138, 91, 0.25);
+      border-radius: 999px;
+      padding: 0.35rem 0.7rem;
+      margin-bottom: 0.9rem;
+    }
+    .broadcast-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.55rem, 3.2vw, 2.2rem);
+      letter-spacing: -0.02em;
+      margin: 0 0 0.75rem;
+      line-height: 1.15;
+    }
+    .broadcast-body {
+      max-width: 62ch;
+      color: var(--ink-2);
+      font-size: 1rem;
+      line-height: 1.6;
+      margin: 0 0 1.1rem;
+    }
+    .broadcast-ticker {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+    .ticker-item {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0.85rem 0.95rem;
+    }
+    .ticker-item .t-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+      margin-bottom: 0.35rem;
+    }
+    .ticker-item .t-value {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--ink);
+    }
+    .ticker-item .t-value.down { color: #1f8a5b; }
+    .ticker-item .t-value.up { color: #b5502f; }
+    .ticker-item .t-meta {
+      margin-top: 0.25rem;
+      font-size: 0.8rem;
+      color: var(--ink-2);
+    }
+    .source-link {
+      margin-top: 1rem;
+      font-size: 0.88rem;
+      color: var(--ink-2);
+    }
+    .source-link a {
+      color: var(--hand-deep);
+      font-weight: 600;
+    }
+    @media (max-width: 800px) {
+      .concept-strip,
+      .broadcast-ticker {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="site-shell">
@@ -20,18 +158,66 @@
           <p class="eyebrow"><span class="dot"></span> Next vision · Imagination</p>
           <h1 class="display">If this works, the scoreboard changes.</h1>
           <p class="lead" style="margin-top:1.25rem">
-            Today we help one startup see footprint and handprint.
-            Tomorrow, if GTR succeeds, impact intensity becomes as legible as revenue —
-            in boardrooms, term sheets, and public culture.
+            Start with <strong>company-wise environmental impact</strong> —
+            then make <strong>EI / Revenue</strong> as legible as growth.
+            If GTR succeeds, intensity ratios leave the ESG appendix and enter
+            boardrooms, term sheets, demo days, and eventually the national feed.
           </p>
         </div>
       </section>
 
-      <section class="section" style="padding-top:1rem">
+      <section class="section" style="padding-top:0.5rem">
+        <div class="container">
+          <div class="section-head">
+            <h2>The core idea</h2>
+            <p>
+              Company-level EI calculation and impact intensity —
+              elaborated from the concept thread that drives this vision.
+            </p>
+          </div>
+
+          <div class="concept-strip">
+            <div class="concept-card">
+              <h3>Company-wise environmental impact</h3>
+              <p>
+                Every firm gets a living ledger: footprint (−) from operations and value chain,
+                handprint (+) only when additionality holds, maturity scored L0–L5,
+                claims gated on evidence. Same language GTR prototypes today —
+                Scope-aware, sourced factors, modeled until metered.
+              </p>
+              <p style="margin-top:0.85rem">
+                Not a one-off consultant PDF. A continuous operator surface:
+                evidence in, estimates out, first action binding to the next maturity step.
+              </p>
+            </div>
+            <div class="formula-box">
+              <p class="eyebrow" style="margin:0"><span class="dot"></span> Intensity, not vibes</p>
+              <div class="formula-main">
+                <em>EI / Revenue</em><br />
+                Environmental impact per unit of economic output
+              </div>
+              <p class="formula-sub">
+                Pair absolute tonnes (tCO₂e/yr) with intensity
+                (tCO₂e per $1M revenue, per FTE, per unit shipped).
+                Growth without a better ratio is no longer automatic success.
+              </p>
+            </div>
+          </div>
+
+          <p class="source-link">
+            Source concept:
+            <a href="https://grok.com/share/c2hhcmQtMg_b08dad49-52db-45f3-97ad-294eab43403e" target="_blank" rel="noopener">
+              Grok share — company-wise EI &amp; EI/Re elaboration ↗
+            </a>
+          </p>
+        </div>
+      </section>
+
+      <section class="section band">
         <div class="container">
           <div class="section-head">
             <h2>Three shifts</h2>
-            <p>System. Culture. Paradigm. Nested layers of the same bet.</p>
+            <p>System. Culture. Paradigm. Nested layers of the same EI/Revenue bet.</p>
           </div>
           <div class="vision-pillars">
             <article class="pillar">
@@ -39,16 +225,16 @@
               <h3>System change</h3>
               <p>
                 Climate data stops living in annual PDF reports for the largest companies only.
-                Every venture-backed firm ships a living ledger: evidence in, estimates out,
+                Every venture-backed firm ships a company-wise EI ledger: evidence in, estimates out,
                 maturity scored, handprint claims gated on additionality.
-                Investors allocate capital with portfolio impact boards — not gut feel after a pitch.
+                Investors open portfolio boards ranked by intensity — not gut feel after a pitch.
               </p>
             </article>
             <article class="pillar">
               <div class="pillar-index">02</div>
               <h3>Culture change</h3>
               <p>
-                Founders brag about impact ratios the way they brag about ARR and burn multiple.
+                Founders brag about <strong>EI / Revenue</strong> the way they brag about ARR and burn multiple.
                 Hiring pages show “tCO₂e per $1M revenue” next to remote policy.
                 Customers ask for intensity the way they ask for security questionnaires.
                 Green claims without evidence become socially expensive, not just legally risky.
@@ -59,7 +245,7 @@
               <h3>Paradigm shift</h3>
               <p>
                 Competition expands beyond revenue and GDP.
-                Nations, cities, funds, and companies race on <em>environmental impact ratios</em> —
+                Nations, cities, funds, and companies race on environmental impact ratios —
                 value created per tonne, harm avoided per product unit, handprint integrity under audit.
                 Growth that cannot decouple from damage is no longer celebrated as success.
               </p>
@@ -68,32 +254,77 @@
         </div>
       </section>
 
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <h2>Design fiction · If the index is public</h2>
+            <p>
+              The end state of company-wise EI: a civic scoreboard that treats resource depletion
+              like weather and markets — continuous, regional, and hard to ignore.
+            </p>
+          </div>
+
+          <div class="broadcast-hero">
+            <div class="broadcast-kicker">Breaking · National Index</div>
+            <h3 class="broadcast-title">National Index Broadcasts Regional Resource Depletion</h3>
+            <p class="broadcast-body">
+              Imagine the evening feed: not only GDP and unemployment, but a national environmental
+              intensity index — rolling up company-wise EI into regional resource signals.
+              Watershed stress, grid carbon intensity, material throughput, and verified handprints
+              sit beside growth. Capital and culture reprice overnight because the number is public.
+            </p>
+            <div class="broadcast-ticker" aria-label="Illustrative national index ticker">
+              <div class="ticker-item">
+                <div class="t-label">Bay Area · SaaS cluster</div>
+                <div class="t-value down">EI/Rev −11% YoY</div>
+                <div class="t-meta">Decoupling while ARR rises</div>
+              </div>
+              <div class="ticker-item">
+                <div class="t-label">Industrial Midwest</div>
+                <div class="t-value up">Resource draw +6%</div>
+                <div class="t-meta">Material + energy hotspot</div>
+              </div>
+              <div class="ticker-item">
+                <div class="t-label">National handprint integrity</div>
+                <div class="t-value">58% verified</div>
+                <div class="t-meta">Ungated claims flagged red</div>
+              </div>
+            </div>
+            <p class="source-link" style="margin-bottom:0">
+              Illustrative only — design fiction from the vision thread
+              (<a href="https://grok.com/share/c2hhcmQtMg_b08dad49-52db-45f3-97ad-294eab43403e" target="_blank" rel="noopener">open source share ↗</a>).
+              Not live market data.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section class="section band">
         <div class="container">
           <div class="section-head">
             <h2>The new leaderboard</h2>
-            <p>Imagine markets ranking not only who grew fastest — but who grew cleanest.</p>
+            <p>Markets ranking not only who grew fastest — but who improved EI / Revenue while scaling.</p>
           </div>
           <div class="ratio-board">
             <div class="ratio-card">
               <div class="label">Series B · SaaS</div>
               <div class="company">Northgrid</div>
               <div class="stat"><span>Revenue growth</span><b>+82% YoY</b></div>
-              <div class="stat"><span>tCO₂e / $1M ARR</span><b>4.1 ↓</b></div>
+              <div class="stat"><span>EI / $1M ARR</span><b>4.1 t ↓</b></div>
               <div class="stat"><span>Handprint integrity</span><b>L4 Active</b></div>
             </div>
             <div class="ratio-card">
               <div class="label">Seed · Hardware</div>
               <div class="company">Clayform</div>
               <div class="stat"><span>Revenue growth</span><b>+40% YoY</b></div>
-              <div class="stat"><span>tCO₂e / unit shipped</span><b>1.8 ↓</b></div>
+              <div class="stat"><span>EI / unit shipped</span><b>1.8 t ↓</b></div>
               <div class="stat"><span>LCA coverage</span><b>Top 3 SKUs</b></div>
             </div>
             <div class="ratio-card">
               <div class="label">Fund · Climate book</div>
               <div class="company">Carbon Capital III</div>
               <div class="stat"><span>Portfolio ARR</span><b>$1.2B</b></div>
-              <div class="stat"><span>Weighted intensity</span><b>−18% YoY</b></div>
+              <div class="stat"><span>Weighted EI intensity</span><b>−18% YoY</b></div>
               <div class="stat"><span>Claims verified</span><b>61%</b></div>
             </div>
           </div>
@@ -107,41 +338,42 @@
         <div class="container">
           <div class="section-head">
             <h2>Scenes from a world that measures what it values</h2>
-            <p>Small stories of system, culture, and paradigm landing in everyday life.</p>
+            <p>From one company’s EI ledger to a public resource index.</p>
           </div>
           <div class="scene-grid">
             <article class="scene">
               <div class="scene-year">Near term</div>
               <div>
-                <h3>The diligence tab opens first</h3>
+                <h3>Company-wise EI is the diligence tab</h3>
                 <p>
                   A partner does not start with the growth chart. They open the GTR share link:
-                  footprint hotspots, maturity level, additionality status on handprint claims,
-                  and the stranding-year countdown if the architecture does not change.
-                  The raise still depends on product — but climate is no longer a slide-28 afterthought.
+                  company-wise footprint hotspots, EI/Revenue vs peers, maturity level,
+                  additionality status on handprint claims, and the stranding-year countdown
+                  if the architecture does not change. Climate is no longer slide-28.
                 </p>
               </div>
             </article>
             <article class="scene">
               <div class="scene-year">Medium term</div>
               <div>
-                <h3>Founders compete on ratio</h3>
+                <h3>Founders compete on EI / Revenue</h3>
                 <p>
-                  Demo days include a second scoreboard: environmental impact ratio vs peers at the same stage.
-                  Not a beauty contest of “net zero someday,” but tCO₂e per revenue, per FTE, and verified avoided tonnes —
-                  with red flags for ungated handprints. Status accrues to those who improve the ratio while scaling.
+                  Demo days include a second scoreboard: environmental impact ratio vs peers
+                  at the same stage. Not “net zero someday,” but tCO₂e per revenue, per FTE,
+                  and verified avoided tonnes — with red flags for ungated handprints.
+                  Status accrues to those who improve the ratio while scaling.
                 </p>
               </div>
             </article>
             <article class="scene">
               <div class="scene-year">Long arc</div>
               <div>
-                <h3>GDP shares the stage</h3>
+                <h3>National index on the air</h3>
                 <p>
-                  Cities and countries publish growth alongside impact intensity the way they publish unemployment.
-                  Capital markets price transition risk in continuous signals, not annual PDFs.
-                  “Successful” means creating value that does not mortgage the climate commons —
-                  and tools like GTR are infrastructure for that accounting culture, not a niche climate app.
+                  Cities and countries broadcast growth alongside resource-depletion intensity
+                  the way they broadcast unemployment. Capital markets price transition risk
+                  in continuous signals, not annual PDFs. GTR-like ledgers become the
+                  company-level sensors feeding that national index — infrastructure, not a niche app.
                 </p>
               </div>
             </article>
@@ -154,7 +386,8 @@
           <blockquote class="quote-block">
             <p>
               “What if the companies we celebrate are not only the ones that grow the fastest —
-              but the ones that grow with the lightest scar and the strongest handprint?”
+              but the ones that grow with the lightest scar, the strongest handprint,
+              and a falling EI / Revenue?”
             </p>
             <cite>GTR Handprint · vision statement</cite>
           </blockquote>
@@ -165,11 +398,11 @@
         <div class="container split">
           <div>
             <p class="eyebrow"><span class="dot"></span> From product to paradigm</p>
-            <h2 class="display" style="font-size:clamp(1.8rem,3.5vw,2.5rem);margin:0 0 1rem">We start with one startup’s truth.</h2>
+            <h2 class="display" style="font-size:clamp(1.8rem,3.5vw,2.5rem);margin:0 0 1rem">We start with one startup’s EI.</h2>
             <p class="lead">
-              Evidence today. Estimates for tomorrow. A dashboard for operators.
-              A board for portfolios. Then a culture that treats impact ratios as competitive sport —
-              with integrity rules so the game cannot be gamed.
+              Company-wise impact today. EI / Revenue as the competitive ratio.
+              A dashboard for operators. A board for portfolios.
+              Then a culture — and a national index — that treats intensity as public infrastructure.
             </p>
           </div>
           <div>
@@ -178,21 +411,21 @@
                 <span class="step-num" style="background:rgba(125,222,179,0.15);color:#7ddeb3">1</span>
                 <div>
                   <h3 style="color:#f7f6f2">Now</h3>
-                  <p style="color:rgba(242,244,242,0.75)">Assessment, ledger, maturity, risk, investor share.</p>
+                  <p style="color:rgba(242,244,242,0.75)">Company-wise EI: assessment, ledger, maturity, risk, investor share.</p>
                 </div>
               </li>
               <li style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08)">
                 <span class="step-num" style="background:rgba(125,222,179,0.15);color:#7ddeb3">2</span>
                 <div>
                   <h3 style="color:#f7f6f2">Next</h3>
-                  <p style="color:rgba(242,244,242,0.75)">Portfolio boards, revenue intensity, stranding clocks.</p>
+                  <p style="color:rgba(242,244,242,0.75)">Portfolio boards ranked by EI/Revenue intensity + stranding clocks.</p>
                 </div>
               </li>
               <li style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08)">
                 <span class="step-num" style="background:rgba(125,222,179,0.15);color:#7ddeb3">3</span>
                 <div>
                   <h3 style="color:#f7f6f2">If we win</h3>
-                  <p style="color:rgba(242,244,242,0.75)">Impact ratios sit beside GDP and ARR in how we keep score.</p>
+                  <p style="color:rgba(242,244,242,0.75)">National index broadcasts regional resource depletion beside GDP.</p>
                 </div>
               </li>
             </ol>
@@ -203,7 +436,7 @@
       <section class="cta-band">
         <p class="eyebrow" style="justify-content:center"><span class="dot"></span> Begin in the present</p>
         <h2 class="display">Try the prototype. Read the research.</h2>
-        <p>Imagination is the map. The product is the first mile.</p>
+        <p>Imagination is the map. Company-wise EI is the first mile.</p>
         <div class="btn-row" style="justify-content:center">
           <a class="btn btn-hand" href="../prototype/">Guided prototype</a>
           <a class="btn btn-secondary" href="../research/">Research library</a>
