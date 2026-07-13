@@ -81,10 +81,10 @@
       position: relative;
       overflow: hidden;
       box-shadow: 0 22px 55px rgba(18, 24, 22, 0.14);
-      padding: 0.26in 0.34in 0.2in;
+      padding: 0.3in 0.38in 0.24in;
       display: grid;
       grid-template-rows: auto auto auto 1fr auto;
-      gap: 0.09in;
+      gap: 0.12in;
     }
 
     .topbar {
@@ -92,63 +92,63 @@
       justify-content: space-between;
       align-items: center;
       font-family: var(--mono);
-      font-size: 8pt;
-      letter-spacing: 0.16em;
+      font-size: 10pt;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--ink-soft);
     }
 
     .topbar .dot {
-      width: 0.11in;
-      height: 0.11in;
+      width: 0.12in;
+      height: 0.12in;
       border-radius: 50%;
       background: var(--accent);
       display: inline-block;
-      margin-right: 0.08in;
+      margin-right: 0.1in;
       vertical-align: middle;
     }
 
     .rule {
       width: 100%;
-      height: 2.5px;
+      height: 3px;
       background: var(--ink);
     }
 
     .masthead {
       display: grid;
-      grid-template-columns: 1.6fr auto;
-      gap: 0.25in;
+      grid-template-columns: 1.55fr auto;
+      gap: 0.3in;
       align-items: end;
     }
 
     .masthead h1 {
       font-family: var(--serif);
       font-weight: 600;
-      font-size: 34pt;
+      font-size: 42pt;
       line-height: 0.92;
-      letter-spacing: -0.025em;
+      letter-spacing: -0.03em;
     }
 
     .masthead .sub {
       font-family: var(--serif);
       font-style: italic;
-      font-size: 12pt;
-      line-height: 1.25;
+      font-size: 14pt;
+      line-height: 1.28;
       color: var(--ink-soft);
-      margin-top: 0.05in;
+      margin-top: 0.06in;
       max-width: 12in;
     }
 
     .edition {
       text-align: right;
       font-family: var(--mono);
-      font-size: 8.5pt;
-      line-height: 1.4;
+      font-size: 10.5pt;
+      line-height: 1.45;
       white-space: nowrap;
     }
 
     .edition .lbl {
-      font-size: 7pt;
+      font-size: 9pt;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--ink-soft);
@@ -156,60 +156,59 @@
 
     .edition .date {
       font-family: var(--serif);
-      font-size: 13pt;
+      font-size: 16pt;
       font-weight: 500;
     }
 
-    /* How culture shifts — strip */
     .shift-strip {
       display: grid;
       grid-template-columns: auto repeat(5, 1fr);
-      gap: 0.08in;
+      gap: 0.1in;
       align-items: stretch;
       background: var(--panel);
       border: 1.5px solid var(--line);
       border-left: 5px solid var(--accent);
-      border-radius: 8px;
-      padding: 0.09in 0.12in;
+      border-radius: 10px;
+      padding: 0.12in 0.14in;
     }
 
     .shift-strip .intro {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding-right: 0.08in;
+      padding-right: 0.1in;
       border-right: 1px solid var(--line);
-      min-width: 1.35in;
+      min-width: 1.5in;
     }
 
     .shift-strip .intro .k {
       font-family: var(--mono);
-      font-size: 6.5pt;
+      font-size: 8.5pt;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--accent-deep);
-      margin-bottom: 0.03in;
+      margin-bottom: 0.04in;
     }
 
     .shift-strip .intro strong {
       font-family: var(--serif);
       font-weight: 500;
-      font-size: 11pt;
+      font-size: 13.5pt;
       line-height: 1.15;
     }
 
     .marker {
       background: white;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      padding: 0.07in 0.08in;
+      border: 1.5px solid var(--line);
+      border-radius: 8px;
+      padding: 0.1in 0.1in;
       display: flex;
       flex-direction: column;
-      gap: 0.03in;
+      gap: 0.04in;
     }
 
     .marker .from {
-      font-size: 7.2pt;
+      font-size: 10pt;
       line-height: 1.25;
       color: var(--ink-soft);
       text-decoration: line-through;
@@ -219,25 +218,24 @@
     .marker .to {
       font-family: var(--serif);
       font-weight: 500;
-      font-size: 9pt;
+      font-size: 12pt;
       line-height: 1.2;
       color: var(--ink);
     }
 
     .marker .where {
       font-family: var(--mono);
-      font-size: 6pt;
+      font-size: 8.5pt;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--accent-deep);
       margin-top: auto;
     }
 
-    /* Main grid */
     .news-grid {
       display: grid;
-      grid-template-columns: 1.5fr 1fr;
-      gap: 0.14in;
+      grid-template-columns: 1.45fr 1fr;
+      gap: 0.16in;
       min-height: 0;
       overflow: hidden;
     }
@@ -245,7 +243,7 @@
     .lead {
       display: flex;
       flex-direction: column;
-      gap: 0.07in;
+      gap: 0.09in;
       min-height: 0;
       overflow: hidden;
     }
@@ -253,11 +251,11 @@
     .story-meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.06in 0.1in;
+      gap: 0.08in 0.12in;
       align-items: center;
       font-family: var(--mono);
-      font-size: 7.5pt;
-      letter-spacing: 0.1em;
+      font-size: 9.5pt;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--ink-soft);
     }
@@ -268,8 +266,8 @@
     }
 
     .story-meta .sep {
-      width: 3px;
-      height: 3px;
+      width: 4px;
+      height: 4px;
       border-radius: 50%;
       background: var(--line);
     }
@@ -277,7 +275,7 @@
     .lead h2 {
       font-family: var(--serif);
       font-weight: 600;
-      font-size: 14.5pt;
+      font-size: 18pt;
       line-height: 1.12;
       letter-spacing: -0.015em;
     }
@@ -285,7 +283,7 @@
     .dek {
       font-family: var(--serif);
       font-style: italic;
-      font-size: 9.5pt;
+      font-size: 12pt;
       line-height: 1.3;
       color: var(--ink-soft);
     }
@@ -293,42 +291,42 @@
     .lead-cols {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.12in 0.14in;
+      gap: 0.14in 0.16in;
       flex: 1;
       min-height: 0;
     }
 
     .body p {
-      font-size: 8.1pt;
-      line-height: 1.34;
+      font-size: 10.5pt;
+      line-height: 1.38;
       color: var(--ink-soft);
-      margin-bottom: 0.06in;
+      margin-bottom: 0.08in;
     }
 
     .body p strong { color: var(--ink); font-weight: 600; }
     .body p:last-child { margin-bottom: 0; }
 
     .quote {
-      border-left: 3px solid var(--accent);
-      padding: 0.05in 0 0.05in 0.09in;
-      margin: 0.05in 0 0.07in;
+      border-left: 4px solid var(--accent);
+      padding: 0.06in 0 0.06in 0.11in;
+      margin: 0.06in 0 0.09in;
     }
 
     .quote p {
       font-family: var(--serif);
       font-style: italic;
-      font-size: 9.2pt;
-      line-height: 1.25;
+      font-size: 11.5pt;
+      line-height: 1.28;
       color: var(--ink);
       margin: 0;
     }
 
     .quote cite {
       display: block;
-      margin-top: 0.035in;
+      margin-top: 0.05in;
       font-family: var(--mono);
       font-style: normal;
-      font-size: 6.5pt;
+      font-size: 8.5pt;
       letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--ink-soft);
@@ -337,33 +335,37 @@
     .subhead {
       font-family: var(--serif);
       font-weight: 600;
-      font-size: 10pt;
+      font-size: 12.5pt;
       line-height: 1.15;
-      margin: 0.05in 0 0.04in;
+      margin: 0.06in 0 0.05in;
       color: var(--ink);
     }
 
-    /* Sidebar */
     .sidebar {
       display: flex;
       flex-direction: column;
-      gap: 0.09in;
+      gap: 0.12in;
       min-height: 0;
     }
 
     .panel {
       background: var(--panel);
       border: 1.5px solid var(--line);
-      border-radius: 8px;
-      padding: 0.09in 0.11in;
+      border-radius: 10px;
+      padding: 0.12in 0.14in;
       display: flex;
       flex-direction: column;
-      gap: 0.05in;
+      gap: 0.07in;
+    }
+
+    .panel.grow {
+      flex: 1;
+      min-height: 0;
     }
 
     .panel .kicker {
       font-family: var(--mono);
-      font-size: 6.5pt;
+      font-size: 8.5pt;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--accent-deep);
@@ -372,30 +374,31 @@
     .panel h3 {
       font-family: var(--serif);
       font-weight: 500;
-      font-size: 11pt;
-      line-height: 1.1;
+      font-size: 14pt;
+      line-height: 1.12;
     }
 
     .panel p.note {
-      font-size: 7.3pt;
-      line-height: 1.28;
+      font-size: 10pt;
+      line-height: 1.32;
       color: var(--ink-soft);
     }
 
     .norms {
       display: flex;
       flex-direction: column;
-      gap: 0.04in;
+      gap: 0.02in;
+      flex: 1;
     }
 
     .norm {
       display: grid;
-      grid-template-columns: 0.9in 1fr;
-      gap: 0.06in;
+      grid-template-columns: 1.05in 1fr;
+      gap: 0.08in;
       align-items: baseline;
-      font-size: 7.5pt;
-      line-height: 1.28;
-      padding: 0.04in 0;
+      font-size: 11pt;
+      line-height: 1.3;
+      padding: 0.07in 0;
       border-bottom: 1px solid var(--line);
     }
 
@@ -403,7 +406,7 @@
 
     .norm .who {
       font-family: var(--mono);
-      font-size: 6.5pt;
+      font-size: 9pt;
       letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--clay-deep);
@@ -416,21 +419,21 @@
     .flow {
       display: grid;
       grid-template-columns: 1fr auto 1fr auto 1fr;
-      gap: 0.04in;
+      gap: 0.06in;
       align-items: center;
     }
 
     .flow-box {
       background: white;
       border: 1.5px solid var(--line);
-      border-radius: 6px;
-      padding: 0.06in 0.05in;
+      border-radius: 8px;
+      padding: 0.1in 0.08in;
       text-align: center;
     }
 
     .flow-box .lbl {
       font-family: var(--mono);
-      font-size: 5.5pt;
+      font-size: 8pt;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--ink-soft);
@@ -440,9 +443,9 @@
       display: block;
       font-family: var(--serif);
       font-weight: 500;
-      font-size: 8.5pt;
+      font-size: 12pt;
       line-height: 1.15;
-      margin-top: 0.02in;
+      margin-top: 0.03in;
     }
 
     .flow-box.hi {
@@ -453,15 +456,19 @@
     .flow-arr {
       font-family: var(--mono);
       color: var(--accent-deep);
-      font-size: 10pt;
+      font-size: 14pt;
       text-align: center;
     }
 
     .chart {
       background: white;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      padding: 0.06in 0.08in 0.04in;
+      border: 1.5px solid var(--line);
+      border-radius: 8px;
+      padding: 0.1in 0.12in 0.08in;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .chart svg {
@@ -473,10 +480,10 @@
     .chart-legend {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.06in 0.12in;
-      margin-top: 0.03in;
+      gap: 0.08in 0.16in;
+      margin-top: 0.06in;
       font-family: var(--mono);
-      font-size: 6pt;
+      font-size: 9pt;
       letter-spacing: 0.04em;
       text-transform: uppercase;
       color: var(--ink-soft);
@@ -485,50 +492,15 @@
     .chart-legend span::before {
       content: "";
       display: inline-block;
-      width: 0.1in;
-      height: 0.05in;
-      margin-right: 0.03in;
+      width: 0.14in;
+      height: 0.07in;
+      margin-right: 0.05in;
       vertical-align: middle;
       border-radius: 1px;
     }
 
     .chart-legend .ei::before { background: var(--accent-deep); }
     .chart-legend .ret::before { background: var(--clay); }
-
-    .img-frame {
-      background: white;
-      border: 1.5px solid var(--line);
-      border-radius: 8px;
-      overflow: hidden;
-      flex: 1;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .img-frame img {
-      width: 100%;
-      height: 1.35in;
-      object-fit: cover;
-      object-position: top center;
-      display: block;
-      background: var(--panel);
-    }
-
-    .img-frame .cap {
-      padding: 0.05in 0.09in;
-      font-family: var(--mono);
-      font-size: 6.5pt;
-      letter-spacing: 0.03em;
-      color: var(--ink-soft);
-      border-top: 1px solid var(--line);
-      line-height: 1.3;
-    }
-
-    .img-frame .cap strong {
-      color: var(--ink);
-      font-weight: 500;
-    }
 
     .foot {
       display: flex;
@@ -537,12 +509,12 @@
       gap: 0.15in;
       flex-wrap: wrap;
       font-family: var(--mono);
-      font-size: 7.5pt;
+      font-size: 10pt;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--ink-soft);
       border-top: 2px solid var(--ink);
-      padding-top: 0.06in;
+      padding-top: 0.08in;
     }
 
     .foot strong {
@@ -589,7 +561,7 @@
         <span>04 · Culture shift · Climatico poster series</span>
         <span><span class="dot" aria-hidden="true"></span>What people brag about · Hire for · Ask for · Fund on</span>
       </div>
-      <div class="rule" aria-hidden="true" style="margin-top:0.06in"></div>
+      <div class="rule" aria-hidden="true" style="margin-top:0.08in"></div>
     </div>
 
     <header class="masthead">
@@ -597,7 +569,7 @@
         <h1>What we brag about changes</h1>
         <p class="sub">
           Culture shift around Environmental Impact: EI intensity becomes as legible as ARR —
-          on pitch decks, hiring pages, diligence checklists, and Demo Day. Capital is the lever that makes the new norms stick.
+          on pitch decks, hiring pages, diligence, and Demo Day. Capital is the lever that makes the new norms stick.
         </p>
       </div>
       <div class="edition">
@@ -608,7 +580,6 @@
       </div>
     </header>
 
-    <!-- How culture shifts -->
     <div class="shift-strip" aria-label="How culture shifts around EI">
       <div class="intro">
         <div class="k">How the culture moves</div>
@@ -621,7 +592,7 @@
       </div>
       <div class="marker">
         <div class="from">Remote policy as flex</div>
-        <div class="to">tCO₂e per $1M on the careers page</div>
+        <div class="to">tCO₂e per $1M on careers pages</div>
         <div class="where">Hiring</div>
       </div>
       <div class="marker">
@@ -661,12 +632,12 @@
             <p>
               Culture does not change because founders suddenly love spreadsheets. It changes when
               <strong>status, access, and capital</strong> start rewarding different numbers. That is the bet behind
-              <strong>GTRock</strong>: a rapidly growing fund of funds that invests in venture firms and accelerators —
-              including the new <strong>GTR Partners</strong> program — and requires every underlying manager to track
-              and report Environmental Impact (EI) as core process, not an ESG appendix.
+              <strong>GTRock</strong>: a fund of funds that invests in venture firms and accelerators —
+              including <strong>GTR Partners</strong> — and requires every underlying manager to track and report
+              Environmental Impact (EI) as core process, not an ESG appendix.
             </p>
             <p>
-              Instead of a separate sustainability overlay, GTRock folds <strong>EI intensity</strong>, progress tracking,
+              Instead of a sustainability overlay, GTRock folds <strong>EI intensity</strong>, progress tracking,
               and portfolio-level impact into selection, monitoring, and deployment. The claim is cultural as much as
               financial: if LPs and FoFs ask hard EI questions, VCs will ask founders; if VCs ask, founders will design
               for better intensity from day one.
@@ -675,16 +646,11 @@
               <p>“Capital is the most powerful lever we have to shift corporate behavior at speed. By applying rigorous EI measurement not just to companies, but to the funds that back them, we can influence investment culture from the top down.”</p>
               <cite>Elena Vargas · CIO · GTRock</cite>
             </blockquote>
-            <h3 class="subhead">Why intermediaries matter for culture</h3>
+            <h3 class="subhead">Why intermediaries matter</h3>
             <p>
               Direct company-level ESG often stays a reporting chore. A fund-of-funds that only writes checks when
               managers can show EI dashboards changes the <strong>norms of the room</strong> — what is embarrassing not
               to know, what belongs on a fundraising deck, what partners compare after Demo Day.
-            </p>
-            <p>
-              Early-stage funds long treated environmental tracking as operationally heavy. Making it a
-              <strong>condition of investment</strong> pulls the practice earlier. GTR Partners, built to help founders
-              integrate EI measurement from day one, is part of that stack: infrastructure plus expectation.
             </p>
           </div>
 
@@ -692,13 +658,14 @@
             <h3 class="subhead">From ESG theater to shared language</h3>
             <p>
               GTRock frames its ambition as <strong>“environmentally friendly capitalism”</strong> — impact data held
-              to the same rigor as returns. That is a culture claim: not a niche impact fund on the side, but a
-              mainstream allocation style where intensity sits next to performance.
+              to the same rigor as returns. That is a culture claim: mainstream allocation style where intensity sits
+              next to performance. Making EI a <strong>condition of investment</strong> pulls the practice earlier;
+              GTR Partners is part of that stack.
             </p>
             <p>
-              The firm says underlying funds have improved EI metrics without sacrificing returns, but has not released
-              third-party verified detail. Critics still flag weak Scope 3 and incomparable manager data. Culture can
-              outrun measurement quality — which is why verification and shared definitions still matter.
+              The firm says underlying funds improved EI without sacrificing returns, but has not released third-party
+              verified detail. Critics still flag weak Scope 3. Culture can outrun measurement quality — which is why
+              verification still matters.
             </p>
             <blockquote class="quote">
               <p>“Five years ago, almost no one asked these questions during fundraising. Now it’s becoming part of the conversation, whether you like it or not.”</p>
@@ -706,21 +673,17 @@
             </blockquote>
             <h3 class="subhead">What “culture shifted” looks like</h3>
             <p>
-              Founders brag about <strong>EI / Revenue</strong> the way they brag about ARR and burn. Hiring pages show
-              intensity next to remote policy. Customers request intensity the way they request security questionnaires.
-              Green claims without evidence become socially expensive, not only legally risky.
-            </p>
-            <p>
-              If FoF models like GTRock scale, the pressure hits <strong>before Series A</strong> — when product and
-              supplier choices still set the trajectory. Whether environmental gains and returns hold together at scale
-              is open. The cultural signal is already clear: the questions have entered the room.
+              Founders brag about <strong>EI / Revenue</strong> the way they brag about ARR. Hiring pages show intensity
+              next to remote policy. Customers request intensity like security questionnaires. Green claims without
+              evidence become socially expensive. If FoF models scale, the pressure hits <strong>before Series A</strong> —
+              when product and supplier choices still set the trajectory.
             </p>
           </div>
         </div>
       </div>
 
-      <aside class="sidebar" aria-label="Culture mechanics and case graphics">
-        <div class="panel">
+      <aside class="sidebar" aria-label="Culture mechanics and graphics">
+        <div class="panel grow">
           <div class="kicker">Who changes what they value</div>
           <h3>New status signals around EI</h3>
           <div class="norms">
@@ -768,22 +731,28 @@
           <p class="note">Access → expectations → habits. Culture follows what gets funded.</p>
         </div>
 
-        <div class="panel">
+        <div class="panel grow">
           <div class="kicker">Illustrative · Case portfolio</div>
           <h3>Intensity can fall while returns hold</h3>
           <p class="note">Hypothetical path under FoF pressure — not third-party verified.</p>
           <div class="chart" aria-hidden="true">
-            <svg viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg">
-              <line x1="36" y1="8" x2="36" y2="82" stroke="#ccc" stroke-width="1"/>
-              <line x1="36" y1="82" x2="310" y2="82" stroke="#ccc" stroke-width="1"/>
-              <line x1="36" y1="28" x2="310" y2="28" stroke="#e8e4dc" stroke-width="1"/>
-              <line x1="36" y1="50" x2="310" y2="50" stroke="#e8e4dc" stroke-width="1"/>
-              <polyline fill="none" stroke="#2d6b4f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                points="44,22 90,32 140,42 190,52 240,64 300,72"/>
-              <polyline fill="none" stroke="#a65c28" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 3"
-                points="44,58 90,56 140,54 190,52 240,48 300,42"/>
-              <text x="44" y="96" font-family="IBM Plex Mono, monospace" font-size="8" fill="#777">’22</text>
-              <text x="285" y="96" font-family="IBM Plex Mono, monospace" font-size="8" fill="#777">’26</text>
+            <svg viewBox="0 0 320 130" xmlns="http://www.w3.org/2000/svg">
+              <line x1="40" y1="12" x2="40" y2="100" stroke="#ccc" stroke-width="1.5"/>
+              <line x1="40" y1="100" x2="308" y2="100" stroke="#ccc" stroke-width="1.5"/>
+              <line x1="40" y1="35" x2="308" y2="35" stroke="#e8e4dc" stroke-width="1"/>
+              <line x1="40" y1="60" x2="308" y2="60" stroke="#e8e4dc" stroke-width="1"/>
+              <line x1="40" y1="80" x2="308" y2="80" stroke="#e8e4dc" stroke-width="1"/>
+              <polyline fill="none" stroke="#2d6b4f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                points="48,28 95,40 145,52 195,64 245,78 300,88"/>
+              <circle cx="48" cy="28" r="4" fill="#2d6b4f"/>
+              <circle cx="300" cy="88" r="4" fill="#2d6b4f"/>
+              <polyline fill="none" stroke="#a65c28" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 4"
+                points="48,72 95,70 145,66 195,62 245,56 300,48"/>
+              <circle cx="48" cy="72" r="3.5" fill="#a65c28"/>
+              <circle cx="300" cy="48" r="3.5" fill="#a65c28"/>
+              <text x="48" y="120" font-family="IBM Plex Mono, monospace" font-size="12" fill="#666">’22</text>
+              <text x="145" y="120" font-family="IBM Plex Mono, monospace" font-size="12" fill="#666">’24</text>
+              <text x="275" y="120" font-family="IBM Plex Mono, monospace" font-size="12" fill="#666">’26</text>
             </svg>
             <div class="chart-legend">
               <span class="ei">EI intensity ↓</span>
@@ -791,18 +760,6 @@
             </div>
           </div>
         </div>
-
-        <figure class="img-frame">
-          <img
-            src="./assets/dashboard-sketch.jpg"
-            alt="Fieldwork sketch of an environmental impact dashboard"
-            width="800"
-            height="500"
-          />
-          <figcaption class="cap">
-            <strong>What “normal” looks like</strong> — portfolio EI views that VCs and accelerators start to expect once capital asks.
-          </figcaption>
-        </figure>
       </aside>
     </div>
 
