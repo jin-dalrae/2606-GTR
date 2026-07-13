@@ -27,7 +27,7 @@
         const depthAfter = parts.length - idx - 1;
         return depthAfter === 0 ? "../" : "../".repeat(depthAfter + 1);
       }
-      const roots = new Set(["research", "prototype", "vision", "leaderboard", "app", "gtr", "posters"]);
+      const roots = new Set(["research", "prototype", "vision", "leaderboard", "app", "gtr", "posters", "leaflet"]);
       if (parts.some((p) => roots.has(p))) return "../";
       return "./";
     }
@@ -43,6 +43,7 @@
     { href: base + "research/", id: "research", label: "Research" },
     { href: base + "prototype/", id: "prototype", label: "Prototype" },
     { href: base + "posters/", id: "posters", label: "Posters" },
+    { href: base + "leaflet/", id: "leaflet", label: "Leaflet" },
   ];
 
   function currentId() {
@@ -53,6 +54,7 @@
     }
     if (path.includes("/leaderboard")) return "prototype";
     if (path.includes("/posters")) return "posters";
+    if (path.includes("/leaflet")) return "leaflet";
     if (path.includes("/vision")) return "home";
     return "home";
   }
@@ -106,6 +108,7 @@
             <li><a href="${gtr}">Evidence archive</a></li>
             <li><a href="${base}prototype/">Interactive prototype</a></li>
             <li><a href="${base}posters/">Poster series</a></li>
+            <li><a href="${base}leaflet/">Climatico leaflet</a></li>
             <li><a href="${base}index.html#vision">Vision on home</a></li>
           </ul>
         </div>
