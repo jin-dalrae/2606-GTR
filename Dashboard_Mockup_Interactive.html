@@ -43,6 +43,7 @@
 
   /* --- Step 1: URL entry --- */
   #entryCard {
+    display: none;
     background: var(--white);
     border-radius: 14px;
     padding: 40px 32px;
@@ -101,7 +102,7 @@
   @keyframes spin { to { transform: rotate(360deg); } }
 
   /* --- Step 2: Dashboard (hidden until submit) --- */
-  #dashboard { display: none; }
+  #dashboard { display: block; } /* auto-show dashboard */
   .fade-in { animation: fadeIn 0.5s ease both; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: translateY(0);} }
 
@@ -268,10 +269,10 @@
   <div id="dashboard">
 
     <div class="identity fade-in">
-      <div class="logo-tile" id="logoTile">?</div>
+      <div class="logo-tile" id="logoTile">N</div>
       <div>
-        <div class="name" id="companyName">Company</div>
-        <div class="domain" id="companyDomain">yourstartup.com</div>
+        <div class="name" id="companyName">Northgrid</div>
+        <div class="domain" id="companyDomain">northgrid.example</div>
       </div>
       <div class="badge">Auto-detected</div>
     </div>
@@ -397,6 +398,10 @@
     urlInput.value = "";
     urlInput.focus();
   });
+  // Start on the dashboard view so the embed isn't an empty form
+  entryCard.style.display = "none";
+  loading.style.display = "none";
+  dashboard.style.display = "block";
 </script>
 </body>
 </html>

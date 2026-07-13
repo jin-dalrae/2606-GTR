@@ -229,8 +229,14 @@
 
   function frameSrc() {
     const c = cfg();
-    if (c.device && device === "mobile") return abs(c.srcMobile || c.fullMobile);
-    return abs(c.src || c.full);
+    // Prefer absolute /midterm/… paths; fall back to relative
+    try {
+      if (c.device && device === "mobile") return abs(c.srcMobile || c.fullMobile);
+      return abs(c.src || c.full);
+    } catch (e) {
+      if (c.device && device === "mobile") return c.srcMobile || c.fullMobile;
+      return c.src || c.full;
+    }
   }
 
   function fullHref() {
@@ -241,9 +247,11 @@
     const frame = document.getElementById("proto-frame");
     if (!frame) return;
     const next = wanted || frameSrc();
-    // Always assign — path compare breaks under Firebase cleanUrls/trailingSlash
-    if (frame.getAttribute("data-src") !== next) {
-      frame.setAttribute("data-src", next);
+    frame.setAttribute("data-src", next);
+    // Force navigation even if same logical path (cache / about:blank edge cases)
+    if (frame.src !== new URL(next, window.location.href).href) {
+      frame.src = next;
+    } else if (!frame.src || frame.src === "about:blank" || frame.src.endsWith("about:blank")) {
       frame.src = next;
     }
   }
