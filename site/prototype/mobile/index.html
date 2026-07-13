@@ -8,11 +8,16 @@
   />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="theme-color" content="#fbfaf7" />
+  <meta name="theme-color" content="#dedcd5" />
   <title>Climatico · Onboarding</title>
-  <meta name="description" content="Climatico onboarding assessment — full-screen mobile experience." />
+  <meta name="description" content="Climatico onboarding assessment — original mobile wireframe." />
   <style>
-    /* True mobile shell: no site chrome, no outer scroll, one full-viewport app */
+    /*
+      True mobile host page:
+      - no midterm site header / toolbar
+      - loads the original onboarding build as-is (phone bezel, colors, type)
+      - only the iframe document scrolls (inner overflow-y pages)
+    */
     html,
     body {
       margin: 0;
@@ -24,7 +29,7 @@
       overscroll-behavior: none;
       touch-action: manipulation;
       -webkit-text-size-adjust: 100%;
-      background: #fbfaf7;
+      background: #dedcd5; /* match original onboarding canvas */
     }
 
     iframe {
@@ -35,17 +40,16 @@
       height: 100dvh;
       border: 0;
       display: block;
-      background: #fbfaf7;
-      /* scrolling happens inside the app, not on this page */
+      background: #dedcd5;
     }
   </style>
 </head>
 <body>
-  <!-- Full-bleed onboarding app (no phone bezel, no midterm site header) -->
+  <!-- Original Prototype 1 onboarding — same HTML/CSS as prototype1 (phone frame + styles) -->
   <iframe
     id="onboarding"
     title="Climatico onboarding assessment"
-    src="./app.html"
+    src="../../prototype1/index.html"
     allow="clipboard-write"
     loading="eager"
   ></iframe>
