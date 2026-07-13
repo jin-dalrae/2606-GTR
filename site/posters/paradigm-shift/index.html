@@ -53,7 +53,7 @@
     }
 
     .chrome {
-      width: min(17in, 100%);
+      width: 17in;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -78,6 +78,7 @@
     .poster {
       width: var(--poster-w);
       height: var(--poster-h);
+      flex-shrink: 0;
       background: var(--paper);
       color: var(--ink);
       position: relative;
@@ -511,16 +512,23 @@
       font-weight: 500;
     }
 
-    @media screen and (max-width: 17.5in) {
-      body { padding: 0.6rem; }
-      .poster {
-        width: min(17in, 100%);
-        height: auto;
-        aspect-ratio: 17 / 11;
-      }
+    
+
+
+    /* Print preview: fixed sheet; JS scales whole poster — no reflow */
+    .print-stage {
+      display: flex;
+      justify-content: center;
+      margin: 0 auto;
+      overflow: visible;
+    }
+    body {
+      overflow-x: auto;
     }
 
     @media print {
+      .print-stage { width: auto !important; height: auto !important; }
+      .poster { transform: none !important; }
       html, body {
         background: white;
         padding: 0;
@@ -541,7 +549,7 @@
 <body>
   <div class="chrome">
     <a href="../">← All posters</a>
-    <span>17 × 11 landscape tabloid · Print this page</span>
+    <span>17 × 11 landscape tabloid · Fixed print size · Scroll or zoom to inspect · Print for true size</span>
   </div>
 
   <article class="poster" aria-label="Paradigm shift landscape tabloid">
@@ -668,16 +676,16 @@
           />
           <figcaption class="founders-caption">
             <div class="person">
+              <div class="name">Gabriel</div>
+              <div class="role">Strategy · policy</div>
+            </div>
+            <div class="person">
               <div class="name">Rae</div>
               <div class="role">Data &amp; models</div>
             </div>
             <div class="person">
               <div class="name">Tej</div>
               <div class="role">Design</div>
-            </div>
-            <div class="person">
-              <div class="name">Gabriel</div>
-              <div class="role">Strategy · policy</div>
             </div>
           </figcaption>
         </figure>
@@ -691,5 +699,6 @@
       <span>17 × 11 landscape · Rae · Gabriel · Tej</span>
     </footer>
   </article>
+  <script src="../print-preview.js"></script>
 </body>
 </html>
