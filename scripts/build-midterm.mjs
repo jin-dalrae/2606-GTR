@@ -61,12 +61,48 @@ function rewriteText(text) {
     .replaceAll('href="/assets/', `href="${BASE}/assets/`);
 }
 
+/**
+ * Full-bleed mobile variant of the onboarding assessment:
+ * drop the 380×760 phone bezel, fill the viewport, keep internal overflow-y scroll.
+ */
+function makeMobileOnboardingApp(sourceHtml) {
+  let out = sourceHtml;
+  out = out.replace(
+    "body{margin:0}",
+    "html,body{height:100%;margin:0;overflow:hidden;overscroll-behavior:none}body{margin:0}"
+  );
+  out = out.replace(
+    "min-height:100vh;width:100%;background:#dedcd5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:28px 16px",
+    "height:100%;min-height:100dvh;width:100%;background:#fbfaf7;display:flex;flex-direction:column;align-items:stretch;justify-content:stretch;gap:0;padding:0;overflow:hidden;touch-action:manipulation"
+  );
+  out = out.replace(
+    "position:relative;width:380px;height:760px;background:#fbfaf7;border:1px solid #e6e4dd;border-radius:32px;overflow:hidden",
+    "position:relative;width:100%;height:100%;flex:1;min-height:0;background:#fbfaf7;border:none;border-radius:0;overflow:hidden"
+  );
+  out = out.replace(
+    "showDeviceFrame&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true",
+    "showDeviceFrame&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false"
+  );
+  // Hide desktop caption under the phone shell
+  out = out.replace(
+    '<div style=\\"font-size:12px;color:#8a8983;font-family:ui-monospace,monospace\\">Onboarding assessment · mobile wireframe<\\u002Fdiv>',
+    ""
+  );
+  return out;
+}
+
 function rewriteTree(dir) {
   for (const file of walk(dir)) {
     // Never rewrite self-contained prototype bundles — base64/JSON breaks easily
     // and they resolve paths at runtime via midterm-aware injectShowcaseHeader.
     const rel = relative(MID, file).replace(/\\/g, "/");
-    if (/^prototype[0-4](\b|\/)/.test(rel) || rel.startsWith("posters/main/")) continue; // self-contained bundles
+    if (
+      /^prototype[0-4](\b|\/)/.test(rel) ||
+      rel.startsWith("posters/main/") ||
+      rel === "prototype/mobile/app.html"
+    ) {
+      continue;
+    }
 
     if (!/\.(html?|js|css|jsx|json|md|svg)$/i.test(file)) continue;
     const before = readFileSync(file, "utf8");
@@ -93,11 +129,16 @@ cpSync(join(ROOT, "dist", "assets"), join(MID, "assets"), { recursive: true });
 mkdirSync(join(MID, "prototype0"), { recursive: true });
 cpSync(join(ROOT, "dist", "index.html"), join(MID, "prototype0", "index.html"));
 
-// 1 · Founder assessment (mobile shell)
+// 1 · Founder assessment (desktop phone-frame shell)
 mkdirSync(join(MID, "prototype1"), { recursive: true });
-cpSync(
-  join(ROOT, "Onboarding Assessment Standalone.html"),
-  join(MID, "prototype1", "index.html")
+const onboardingSrc = join(ROOT, "Onboarding Assessment Standalone.html");
+cpSync(onboardingSrc, join(MID, "prototype1", "index.html"));
+
+// 1b · True full-screen mobile onboarding (no bezel) for /midterm/prototype/mobile/
+mkdirSync(join(MID, "prototype", "mobile"), { recursive: true });
+writeFileSync(
+  join(MID, "prototype", "mobile", "app.html"),
+  makeMobileOnboardingApp(readFileSync(onboardingSrc, "utf8"))
 );
 
 // 2 · Founder dashboard — interactive mockup (primary) + optional mobile shell
