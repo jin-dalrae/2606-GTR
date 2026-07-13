@@ -90,10 +90,10 @@
       position: relative;
       overflow: hidden;
       box-shadow: 0 22px 55px rgba(18, 24, 22, 0.14);
-      padding: 0.26in 0.32in 0.2in;
+      padding: 0.2in 0.28in 0.16in;
       display: grid;
-      grid-template-rows: auto auto 1fr auto;
-      gap: 0.1in;
+      grid-template-rows: auto auto auto 1fr auto;
+      gap: 0.08in;
     }
 
     .topbar {
@@ -126,23 +126,23 @@
     .masthead {
       display: grid;
       grid-template-columns: 1.6fr auto;
-      gap: 0.28in;
+      gap: 0.22in;
       align-items: end;
     }
 
     .masthead .kicker {
       font-family: var(--mono);
-      font-size: 9.5pt;
+      font-size: 9pt;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--accent-deep);
-      margin-bottom: 0.04in;
+      margin-bottom: 0.03in;
     }
 
     .masthead h1 {
       font-family: var(--serif);
       font-weight: 600;
-      font-size: 28pt;
+      font-size: 24pt;
       line-height: 1.08;
       letter-spacing: -0.025em;
       max-width: 13in;
@@ -151,23 +151,23 @@
     .masthead .sub {
       font-family: var(--serif);
       font-style: italic;
-      font-size: 13.5pt;
-      line-height: 1.28;
+      font-size: 12.5pt;
+      line-height: 1.25;
       color: var(--ink-soft);
-      margin-top: 0.06in;
+      margin-top: 0.04in;
       max-width: 13in;
     }
 
     .edition {
       text-align: right;
       font-family: var(--mono);
-      font-size: 11pt;
-      line-height: 1.4;
+      font-size: 10.5pt;
+      line-height: 1.35;
       white-space: nowrap;
     }
 
     .edition .lbl {
-      font-size: 9.5pt;
+      font-size: 9pt;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--ink-soft);
@@ -175,17 +175,98 @@
 
     .edition .year {
       font-family: var(--serif);
-      font-size: 34pt;
+      font-size: 30pt;
       font-weight: 500;
       line-height: 1;
       color: var(--accent-deep);
-      margin: 0.03in 0;
+      margin: 0.02in 0;
     }
+
+    /* Primer: what is EI */
+    .ei-primer {
+      display: grid;
+      grid-template-columns: 1.15fr 1.35fr 1fr;
+      gap: 0.1in;
+      background: var(--panel);
+      border: 1.5px solid var(--line);
+      border-left: 5px solid var(--accent);
+      border-radius: 8px;
+      padding: 0.1in 0.12in;
+    }
+
+    .ei-primer .block {
+      min-width: 0;
+    }
+
+    .ei-primer .k {
+      font-family: var(--mono);
+      font-size: 8.5pt;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      margin-bottom: 0.03in;
+    }
+
+    .ei-primer h3 {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 13pt;
+      line-height: 1.15;
+      margin-bottom: 0.04in;
+    }
+
+    .ei-primer p {
+      font-size: 10.5pt;
+      line-height: 1.3;
+      color: var(--ink-soft);
+    }
+
+    .ei-primer p strong { color: var(--ink); font-weight: 600; }
+
+    .ei-primer .formula {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0.07in 0.1in;
+      font-family: var(--mono);
+      font-size: 11pt;
+      line-height: 1.35;
+      color: var(--ink);
+      margin-top: 0.04in;
+    }
+
+    .ei-primer .formula small {
+      display: block;
+      font-family: var(--sans);
+      font-size: 9.5pt;
+      color: var(--ink-soft);
+      margin-top: 0.03in;
+    }
+
+    .ei-primer .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.05in;
+      margin-top: 0.05in;
+    }
+
+    .ei-primer .chip {
+      font-family: var(--mono);
+      font-size: 8.5pt;
+      letter-spacing: 0.04em;
+      padding: 0.03in 0.08in;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--ink-soft);
+    }
+
+    .ei-primer .chip b { color: var(--ink); font-weight: 500; }
 
     .columns {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 0.12in;
+      gap: 0.1in;
       min-height: 0;
       align-items: stretch;
     }
@@ -193,11 +274,11 @@
     .col {
       background: var(--panel);
       border: 1.5px solid var(--line);
-      border-radius: 10px;
-      padding: 0.13in 0.14in 0.12in;
+      border-radius: 8px;
+      padding: 0.1in 0.11in 0.1in;
       display: flex;
       flex-direction: column;
-      gap: 0.07in;
+      gap: 0.06in;
       min-height: 0;
       overflow: hidden;
     }
@@ -233,7 +314,7 @@
     .col h2 {
       font-family: var(--serif);
       font-weight: 600;
-      font-size: 14.5pt;
+      font-size: 13.5pt;
       line-height: 1.12;
       letter-spacing: -0.015em;
     }
@@ -241,14 +322,14 @@
     .col .body {
       display: flex;
       flex-direction: column;
-      gap: 0.065in;
+      gap: 0.055in;
       flex: 1;
       min-height: 0;
     }
 
     .col .body p {
-      font-size: 11.5pt;
-      line-height: 1.34;
+      font-size: 11pt;
+      line-height: 1.32;
       color: var(--ink-soft);
     }
 
@@ -541,6 +622,49 @@
         <div>Rae · Gabriel · Tej</div>
       </div>
     </header>
+
+    <section class="ei-primer" aria-label="What is EI and EI intensity">
+      <div class="block">
+        <div class="k">Primer · Before the dispatches</div>
+        <h3>What is EI?</h3>
+        <p>
+          <strong>Environmental Impact (EI)</strong> is the measured harm a product, company, fund, or place
+          causes — usually greenhouse gases (tCO₂e), and often water stress and land use as well.
+          Built from activity data × emission factors (GHG Protocol for companies).
+        </p>
+        <div class="chips">
+          <span class="chip"><b>Scope 1</b> direct</span>
+          <span class="chip"><b>Scope 2</b> power</span>
+          <span class="chip"><b>Scope 3</b> value chain</span>
+        </div>
+      </div>
+      <div class="block">
+        <div class="k">The number on every receipt &amp; ranking</div>
+        <h3>What is EI intensity?</h3>
+        <p>
+          Absolute tonnes alone punish scale. <strong>Intensity</strong> divides total impact by value created —
+          so a large firm and a small one (or two grocery baskets) can be compared fairly.
+        </p>
+        <div class="formula">
+          EI intensity = Total EI (e.g. tCO₂e) ÷ value unit (revenue, $ spent, GDP…)
+          <small>Lower intensity = more economic (or consumer) value per unit of environmental harm.</small>
+        </div>
+      </div>
+      <div class="block">
+        <div class="k">Why it becomes the scoreboard</div>
+        <h3>From capital language → civic language</h3>
+        <p>
+          Once intensity is public and standardized, it leaves investor decks and shows up on
+          <strong>receipts</strong>, <strong>provincial ranks</strong>, and <strong>political fights</strong>
+          over who the metric serves — the three stories below.
+        </p>
+        <div class="chips">
+          <span class="chip"><b>01</b> shop</span>
+          <span class="chip"><b>02</b> place</span>
+          <span class="chip"><b>03</b> justice</span>
+        </div>
+      </div>
+    </section>
 
     <div class="columns">
       <!-- 01 Grocery -->
