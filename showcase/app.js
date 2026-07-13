@@ -13,10 +13,10 @@ import { MATURITY_INSIGHTS, selectInsight } from "../data/insights.js";
 
 const SOURCE_LINKS = sourceLinks();
 
-const CARDINAL_STATE = {
+const DEMO_STATE = {
   company: {
-    name: "Cardinal Climate",
-    url: "https://cardinalclimate.com",
+    name: "Northgrid",
+    url: "https://northgrid.example",
     stage: "Series A",
     businessModel: "SaaS",
     teamSize: 24,
@@ -59,8 +59,8 @@ const CARDINAL_STATE = {
   ],
   funnelStage: "done",
   assessment: {
-    name: "Cardinal Climate",
-    url: "https://cardinalclimate.com",
+    name: "Northgrid",
+    url: "https://northgrid.example",
     stage: "Series A",
     businessModel: "SaaS",
     teamSize: 24,
@@ -71,7 +71,7 @@ const CARDINAL_STATE = {
     activities: ["compute", "hardware", "travel", "vendors", "scope2-grid", "scope1-direct", "avoided-grid", "avoided-transport"],
     notes: "Building high-performance API routers with zero-latency caching, optimized for low energy per query.",
     docs: {
-      deck: "Cardinal-Climate-SeriesA-Deck.pdf",
+      deck: "Northgrid-SeriesA-Deck.pdf",
       accounting: "accounting-report-q1.csv"
     },
     snapshot: {
@@ -97,9 +97,9 @@ const CARDINAL_STATE = {
       ]
     },
     aiPreview: {
-      headline: "Cardinal Climate demonstrates strong alignment with SBTi carbon reductions and high-integrity avoided emissions pathways.",
+      headline: "Northgrid demonstrates strong alignment with SBTi carbon reductions and high-integrity avoided emissions pathways.",
       basis: "Based on their Series A team (24 FTEs) and cloud SaaS-driven workflows.",
-      executiveSummary: "Cardinal Climate operates a highly optimized green cloud platform. Their principal hotspot is cloud compute (Scope 3). However, through innovative Rust-based algorithmic routing and green region selection, they deliver substantial avoided emissions for customers.",
+      executiveSummary: "Northgrid operates a highly optimized green cloud platform. Their principal hotspot is cloud compute (Scope 3). However, through innovative Rust-based algorithmic routing and green region selection, they deliver substantial avoided emissions for customers.",
       issues: [
         { title: "Algorithmic Efficiency", detail: "Transitioning core indexing scripts from Python to compiled languages (Rust) reduced CPU hours per search request by 91%." },
         { title: "Hosting Decarbonization", detail: "Hosting 100% of compute services in US-East (N. Virginia) represents a key hotspot. Spreading loads or utilizing green hosting zones (e.g., AWS us-east-2 or EU-central-1) can reduce compute footprints by over 80%." }
@@ -138,9 +138,9 @@ const CARDINAL_STATE = {
       ]
     },
     aiReport: {
-      headline: "Cardinal Climate demonstrates strong alignment with SBTi carbon reductions and high-integrity avoided emissions pathways.",
+      headline: "Northgrid demonstrates strong alignment with SBTi carbon reductions and high-integrity avoided emissions pathways.",
       basis: "Based on their Series A team (24 FTEs) and cloud SaaS-driven workflows.",
-      executiveSummary: "Cardinal Climate operates a highly optimized green cloud platform. Their principal hotspot is cloud compute (Scope 3). However, through innovative Rust-based algorithmic routing and green region selection, they deliver substantial avoided emissions for customers.",
+      executiveSummary: "Northgrid operates a highly optimized green cloud platform. Their principal hotspot is cloud compute (Scope 3). However, through innovative Rust-based algorithmic routing and green region selection, they deliver substantial avoided emissions for customers.",
       issues: [
         { title: "Algorithmic Efficiency", detail: "Transitioning core indexing scripts from Python to compiled languages (Rust) reduced CPU hours per search request by 91%." },
         { title: "Hosting Decarbonization", detail: "Hosting 100% of compute services in US-East (N. Virginia) represents a key hotspot. Spreading loads or utilizing green hosting zones (e.g., AWS us-east-2 or EU-central-1) can reduce compute footprints by over 80%." }
@@ -190,7 +190,7 @@ if (isShowcaseActive) {
   window.fetch = async function(url, options) {
     const urlStr = typeof url === 'string' ? url : url.url;
     if (urlStr.includes("/api/me")) {
-      return new Response(JSON.stringify({ email: "founder@cardinalclimate.com", id: "cardinal-user" }), {
+      return new Response(JSON.stringify({ email: "founder@northgrid.example", id: "northgrid-user" }), {
         status: 200,
         headers: { "Content-Type": "application/json" }
       });
@@ -202,15 +202,15 @@ if (isShowcaseActive) {
           headers: { "Content-Type": "application/json" }
         });
       }
-      return new Response(JSON.stringify({ state: CARDINAL_STATE }), {
+      return new Response(JSON.stringify({ state: DEMO_STATE }), {
         status: 200,
         headers: { "Content-Type": "application/json" }
       });
     }
     if (urlStr.includes("/api/generate-report")) {
       return new Response(JSON.stringify({
-        report: CARDINAL_STATE.assessment.aiReport,
-        snapshot: CARDINAL_STATE.assessment.snapshot
+        report: DEMO_STATE.assessment.aiReport,
+        snapshot: DEMO_STATE.assessment.snapshot
       }), {
         status: 200,
         headers: { "Content-Type": "application/json" }
@@ -219,7 +219,7 @@ if (isShowcaseActive) {
     if (urlStr.includes("/api/reports")) {
       const match = urlStr.match(/\/api\/reports\/([a-zA-Z0-9_-]+)/);
       if (match) {
-        return new Response(JSON.stringify({ state_json: JSON.stringify(CARDINAL_STATE) }), {
+        return new Response(JSON.stringify({ state_json: JSON.stringify(DEMO_STATE) }), {
           status: 200,
           headers: { "Content-Type": "application/json" }
         });
@@ -234,7 +234,7 @@ if (isShowcaseActive) {
     }
     if (urlStr.includes("/api/documents")) {
       return new Response(JSON.stringify([
-        { id: "doc-1", kind: "deck", name: "Cardinal-Climate-SeriesA-Deck.pdf", size: 4200100 },
+        { id: "doc-1", kind: "deck", name: "Northgrid-SeriesA-Deck.pdf", size: 4200100 },
         { id: "doc-2", kind: "accounting", name: "accounting-report-q1.csv", size: 128400 }
       ]), {
         status: 200,
@@ -256,7 +256,7 @@ if (isShowcaseActive) {
     if (urlStr.includes("/api/admin/token-logs")) {
       return new Response(JSON.stringify({
         logs: [
-          { created_at: "2026-06-28T18:30:00.000Z", user_id: "founder@cardinalclimate.com", prompt_tokens: 1240, completion_tokens: 580, total_tokens: 1820 },
+          { created_at: "2026-06-28T18:30:00.000Z", user_id: "founder@northgrid.example", prompt_tokens: 1240, completion_tokens: 580, total_tokens: 1820 },
           { created_at: "2026-06-28T14:15:00.000Z", user_id: "rae@verba.ai", prompt_tokens: 1420, completion_tokens: 620, total_tokens: 2040 },
           { created_at: "2026-06-27T09:45:00.000Z", user_id: "sam@greenops.com", prompt_tokens: 1150, completion_tokens: 490, total_tokens: 1640 }
         ]
@@ -425,8 +425,8 @@ class ClimateDashboardApp {
     const isShowcase = window.location.hostname === "gtr1.web.app" || window.location.search.includes("showcase");
     
     if (isShowcase) {
-      this.state = JSON.parse(JSON.stringify(CARDINAL_STATE));
-      this.user = "founder@cardinalclimate.com";
+      this.state = JSON.parse(JSON.stringify(DEMO_STATE));
+      this.user = "founder@northgrid.example";
       const hash = window.location.hash.replace("#", "");
       const isFunnelView = ["landing", "methodology", "onboard", "report"].includes(hash);
       this.showFunnel = isFunnelView || !hash;
