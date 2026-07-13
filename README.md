@@ -1,4 +1,4 @@
-# GTR Handprint — Climate Impact Dashboard
+# Climatico — Climate Impact Dashboard
 
 A two-sided environmental-impact dashboard for early-stage climate-tech startups.
 It models a company's **footprint** (emissions it causes) against its **handprint**

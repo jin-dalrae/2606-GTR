@@ -553,7 +553,7 @@ class ClimateDashboardApp {
           <svg class="showcase-sidebar-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
           </svg>
-          <span class="showcase-sidebar-title">GTR Handprint</span>
+          <span class="showcase-sidebar-title">Climatico</span>
         </div>
         <button class="showcase-sidebar-close" aria-label="Close menu">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
@@ -1901,14 +1901,14 @@ class ClimateDashboardApp {
   }
 
   buildPositiveShareSummary(a) {
-    if (!a) return "Check out GTR Handprint impact assessment";
+    if (!a) return "Check out Climatico impact assessment";
     const name = a.name || "We";
     const snapshot = a.snapshot || {};
     const hp = Number(snapshot.handprintPotential) || 0;
     const breakdown = Array.isArray(snapshot.breakdown) ? snapshot.breakdown : [];
 
     if (hp > 0) {
-      return `${name} modeled our climate impact with GTR Handprint: ~${Math.round(hp)} tCO2e/yr of avoided emissions identified. Early days, but the handprint signal is real. #climatetech #impact`;
+      return `${name} modeled our climate impact with Climatico: ~${Math.round(hp)} tCO2e/yr of avoided emissions identified. Early days, but the handprint signal is real. #climatetech #impact`;
     }
 
     const smallest = breakdown
@@ -1916,10 +1916,10 @@ class ClimateDashboardApp {
       .sort((x, y) => x.value - y.value)[0];
 
     if (smallest) {
-      return `${name} started mapping our climate impact with GTR Handprint. Our smallest modeled line is ${smallest.name.toLowerCase()} at ~${smallest.value.toFixed(1)} tCO2e/yr — a useful starting point. #climatetech #impact`;
+      return `${name} started mapping our climate impact with Climatico. Our smallest modeled line is ${smallest.name.toLowerCase()} at ~${smallest.value.toFixed(1)} tCO2e/yr — a useful starting point. #climatetech #impact`;
     }
 
-    return `${name} started mapping our climate impact with GTR Handprint. Modeling the footprint is the first step; the rest is iteration. #climatetech #impact`;
+    return `${name} started mapping our climate impact with Climatico. Modeling the footprint is the first step; the rest is iteration. #climatetech #impact`;
   }
 
   copyShareLink() {

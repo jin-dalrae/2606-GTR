@@ -1,4 +1,4 @@
-/* Shared shell for GTR multipage site — works under /midterm/ */
+/* Shared shell for Climatico multipage site — works under /midterm/ */
 (function () {
   const SITE_ROOT_NAME = "midterm";
 
@@ -75,10 +75,10 @@
 
     mount.innerHTML = `
       <a class="nav-brand" href="${base}index.html">
-        <span class="nav-mark">G</span>
+        <span class="nav-mark">C</span>
         <span class="nav-brand-text">
-          <strong>GTR Handprint</strong>
-          <span>Midterm · Climate impact</span>
+          <strong>Climatico</strong>
+          <span>Climate impact · Midterm</span>
         </span>
       </a>
       <button class="nav-toggle" type="button" aria-label="Open menu" id="nav-toggle"><span></span></button>
@@ -102,7 +102,7 @@
     mount.innerHTML = `
       <div class="footer-inner">
         <div>
-          <p class="footer-brand">GTR Handprint</p>
+          <p class="footer-brand">Climatico</p>
           <p class="footer-copy">Evidence first. Estimates next. Climate-aware decisions for every kind of early-stage business — footprint and handprint, good or bad.</p>
         </div>
         <div class="footer-col">

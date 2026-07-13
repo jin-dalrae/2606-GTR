@@ -166,7 +166,7 @@ writeFileSync(
     <meta charset="utf-8" />
     <meta http-equiv="refresh" content="0; url=${BASE}/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>GTR Handprint — Midterm</title>
+    <title>Climatico — Midterm</title>
     <link rel="canonical" href="${BASE}/" />
     <style>
       body { font: 16px/1.5 system-ui, sans-serif; margin: 3rem; color: #16201c; background: #f7f6f2; }
@@ -174,7 +174,7 @@ writeFileSync(
     </style>
   </head>
   <body>
-    <p>Redirecting to <a href="${BASE}/">GTR Handprint midterm site</a>…</p>
+    <p>Redirecting to <a href="${BASE}/">Climatico midterm site</a>…</p>
     <script>location.replace("${BASE}/");</script>
   </body>
 </html>

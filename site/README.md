@@ -1,4 +1,4 @@
-# GTR midterm site
+# Climatico midterm site
 
 Public multipage site served under **`/midterm/`**.
 
