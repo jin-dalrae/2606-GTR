@@ -157,8 +157,8 @@
     p5: {
       id: "p5",
       label: "5 · Leaderboard",
-      stageLabel: "Prototype 5 · Leaderboard",
-      openLabel: "Open leaderboard ↗",
+      stageLabel: "Prototype 5 · Investor leaderboard",
+      openLabel: "Open investor leaderboard ↗",
       src: "../leaderboard/",
       full: "../leaderboard/",
       device: false,
@@ -167,7 +167,7 @@
           title: "1 · Pick a cohort",
           short: "Stage, size, revenue",
           detail:
-            "Filter by funding stage, team size, and revenue band so Seed companies are not ranked against Series B giants.",
+            "Investor cohort filters: funding stage, team size, and revenue band so Seed is not ranked against Series B.",
         },
         {
           title: "2 · Sort the board",
@@ -179,7 +179,7 @@
           title: "3 · Read intensity",
           short: "Footprint vs handprint",
           detail:
-            "Each row shows EI/$1M, absolute footprint, handprint, maturity level, and YoY intensity trend — illustrative portfolio data.",
+            "Portfolio table: EI/$1M, footprint, handprint, maturity, integrity, and YoY intensity — diligence language, illustrative holdings.",
         },
         {
           title: "4 · Cohort summary",

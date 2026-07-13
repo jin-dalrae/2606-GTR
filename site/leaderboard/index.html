@@ -3,467 +3,559 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Climatico leaderboard · Midterm</title>
-  <meta name="description" content="Compare early-stage startups by stage, team size, revenue, and environmental impact intensity (EI/Revenue). Illustrative prototype." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/site.css" />
+  <title>Climatico · Investor leaderboard</title>
+  <meta name="description" content="Investor portfolio leaderboard — compare startups by stage, size, revenue, and EI intensity." />
   <style>
-    .lb-hero {
-      padding: 2.5rem 0 1.25rem;
+    :root {
+      --bg: #dedcd5;
+      --panel: #fbfaf7;
+      --panel-2: #ffffff;
+      --ink: #2b2b2b;
+      --muted: #77756b;
+      --muted-2: #9a988f;
+      --line: #e6e4dd;
+      --line-2: #cfcdc7;
+      --accent: #2b2b2b;
+      --good: #5a6a3e;
+      --good-soft: #e4e6d5;
+      --warn: #8a6410;
+      --warn-soft: #e9d7ba;
+      --bad: #9e3b26;
+      --bad-soft: #e5c6ba;
+      --chip: #f0efea;
+      --shadow: 0 1px 0 rgba(43,43,43,0.04), 0 10px 28px rgba(43,43,43,0.06);
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
     }
-    .lb-hero .display {
-      font-size: clamp(1.9rem, 4vw, 2.75rem);
-      margin: 0;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      min-height: 100%;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
     }
-    .lb-controls {
+    body.embed-mode .lb-topbar,
+    body.embed-mode .lb-footer-cta { display: none !important; }
+    body.embed-mode .lb-page { padding-top: 16px; }
+
+    .lb-page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 28px 20px 48px;
+    }
+
+    /* Investor chrome */
+    .lb-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .lb-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: -0.01em;
+    }
+    .lb-brand-mark {
+      width: 26px; height: 26px;
+      border-radius: 7px;
+      background: var(--ink);
+      color: #fbfaf7;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .lb-top-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .lb-top-links a {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 8px 12px;
+      border: 1.5px solid var(--line-2);
+      border-radius: 9px;
+      background: var(--panel);
+    }
+    .lb-top-links a:hover { border-color: var(--ink); color: var(--ink); }
+
+    .lb-header {
+      background: var(--panel);
+      border: 1.5px solid var(--line);
+      border-radius: 16px;
+      padding: 22px 22px 18px;
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+    }
+    .lb-kicker {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .lb-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+    .lb-header p {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--muted);
+      max-width: 62ch;
+    }
+
+    /* Stage chips — investor filter language */
+    .stage-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0 12px;
+    }
+    .stage-row button {
+      border: 1.5px solid var(--line-2);
+      background: var(--panel);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .stage-row button.active {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: #fbfaf7;
+    }
+
+    .filters {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 0.75rem;
-      margin: 1.25rem 0 1rem;
+      gap: 10px;
+      margin-bottom: 12px;
     }
-    .lb-field label {
+    .field label {
       display: block;
-      font-size: 0.72rem;
+      font-size: 10.5px;
       font-weight: 700;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--ink-3);
-      margin-bottom: 0.35rem;
+      color: var(--muted-2);
+      margin-bottom: 6px;
     }
-    .lb-field select,
-    .lb-search input {
+    .field select,
+    .search input {
       width: 100%;
       appearance: none;
-      border: 1px solid var(--line-strong);
-      background: var(--bg-elevated);
-      border-radius: 12px;
-      padding: 0.7rem 0.85rem;
+      border: 1.5px solid var(--line-2);
+      background: var(--panel-2);
+      border-radius: 9px;
+      padding: 11px 12px;
       font: inherit;
-      font-size: 0.92rem;
+      font-size: 13.5px;
       color: var(--ink);
+      outline: none;
     }
-    .lb-search {
-      margin-bottom: 1rem;
-    }
-    .lb-toolbar {
+    .field select:focus,
+    .search input:focus { border-color: var(--ink); }
+    .search { margin-bottom: 12px; }
+
+    .toolbar {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 0.75rem;
-      margin-bottom: 0.85rem;
+      gap: 10px;
+      margin-bottom: 10px;
     }
-    .lb-meta {
-      font-size: 0.9rem;
-      color: var(--ink-2);
+    .count {
+      font-size: 13px;
+      color: var(--muted);
     }
-    .lb-meta strong { color: var(--ink); }
+    .count strong { color: var(--ink); font-weight: 700; }
     .sort-pills {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.4rem;
+      gap: 6px;
     }
     .sort-pills button {
-      border: 1px solid var(--line);
-      background: var(--bg-elevated);
+      border: 1.5px solid var(--line-2);
+      background: var(--panel);
       border-radius: 999px;
-      padding: 0.4rem 0.75rem;
+      padding: 7px 12px;
       font: inherit;
-      font-size: 0.8rem;
+      font-size: 12px;
       font-weight: 600;
-      color: var(--ink-2);
+      color: var(--muted);
       cursor: pointer;
     }
     .sort-pills button.active {
-      background: var(--hand-soft);
-      border-color: rgba(31, 138, 91, 0.35);
-      color: var(--hand-deep);
-    }
-    .stage-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.45rem;
-      margin-bottom: 1rem;
-    }
-    .stage-chips button {
-      border: 1px solid var(--line);
-      background: var(--bg-elevated);
-      border-radius: 999px;
-      padding: 0.45rem 0.85rem;
-      font: inherit;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--ink-2);
-      cursor: pointer;
-    }
-    .stage-chips button.active {
       background: var(--ink);
       border-color: var(--ink);
-      color: #fff;
+      color: #fbfaf7;
     }
-    .lb-table-wrap {
-      background: var(--bg-elevated);
-      border: 1px solid var(--line);
-      border-radius: 18px;
+
+    /* Summary cards like investor portfolio metrics */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .metric {
+      background: var(--panel);
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+    }
+    .metric .k {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted-2);
+    }
+    .metric .v {
+      margin-top: 6px;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+    }
+    .metric .s {
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Table board */
+    .board {
+      background: var(--panel);
+      border: 1.5px solid var(--line);
+      border-radius: 16px;
       overflow: auto;
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--shadow);
     }
-    table.lb-table {
+    table {
       width: 100%;
       border-collapse: collapse;
       min-width: 920px;
     }
-    .lb-table th,
-    .lb-table td {
+    th, td {
       text-align: left;
-      padding: 0.85rem 1rem;
+      padding: 12px 14px;
       border-bottom: 1px solid var(--line);
+      font-size: 13px;
       vertical-align: middle;
-      font-size: 0.92rem;
     }
-    .lb-table th {
+    th {
       position: sticky;
       top: 0;
       background: #f3f2ec;
-      font-size: 0.72rem;
-      letter-spacing: 0.05em;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--ink-3);
-      font-weight: 700;
+      color: var(--muted);
       white-space: nowrap;
+      z-index: 1;
     }
-    .lb-table th.sortable {
-      cursor: pointer;
-      user-select: none;
-    }
-    .lb-table th.sortable:hover { color: var(--ink); }
-    .lb-table th .arrow { opacity: 0.35; margin-left: 0.25rem; }
-    .lb-table th.active .arrow { opacity: 1; color: var(--hand-deep); }
-    .lb-table tbody tr:hover { background: rgba(31, 138, 91, 0.04); }
-    .lb-table tbody tr:last-child td { border-bottom: 0; }
+    th.sortable { cursor: pointer; user-select: none; }
+    th.sortable:hover { color: var(--ink); }
+    th .arrow { opacity: 0.35; margin-left: 3px; }
+    th.active .arrow { opacity: 1; color: var(--ink); }
+    tbody tr:hover { background: rgba(43,43,43,0.03); }
+    tbody tr:last-child td { border-bottom: 0; }
+
     .rank {
+      font-family: var(--mono);
       font-weight: 700;
-      font-variant-numeric: tabular-nums;
-      color: var(--ink-3);
-      width: 2.5rem;
+      font-size: 12.5px;
+      color: var(--muted-2);
+      width: 2.4rem;
     }
-    .rank.top { color: var(--hand-deep); }
-    .company-cell {
-      display: flex;
-      flex-direction: column;
-      gap: 0.15rem;
-      min-width: 140px;
-    }
-    .company-cell strong {
-      font-size: 0.98rem;
+    .rank.top { color: var(--ink); }
+
+    .co strong {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 700;
       letter-spacing: -0.01em;
     }
-    .company-cell span {
-      font-size: 0.8rem;
-      color: var(--ink-3);
+    .co span {
+      display: block;
+      margin-top: 2px;
+      font-size: 11.5px;
+      color: var(--muted);
     }
+
     .badge {
       display: inline-flex;
       align-items: center;
       border-radius: 999px;
-      padding: 0.2rem 0.55rem;
-      font-size: 0.72rem;
+      padding: 3px 8px;
+      font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.02em;
       white-space: nowrap;
+      border: 1px solid transparent;
     }
-    .badge.stage-pre { background: #eee; color: #555; }
-    .badge.stage-seed { background: #e8f0ff; color: #1e4a9a; }
-    .badge.stage-a { background: #eef6e8; color: #2d5c1a; }
-    .badge.stage-b { background: #f6efe2; color: #8a5a10; }
-    .badge.stage-c { background: #f3e8f6; color: #6b2a7a; }
-    .badge.model {
-      background: var(--bg-soft);
-      color: var(--ink-2);
-      font-weight: 600;
-    }
-    .num {
-      font-variant-numeric: tabular-nums;
-      font-weight: 600;
-    }
-    .ei-good { color: var(--hand-deep); }
-    .ei-mid { color: var(--amber); }
-    .ei-high { color: var(--foot); }
-    .trend {
-      font-size: 0.8rem;
-      font-weight: 700;
-    }
-    .trend.down { color: var(--hand-deep); }
-    .trend.up { color: var(--foot); }
-    .trend.flat { color: var(--ink-3); }
-    .maturity {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-weight: 600;
-      font-size: 0.85rem;
-    }
-    .maturity .dot-l {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--hand);
-    }
-    .bar-cell { min-width: 110px; }
+    .badge.stage { background: var(--chip); color: var(--ink); border-color: var(--line); }
+    .badge.model { background: #fff; color: var(--muted); border-color: var(--line-2); font-weight: 600; }
+
+    .num { font-variant-numeric: tabular-nums; font-weight: 600; font-family: var(--mono); font-size: 12.5px; }
+    .ei-good { color: var(--good); }
+    .ei-mid { color: var(--warn); }
+    .ei-high { color: var(--bad); }
+
+    .bar-cell { min-width: 108px; }
     .bar-track {
-      height: 7px;
-      background: #edece5;
+      height: 6px;
+      background: var(--line);
       border-radius: 4px;
       overflow: hidden;
-      margin-top: 0.3rem;
+      margin-top: 5px;
     }
     .bar-fill {
       height: 100%;
       border-radius: 4px;
-      background: linear-gradient(90deg, var(--hand), var(--hand-deep));
+      background: var(--ink);
     }
-    .cohort-panel {
-      margin-top: 1.5rem;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.85rem;
-    }
-    .cohort-card {
-      background: var(--bg-elevated);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 1rem 1.1rem;
-    }
-    .cohort-card .k {
-      font-size: 0.72rem;
+
+    .trend {
+      font-family: var(--mono);
+      font-size: 12px;
       font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: var(--ink-3);
     }
-    .cohort-card .v {
-      margin-top: 0.25rem;
-      font-size: 1.35rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
+    .trend.down { color: var(--good); }
+    .trend.up { color: var(--bad); }
+    .trend.flat { color: var(--muted-2); }
+
+    .maturity {
+      font-size: 12.5px;
+      font-weight: 600;
     }
-    .cohort-card .s {
-      margin-top: 0.2rem;
-      font-size: 0.82rem;
-      color: var(--ink-2);
+    .maturity small {
+      display: block;
+      margin-top: 2px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--muted);
     }
-    .note-band {
-      margin: 1.5rem 0 2.5rem;
-      padding: 1rem 1.15rem;
-      border-radius: 14px;
-      background: var(--hand-soft);
-      border: 1px solid rgba(31, 138, 91, 0.2);
-      color: var(--ink-2);
-      font-size: 0.9rem;
-    }
+
     .empty {
-      padding: 2.5rem 1rem;
+      padding: 40px 16px;
       text-align: center;
-      color: var(--ink-2);
+      color: var(--muted);
+      font-size: 14px;
     }
+
+    .note {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: var(--panel);
+      border: 1.5px solid var(--line);
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .note strong { color: var(--ink); }
+
+    .lb-footer-cta {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .lb-footer-cta a {
+      display: inline-flex;
+      align-items: center;
+      padding: 11px 14px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--ink);
+      color: #fbfaf7;
+      border: 1.5px solid var(--ink);
+    }
+    .btn-secondary {
+      background: var(--panel);
+      color: var(--ink);
+      border: 1.5px solid var(--line-2);
+    }
+
     @media (max-width: 900px) {
-      .lb-controls,
-      .cohort-panel {
-        grid-template-columns: 1fr 1fr;
-      }
+      .filters, .metrics { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 560px) {
-      .lb-controls,
-      .cohort-panel {
-        grid-template-columns: 1fr;
-      }
+      .filters, .metrics { grid-template-columns: 1fr; }
+      .lb-header h1 { font-size: 22px; }
     }
   </style>
-
-  <style>
-    body.embed-mode .site-nav,
-    body.embed-mode .site-footer,
-    body.embed-mode .lb-hero > .container > .btn-row { display: none !important; }
-    body.embed-mode .lb-hero { padding-top: 1rem; }
-    body.embed-mode { background: var(--bg); }
-  </style>
-  <script>
-    (function () {
-      try {
-        if (window.self !== window.top) {
-          document.documentElement.classList.add("embed-pending");
-          document.addEventListener("DOMContentLoaded", function () {
-            document.body.classList.add("embed-mode");
-          });
-        }
-      } catch (e) {}
-    })();
-  </script>
 </head>
 <body>
-  <div class="site-shell">
-    <header class="site-nav" id="site-nav"></header>
+  <div class="lb-page">
+    <div class="lb-topbar">
+      <a class="lb-brand" href="../">
+        <span class="lb-brand-mark">C</span>
+        Climatico
+      </a>
+      <div class="lb-top-links">
+        <a href="../prototype/?tab=p3">Investor board</a>
+        <a href="../prototype/?tab=p5">In prototype</a>
+      </div>
+    </div>
 
-    <main>
-      <section class="lb-hero">
-        <div class="container">
-          <p class="eyebrow"><span class="dot"></span> Prototype 5 · Portfolio leaderboard</p>
-          <h1 class="display">Compare startups by stage, size &amp; intensity</h1>
-          <p class="lead" style="margin-top:1rem;max-width:62ch">
-            Rank companies within a fair cohort — same funding stage, similar headcount and revenue —
-            on <strong>EI / Revenue</strong>, absolute footprint, handprint integrity, and maturity.
-            Illustrative data only.
-          </p>
+    <header class="lb-header">
+      <div class="lb-kicker">Investor view · Portfolio leaderboard</div>
+      <h1>Compare holdings by stage, size &amp; intensity</h1>
+      <p>
+        Rank companies within a fair cohort — same funding stage, similar headcount and revenue —
+        on <strong style="color:var(--ink)">EI / Revenue</strong>, absolute footprint, handprint integrity, and maturity.
+        Diligence-ready language. Illustrative data only.
+      </p>
 
-          <div class="stage-chips" id="stage-chips" role="tablist" aria-label="Funding stage cohort"></div>
+      <div class="stage-row" id="stage-chips" role="tablist" aria-label="Funding stage cohort"></div>
 
-          <div class="lb-controls">
-            <div class="lb-field">
-              <label for="f-size">Team size</label>
-              <select id="f-size">
-                <option value="all">All sizes</option>
-                <option value="1-5">1–5 FTE</option>
-                <option value="6-15">6–15 FTE</option>
-                <option value="16-50">16–50 FTE</option>
-                <option value="51-150">51–150 FTE</option>
-                <option value="151+">151+ FTE</option>
-              </select>
-            </div>
-            <div class="lb-field">
-              <label for="f-rev">Revenue band</label>
-              <select id="f-rev">
-                <option value="all">All revenue</option>
-                <option value="pre">Pre-revenue</option>
-                <option value="<1m">&lt; $1M ARR</option>
-                <option value="1-5m">$1–5M ARR</option>
-                <option value="5-20m">$5–20M ARR</option>
-                <option value="20m+">$20M+ ARR</option>
-              </select>
-            </div>
-            <div class="lb-field">
-              <label for="f-model">Business model</label>
-              <select id="f-model">
-                <option value="all">All models</option>
-                <option value="SaaS">SaaS</option>
-                <option value="Hardware">Hardware</option>
-                <option value="Marketplace">Marketplace</option>
-                <option value="Biotech">Biotech</option>
-                <option value="Climate services">Climate services</option>
-                <option value="Foundation model">Foundation model</option>
-              </select>
-            </div>
-            <div class="lb-field">
-              <label for="f-maturity">Min maturity</label>
-              <select id="f-maturity">
-                <option value="0">Any level</option>
-                <option value="1">L1+</option>
-                <option value="2">L2+</option>
-                <option value="3">L3+</option>
-                <option value="4">L4+</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="lb-search">
-            <input id="f-q" type="search" placeholder="Search company or sector…" autocomplete="off" />
-          </div>
-
-          <div class="lb-toolbar">
-            <p class="lb-meta" id="lb-count">Loading…</p>
-            <div class="sort-pills" id="sort-pills" aria-label="Sort by">
-              <button type="button" data-sort="eiRev" class="active">Best EI/Rev</button>
-              <button type="button" data-sort="eiTrend">Improving fastest</button>
-              <button type="button" data-sort="maturity">Highest maturity</button>
-              <button type="button" data-sort="revenue">Largest revenue</button>
-              <button type="button" data-sort="fte">Largest team</button>
-            </div>
-          </div>
-
-          <div class="lb-table-wrap">
-            <table class="lb-table" aria-label="Startup impact leaderboard">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th class="sortable" data-sort="name">Company <span class="arrow">↕</span></th>
-                  <th class="sortable" data-sort="stage">Stage <span class="arrow">↕</span></th>
-                  <th class="sortable" data-sort="fte">Team <span class="arrow">↕</span></th>
-                  <th class="sortable" data-sort="revenue">Revenue <span class="arrow">↕</span></th>
-                  <th class="sortable active" data-sort="eiRev">EI / $1M <span class="arrow">↓</span></th>
-                  <th class="sortable" data-sort="footprint">Footprint <span class="arrow">↕</span></th>
-                  <th class="sortable" data-sort="handprint">Handprint <span class="arrow">↕</span></th>
-                  <th class="sortable" data-sort="maturity">Maturity <span class="arrow">↕</span></th>
-                  <th class="sortable" data-sort="eiTrend">Trend <span class="arrow">↕</span></th>
-                </tr>
-              </thead>
-              <tbody id="lb-body"></tbody>
-            </table>
-            <div class="empty" id="lb-empty" hidden>No startups match these filters. Widen the cohort.</div>
-          </div>
-
-          <div class="cohort-panel" id="cohort-panel" aria-live="polite"></div>
-
-          <div class="note-band">
-            <strong>Prototype honesty:</strong> figures are modeled and illustrative for midterm review —
-            not certified carbon accounting. Ranking defaults to lower <em>EI / Revenue</em>
-            (tCO₂e per $1M ARR) within the selected stage and size/revenue band so early Seed companies
-            are not scored against Series B giants. Handprint stays separate and integrity-gated.
-          </div>
-
-          <div class="btn-row" style="margin-bottom:2.5rem">
-            <a class="btn btn-primary" href="../prototype/?tab=p5">Open in guided prototype</a>
-            <a class="btn btn-secondary" href="../prototype/">All prototypes</a>
-            <a class="btn btn-secondary" href="../vision/">Vision</a>
-          </div>
+      <div class="filters">
+        <div class="field">
+          <label for="f-size">Team size</label>
+          <select id="f-size">
+            <option value="all">All sizes</option>
+            <option value="1-5">1–5 FTE</option>
+            <option value="6-15">6–15 FTE</option>
+            <option value="16-50">16–50 FTE</option>
+            <option value="51-150">51–150 FTE</option>
+            <option value="151+">151+ FTE</option>
+          </select>
         </div>
-      </section>
-    </main>
+        <div class="field">
+          <label for="f-rev">Revenue band</label>
+          <select id="f-rev">
+            <option value="all">All revenue</option>
+            <option value="pre">Pre-revenue</option>
+            <option value="<1m">&lt; $1M ARR</option>
+            <option value="1-5m">$1–5M ARR</option>
+            <option value="5-20m">$5–20M ARR</option>
+            <option value="20m+">$20M+ ARR</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-model">Business model</label>
+          <select id="f-model">
+            <option value="all">All models</option>
+            <option value="SaaS">SaaS</option>
+            <option value="Hardware">Hardware</option>
+            <option value="Marketplace">Marketplace</option>
+            <option value="Biotech">Biotech</option>
+            <option value="Climate services">Climate services</option>
+            <option value="Foundation model">Foundation model</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-maturity">Min maturity</label>
+          <select id="f-maturity">
+            <option value="0">Any level</option>
+            <option value="1">L1+</option>
+            <option value="2">L2+</option>
+            <option value="3">L3+</option>
+            <option value="4">L4+</option>
+          </select>
+        </div>
+      </div>
 
-    <footer class="site-footer" id="site-footer"></footer>
+      <div class="search">
+        <input id="f-q" type="search" placeholder="Search company or sector…" autocomplete="off" />
+      </div>
+
+      <div class="toolbar">
+        <p class="count" id="lb-count">Loading…</p>
+        <div class="sort-pills" id="sort-pills" aria-label="Sort by">
+          <button type="button" data-sort="eiRev" class="active">Best EI/Rev</button>
+          <button type="button" data-sort="eiTrend">Improving fastest</button>
+          <button type="button" data-sort="maturity">Highest maturity</button>
+          <button type="button" data-sort="revenue">Largest revenue</button>
+          <button type="button" data-sort="fte">Largest team</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="metrics" id="cohort-panel" aria-live="polite"></div>
+
+    <div class="board">
+      <table aria-label="Investor portfolio leaderboard">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th class="sortable" data-sort="name">Company <span class="arrow">↕</span></th>
+            <th class="sortable" data-sort="stage">Stage <span class="arrow">↕</span></th>
+            <th class="sortable" data-sort="fte">Team <span class="arrow">↕</span></th>
+            <th class="sortable" data-sort="revenue">Revenue <span class="arrow">↕</span></th>
+            <th class="sortable active" data-sort="eiRev">EI / $1M <span class="arrow">↓</span></th>
+            <th class="sortable" data-sort="footprint">Footprint <span class="arrow">↕</span></th>
+            <th class="sortable" data-sort="handprint">Handprint <span class="arrow">↕</span></th>
+            <th class="sortable" data-sort="maturity">Maturity <span class="arrow">↕</span></th>
+            <th class="sortable" data-sort="eiTrend">Trend <span class="arrow">↕</span></th>
+          </tr>
+        </thead>
+        <tbody id="lb-body"></tbody>
+      </table>
+      <div class="empty" id="lb-empty" hidden>No holdings match these filters. Widen the cohort.</div>
+    </div>
+
+    <p class="note">
+      <strong>Investor prototype honesty:</strong> figures are modeled and illustrative —
+      not certified carbon accounting. Ranking defaults to lower EI / Revenue
+      (tCO₂e per $1M ARR) within the selected stage and size/revenue band so Seed is not scored against Series B.
+      Handprint stays separate and integrity-gated.
+    </p>
+
+    <div class="lb-footer-cta">
+      <a class="btn-primary" href="../prototype/?tab=p5">Open in guided prototype</a>
+      <a class="btn-secondary" href="../prototype/?tab=p3">Investor portfolio board</a>
+      <a class="btn-secondary" href="../prototype/">All prototypes</a>
+    </div>
   </div>
 
-  <script src="../js/site.js"></script>
   <script>
 (function () {
+  try {
+    if (window.self !== window.top) {
+      document.addEventListener("DOMContentLoaded", function () {
+        document.body.classList.add("embed-mode");
+      });
+    }
+  } catch (e) {}
+
   const STAGE_ORDER = {
-    "Pre-seed": 0,
-    Seed: 1,
-    "Series A": 2,
-    "Series B": 3,
-    "Series C+": 4,
+    "Pre-seed": 0, Seed: 1, "Series A": 2, "Series B": 3, "Series C+": 4,
   };
-  const STAGE_CLASS = {
-    "Pre-seed": "stage-pre",
-    Seed: "stage-seed",
-    "Series A": "stage-a",
-    "Series B": "stage-b",
-    "Series C+": "stage-c",
-  };
-  const REV_MID = {
-    pre: 0,
-    "<1m": 0.5,
-    "1-5m": 3,
-    "5-20m": 12,
-    "20m+": 35,
-  };
-  const FTE_MID = {
-    "1-5": 3,
-    "6-15": 10,
-    "16-50": 30,
-    "51-150": 90,
-    "151+": 200,
-  };
+  const REV_MID = { pre: 0, "<1m": 0.5, "1-5m": 3, "5-20m": 12, "20m+": 35 };
+  const FTE_MID = { "1-5": 3, "6-15": 10, "16-50": 30, "51-150": 90, "151+": 200 };
   const MATURITY_LABEL = [
-    "L0 Unmapped",
-    "L1 Mapped",
-    "L2 Gated",
-    "L3 Metered",
-    "L4 Active",
-    "L5 Improved",
+    "L0 Unmapped", "L1 Mapped", "L2 Gated", "L3 Metered", "L4 Active", "L5 Improved",
   ];
 
-  /** Illustrative portfolio — mix of stages, sizes, revenue, models */
   const DATA = [
     { name: "Northgrid", sector: "Grid software", model: "SaaS", stage: "Series B", fteBand: "51-150", revBand: "5-20m", eiRev: 4.1, footprint: 61.7, handprint: 60, maturity: 4, eiTrend: -12, integrity: 92 },
     { name: "Clayform", sector: "Low-carbon materials", model: "Hardware", stage: "Seed", fteBand: "6-15", revBand: "<1m", eiRev: 18.2, footprint: 28.4, handprint: 12, maturity: 2, eiTrend: -6, integrity: 55 },
@@ -489,69 +581,35 @@
     { name: "Driftline", sector: "Shipping ops", model: "Climate services", stage: "Seed", fteBand: "6-15", revBand: "<1m", eiRev: 16.5, footprint: 24, handprint: 70, maturity: 1, eiTrend: -1, integrity: 42 },
     { name: "Pebble Grid", sector: "Microgrids", model: "Hardware", stage: "Series B", fteBand: "51-150", revBand: "5-20m", eiRev: 8.4, footprint: 96, handprint: 520, maturity: 4, eiTrend: -17, integrity: 81 },
     { name: "Nimbus Tokens", sector: "Enterprise AI", model: "Foundation model", stage: "Series A", fteBand: "16-50", revBand: "1-5m", eiRev: 36.2, footprint: 420, handprint: 0, maturity: 1, eiTrend: 8, integrity: 28 },
-  ].map((d) => ({
-    ...d,
-    fte: FTE_MID[d.fteBand],
-    revenue: REV_MID[d.revBand],
-  }));
+  ].map((d) => ({ ...d, fte: FTE_MID[d.fteBand], revenue: REV_MID[d.revBand] }));
 
   const state = {
-    stage: "all",
-    size: "all",
-    rev: "all",
-    model: "all",
-    maturity: 0,
-    q: "",
-    sort: "eiRev",
-    dir: "asc", // lower EI/Rev is better by default
+    stage: "all", size: "all", rev: "all", model: "all",
+    maturity: 0, q: "", sort: "eiRev", dir: "asc",
   };
 
   const DEFAULT_DIR = {
-    eiRev: "asc",
-    eiTrend: "asc", // more negative improvement first
-    maturity: "desc",
-    revenue: "desc",
-    fte: "desc",
-    footprint: "asc",
-    handprint: "desc",
-    name: "asc",
-    stage: "asc",
+    eiRev: "asc", eiTrend: "asc", maturity: "desc", revenue: "desc",
+    fte: "desc", footprint: "asc", handprint: "desc", name: "asc", stage: "asc",
   };
-
-  function stageClass(s) {
-    return STAGE_CLASS[s] || "stage-pre";
-  }
 
   function eiClass(v) {
     if (v <= 6) return "ei-good";
     if (v <= 14) return "ei-mid";
     return "ei-high";
   }
-
   function revLabel(band) {
-    return (
-      {
-        pre: "Pre-revenue",
-        "<1m": "< $1M",
-        "1-5m": "$1–5M",
-        "5-20m": "$5–20M",
-        "20m+": "$20M+",
-      }[band] || band
-    );
+    return ({ pre: "Pre-revenue", "<1m": "< $1M", "1-5m": "$1–5M", "5-20m": "$5–20M", "20m+": "$20M+" })[band] || band;
   }
-
   function fteLabel(band) {
     return band === "151+" ? "151+ FTE" : band + " FTE";
   }
-
   function trendHtml(t) {
     if (t < -1) return `<span class="trend down">↓ ${Math.abs(t)}%</span>`;
     if (t > 1) return `<span class="trend up">↑ ${t}%</span>`;
     return `<span class="trend flat">→ 0%</span>`;
   }
-
   function barWidth(eiRev) {
-    // map 2..50 -> 8%..100% inverted (lower intensity = fuller green bar of "efficiency")
     const score = Math.max(0, Math.min(1, (50 - eiRev) / 48));
     return Math.round(8 + score * 92);
   }
@@ -576,8 +634,7 @@
     const key = state.sort;
     const dir = state.dir === "asc" ? 1 : -1;
     return rows.slice().sort((a, b) => {
-      let av;
-      let bv;
+      let av, bv;
       if (key === "stage") {
         av = STAGE_ORDER[a.stage] ?? 0;
         bv = STAGE_ORDER[b.stage] ?? 0;
@@ -592,7 +649,6 @@
         bv = b[key];
       }
       if (av === bv) {
-        // tie-break: better EI/Rev, then name
         if (a.eiRev !== b.eiRev) return a.eiRev - b.eiRev;
         return a.name.localeCompare(b.name);
       }
@@ -603,13 +659,11 @@
   function renderChips() {
     const stages = ["all", "Pre-seed", "Seed", "Series A", "Series B", "Series C+"];
     const el = document.getElementById("stage-chips");
-    el.innerHTML = stages
-      .map((s) => {
-        const label = s === "all" ? "All stages" : s;
-        const n = s === "all" ? DATA.length : DATA.filter((d) => d.stage === s).length;
-        return `<button type="button" data-stage="${s}" class="${state.stage === s ? "active" : ""}">${label} · ${n}</button>`;
-      })
-      .join("");
+    el.innerHTML = stages.map((s) => {
+      const label = s === "all" ? "All stages" : s;
+      const n = s === "all" ? DATA.length : DATA.filter((d) => d.stage === s).length;
+      return `<button type="button" data-stage="${s}" class="${state.stage === s ? "active" : ""}">${label} · ${n}</button>`;
+    }).join("");
     el.querySelectorAll("button").forEach((btn) => {
       btn.addEventListener("click", () => {
         state.stage = btn.dataset.stage;
@@ -629,17 +683,17 @@
     const improving = rows.filter((r) => r.eiTrend < 0).length;
     const top = rows.slice().sort((a, b) => a.eiRev - b.eiRev)[0];
     panel.innerHTML = `
-      <div class="cohort-card">
+      <div class="metric">
         <div class="k">Cohort median team</div>
         <div class="v">~${medFte} FTE</div>
-        <div class="s">${rows.length} companies in view</div>
+        <div class="s">${rows.length} holdings in view</div>
       </div>
-      <div class="cohort-card">
+      <div class="metric">
         <div class="k">Avg EI / $1M ARR</div>
         <div class="v">${avgEi.toFixed(1)} t</div>
         <div class="s">${improving} improving YoY intensity</div>
       </div>
-      <div class="cohort-card">
+      <div class="metric">
         <div class="k">Intensity leader</div>
         <div class="v" style="font-size:1.15rem">${top.name}</div>
         <div class="s">${top.eiRev.toFixed(1)} tCO₂e / $1M · ${top.stage}</div>
@@ -651,30 +705,23 @@
     const body = document.getElementById("lb-body");
     const empty = document.getElementById("lb-empty");
     const count = document.getElementById("lb-count");
-
     if (!rows.length) {
       body.innerHTML = "";
       empty.hidden = false;
-      count.innerHTML = `<strong>0</strong> startups in this cohort`;
+      count.innerHTML = `<strong>0</strong> holdings in this cohort`;
       return;
     }
     empty.hidden = true;
     const stageLabel = state.stage === "all" ? "all stages" : state.stage;
-    count.innerHTML = `<strong>${rows.length}</strong> startups · ranked in <strong>${stageLabel}</strong> cohort`;
+    count.innerHTML = `<strong>${rows.length}</strong> holdings · ranked in <strong>${stageLabel}</strong> cohort`;
 
-    body.innerHTML = rows
-      .map((d, i) => {
-        const rankClass = i < 3 ? "rank top" : "rank";
-        return `
+    body.innerHTML = rows.map((d, i) => {
+      const rankClass = i < 3 ? "rank top" : "rank";
+      return `
         <tr>
           <td class="${rankClass}">${i + 1}</td>
-          <td>
-            <div class="company-cell">
-              <strong>${d.name}</strong>
-              <span>${d.sector}</span>
-            </div>
-          </td>
-          <td><span class="badge ${stageClass(d.stage)}">${d.stage}</span></td>
+          <td><div class="co"><strong>${d.name}</strong><span>${d.sector}</span></div></td>
+          <td><span class="badge stage">${d.stage}</span></td>
           <td class="num">${fteLabel(d.fteBand)}</td>
           <td>
             <div class="num">${revLabel(d.revBand)}</div>
@@ -687,13 +734,13 @@
           <td class="num">${d.footprint.toFixed(1)} t/yr</td>
           <td class="num">${d.handprint > 0 ? "~" + d.handprint : "—"}</td>
           <td>
-            <div class="maturity"><span class="dot-l"></span>${MATURITY_LABEL[d.maturity]}</div>
-            <div style="font-size:0.78rem;color:var(--ink-3);margin-top:0.15rem">${d.integrity}% integrity</div>
+            <div class="maturity">${MATURITY_LABEL[d.maturity]}
+              <small>${d.integrity}% integrity</small>
+            </div>
           </td>
           <td>${trendHtml(d.eiTrend)}</td>
         </tr>`;
-      })
-      .join("");
+    }).join("");
   }
 
   function syncSortUI() {
@@ -718,49 +765,26 @@
     syncSortUI();
   }
 
-  document.getElementById("f-size").addEventListener("change", (e) => {
-    state.size = e.target.value;
-    render();
-  });
-  document.getElementById("f-rev").addEventListener("change", (e) => {
-    state.rev = e.target.value;
-    render();
-  });
-  document.getElementById("f-model").addEventListener("change", (e) => {
-    state.model = e.target.value;
-    render();
-  });
-  document.getElementById("f-maturity").addEventListener("change", (e) => {
-    state.maturity = Number(e.target.value);
-    render();
-  });
-  document.getElementById("f-q").addEventListener("input", (e) => {
-    state.q = e.target.value.trim();
-    render();
-  });
+  document.getElementById("f-size").addEventListener("change", (e) => { state.size = e.target.value; render(); });
+  document.getElementById("f-rev").addEventListener("change", (e) => { state.rev = e.target.value; render(); });
+  document.getElementById("f-model").addEventListener("change", (e) => { state.model = e.target.value; render(); });
+  document.getElementById("f-maturity").addEventListener("change", (e) => { state.maturity = Number(e.target.value); render(); });
+  document.getElementById("f-q").addEventListener("input", (e) => { state.q = e.target.value.trim(); render(); });
 
   document.getElementById("sort-pills").addEventListener("click", (e) => {
     const btn = e.target.closest("button[data-sort]");
     if (!btn) return;
     const key = btn.dataset.sort;
-    if (state.sort === key) {
-      state.dir = state.dir === "asc" ? "desc" : "asc";
-    } else {
-      state.sort = key;
-      state.dir = DEFAULT_DIR[key] || "asc";
-    }
+    if (state.sort === key) state.dir = state.dir === "asc" ? "desc" : "asc";
+    else { state.sort = key; state.dir = DEFAULT_DIR[key] || "asc"; }
     render();
   });
 
   document.querySelectorAll("th.sortable").forEach((th) => {
     th.addEventListener("click", () => {
       const key = th.dataset.sort;
-      if (state.sort === key) {
-        state.dir = state.dir === "asc" ? "desc" : "asc";
-      } else {
-        state.sort = key;
-        state.dir = DEFAULT_DIR[key] || "asc";
-      }
+      if (state.sort === key) state.dir = state.dir === "asc" ? "desc" : "asc";
+      else { state.sort = key; state.dir = DEFAULT_DIR[key] || "asc"; }
       render();
     });
   });
