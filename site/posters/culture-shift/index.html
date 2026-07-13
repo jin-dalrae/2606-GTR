@@ -83,7 +83,8 @@
       box-shadow: 0 22px 55px rgba(18, 24, 22, 0.14);
       padding: 0.26in 0.34in 0.2in;
       display: grid;
-      grid-template-rows: auto auto auto 1fr auto;
+      /* header · story · culture strip · footer */
+      grid-template-rows: auto 1fr auto auto;
       gap: 0.1in;
     }
 
@@ -177,6 +178,8 @@
       border-left: 5px solid var(--accent);
       border-radius: 10px;
       padding: 0.11in 0.12in;
+      /* Sits under the GTRock story — broader culture, not the lead */
+      flex-shrink: 0;
     }
 
     .shift-strip .intro {
@@ -607,38 +610,6 @@
       </div>
     </header>
 
-    <div class="shift-strip" aria-label="Culture shift the report is describing">
-      <div class="intro">
-        <div class="k">How the culture moves</div>
-        <strong>Five rooms where EI becomes normal</strong>
-      </div>
-      <div class="marker">
-        <div class="from">Burn multiple only</div>
-        <div class="to">EI / Revenue next to ARR</div>
-        <div class="where">Pitch decks</div>
-      </div>
-      <div class="marker">
-        <div class="from">Remote policy as flex</div>
-        <div class="to">tCO₂e per $1M on careers pages</div>
-        <div class="where">Hiring</div>
-      </div>
-      <div class="marker">
-        <div class="from">ESG slide at the end</div>
-        <div class="to">Intensity questions in first meeting</div>
-        <div class="where">Diligence</div>
-      </div>
-      <div class="marker">
-        <div class="from">Demo Day = product only</div>
-        <div class="to">Cohort EI shared with investors</div>
-        <div class="where">Accelerators</div>
-      </div>
-      <div class="marker">
-        <div class="from">Green claims as vibe</div>
-        <div class="to">Unbacked claims get socially expensive</div>
-        <div class="where">Peer pressure</div>
-      </div>
-    </div>
-
     <div class="news-grid">
       <div class="lead">
         <div class="lead-cols">
@@ -769,6 +740,38 @@
           </p>
         </div>
       </aside>
+    </div>
+
+    <div class="shift-strip" aria-label="Broader culture shift around EI">
+      <div class="intro">
+        <div class="k">How the culture moves</div>
+        <strong>Five rooms where EI becomes normal</strong>
+      </div>
+      <div class="marker">
+        <div class="from">Burn multiple only</div>
+        <div class="to">EI / Revenue next to ARR</div>
+        <div class="where">Pitch decks</div>
+      </div>
+      <div class="marker">
+        <div class="from">Remote policy as flex</div>
+        <div class="to">tCO₂e per $1M on careers pages</div>
+        <div class="where">Hiring</div>
+      </div>
+      <div class="marker">
+        <div class="from">ESG slide at the end</div>
+        <div class="to">Intensity questions in first meeting</div>
+        <div class="where">Diligence</div>
+      </div>
+      <div class="marker">
+        <div class="from">Demo Day = product only</div>
+        <div class="to">Cohort EI shared with investors</div>
+        <div class="where">Accelerators</div>
+      </div>
+      <div class="marker">
+        <div class="from">Green claims as vibe</div>
+        <div class="to">Unbacked claims get socially expensive</div>
+        <div class="where">Peer pressure</div>
+      </div>
     </div>
 
     <footer class="foot">
