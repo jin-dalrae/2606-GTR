@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Culture Shift — GTRock &amp; Environmentally Friendly Capitalism</title>
-  <meta name="description" content="Newspaper tabloid: GTRock embeds EI metrics across its fund-of-funds portfolio — culture shift in venture capital, July 2026." />
+  <title>Culture Shift — How EI Becomes What We Brag About</title>
+  <meta name="description" content="Landscape tabloid on culture shift around Environmental Impact: EI intensity next to ARR, capital forcing new norms, GTRock case study." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" />
@@ -81,10 +81,10 @@
       position: relative;
       overflow: hidden;
       box-shadow: 0 22px 55px rgba(18, 24, 22, 0.14);
-      padding: 0.28in 0.36in 0.22in;
+      padding: 0.26in 0.34in 0.2in;
       display: grid;
-      grid-template-rows: auto auto 1fr auto;
-      gap: 0.1in;
+      grid-template-rows: auto auto auto 1fr auto;
+      gap: 0.09in;
     }
 
     .topbar {
@@ -114,43 +114,29 @@
       background: var(--ink);
     }
 
-    .rule-thin {
-      width: 100%;
-      height: 1px;
-      background: var(--line);
-    }
-
-    /* Newspaper masthead */
     .masthead {
       display: grid;
-      grid-template-columns: auto 1fr auto;
+      grid-template-columns: 1.6fr auto;
       gap: 0.25in;
       align-items: end;
     }
 
-    .series-tag {
-      font-family: var(--mono);
-      font-size: 8pt;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent-deep);
-      writing-mode: horizontal-tb;
-    }
-
-    .masthead-main h1 {
+    .masthead h1 {
       font-family: var(--serif);
       font-weight: 600;
-      font-size: 32pt;
+      font-size: 34pt;
       line-height: 0.92;
       letter-spacing: -0.025em;
     }
 
-    .masthead-main .sub {
+    .masthead .sub {
       font-family: var(--serif);
       font-style: italic;
-      font-size: 11pt;
+      font-size: 12pt;
+      line-height: 1.25;
       color: var(--ink-soft);
-      margin-top: 0.04in;
+      margin-top: 0.05in;
+      max-width: 12in;
     }
 
     .edition {
@@ -170,16 +156,88 @@
 
     .edition .date {
       font-family: var(--serif);
-      font-size: 14pt;
+      font-size: 13pt;
       font-weight: 500;
+    }
+
+    /* How culture shifts — strip */
+    .shift-strip {
+      display: grid;
+      grid-template-columns: auto repeat(5, 1fr);
+      gap: 0.08in;
+      align-items: stretch;
+      background: var(--panel);
+      border: 1.5px solid var(--line);
+      border-left: 5px solid var(--accent);
+      border-radius: 8px;
+      padding: 0.09in 0.12in;
+    }
+
+    .shift-strip .intro {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-right: 0.08in;
+      border-right: 1px solid var(--line);
+      min-width: 1.35in;
+    }
+
+    .shift-strip .intro .k {
+      font-family: var(--mono);
+      font-size: 6.5pt;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      margin-bottom: 0.03in;
+    }
+
+    .shift-strip .intro strong {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 11pt;
+      line-height: 1.15;
+    }
+
+    .marker {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0.07in 0.08in;
+      display: flex;
+      flex-direction: column;
+      gap: 0.03in;
+    }
+
+    .marker .from {
+      font-size: 7.2pt;
+      line-height: 1.25;
+      color: var(--ink-soft);
+      text-decoration: line-through;
+      text-decoration-color: color-mix(in oklab, var(--ink) 25%, transparent);
+    }
+
+    .marker .to {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 9pt;
+      line-height: 1.2;
       color: var(--ink);
     }
 
-    /* Body grid: lead + sidebar */
+    .marker .where {
+      font-family: var(--mono);
+      font-size: 6pt;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      margin-top: auto;
+    }
+
+    /* Main grid */
     .news-grid {
       display: grid;
-      grid-template-columns: 1.55fr 1fr;
-      gap: 0.16in;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 0.14in;
       min-height: 0;
       overflow: hidden;
     }
@@ -187,7 +245,7 @@
     .lead {
       display: flex;
       flex-direction: column;
-      gap: 0.08in;
+      gap: 0.07in;
       min-height: 0;
       overflow: hidden;
     }
@@ -219,15 +277,15 @@
     .lead h2 {
       font-family: var(--serif);
       font-weight: 600;
-      font-size: 16.5pt;
-      line-height: 1.1;
+      font-size: 14.5pt;
+      line-height: 1.12;
       letter-spacing: -0.015em;
     }
 
     .dek {
       font-family: var(--serif);
       font-style: italic;
-      font-size: 10pt;
+      font-size: 9.5pt;
       line-height: 1.3;
       color: var(--ink-soft);
     }
@@ -235,47 +293,42 @@
     .lead-cols {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.14in 0.16in;
+      gap: 0.12in 0.14in;
       flex: 1;
       min-height: 0;
     }
 
-    .lead-cols .body p {
-      font-size: 8.4pt;
-      line-height: 1.36;
+    .body p {
+      font-size: 8.1pt;
+      line-height: 1.34;
       color: var(--ink-soft);
-      margin-bottom: 0.07in;
+      margin-bottom: 0.06in;
     }
 
-    .lead-cols .body p strong {
-      color: var(--ink);
-      font-weight: 600;
-    }
-
-    .lead-cols .body p:last-child {
-      margin-bottom: 0;
-    }
+    .body p strong { color: var(--ink); font-weight: 600; }
+    .body p:last-child { margin-bottom: 0; }
 
     .quote {
       border-left: 3px solid var(--accent);
-      padding: 0.06in 0 0.06in 0.1in;
-      margin: 0.06in 0 0.08in;
+      padding: 0.05in 0 0.05in 0.09in;
+      margin: 0.05in 0 0.07in;
     }
 
     .quote p {
       font-family: var(--serif);
       font-style: italic;
-      font-size: 10pt;
+      font-size: 9.2pt;
       line-height: 1.25;
       color: var(--ink);
+      margin: 0;
     }
 
     .quote cite {
       display: block;
-      margin-top: 0.04in;
+      margin-top: 0.035in;
       font-family: var(--mono);
       font-style: normal;
-      font-size: 7pt;
+      font-size: 6.5pt;
       letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--ink-soft);
@@ -284,9 +337,9 @@
     .subhead {
       font-family: var(--serif);
       font-weight: 600;
-      font-size: 11pt;
+      font-size: 10pt;
       line-height: 1.15;
-      margin: 0.06in 0 0.05in;
+      margin: 0.05in 0 0.04in;
       color: var(--ink);
     }
 
@@ -294,7 +347,7 @@
     .sidebar {
       display: flex;
       flex-direction: column;
-      gap: 0.1in;
+      gap: 0.09in;
       min-height: 0;
     }
 
@@ -302,15 +355,15 @@
       background: var(--panel);
       border: 1.5px solid var(--line);
       border-radius: 8px;
-      padding: 0.1in 0.12in;
+      padding: 0.09in 0.11in;
       display: flex;
       flex-direction: column;
-      gap: 0.06in;
+      gap: 0.05in;
     }
 
     .panel .kicker {
       font-family: var(--mono);
-      font-size: 7pt;
+      font-size: 6.5pt;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--accent-deep);
@@ -319,60 +372,51 @@
     .panel h3 {
       font-family: var(--serif);
       font-weight: 500;
-      font-size: 12pt;
+      font-size: 11pt;
       line-height: 1.1;
     }
 
     .panel p.note {
-      font-size: 7.5pt;
-      line-height: 1.3;
+      font-size: 7.3pt;
+      line-height: 1.28;
       color: var(--ink-soft);
     }
 
-    /* Chart */
-    .chart {
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      padding: 0.08in 0.1in 0.06in;
-    }
-
-    .chart svg {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .chart-legend {
+    .norms {
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.08in 0.14in;
-      margin-top: 0.04in;
+      flex-direction: column;
+      gap: 0.04in;
+    }
+
+    .norm {
+      display: grid;
+      grid-template-columns: 0.9in 1fr;
+      gap: 0.06in;
+      align-items: baseline;
+      font-size: 7.5pt;
+      line-height: 1.28;
+      padding: 0.04in 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .norm:last-child { border-bottom: none; }
+
+    .norm .who {
       font-family: var(--mono);
       font-size: 6.5pt;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--ink-soft);
+      color: var(--clay-deep);
+      font-weight: 500;
     }
 
-    .chart-legend span::before {
-      content: "";
-      display: inline-block;
-      width: 0.12in;
-      height: 0.06in;
-      margin-right: 0.04in;
-      vertical-align: middle;
-      border-radius: 1px;
-    }
+    .norm .what { color: var(--ink-soft); }
+    .norm .what strong { color: var(--ink); font-weight: 600; }
 
-    .chart-legend .ei::before { background: var(--accent-deep); }
-    .chart-legend .ret::before { background: var(--clay); }
-
-    /* Flow diagram */
     .flow {
       display: grid;
       grid-template-columns: 1fr auto 1fr auto 1fr;
-      gap: 0.05in;
+      gap: 0.04in;
       align-items: center;
     }
 
@@ -380,13 +424,13 @@
       background: white;
       border: 1.5px solid var(--line);
       border-radius: 6px;
-      padding: 0.07in 0.06in;
+      padding: 0.06in 0.05in;
       text-align: center;
     }
 
     .flow-box .lbl {
       font-family: var(--mono);
-      font-size: 6pt;
+      font-size: 5.5pt;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--ink-soft);
@@ -396,7 +440,7 @@
       display: block;
       font-family: var(--serif);
       font-weight: 500;
-      font-size: 9pt;
+      font-size: 8.5pt;
       line-height: 1.15;
       margin-top: 0.02in;
     }
@@ -409,11 +453,48 @@
     .flow-arr {
       font-family: var(--mono);
       color: var(--accent-deep);
-      font-size: 11pt;
+      font-size: 10pt;
       text-align: center;
     }
 
-    /* Image frame */
+    .chart {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0.06in 0.08in 0.04in;
+    }
+
+    .chart svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.06in 0.12in;
+      margin-top: 0.03in;
+      font-family: var(--mono);
+      font-size: 6pt;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .chart-legend span::before {
+      content: "";
+      display: inline-block;
+      width: 0.1in;
+      height: 0.05in;
+      margin-right: 0.03in;
+      vertical-align: middle;
+      border-radius: 1px;
+    }
+
+    .chart-legend .ei::before { background: var(--accent-deep); }
+    .chart-legend .ret::before { background: var(--clay); }
+
     .img-frame {
       background: white;
       border: 1.5px solid var(--line);
@@ -427,7 +508,7 @@
 
     .img-frame img {
       width: 100%;
-      height: 1.65in;
+      height: 1.35in;
       object-fit: cover;
       object-position: top center;
       display: block;
@@ -435,10 +516,10 @@
     }
 
     .img-frame .cap {
-      padding: 0.06in 0.1in;
+      padding: 0.05in 0.09in;
       font-family: var(--mono);
-      font-size: 7pt;
-      letter-spacing: 0.04em;
+      font-size: 6.5pt;
+      letter-spacing: 0.03em;
       color: var(--ink-soft);
       border-top: 1px solid var(--line);
       line-height: 1.3;
@@ -448,51 +529,6 @@
       color: var(--ink);
       font-weight: 500;
     }
-
-    /* Stats strip */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.06in;
-    }
-
-    .stat {
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      padding: 0.07in 0.08in;
-      text-align: center;
-    }
-
-    .stat b {
-      display: block;
-      font-family: var(--serif);
-      font-size: 14pt;
-      font-weight: 500;
-      line-height: 1;
-      color: var(--accent-deep);
-    }
-
-    .stat span {
-      font-family: var(--mono);
-      font-size: 6.5pt;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--ink-soft);
-    }
-
-    .callout {
-      background: color-mix(in oklab, var(--clay) 8%, var(--panel));
-      border: 1.5px solid var(--line);
-      border-left: 4px solid var(--clay);
-      border-radius: 6px;
-      padding: 0.08in 0.1in;
-      font-size: 8pt;
-      line-height: 1.32;
-      color: var(--ink-soft);
-    }
-
-    .callout strong { color: var(--ink); }
 
     .foot {
       display: flex;
@@ -506,7 +542,7 @@
       text-transform: uppercase;
       color: var(--ink-soft);
       border-top: 2px solid var(--ink);
-      padding-top: 0.07in;
+      padding-top: 0.06in;
     }
 
     .foot strong {
@@ -544,230 +580,234 @@
 <body>
   <div class="chrome">
     <a href="../">← All posters</a>
-    <span>17 × 11 landscape · Markets desk · Print this page</span>
+    <span>17 × 11 landscape · Culture shift around EI · Print this page</span>
   </div>
 
-  <article class="poster" aria-label="Culture shift newspaper tabloid — GTRock EI across funds">
+  <article class="poster" aria-label="Culture shift around Environmental Impact — newspaper tabloid">
     <div>
       <div class="topbar">
         <span>04 · Culture shift · Climatico poster series</span>
-        <span><span class="dot" aria-hidden="true"></span>Markets · Venture capital · Capital allocation</span>
+        <span><span class="dot" aria-hidden="true"></span>What people brag about · Hire for · Ask for · Fund on</span>
       </div>
-      <div class="rule" aria-hidden="true" style="margin-top:0.07in"></div>
+      <div class="rule" aria-hidden="true" style="margin-top:0.06in"></div>
     </div>
 
     <header class="masthead">
-      <div class="series-tag">Culture<br/>Shift</div>
-      <div class="masthead-main">
-        <h1>Environmentally Friendly Capitalism</h1>
-        <p class="sub">When EI intensity sits next to returns — a fund-of-funds bets the culture of investing will follow the data.</p>
+      <div>
+        <h1>What we brag about changes</h1>
+        <p class="sub">
+          Culture shift around Environmental Impact: EI intensity becomes as legible as ARR —
+          on pitch decks, hiring pages, diligence checklists, and Demo Day. Capital is the lever that makes the new norms stick.
+        </p>
       </div>
       <div class="edition">
-        <div class="lbl">Published</div>
+        <div class="lbl">Case study dated</div>
         <div class="date">July 13, 2026</div>
         <div>Vol. Culture · No. 04</div>
         <div>Rae · Gabriel · Tej</div>
       </div>
     </header>
 
+    <!-- How culture shifts -->
+    <div class="shift-strip" aria-label="How culture shifts around EI">
+      <div class="intro">
+        <div class="k">How the culture moves</div>
+        <strong>Five rooms where EI becomes normal</strong>
+      </div>
+      <div class="marker">
+        <div class="from">Burn multiple only</div>
+        <div class="to">EI / Revenue next to ARR</div>
+        <div class="where">Pitch decks</div>
+      </div>
+      <div class="marker">
+        <div class="from">Remote policy as flex</div>
+        <div class="to">tCO₂e per $1M on the careers page</div>
+        <div class="where">Hiring</div>
+      </div>
+      <div class="marker">
+        <div class="from">ESG slide at the end</div>
+        <div class="to">Intensity questions in first meeting</div>
+        <div class="where">Diligence</div>
+      </div>
+      <div class="marker">
+        <div class="from">Demo Day = product only</div>
+        <div class="to">Cohort EI shared with investors</div>
+        <div class="where">Accelerators</div>
+      </div>
+      <div class="marker">
+        <div class="from">Green claims as vibe</div>
+        <div class="to">Unbacked claims get socially expensive</div>
+        <div class="where">Peer pressure</div>
+      </div>
+    </div>
+
     <div class="news-grid">
-      <!-- Lead article -->
       <div class="lead">
         <div class="story-meta">
-          <span class="sec">Lead · Capital markets</span>
+          <span class="sec">Case · How capital forces culture</span>
           <span class="sep" aria-hidden="true"></span>
           <span>July 13, 2026</span>
           <span class="sep" aria-hidden="true"></span>
-          <span>Fund of funds</span>
+          <span>Fund of funds → VCs → founders</span>
         </div>
         <h2>GTRock Bets on ‘Environmentally Friendly Capitalism’ by Embedding EI Metrics Across Its Entire Portfolio of Funds</h2>
         <p class="dek">
-          A rapidly growing hedge fund that invests in other funds now requires every underlying manager to track and report Environmental Impact — not as an ESG overlay, but as core investment process.
+          One fund-of-funds makes EI reporting a condition of capital access — a live example of how investment culture
+          shifts when the people who write the checks treat impact data like returns.
         </p>
 
         <div class="lead-cols">
           <div class="body">
             <p>
-              <strong>GTRock</strong>, which allocates capital across venture capital funds and accelerators —
-              including the recently launched <strong>GTR Partners</strong> accelerator — has quietly become
-              one of the most aggressive proponents of using environmental impact data to guide capital
-              allocation at scale. All underlying managers must track and report Environmental Impact (EI)
-              metrics as a core part of its investment process.
+              Culture does not change because founders suddenly love spreadsheets. It changes when
+              <strong>status, access, and capital</strong> start rewarding different numbers. That is the bet behind
+              <strong>GTRock</strong>: a rapidly growing fund of funds that invests in venture firms and accelerators —
+              including the new <strong>GTR Partners</strong> program — and requires every underlying manager to track
+              and report Environmental Impact (EI) as core process, not an ESG appendix.
             </p>
             <p>
-              Rather than treating environmental performance as a separate ESG overlay, GTRock integrates
-              <strong>EI intensity</strong>, progress tracking, and portfolio-level impact data directly into
-              fund selection, monitoring, and capital deployment. The firm argues this aligns large pools of
-              capital with measurable environmental outcomes while still targeting strong financial returns.
+              Instead of a separate sustainability overlay, GTRock folds <strong>EI intensity</strong>, progress tracking,
+              and portfolio-level impact into selection, monitoring, and deployment. The claim is cultural as much as
+              financial: if LPs and FoFs ask hard EI questions, VCs will ask founders; if VCs ask, founders will design
+              for better intensity from day one.
             </p>
             <blockquote class="quote">
               <p>“Capital is the most powerful lever we have to shift corporate behavior at speed. By applying rigorous EI measurement not just to companies, but to the funds that back them, we can influence investment culture from the top down.”</p>
-              <cite>Elena Vargas · Chief Investment Officer · GTRock</cite>
+              <cite>Elena Vargas · CIO · GTRock</cite>
             </blockquote>
-            <h3 class="subhead">A fund-of-funds approach to accountability</h3>
+            <h3 class="subhead">Why intermediaries matter for culture</h3>
             <p>
-              Unlike traditional hedge funds or impact vehicles that invest directly in companies, GTRock
-              operates primarily as a <strong>fund of funds</strong>. It selects venture firms and specialized
-              accelerators, then uses that position to push for standardized EI tracking across those portfolios.
+              Direct company-level ESG often stays a reporting chore. A fund-of-funds that only writes checks when
+              managers can show EI dashboards changes the <strong>norms of the room</strong> — what is embarrassing not
+              to know, what belongs on a fundraising deck, what partners compare after Demo Day.
             </p>
             <p>
-              Managers seeking GTRock’s capital must demonstrate not only historical financial performance but
-              also the ability to collect, report, and act on environmental data from portfolio companies —
-              using portfolio-level EI dashboards and intensity metrics the firm has codified internally.
+              Early-stage funds long treated environmental tracking as operationally heavy. Making it a
+              <strong>condition of investment</strong> pulls the practice earlier. GTR Partners, built to help founders
+              integrate EI measurement from day one, is part of that stack: infrastructure plus expectation.
             </p>
           </div>
 
           <div class="body">
+            <h3 class="subhead">From ESG theater to shared language</h3>
             <p>
-              In venture, many early-stage funds once treated detailed environmental tracking as operationally
-              burdensome. By making EI reporting a <strong>condition of investment</strong>, GTRock is pressuring
-              smaller managers to adopt these practices earlier. GTR Partners — the accelerator launched this year
-              to help founders integrate EI measurement from day one — is among the vehicles now backed by the firm.
-              Observers see a deliberate strategy: fund both the infrastructure and the cultural shift.
-            </p>
-            <h3 class="subhead">Aiming to redefine investment norms</h3>
-            <p>
-              GTRock’s leadership has been vocal about moving beyond traditional ESG approaches it views as too
-              superficial or inconsistently applied. Instead it advocates <strong>“environmentally friendly
-              capitalism”</strong> — environmental impact data treated with the same rigor as financial returns.
+              GTRock frames its ambition as <strong>“environmentally friendly capitalism”</strong> — impact data held
+              to the same rigor as returns. That is a culture claim: not a niche impact fund on the side, but a
+              mainstream allocation style where intensity sits next to performance.
             </p>
             <p>
-              The firm claims its portfolio of underlying funds has shown improving EI metrics without sacrificing
-              returns, though it has not yet released detailed third-party verified performance data. Critics note
-              fund-of-funds strategies still struggle with high-quality, comparable data from managers —
-              especially Scope 3.
-            </p>
-            <p>
-              Still, scale and willingness to tie capital access to EI practices have made GTRock influential.
-              Several VCs who pitched the firm described diligence as notably more rigorous on environmental
-              metrics than usual.
+              The firm says underlying funds have improved EI metrics without sacrificing returns, but has not released
+              third-party verified detail. Critics still flag weak Scope 3 and incomparable manager data. Culture can
+              outrun measurement quality — which is why verification and shared definitions still matter.
             </p>
             <blockquote class="quote">
               <p>“Five years ago, almost no one asked these questions during fundraising. Now it’s becoming part of the conversation, whether you like it or not.”</p>
-              <cite>VC partner · fund recently allocated by GTRock</cite>
+              <cite>VC partner · recently allocated by GTRock</cite>
             </blockquote>
-            <h3 class="subhead">Implications for the broader market</h3>
+            <h3 class="subhead">What “culture shifted” looks like</h3>
             <p>
-              If the model gains traction, standardized environmental measurement could push deeper into venture
-              and private markets. By focusing on intermediaries — VCs and accelerators — rather than only
-              individual companies, GTRock is trying to create systemic pressure for better data and decisions
-              at earlier stages of company building. Whether it delivers both meaningful environmental gains and
-              competitive returns at scale remains open. For now, the firm is a test case for integrated
-              capitalism — and says it will publish more detailed portfolio-level EI and return data next year.
+              Founders brag about <strong>EI / Revenue</strong> the way they brag about ARR and burn. Hiring pages show
+              intensity next to remote policy. Customers request intensity the way they request security questionnaires.
+              Green claims without evidence become socially expensive, not only legally risky.
+            </p>
+            <p>
+              If FoF models like GTRock scale, the pressure hits <strong>before Series A</strong> — when product and
+              supplier choices still set the trajectory. Whether environmental gains and returns hold together at scale
+              is open. The cultural signal is already clear: the questions have entered the room.
             </p>
           </div>
         </div>
       </div>
 
-      <!-- Sidebar visuals -->
-      <aside class="sidebar" aria-label="Graphics and context">
+      <aside class="sidebar" aria-label="Culture mechanics and case graphics">
         <div class="panel">
-          <div class="kicker">Illustrative · Portfolio view</div>
-          <h3>EI intensity vs. returns</h3>
-          <p class="note">Hypothetical path for GTRock’s underlying-fund book: falling intensity, stable returns. Not third-party verified.</p>
-          <div class="chart" aria-hidden="true">
-            <svg viewBox="0 0 320 120" xmlns="http://www.w3.org/2000/svg" role="img">
-              <!-- grid -->
-              <line x1="36" y1="10" x2="36" y2="95" stroke="#ccc" stroke-width="1"/>
-              <line x1="36" y1="95" x2="310" y2="95" stroke="#ccc" stroke-width="1"/>
-              <line x1="36" y1="30" x2="310" y2="30" stroke="#e8e4dc" stroke-width="1"/>
-              <line x1="36" y1="55" x2="310" y2="55" stroke="#e8e4dc" stroke-width="1"/>
-              <line x1="36" y1="75" x2="310" y2="75" stroke="#e8e4dc" stroke-width="1"/>
-              <!-- EI intensity declining -->
-              <polyline
-                fill="none"
-                stroke="#2d6b4f"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                points="44,28 90,38 140,48 190,58 240,72 300,82"
-              />
-              <circle cx="44" cy="28" r="3" fill="#2d6b4f"/>
-              <circle cx="300" cy="82" r="3" fill="#2d6b4f"/>
-              <!-- Returns flat/up slight -->
-              <polyline
-                fill="none"
-                stroke="#a65c28"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-dasharray="4 3"
-                points="44,68 90,66 140,64 190,62 240,58 300,52"
-              />
-              <circle cx="44" cy="68" r="2.5" fill="#a65c28"/>
-              <circle cx="300" cy="52" r="2.5" fill="#a65c28"/>
-              <!-- labels -->
-              <text x="44" y="108" font-family="IBM Plex Mono, monospace" font-size="8" fill="#777">’22</text>
-              <text x="130" y="108" font-family="IBM Plex Mono, monospace" font-size="8" fill="#777">’24</text>
-              <text x="220" y="108" font-family="IBM Plex Mono, monospace" font-size="8" fill="#777">’25</text>
-              <text x="285" y="108" font-family="IBM Plex Mono, monospace" font-size="8" fill="#777">’26</text>
-              <text x="4" y="32" font-family="IBM Plex Mono, monospace" font-size="7" fill="#777">high</text>
-              <text x="6" y="92" font-family="IBM Plex Mono, monospace" font-size="7" fill="#777">low</text>
-            </svg>
-            <div class="chart-legend">
-              <span class="ei">EI intensity (↓ better)</span>
-              <span class="ret">Financial returns</span>
+          <div class="kicker">Who changes what they value</div>
+          <h3>New status signals around EI</h3>
+          <div class="norms">
+            <div class="norm">
+              <span class="who">Founders</span>
+              <span class="what">Brag about <strong>EI intensity</strong> with ARR — not only growth</span>
+            </div>
+            <div class="norm">
+              <span class="who">VCs</span>
+              <span class="what">Ask for intensity in diligence — not only unit economics</span>
+            </div>
+            <div class="norm">
+              <span class="who">Accelerators</span>
+              <span class="what">Ship cohort EI to investors before Demo Day</span>
+            </div>
+            <div class="norm">
+              <span class="who">LPs / FoFs</span>
+              <span class="what">Make EI capability a <strong>condition of capital</strong></span>
+            </div>
+            <div class="norm">
+              <span class="who">Peers</span>
+              <span class="what">Unverified “green” claims lose social cover</span>
             </div>
           </div>
         </div>
 
         <div class="panel">
-          <div class="kicker">How capital pressure flows</div>
-          <div class="flow" aria-label="Capital flow diagram">
+          <div class="kicker">Mechanism · Top-down norms</div>
+          <div class="flow" aria-label="How capital rewrites culture">
             <div class="flow-box hi">
-              <div class="lbl">LPs</div>
+              <div class="lbl">Capital</div>
               <strong>GTRock</strong>
             </div>
             <div class="flow-arr">→</div>
             <div class="flow-box">
-              <div class="lbl">Managers</div>
-              <strong>VCs · GTR</strong>
+              <div class="lbl">Culture</div>
+              <strong>VC habits</strong>
             </div>
             <div class="flow-arr">→</div>
             <div class="flow-box">
-              <div class="lbl">Founders</div>
-              <strong>EI from day 1</strong>
+              <div class="lbl">Practice</div>
+              <strong>Founder EI</strong>
             </div>
           </div>
-          <p class="note">Access to capital requires EI reporting at each hop — culture shifts top-down.</p>
+          <p class="note">Access → expectations → habits. Culture follows what gets funded.</p>
         </div>
 
-        <div class="stats">
-          <div class="stat">
-            <b>FoF</b>
-            <span>Structure</span>
-          </div>
-          <div class="stat">
-            <b>EI</b>
-            <span>Mandatory</span>
-          </div>
-          <div class="stat">
-            <b>GTR</b>
-            <span>Accelerator</span>
+        <div class="panel">
+          <div class="kicker">Illustrative · Case portfolio</div>
+          <h3>Intensity can fall while returns hold</h3>
+          <p class="note">Hypothetical path under FoF pressure — not third-party verified.</p>
+          <div class="chart" aria-hidden="true">
+            <svg viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg">
+              <line x1="36" y1="8" x2="36" y2="82" stroke="#ccc" stroke-width="1"/>
+              <line x1="36" y1="82" x2="310" y2="82" stroke="#ccc" stroke-width="1"/>
+              <line x1="36" y1="28" x2="310" y2="28" stroke="#e8e4dc" stroke-width="1"/>
+              <line x1="36" y1="50" x2="310" y2="50" stroke="#e8e4dc" stroke-width="1"/>
+              <polyline fill="none" stroke="#2d6b4f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                points="44,22 90,32 140,42 190,52 240,64 300,72"/>
+              <polyline fill="none" stroke="#a65c28" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 3"
+                points="44,58 90,56 140,54 190,52 240,48 300,42"/>
+              <text x="44" y="96" font-family="IBM Plex Mono, monospace" font-size="8" fill="#777">’22</text>
+              <text x="285" y="96" font-family="IBM Plex Mono, monospace" font-size="8" fill="#777">’26</text>
+            </svg>
+            <div class="chart-legend">
+              <span class="ei">EI intensity ↓</span>
+              <span class="ret">Returns</span>
+            </div>
           </div>
         </div>
 
         <figure class="img-frame">
           <img
             src="./assets/dashboard-sketch.jpg"
-            alt="Sketch of an environmental impact portfolio dashboard used in GTR fieldwork"
+            alt="Fieldwork sketch of an environmental impact dashboard"
             width="800"
             height="500"
           />
           <figcaption class="cap">
-            <strong>Portfolio EI dashboard</strong> — fieldwork sketch of the kind of intensity and progress views managers are expected to maintain under GTRock diligence.
+            <strong>What “normal” looks like</strong> — portfolio EI views that VCs and accelerators start to expect once capital asks.
           </figcaption>
         </figure>
-
-        <div class="callout">
-          <strong>Next year:</strong> GTRock says it will publish more detailed portfolio-level EI and return data —
-          the missing piece for skeptics who want verified “green without sacrifice” claims.
-        </div>
       </aside>
     </div>
 
     <footer class="foot">
-      <span>Climatico · Culture shift · Markets</span>
+      <span>Climatico · Culture shift around EI</span>
       <strong>gtr1.web.app/midterm/posters</strong>
       <span>17 × 11 landscape · Rae · Gabriel · Tej</span>
     </footer>
