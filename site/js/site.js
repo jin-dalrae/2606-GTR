@@ -32,7 +32,7 @@
         const depthAfter = parts.length - idx - 1;
         return depthAfter === 0 ? "../" : "../".repeat(depthAfter + 1);
       }
-      const roots = new Set(["research", "prototype", "vision", "app", "gtr"]);
+      const roots = new Set(["research", "prototype", "vision", "leaderboard", "app", "gtr"]);
       if (parts.some((p) => roots.has(p))) return "../";
       return "./";
     }
@@ -48,6 +48,7 @@
     { href: base + "index.html", id: "home", label: "Home" },
     { href: base + "research/", id: "research", label: "Research" },
     { href: base + "prototype/", id: "prototype", label: "Prototype" },
+    { href: base + "leaderboard/", id: "leaderboard", label: "Leaderboard" },
     { href: base + "vision/", id: "vision", label: "Vision" },
   ];
 
@@ -57,6 +58,7 @@
     if (path.includes("/prototype") && !path.includes("prototype1") && !path.includes("prototype2")) {
       return "prototype";
     }
+    if (path.includes("/leaderboard")) return "leaderboard";
     if (path.includes("/vision")) return "vision";
     return "home";
   }
@@ -110,6 +112,7 @@
             <li><a href="${base}research/">Research library</a></li>
             <li><a href="${gtr}">Evidence archive</a></li>
             <li><a href="${base}prototype/">Interactive prototype</a></li>
+            <li><a href="${base}leaderboard/">Leaderboard prototype</a></li>
             <li><a href="${base}vision/">Next vision</a></li>
           </ul>
         </div>
@@ -117,6 +120,7 @@
           <h4>Also in this build</h4>
           <ul>
             <li><a href="${base}app/">Full product demo</a></li>
+            <li><a href="${base}leaderboard/">Impact leaderboard</a></li>
             <li><a href="${base}prototype2/">Dashboard prototype</a></li>
             <li><a href="${gtr}docs/fieldwork-report/">Fieldwork report</a></li>
             <li><a href="${gtr}docs/stage-1/">Stage 1 PRD</a></li>

@@ -12,6 +12,7 @@ Public multipage site served under **`/midterm/`**.
 | `/midterm/gtr/` | Evidence archive (reports + PRDs) |
 | `/midterm/prototype/` | Guided Prototype 1 |
 | `/midterm/vision/` | Next vision |
+| `/midterm/leaderboard/` | Stage/size/revenue leaderboard prototype |
 | `/midterm/app/` | Full product demo |
 
 ## Commands
