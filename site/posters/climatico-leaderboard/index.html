@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>In 2028 San Francisco, Startups Are Now Competing on the Climatico Leaderboard — and It’s Getting Personal</title>
+  <meta name="description" content="March 15, 2028: SF startups compete on EI intensity via the Climatico Leaderboard — investors, customers, and EI Reduction Hackathons." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: oklch(0.976 0.008 85);
+      --panel: oklch(0.948 0.01 85);
+      --ink: oklch(0.22 0.02 255);
+      --ink-soft: oklch(0.46 0.016 255);
+      --line: oklch(0.85 0.012 90);
+      --accent: oklch(0.56 0.11 155);
+      --accent-deep: oklch(0.4 0.07 160);
+      --clay: oklch(0.56 0.11 55);
+      --clay-deep: oklch(0.42 0.08 55);
+      --serif: "Newsreader", Georgia, serif;
+      --sans: "IBM Plex Sans", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+      --poster-w: 17in;
+      --poster-h: 11in;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    @page {
+      size: 17in 11in;
+      margin: 0;
+    }
+
+    html, body {
+      background: #d8d4cb;
+      color: var(--ink);
+      font-family: var(--sans);
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem 1rem 2rem;
+      overflow-x: auto;
+    }
+
+    .chrome {
+      width: 17in;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .chrome a {
+      color: var(--accent-deep);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .chrome a:hover { text-decoration: underline; }
+
+    .print-stage {
+      display: flex;
+      justify-content: center;
+      margin: 0 auto;
+      overflow: visible;
+    }
+
+    .poster {
+      width: var(--poster-w);
+      height: var(--poster-h);
+      flex-shrink: 0;
+      background: var(--paper);
+      color: var(--ink);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 22px 55px rgba(18, 24, 22, 0.14);
+      padding: 0.18in 0.26in 0.14in;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 0.08in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 10.5pt;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .topbar .dot {
+      width: 0.11in;
+      height: 0.11in;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+      margin-right: 0.08in;
+      vertical-align: middle;
+    }
+
+    .rule {
+      width: 100%;
+      height: 2.5px;
+      background: var(--ink);
+      margin-top: 0.05in;
+    }
+
+    .masthead {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.22in;
+      align-items: end;
+    }
+
+    .masthead .kicker {
+      font-family: var(--mono);
+      font-size: 9pt;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      margin-bottom: 0.03in;
+    }
+
+    .masthead h1 {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 22pt;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      max-width: 13.4in;
+    }
+
+    .masthead .byline {
+      margin-top: 0.05in;
+      font-size: 11.5pt;
+      line-height: 1.3;
+      color: var(--ink-soft);
+    }
+
+    .masthead .byline strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .edition {
+      text-align: right;
+      font-family: var(--mono);
+      font-size: 10.5pt;
+      line-height: 1.4;
+      white-space: nowrap;
+      padding: 0.08in 0.12in;
+      border: 1.5px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      min-width: 2.35in;
+    }
+
+    .edition .lbl {
+      font-size: 9pt;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      font-weight: 500;
+    }
+
+    .edition .date {
+      font-family: var(--serif);
+      font-size: 16pt;
+      font-weight: 500;
+      text-transform: none;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin: 0.03in 0 0.04in;
+      line-height: 1.1;
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 0.92fr;
+      gap: 0.12in;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .col {
+      min-height: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 0.06in;
+      padding-right: 0.1in;
+      border-right: 1px solid var(--line);
+    }
+
+    .col:nth-child(3) {
+      border-right: none;
+      padding-right: 0;
+    }
+
+    .col p {
+      font-size: 10.5pt;
+      line-height: 1.32;
+      color: var(--ink-soft);
+    }
+
+    .col p strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .col p + p { margin-top: 0.06in; }
+
+    .subhead {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 13pt;
+      line-height: 1.12;
+      color: var(--ink);
+      margin: 0.04in 0 0.02in;
+      padding-top: 0.05in;
+      border-top: 1.5px solid var(--line);
+    }
+
+    .subhead:first-child {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .quote {
+      border-left: 3.5px solid var(--accent);
+      padding: 0.04in 0 0.04in 0.09in;
+      margin: 0.06in 0;
+    }
+
+    .quote p {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 11pt;
+      line-height: 1.28;
+      color: var(--ink);
+      margin: 0 !important;
+    }
+
+    .quote cite {
+      display: block;
+      margin-top: 0.04in;
+      font-family: var(--mono);
+      font-style: normal;
+      font-size: 8.5pt;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 0.08in;
+      min-height: 0;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1.5px solid var(--line);
+      border-radius: 8px;
+      padding: 0.1in 0.11in;
+      display: flex;
+      flex-direction: column;
+      gap: 0.06in;
+    }
+
+    .panel.grow {
+      flex: 1;
+      min-height: 0;
+    }
+
+    .panel .kicker {
+      font-family: var(--mono);
+      font-size: 9pt;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      font-weight: 500;
+    }
+
+    .panel h3 {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 13.5pt;
+      line-height: 1.12;
+    }
+
+    .panel .note {
+      font-size: 10pt;
+      line-height: 1.28;
+      color: var(--ink-soft);
+    }
+
+    .board {
+      background: white;
+      border: 1.5px solid var(--line);
+      border-radius: 7px;
+      overflow: hidden;
+    }
+
+    .board-row {
+      display: grid;
+      grid-template-columns: 0.42in 1fr auto;
+      gap: 0.06in;
+      align-items: center;
+      padding: 0.07in 0.09in;
+      border-bottom: 1px solid var(--line);
+      font-size: 10.5pt;
+    }
+
+    .board-row:last-child { border-bottom: none; }
+
+    .board-row .rank {
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 11pt;
+      color: var(--ink-soft);
+    }
+
+    .board-row .name {
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.15;
+    }
+
+    .board-row .meta {
+      display: block;
+      font-family: var(--mono);
+      font-size: 8pt;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-top: 0.015in;
+    }
+
+    .board-row .delta {
+      font-family: var(--mono);
+      font-size: 9.5pt;
+      font-weight: 500;
+      color: var(--accent-deep);
+      white-space: nowrap;
+    }
+
+    .board-row.hi {
+      background: color-mix(in oklab, var(--accent) 10%, white);
+    }
+
+    .board-row.hi .rank { color: var(--accent-deep); }
+
+    .board-row.chase .delta { color: var(--clay-deep); }
+
+    .beats {
+      display: flex;
+      flex-direction: column;
+      gap: 0.05in;
+    }
+
+    .beat {
+      background: white;
+      border: 1.5px solid var(--line);
+      border-radius: 6px;
+      padding: 0.07in 0.09in;
+    }
+
+    .beat .lbl {
+      font-family: var(--mono);
+      font-size: 8.5pt;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--clay-deep);
+      font-weight: 500;
+      margin-bottom: 0.02in;
+    }
+
+    .beat p {
+      font-size: 10.5pt;
+      line-height: 1.25;
+      color: var(--ink-soft);
+    }
+
+    .beat p strong { color: var(--ink); font-weight: 600; }
+
+    .dash-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.06in;
+    }
+
+    .dash {
+      background: white;
+      border: 1.5px solid var(--line);
+      border-radius: 6px;
+      padding: 0.08in;
+      text-align: center;
+    }
+
+    .dash .lbl {
+      font-family: var(--mono);
+      font-size: 8pt;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .dash strong {
+      display: block;
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 12pt;
+      margin-top: 0.03in;
+      line-height: 1.15;
+    }
+
+    .dash.ei {
+      border-color: color-mix(in oklab, var(--accent) 40%, var(--line));
+      background: color-mix(in oklab, var(--accent) 8%, white);
+    }
+
+    .dash.ei strong { color: var(--accent-deep); }
+
+    .foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.15in;
+      font-family: var(--mono);
+      font-size: 9.5pt;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      border-top: 2px solid var(--ink);
+      padding-top: 0.05in;
+    }
+
+    .foot strong {
+      color: var(--accent-deep);
+      font-weight: 500;
+    }
+
+    @media print {
+      .print-stage {
+        width: auto !important;
+        height: auto !important;
+        background: transparent !important;
+      }
+      .poster { transform: none !important; }
+      html, body {
+        background: #fff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 17in;
+        height: 11in;
+        min-height: 0 !important;
+        -webkit-print-color-adjust: economy;
+        print-color-adjust: economy;
+      }
+      .chrome { display: none !important; }
+      .poster {
+        width: 17in;
+        height: 11in;
+        box-shadow: none;
+        margin: 0;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="chrome">
+    <a href="../">← All posters</a>
+    <span>17 × 11 landscape tabloid · Fixed print size</span>
+  </div>
+
+  <article class="poster" aria-label="2028 San Francisco Climatico Leaderboard news report">
+    <div>
+      <div class="topbar">
+        <span>Climatico news · Tech &amp; climate</span>
+        <span><span class="dot" aria-hidden="true"></span>San Francisco · Leaderboard culture</span>
+      </div>
+      <div class="rule" aria-hidden="true"></div>
+    </div>
+
+    <header class="masthead">
+      <div>
+        <div class="kicker">Hypothetical dispatch · 2028</div>
+        <h1>In 2028 San Francisco, Startups Are Now Competing on the Climatico Leaderboard — and It’s Getting Personal</h1>
+        <p class="byline">
+          By <strong>Tech &amp; Climate Correspondent</strong>
+        </p>
+      </div>
+      <div class="edition">
+        <div class="lbl">Published</div>
+        <div class="date">March 15, 2028</div>
+        <div>San Francisco</div>
+        <div>EI intensity race</div>
+      </div>
+    </header>
+
+    <div class="news-grid">
+      <!-- Col 1 · Lead -->
+      <div class="col">
+        <p>
+          In San Francisco’s startup scene, two dashboards now sit side by side on most founders’ screens. One tracks revenue and growth. The other? Their company’s rank on the Climatico Leaderboard.
+        </p>
+        <p>
+          What started as a quiet tool for measuring environmental impact has turned into something closer to a public scoreboard. Startups are openly competing on Environmental Impact (EI) intensity — emissions per dollar of revenue — and many are treating their position on the leaderboard with the same seriousness as their monthly recurring revenue.
+        </p>
+        <blockquote class="quote">
+          <p>“Last month we jumped from 47th to 19th after switching one of our cloud regions and renegotiating with two suppliers,” said Lila Chen, co-founder of Looply, a Series A logistics startup. “I may or may not have sent a screenshot to our biggest competitor with a smiley face. It got a little competitive.”</p>
+          <cite>Lila Chen · Co-founder · Looply</cite>
+        </blockquote>
+        <p>
+          The leaderboard, powered by Climatico, now ranks hundreds of Bay Area startups. Many teams have integrated AI agents that automatically update their EI data, turning what used to be a dreaded monthly reporting task into something closer to background infrastructure.
+        </p>
+      </div>
+
+      <!-- Col 2 · Investors + hackathons open -->
+      <div class="col">
+        <h3 class="subhead">Investors and Customers Are Checking Daily</h3>
+        <p>
+          The public nature of the rankings has changed external dynamics too. Several venture firms now regularly review the leaderboard during sourcing and due diligence. Some enterprise customers have also started referencing it during procurement conversations.
+        </p>
+        <blockquote class="quote">
+          <p>“We used to get vague sustainability slides in pitch decks,” said Marcus Hale, a partner at a climate-focused fund. “Now I can just open the leaderboard and see how a company is actually trending. It saves everyone a lot of time — and it’s surprisingly addictive to watch the rankings move.”</p>
+          <cite>Marcus Hale · Partner · Climate-focused fund</cite>
+        </blockquote>
+        <h3 class="subhead">Hackathons Turn EI Reduction Into a Sport</h3>
+        <p>
+          Perhaps the most visible sign of this shift is the rise of EI Reduction Hackathons — weekend events where startup teams compete to lower their environmental impact without damaging revenue.
+        </p>
+        <p>
+          At one recent hackathon in the Mission District, a team from a food-tech startup discovered that simply changing the default packaging option for one product line could cut their EI intensity by 11% with almost no effect on margins. The moment was captured on video and quickly went viral in local founder group chats.
+        </p>
+      </div>
+
+      <!-- Col 3 · Hackathons close + rivalry -->
+      <div class="col">
+        <blockquote class="quote">
+          <p>“We treated it like a game,” said Jamal Reyes, who participated in the event. “Our AI agent kept suggesting weird little optimizations — like changing our email service provider. We didn’t expect it to matter, but it actually moved the needle. We ended up winning second place and a case of fancy oat milk.”</p>
+          <cite>Jamal Reyes · EI Reduction Hackathon</cite>
+        </blockquote>
+        <p>
+          Another team reportedly spent most of the weekend arguing over whether switching their office coffee brand counted as a legitimate optimization. (It did — barely.)
+        </p>
+        <h3 class="subhead">A New Kind of Startup Rivalry</h3>
+        <p>
+          The combination of public rankings, AI-assisted tracking, and regular hackathons has created a noticeably different atmosphere among early-stage companies in San Francisco. While growth remains the main priority, environmental performance has become a visible second axis of competition — and sometimes friendly trash talk.
+        </p>
+        <blockquote class="quote">
+          <p>“I check the leaderboard more often than I check our competitor’s website now,” admitted Sofia Patel, co-founder of a climate-focused SaaS startup currently sitting in the top 15. “There’s one company right above us that we’re constantly trying to beat. We’ve never met them, but we definitely have strong opinions about their packaging choices.”</p>
+          <cite>Sofia Patel · Co-founder · Top-15 SaaS</cite>
+        </blockquote>
+        <p>
+          Not everyone is thrilled about the growing transparency. Some founders have expressed concern that early-stage companies with inherently higher-impact models could be unfairly judged. Others worry about the pressure of constant visibility.
+        </p>
+        <p>
+          Still, for many in the ecosystem, the leaderboard has made environmental performance feel more immediate, comparable, and — unexpectedly — a little fun.
+        </p>
+        <blockquote class="quote">
+          <p>“It used to feel like this heavy, abstract thing you were supposed to care about,” said Chen of Looply. “Now it’s just part of the game. And honestly? The game is more interesting when there are real numbers on the board.”</p>
+          <cite>Lila Chen · Looply</cite>
+        </blockquote>
+        <p>
+          Whether this new form of competition will drive meaningful environmental improvements at scale is still unclear. But in San Francisco right now, it has already changed how many founders measure success — and how they talk about it over coffee (oat milk or otherwise).
+        </p>
+      </div>
+
+      <!-- Sidebar · scoreboard chrome -->
+      <aside class="sidebar" aria-label="Leaderboard snapshot">
+        <div class="panel">
+          <div class="kicker">Two dashboards, one desk</div>
+          <div class="dash-pair">
+            <div class="dash">
+              <div class="lbl">Still tracking</div>
+              <strong>Revenue &amp; growth</strong>
+            </div>
+            <div class="dash ei">
+              <div class="lbl">Now also</div>
+              <strong>Climatico rank</strong>
+            </div>
+          </div>
+          <p class="note">EI intensity = emissions per dollar of revenue — treated with the same seriousness as MRR.</p>
+        </div>
+
+        <div class="panel grow">
+          <div class="kicker">Bay Area snapshot · from the piece</div>
+          <h3>Climatico Leaderboard</h3>
+          <div class="board" aria-label="Illustrative ranks mentioned in the article">
+            <div class="board-row">
+              <span class="rank">…</span>
+              <span class="name">Top 15 SaaS<span class="meta">Sofia Patel’s company</span></span>
+              <span class="delta">↑ chase</span>
+            </div>
+            <div class="board-row chase">
+              <span class="rank">14?</span>
+              <span class="name">Packaging rival<span class="meta">“right above us”</span></span>
+              <span class="delta">target</span>
+            </div>
+            <div class="board-row hi">
+              <span class="rank">19</span>
+              <span class="name">Looply<span class="meta">Series A logistics</span></span>
+              <span class="delta">↑ from 47</span>
+            </div>
+            <div class="board-row">
+              <span class="rank">…</span>
+              <span class="name">Hundreds ranked<span class="meta">Bay Area startups</span></span>
+              <span class="delta">live</span>
+            </div>
+          </div>
+          <p class="note">Ranks and moves drawn only from quotes in this dispatch — not a full live board.</p>
+        </div>
+
+        <div class="panel">
+          <div class="kicker">How the culture shows up</div>
+          <div class="beats">
+            <div class="beat">
+              <div class="lbl">Capital &amp; buyers</div>
+              <p>VCs review ranks in sourcing &amp; diligence; enterprise buyers reference them in procurement.</p>
+            </div>
+            <div class="beat">
+              <div class="lbl">Sport</div>
+              <p><strong>EI Reduction Hackathons</strong> — lower impact without damaging revenue. Mission District: <strong>−11%</strong> intensity via packaging default.</p>
+            </div>
+            <div class="beat">
+              <div class="lbl">Infrastructure</div>
+              <p>AI agents auto-update EI data — reporting as background, not a dreaded monthly task.</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="foot">
+      <span>Climatico · News desk · March 15, 2028</span>
+      <span><strong>Tech &amp; climate · San Francisco</strong></span>
+    </footer>
+  </article>
+  <script src="../print-preview.js"></script>
+</body>
+</html>
