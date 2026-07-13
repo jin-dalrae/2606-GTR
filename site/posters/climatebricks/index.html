@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Climatebricks — Reference for Climatico</title>
+  <meta name="description" content="Climatebricks: modular climate bricks for early startups — why it matters for Climatico. 17×11 landscape reference poster." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: oklch(0.976 0.008 85);
+      --panel: oklch(0.948 0.01 85);
+      --ink: oklch(0.24 0.02 255);
+      --ink-soft: oklch(0.42 0.016 255);
+      --line: oklch(0.85 0.012 90);
+      --accent: oklch(0.56 0.11 155);
+      --accent-deep: oklch(0.4 0.07 160);
+      --clay: oklch(0.56 0.11 55);
+      --clay-deep: oklch(0.42 0.08 55);
+      --serif: "Newsreader", Georgia, serif;
+      --sans: "IBM Plex Sans", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+      --poster-w: 17in;
+      --poster-h: 11in;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    @page { size: 17in 11in; margin: 0; }
+
+    html, body {
+      background: #d8d4cb;
+      color: var(--ink);
+      font-family: var(--sans);
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem 1rem 2rem;
+      overflow-x: auto;
+    }
+
+    .chrome {
+      width: 17in;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .chrome a {
+      color: var(--accent-deep);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .chrome a:hover { text-decoration: underline; }
+
+    .print-stage {
+      display: flex;
+      justify-content: center;
+      margin: 0 auto;
+      overflow: visible;
+    }
+
+    .poster {
+      width: var(--poster-w);
+      height: var(--poster-h);
+      flex-shrink: 0;
+      background: var(--paper);
+      color: var(--ink);
+      overflow: hidden;
+      box-shadow: 0 22px 55px rgba(18, 24, 22, 0.14);
+      padding: 0.18in 0.26in 0.14in;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 0.1in;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 10.5pt;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .topbar .dot {
+      width: 0.11in;
+      height: 0.11in;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+      margin-right: 0.08in;
+      vertical-align: middle;
+    }
+
+    .rule {
+      width: 100%;
+      height: 2.5px;
+      background: var(--ink);
+      margin-top: 0.05in;
+    }
+
+    .masthead {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.22in;
+      align-items: end;
+    }
+
+    .masthead .kicker {
+      font-family: var(--mono);
+      font-size: 9.5pt;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      margin-bottom: 0.03in;
+    }
+
+    .masthead h1 {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 26pt;
+      line-height: 1.06;
+      letter-spacing: -0.022em;
+      max-width: 13in;
+    }
+
+    .masthead .sub {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 13.5pt;
+      line-height: 1.28;
+      color: var(--ink-soft);
+      margin-top: 0.05in;
+      max-width: 12.5in;
+    }
+
+    .edition {
+      text-align: right;
+      font-family: var(--mono);
+      font-size: 10.5pt;
+      line-height: 1.4;
+      white-space: nowrap;
+      padding: 0.1in 0.14in;
+      border: 1.5px solid var(--line);
+      border-radius: 9px;
+      background: var(--panel);
+      min-width: 2.4in;
+    }
+
+    .edition .lbl {
+      font-size: 9pt;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      font-weight: 500;
+    }
+
+    .edition .year {
+      font-family: var(--serif);
+      font-size: 18pt;
+      font-weight: 500;
+      text-transform: none;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+      margin: 0.04in 0;
+      line-height: 1.1;
+    }
+
+    /* Main body */
+    .main {
+      display: grid;
+      grid-template-columns: 1.2fr 1.1fr 1fr;
+      gap: 0.12in;
+      min-height: 0;
+      height: 100%;
+    }
+
+    .fig {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1.5px solid var(--line);
+      background: var(--panel);
+      min-height: 0;
+      height: 100%;
+    }
+
+    .fig img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .fig .cap {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 0.08in 0.12in;
+      background: linear-gradient(transparent, rgba(18, 22, 20, 0.78));
+      color: #fff;
+      font-family: var(--mono);
+      font-size: 10pt;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      line-height: 1.25;
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1in;
+      min-height: 0;
+      height: 100%;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      padding: 0.12in 0.14in;
+      display: flex;
+      flex-direction: column;
+      gap: 0.07in;
+      min-height: 0;
+    }
+
+    .card.grow { flex: 1; }
+
+    .card .k {
+      font-family: var(--mono);
+      font-size: 9.5pt;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      font-weight: 500;
+    }
+
+    .card h2 {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 16pt;
+      line-height: 1.12;
+      letter-spacing: -0.015em;
+    }
+
+    .card p {
+      font-size: 12pt;
+      line-height: 1.34;
+      color: var(--ink-soft);
+    }
+
+    .card p strong { color: var(--ink); font-weight: 600; }
+
+    .bricks {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .brick {
+      background: white;
+      border: 1.5px solid var(--line);
+      border-radius: 8px;
+      padding: 0.1in 0.1in;
+      display: flex;
+      flex-direction: column;
+      gap: 0.03in;
+      justify-content: center;
+    }
+
+    .brick .n {
+      font-family: var(--mono);
+      font-size: 9.5pt;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--clay-deep);
+      font-weight: 500;
+    }
+
+    .brick strong {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 13pt;
+      line-height: 1.15;
+      color: var(--ink);
+    }
+
+    .brick span {
+      font-size: 11pt;
+      line-height: 1.25;
+      color: var(--ink-soft);
+    }
+
+    .why-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.08in;
+      flex: 1;
+    }
+
+    .why {
+      display: grid;
+      grid-template-columns: 0.32in 1fr;
+      gap: 0.08in;
+      align-items: start;
+    }
+
+    .why .num {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 16pt;
+      line-height: 1;
+      color: var(--accent-deep);
+    }
+
+    .why strong {
+      display: block;
+      font-size: 12.5pt;
+      color: var(--ink);
+      margin-bottom: 0.02in;
+    }
+
+    .why p {
+      font-size: 11.5pt;
+      line-height: 1.3;
+      color: var(--ink-soft);
+      margin: 0;
+    }
+
+    .diff {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+      flex: 1;
+    }
+
+    .diff .side {
+      background: white;
+      border: 1.5px solid var(--line);
+      border-radius: 8px;
+      padding: 0.1in;
+    }
+
+    .diff .side.hi {
+      border-color: color-mix(in oklab, var(--accent) 40%, var(--line));
+      background: color-mix(in oklab, var(--accent) 8%, white);
+    }
+
+    .diff .side .lbl {
+      font-family: var(--mono);
+      font-size: 9pt;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 0.04in;
+    }
+
+    .diff .side strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 13.5pt;
+      font-weight: 600;
+      margin-bottom: 0.05in;
+      line-height: 1.15;
+    }
+
+    .diff .side p {
+      font-size: 11.5pt;
+      line-height: 1.3;
+      color: var(--ink-soft);
+      margin: 0;
+    }
+
+    .diff .side.hi .lbl { color: var(--accent-deep); }
+
+    .foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 10pt;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      border-top: 2px solid var(--ink);
+      padding-top: 0.05in;
+    }
+
+    .foot strong {
+      color: var(--accent-deep);
+      font-weight: 500;
+    }
+
+    @media print {
+      .print-stage {
+        width: auto !important;
+        height: auto !important;
+        background: transparent !important;
+      }
+      .poster { transform: none !important; }
+      html, body {
+        background: #fff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 17in;
+        height: 11in;
+        min-height: 0 !important;
+        -webkit-print-color-adjust: economy;
+        print-color-adjust: economy;
+      }
+      .chrome { display: none !important; }
+      .poster {
+        width: 17in;
+        height: 11in;
+        box-shadow: none;
+        margin: 0;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="chrome">
+    <a href="../">← All posters</a>
+    <span>17 × 11 landscape tabloid · Reference poster</span>
+  </div>
+
+  <article class="poster" aria-label="Climatebricks reference poster for Climatico">
+    <div>
+      <div class="topbar">
+        <span>Reference · Market tool · Climatico poster series</span>
+        <span><span class="dot" aria-hidden="true"></span>climatebricks.com · Modular climate for early startups</span>
+      </div>
+      <div class="rule" aria-hidden="true"></div>
+    </div>
+
+    <header class="masthead">
+      <div>
+        <div class="kicker">Competitor-adjacent reference</div>
+        <h1>Climatebricks: climate action as stackable “bricks” — not a 40-tab ESG spreadsheet</h1>
+        <p class="sub">
+          A free modular toolkit for early-stage teams. Important reference for how Climatico should stage
+          the on-ramp — while we own EI intensity, evidence, and capital language.
+        </p>
+      </div>
+      <div class="edition">
+        <div class="lbl">Reference</div>
+        <div class="year">Climatebricks</div>
+        <div>Early-stage wedge</div>
+        <div>climatebricks.com</div>
+      </div>
+    </header>
+
+    <div class="main">
+      <figure class="fig">
+        <img src="./assets/bricks-cartoon.jpg" alt="Cartoon founders stacking colorful climate building bricks into a startup building" />
+        <figcaption class="cap">Pick · stack · revise — climate as composition</figcaption>
+      </figure>
+
+      <div class="stack">
+        <div class="card">
+          <div class="k">What it is</div>
+          <h2>Modular climate toolkit for founders</h2>
+          <p>
+            Climatebricks treats climate maturity as a <strong>composition problem</strong>:
+            discrete bricks (measure, operate, culture, narrative) that a Seed–Series A team can stack
+            without a sustainability hire or enterprise ESG suite.
+          </p>
+        </div>
+        <div class="card grow">
+          <div class="k">Example brick types</div>
+          <div class="bricks">
+            <div class="brick">
+              <div class="n">01</div>
+              <strong>Measure</strong>
+              <span>Start with data you have — cloud, travel, office.</span>
+            </div>
+            <div class="brick">
+              <div class="n">02</div>
+              <strong>Operate</strong>
+              <span>Hotspots, vendor swaps, ops changes.</span>
+            </div>
+            <div class="brick">
+              <div class="n">03</div>
+              <strong>Culture</strong>
+              <span>Team habits, rituals, hiring signals.</span>
+            </div>
+            <div class="brick">
+              <div class="n">04</div>
+              <strong>Narrative</strong>
+              <span>Customer &amp; investor story without greenwash.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="card grow">
+          <div class="k">Why it matters for Climatico</div>
+          <h2>Five truths we borrow</h2>
+          <div class="why-list">
+            <div class="why">
+              <div class="num">1</div>
+              <div>
+                <strong>Early-stage is a real segment</strong>
+                <p>Enterprise tools + EPA Excel both miss the five-person Seed team.</p>
+              </div>
+            </div>
+            <div class="why">
+              <div class="num">2</div>
+              <div>
+                <strong>Modularity beats “finish the form”</strong>
+                <p>Progressive disclosure matches partial founder data.</p>
+              </div>
+            </div>
+            <div class="why">
+              <div class="num">3</div>
+              <div>
+                <strong>Action is the product</strong>
+                <p>Name the next brick — not only the tonne total.</p>
+              </div>
+            </div>
+            <div class="why">
+              <div class="num">4</div>
+              <div>
+                <strong>Tone is retention</strong>
+                <p>Plain, non-threatening language keeps founders in the room.</p>
+              </div>
+            </div>
+            <div class="why">
+              <div class="num">5</div>
+              <div>
+                <strong>Free on-ramp, paid depth</strong>
+                <p>Scorecard free; charge for investor packs &amp; vendor value.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="k">Where we differ</div>
+          <div class="diff">
+            <div class="side">
+              <div class="lbl">Climatebricks</div>
+              <strong>Plan from bricks</strong>
+              <p>Assemble climate actions. Lower the barrier to start.</p>
+            </div>
+            <div class="side hi">
+              <div class="lbl">Climatico</div>
+              <strong>EI ledger + decisions</strong>
+              <p>Intensity math, evidence gates, accelerator &amp; capital language.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="foot">
+      <span>Climatico · Reference poster · Climatebricks</span>
+      <span><strong>Borrow the on-ramp · Own the measurement</strong></span>
+    </footer>
+  </article>
+  <script src="../print-preview.js"></script>
+</body>
+</html>
