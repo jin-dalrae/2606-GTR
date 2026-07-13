@@ -4,17 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Paradigm Shift — Climatico Tabloid Poster</title>
-  <meta name="description" content="Paradigm shift tabloid: how EI scores reshaped grocery aisles, places people live, justice movements, and the Climatico founding story — 2040." />
+  <meta name="description" content="Landscape tabloid: when EI intensity reshaped shopping, place, justice — and how Climatico started in 2026." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" />
   <style>
     :root {
       --paper: oklch(0.976 0.008 85);
       --panel: oklch(0.948 0.01 85);
-      --panel-deep: oklch(0.92 0.014 85);
-      --ink: oklch(0.22 0.02 255);
-      --ink-soft: oklch(0.44 0.016 255);
+      --ink: oklch(0.24 0.02 255);
+      --ink-soft: oklch(0.46 0.016 255);
       --line: oklch(0.85 0.012 90);
       --accent: oklch(0.56 0.11 155);
       --accent-deep: oklch(0.4 0.07 160);
@@ -25,14 +24,15 @@
       --serif: "Newsreader", Georgia, serif;
       --sans: "IBM Plex Sans", system-ui, sans-serif;
       --mono: "IBM Plex Mono", ui-monospace, monospace;
-      --poster-w: 11in;
-      --poster-h: 17in;
+      /* Landscape tabloid */
+      --poster-w: 17in;
+      --poster-h: 11in;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     @page {
-      size: 11in 17in;
+      size: 17in 11in;
       margin: 0;
     }
 
@@ -53,14 +53,14 @@
     }
 
     .chrome {
-      width: min(11in, 100%);
+      width: min(17in, 100%);
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 0.75rem;
       margin-bottom: 0.75rem;
       font-family: var(--mono);
-      font-size: 0.72rem;
+      font-size: 0.78rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--ink-soft);
@@ -74,7 +74,7 @@
 
     .chrome a:hover { text-decoration: underline; }
 
-    /* 11 × 17 tabloid canvas */
+    /* 17 × 11 landscape canvas */
     .poster {
       width: var(--poster-w);
       height: var(--poster-h);
@@ -83,691 +83,411 @@
       position: relative;
       overflow: hidden;
       box-shadow: 0 22px 55px rgba(18, 24, 22, 0.14);
-      padding: 0.32in 0.4in 0.28in;
-      display: flex;
-      flex-direction: column;
-      gap: 0.14in;
+      padding: 0.38in 0.48in 0.32in;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 0.18in;
     }
 
-    /* ----- Newspaper masthead ----- */
     .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-family: var(--mono);
-      font-size: 7.5pt;
+      font-size: 10pt;
       letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--ink-soft);
     }
 
     .topbar .dot {
-      width: 0.12in;
-      height: 0.12in;
+      width: 0.14in;
+      height: 0.14in;
       border-radius: 50%;
       background: var(--accent);
       display: inline-block;
-      margin-right: 0.1in;
+      margin-right: 0.12in;
       vertical-align: middle;
     }
 
     .rule {
       width: 100%;
-      height: 2.5px;
+      height: 3px;
       background: var(--ink);
-      flex-shrink: 0;
     }
 
-    .rule-thin {
-      width: 100%;
-      height: 1px;
-      background: var(--line);
-      flex-shrink: 0;
-    }
-
+    /* Masthead */
     .masthead {
       display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 0.2in;
+      grid-template-columns: 1.4fr auto;
+      gap: 0.4in;
       align-items: end;
     }
 
-    .masthead-main h1 {
+    .masthead h1 {
       font-family: var(--serif);
-      font-weight: 600;
-      font-size: 36pt;
-      line-height: 0.88;
-      letter-spacing: -0.025em;
+      font-weight: 500;
+      font-size: 54pt;
+      line-height: 0.9;
+      letter-spacing: -0.03em;
     }
 
-    .masthead-main .tagline {
+    .masthead .sub {
       font-family: var(--serif);
       font-style: italic;
-      font-size: 11pt;
+      font-size: 16pt;
+      line-height: 1.2;
       color: var(--ink-soft);
-      margin-top: 0.06in;
-      max-width: 7.2in;
+      margin-top: 0.1in;
+      max-width: 11in;
     }
 
     .edition {
       text-align: right;
       font-family: var(--mono);
-      font-size: 8pt;
-      line-height: 1.5;
+      font-size: 11pt;
+      line-height: 1.45;
       white-space: nowrap;
     }
 
     .edition .lbl {
-      font-size: 7pt;
-      letter-spacing: 0.16em;
+      font-size: 9pt;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--ink-soft);
-      margin-bottom: 0.03in;
     }
 
     .edition .year {
       font-family: var(--serif);
-      font-size: 22pt;
-      font-weight: 600;
+      font-size: 36pt;
+      font-weight: 500;
       line-height: 1;
       color: var(--accent-deep);
+      margin: 0.04in 0;
     }
 
-    /* ----- Intro ribbon ----- */
-    .ribbon {
+    /* Four columns */
+    .columns {
       display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 0.16in;
-      align-items: center;
-      background: var(--panel);
-      border: 1.5px solid var(--line);
-      border-left: 5px solid var(--accent);
-      border-radius: 6px;
-      padding: 0.1in 0.14in;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.2in;
+      min-height: 0;
+      align-items: stretch;
     }
 
-    .ribbon .kicker {
+    .col {
+      background: var(--panel);
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      padding: 0.2in 0.2in 0.18in;
+      display: flex;
+      flex-direction: column;
+      gap: 0.1in;
+      min-height: 0;
+    }
+
+    .col--clay { border-top: 6px solid var(--clay); }
+    .col--accent { border-top: 6px solid var(--accent); }
+    .col--rose { border-top: 6px solid var(--rose); }
+    .col--ink { border-top: 6px solid var(--ink); }
+
+    .kicker {
       font-family: var(--mono);
-      font-size: 7pt;
+      font-size: 10pt;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--accent-deep);
-      writing-mode: horizontal-tb;
+      font-weight: 500;
     }
 
-    .ribbon p {
-      font-size: 8.5pt;
-      line-height: 1.35;
+    .col--clay .kicker { color: var(--clay-deep); }
+    .col--accent .kicker { color: var(--accent-deep); }
+    .col--rose .kicker { color: var(--rose-deep); }
+    .col--ink .kicker { color: var(--ink-soft); }
+
+    .col h2 {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 20pt;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+
+    .col p {
+      font-size: 12pt;
+      line-height: 1.4;
       color: var(--ink-soft);
     }
 
-    .ribbon p strong { color: var(--ink); font-weight: 600; }
-
-    .ribbon-stats {
-      display: flex;
-      gap: 0.1in;
-    }
-
-    .mini-stat {
-      text-align: center;
-      min-width: 0.7in;
-      padding: 0.04in 0.06in;
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 5px;
-    }
-
-    .mini-stat b {
-      display: block;
-      font-family: var(--serif);
-      font-size: 13pt;
+    .col p strong {
+      color: var(--ink);
       font-weight: 600;
-      line-height: 1;
-      color: var(--accent-deep);
     }
 
-    .mini-stat span {
+    .quote {
+      margin-top: auto;
+      padding-top: 0.1in;
+      border-top: 1.5px solid var(--line);
+    }
+
+    .quote p {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 12.5pt;
+      line-height: 1.25;
+      color: var(--ink);
+    }
+
+    .quote cite {
+      display: block;
+      margin-top: 0.06in;
       font-family: var(--mono);
-      font-size: 6pt;
+      font-style: normal;
+      font-size: 9pt;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--ink-soft);
     }
 
-    /* ----- Article grid ----- */
-    .body-grid {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      grid-template-rows: auto auto 1fr;
-      gap: 0.14in 0.16in;
-      flex: 1;
-      min-height: 0;
-    }
-
-    /* Lead story spans left column */
-    .lead {
-      grid-column: 1;
-      grid-row: 1 / 3;
-      background: var(--panel);
-      border: 1.5px solid var(--line);
-      border-radius: 8px;
-      padding: 0.14in 0.15in 0.15in;
-      display: flex;
-      flex-direction: column;
-      gap: 0.08in;
-      min-height: 0;
-    }
-
-    .story-meta {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.08in 0.12in;
-      font-family: var(--mono);
-      font-size: 7pt;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--ink-soft);
-    }
-
-    .story-meta .section {
-      color: var(--clay-deep);
-      font-weight: 500;
-    }
-
-    .story-meta .date {
-      color: var(--ink-soft);
-    }
-
-    .story-meta .sep {
-      width: 3px;
-      height: 3px;
-      border-radius: 50%;
-      background: var(--line);
-    }
-
-    .lead h2 {
-      font-family: var(--serif);
-      font-weight: 600;
-      font-size: 15.5pt;
-      line-height: 1.08;
-      letter-spacing: -0.015em;
-    }
-
-    .lead .dek {
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: 9.5pt;
-      line-height: 1.3;
-      color: var(--ink-soft);
-    }
-
-    /* Receipt visual */
+    /* Receipt strip in col 1 */
     .receipt {
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 0.12in;
-      align-items: stretch;
+      gap: 0.1in;
       margin: 0.02in 0;
     }
 
     .receipt-body {
       background: white;
-      border: 1.5px dashed color-mix(in oklab, var(--ink) 25%, var(--line));
-      border-radius: 4px;
+      border: 1.5px dashed color-mix(in oklab, var(--ink) 22%, var(--line));
+      border-radius: 6px;
       padding: 0.1in 0.12in;
       font-family: var(--mono);
-      font-size: 7.5pt;
-      line-height: 1.45;
+      font-size: 10pt;
+      line-height: 1.4;
       color: var(--ink-soft);
-      position: relative;
     }
 
-    .receipt-body::before {
-      content: "SELF-CHECKOUT · PHOENIX";
-      display: block;
-      font-size: 6.5pt;
-      letter-spacing: 0.12em;
-      margin-bottom: 0.05in;
+    .receipt-body .hdr {
+      font-size: 8.5pt;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
       color: var(--ink);
       font-weight: 500;
+      margin-bottom: 0.04in;
     }
 
     .receipt-line {
       display: flex;
       justify-content: space-between;
-      gap: 0.1in;
+      gap: 0.08in;
       border-bottom: 1px dotted var(--line);
-      padding: 0.015in 0;
+      padding: 0.02in 0;
     }
 
     .receipt-total {
-      margin-top: 0.06in;
-      padding-top: 0.05in;
-      border-top: 1.5px solid var(--ink);
+      margin-top: 0.05in;
+      padding-top: 0.04in;
+      border-top: 2px solid var(--ink);
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
       color: var(--ink);
       font-weight: 500;
     }
 
-    .receipt-total .score {
-      font-family: var(--serif);
-      font-size: 16pt;
-      font-weight: 600;
-      color: var(--accent-deep);
-      line-height: 1;
-    }
-
     .score-card {
-      background: linear-gradient(160deg, color-mix(in oklab, var(--accent) 18%, white), white);
+      background: oklch(0.96 0.02 155);
       border: 1.5px solid color-mix(in oklab, var(--accent) 40%, var(--line));
       border-radius: 8px;
-      padding: 0.1in 0.12in;
+      padding: 0.1in;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       text-align: center;
-      min-width: 1.15in;
-      gap: 0.04in;
+      min-width: 0.95in;
     }
 
-    .score-card .label {
+    .score-card .lbl {
       font-family: var(--mono);
-      font-size: 6.5pt;
-      letter-spacing: 0.12em;
+      font-size: 8pt;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--accent-deep);
     }
 
     .score-card .big {
       font-family: var(--serif);
-      font-size: 28pt;
-      font-weight: 600;
-      line-height: 0.9;
+      font-size: 32pt;
+      font-weight: 500;
+      line-height: 0.95;
       color: var(--accent-deep);
     }
 
     .score-card .delta {
       font-family: var(--mono);
-      font-size: 7.5pt;
+      font-size: 10pt;
       color: var(--accent-deep);
       font-weight: 500;
     }
 
-    .score-card .was {
-      font-size: 7pt;
-      color: var(--ink-soft);
-    }
-
-    .article-body {
-      font-size: 8.2pt;
-      line-height: 1.38;
-      color: var(--ink-soft);
-      display: flex;
-      flex-direction: column;
-      gap: 0.07in;
-    }
-
-    .article-body p strong { color: var(--ink); font-weight: 600; }
-
-    .article-body .drop {
-      font-family: var(--serif);
-      font-size: 8.5pt;
-      color: var(--ink);
-    }
-
-    .pull-quote {
-      border-left: 3px solid var(--clay);
-      padding: 0.06in 0 0.06in 0.12in;
-      margin: 0.02in 0;
-    }
-
-    .pull-quote p {
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: 9.5pt;
-      line-height: 1.25;
-      color: var(--ink);
-    }
-
-    .pull-quote cite {
-      display: block;
-      margin-top: 0.04in;
-      font-family: var(--mono);
-      font-style: normal;
-      font-size: 7pt;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--ink-soft);
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.05in;
-      margin-top: auto;
-    }
-
-    .chip {
-      font-family: var(--mono);
-      font-size: 6.5pt;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 0.03in 0.08in;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      color: var(--ink-soft);
+    /* Rank list */
+    .ranks {
       background: white;
-    }
-
-    .chip.accent {
-      border-color: color-mix(in oklab, var(--accent) 45%, var(--line));
-      background: color-mix(in oklab, var(--accent) 10%, white);
-      color: var(--accent-deep);
-    }
-
-    .chip.warn {
-      border-color: color-mix(in oklab, var(--clay) 45%, var(--line));
-      background: color-mix(in oklab, var(--clay) 10%, white);
-      color: var(--clay-deep);
-    }
-
-    /* Right column stories */
-    .side-story {
-      background: var(--panel);
       border: 1.5px solid var(--line);
       border-radius: 8px;
-      padding: 0.12in 0.13in;
-      display: flex;
-      flex-direction: column;
-      gap: 0.06in;
-      min-height: 0;
-    }
-
-    .side-story h2 {
-      font-family: var(--serif);
-      font-weight: 600;
-      font-size: 11.5pt;
-      line-height: 1.1;
-      letter-spacing: -0.01em;
-    }
-
-    .side-story .article-body {
-      font-size: 7.8pt;
-      line-height: 1.36;
-    }
-
-    /* Rankings visual */
-    .rank-board {
-      display: flex;
-      flex-direction: column;
-      gap: 0.05in;
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 6px;
       padding: 0.08in 0.1in;
-    }
-
-    .rank-row {
-      display: grid;
-      grid-template-columns: 0.28in 1fr auto;
-      gap: 0.08in;
-      align-items: center;
-      font-size: 7.5pt;
-      padding: 0.03in 0;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .rank-row:last-child { border-bottom: none; }
-
-    .rank-row .n {
-      font-family: var(--mono);
-      font-weight: 500;
-      color: var(--accent-deep);
-      font-size: 8pt;
-    }
-
-    .rank-row .place {
-      color: var(--ink);
-      font-weight: 500;
-    }
-
-    .rank-row .trend {
-      font-family: var(--mono);
-      font-size: 6.5pt;
-      color: var(--accent-deep);
-      letter-spacing: 0.04em;
-    }
-
-    .rank-row.slip .n,
-    .rank-row.slip .trend {
-      color: var(--rose-deep);
-    }
-
-    /* Protest / justice story */
-    .justice {
-      grid-column: 1 / -1;
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 0.14in;
-      background:
-        linear-gradient(135deg, color-mix(in oklab, var(--rose) 8%, var(--panel)), var(--panel));
-      border: 1.5px solid var(--line);
-      border-top: 4px solid var(--rose);
-      border-radius: 8px;
-      padding: 0.13in 0.14in;
-      min-height: 0;
-    }
-
-    .justice h2 {
-      font-family: var(--serif);
-      font-weight: 600;
-      font-size: 13pt;
-      line-height: 1.1;
-      letter-spacing: -0.01em;
-    }
-
-    .justice .article-body {
-      font-size: 7.9pt;
-    }
-
-    .sign-wall {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.08in;
-      align-content: start;
-    }
-
-    .sign {
-      background: white;
-      border: 1.5px solid var(--line);
-      border-radius: 4px;
-      padding: 0.1in 0.1in;
-      font-family: var(--serif);
-      font-weight: 600;
-      font-size: 9pt;
-      line-height: 1.15;
-      text-align: center;
-      box-shadow: 2px 2px 0 color-mix(in oklab, var(--rose) 20%, transparent);
-      transform: rotate(-1.2deg);
-    }
-
-    .sign:nth-child(2) { transform: rotate(1.5deg); }
-    .sign:nth-child(3) { transform: rotate(0.8deg); }
-    .sign:nth-child(4) { transform: rotate(-0.6deg); }
-
-    .sign .loc {
-      display: block;
-      margin-top: 0.05in;
-      font-family: var(--mono);
-      font-weight: 400;
-      font-size: 6.5pt;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--ink-soft);
-    }
-
-    .charter {
-      margin-top: 0.06in;
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      padding: 0.08in 0.1in;
-    }
-
-    .charter .kicker {
-      font-family: var(--mono);
-      font-size: 6.5pt;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--rose-deep);
-      margin-bottom: 0.04in;
-    }
-
-    .charter ul {
-      list-style: none;
       display: flex;
       flex-direction: column;
       gap: 0.04in;
     }
 
-    .charter li {
-      font-size: 7.5pt;
+    .rank {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 0.1in;
+      align-items: center;
+      font-size: 11.5pt;
+      padding: 0.04in 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .rank:last-child { border-bottom: none; }
+
+    .rank .n {
+      font-family: var(--mono);
+      font-weight: 500;
+      color: var(--accent-deep);
+      font-size: 12pt;
+    }
+
+    .rank.down .n { color: var(--rose-deep); }
+
+    .rank .place { font-weight: 600; color: var(--ink); }
+
+    .rank .why {
+      font-family: var(--mono);
+      font-size: 9pt;
+      letter-spacing: 0.04em;
+      color: var(--ink-soft);
+    }
+
+    /* Signs */
+    .signs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.08in;
+    }
+
+    .sign {
+      background: white;
+      border: 1.5px solid var(--line);
+      border-radius: 6px;
+      padding: 0.1in;
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 11.5pt;
+      line-height: 1.15;
+      text-align: center;
+      box-shadow: 2px 2px 0 color-mix(in oklab, var(--rose) 18%, transparent);
+    }
+
+    .sign:nth-child(2) { transform: rotate(0.8deg); }
+    .sign:nth-child(3) { transform: rotate(-0.6deg); }
+    .sign:nth-child(4) { transform: rotate(0.4deg); }
+
+    .bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.06in;
+      margin-top: 0.04in;
+    }
+
+    .bullets li {
+      font-size: 11.5pt;
       line-height: 1.3;
       color: var(--ink-soft);
-      padding-left: 0.14in;
+      padding-left: 0.16in;
       position: relative;
     }
 
-    .charter li::before {
+    .bullets li::before {
       content: "";
       position: absolute;
       left: 0;
-      top: 0.12em;
-      width: 0.07in;
-      height: 0.07in;
+      top: 0.28em;
+      width: 0.08in;
+      height: 0.08in;
       border-radius: 50%;
       background: var(--rose);
     }
 
-    /* Founders feature — full width bottom */
-    .founders {
-      background: var(--panel-deep);
-      border: 1.5px solid var(--line);
-      border-left: 5px solid var(--accent);
-      border-radius: 8px;
-      padding: 0.12in 0.14in;
-      display: grid;
-      grid-template-columns: 1.35fr 1fr;
-      gap: 0.14in;
-      flex-shrink: 0;
-    }
-
-    .founders-copy h2 {
-      font-family: var(--serif);
-      font-weight: 600;
-      font-size: 12.5pt;
-      line-height: 1.1;
-      letter-spacing: -0.01em;
-      margin-bottom: 0.06in;
-    }
-
-    .founders-copy .article-body {
-      font-size: 7.6pt;
-      line-height: 1.34;
-    }
-
-    .trio {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.08in;
-    }
-
-    .person {
+    /* Founders portrait */
+    .founders-photo {
+      margin-top: 0.04in;
       background: white;
       border: 1.5px solid var(--line);
       border-radius: 8px;
-      padding: 0.1in 0.08in 0.1in;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 0.05in;
+      flex: 1;
+      min-height: 0;
     }
 
-    .avatar {
-      width: 0.55in;
-      height: 0.55in;
-      border-radius: 50%;
+    .founders-photo img {
+      width: 100%;
+      height: auto;
+      max-height: 2.35in;
+      object-fit: cover;
+      object-position: center 22%;
+      display: block;
+      background: oklch(0.96 0.005 85);
+    }
+
+    .founders-caption {
       display: grid;
-      place-items: center;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.04in;
+      padding: 0.07in 0.08in 0.08in;
+      border-top: 1px solid var(--line);
+    }
+
+    .founders-caption .person {
+      text-align: center;
+      min-width: 0;
+    }
+
+    .founders-caption .name {
       font-family: var(--serif);
-      font-weight: 600;
-      font-size: 14pt;
-      color: white;
-      position: relative;
+      font-weight: 500;
+      font-size: 11pt;
+      line-height: 1.1;
     }
 
-    .avatar.rae {
-      background: linear-gradient(145deg, oklch(0.5 0.1 160), oklch(0.38 0.08 170));
-    }
-    .avatar.gabriel {
-      background: linear-gradient(145deg, oklch(0.52 0.1 55), oklch(0.4 0.08 45));
-    }
-    .avatar.tej {
-      background: linear-gradient(145deg, oklch(0.5 0.09 250), oklch(0.38 0.08 260));
-    }
-
-    .person .name {
-      font-family: var(--serif);
-      font-weight: 600;
-      font-size: 10pt;
-      line-height: 1;
-    }
-
-    .person .role {
+    .founders-caption .role {
       font-family: var(--mono);
-      font-size: 6.5pt;
-      letter-spacing: 0.08em;
+      font-size: 7.5pt;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
       color: var(--ink-soft);
-      line-height: 1.25;
-    }
-
-    .person .skill {
-      font-size: 7.2pt;
-      line-height: 1.3;
-      color: var(--ink-soft);
+      line-height: 1.2;
       margin-top: 0.02in;
     }
 
-    .platform-pill {
-      margin-top: 0.08in;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.08in;
-      background: color-mix(in oklab, var(--accent) 12%, white);
-      border: 1px solid color-mix(in oklab, var(--accent) 35%, var(--line));
-      border-radius: 999px;
-      padding: 0.05in 0.12in;
+    .pill {
+      margin-top: auto;
+      align-self: flex-start;
       font-family: var(--mono);
-      font-size: 7pt;
-      letter-spacing: 0.08em;
+      font-size: 10pt;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
+      padding: 0.06in 0.12in;
+      border-radius: 999px;
+      border: 1.5px solid color-mix(in oklab, var(--accent) 40%, var(--line));
+      background: oklch(0.96 0.02 155);
       color: var(--accent-deep);
       font-weight: 500;
-    }
-
-    .platform-pill .logo {
-      width: 0.16in;
-      height: 0.16in;
-      border-radius: 3px;
-      background: var(--accent-deep);
-      display: inline-block;
     }
 
     /* Footer */
@@ -775,16 +495,15 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 0.15in;
+      gap: 0.2in;
       flex-wrap: wrap;
       font-family: var(--mono);
-      font-size: 7pt;
+      font-size: 10pt;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--ink-soft);
-      border-top: 1.5px solid var(--line);
-      padding-top: 0.08in;
-      flex-shrink: 0;
+      border-top: 2px solid var(--ink);
+      padding-top: 0.1in;
     }
 
     .foot strong {
@@ -792,15 +511,12 @@
       font-weight: 500;
     }
 
-    /* Screen fit */
-    @media screen and (max-width: 11.5in) {
+    @media screen and (max-width: 17.5in) {
       body { padding: 0.6rem; }
       .poster {
-        width: min(11in, 100%);
+        width: min(17in, 100%);
         height: auto;
-        min-height: 0;
-        aspect-ratio: 11 / 17;
-        transform-origin: top center;
+        aspect-ratio: 17 / 11;
       }
     }
 
@@ -809,13 +525,13 @@
         background: white;
         padding: 0;
         margin: 0;
-        width: 11in;
-        height: 17in;
+        width: 17in;
+        height: 11in;
       }
       .chrome { display: none !important; }
       .poster {
-        width: 11in;
-        height: 17in;
+        width: 17in;
+        height: 11in;
         box-shadow: none;
         margin: 0;
       }
@@ -825,258 +541,154 @@
 <body>
   <div class="chrome">
     <a href="../">← All posters</a>
-    <span>11 × 17 tabloid · Print this page</span>
+    <span>17 × 11 landscape tabloid · Print this page</span>
   </div>
 
-  <article class="poster" aria-label="Paradigm shift tabloid poster — 2040 EI futures">
-    <!-- Header -->
-    <div class="topbar">
-      <span>05 · Paradigm shift · Climatico poster series</span>
-      <span><span class="dot" aria-hidden="true"></span>Special edition · 2040</span>
+  <article class="poster" aria-label="Paradigm shift landscape tabloid">
+    <div>
+      <div class="topbar">
+        <span>05 · Paradigm shift · Climatico poster series</span>
+        <span><span class="dot" aria-hidden="true"></span>Special edition · Looking ahead to 2040</span>
+      </div>
+      <div class="rule" aria-hidden="true" style="margin-top:0.12in"></div>
     </div>
-    <div class="rule" aria-hidden="true"></div>
 
     <header class="masthead">
-      <div class="masthead-main">
+      <div>
         <h1>Paradigm Shift</h1>
-        <p class="tagline">
-          When environmental impact intensity stopped being a report — and became how people shop, move, invest, and protest.
+        <p class="sub">
+          The Structural Shift: when EI intensity left the annual report — and rewrote how people shop, choose a place to live, and demand justice.
         </p>
       </div>
       <div class="edition">
-        <div class="lbl">Looking ahead from</div>
+        <div class="lbl">Horizon year</div>
         <div class="year">2040</div>
-        <div>Vol. EI · No. 01</div>
+        <div>Beyond GDP</div>
         <div>Rae · Gabriel · Tej</div>
       </div>
     </header>
 
-    <div class="rule-thin" aria-hidden="true"></div>
-
-    <div class="ribbon">
-      <div class="kicker">The scoreboard changed</div>
-      <p>
-        Corporate <strong>EI / Revenue</strong> metrics went mainstream in the mid-2030s.
-        By 2040 they had spilled into grocery receipts, provincial rankings, capital markets — and a global fight over who gets to define “impact.”
-      </p>
-      <div class="ribbon-stats" aria-hidden="true">
-        <div class="mini-stat"><b>EI</b><span>on receipt</span></div>
-        <div class="mini-stat"><b>Δ</b><span>decouple</span></div>
-        <div class="mini-stat"><b>200+</b><span>charter orgs</span></div>
-      </div>
-    </div>
-
-    <!-- Main body -->
-    <div class="body-grid">
-      <!-- Lead: Grocery EI -->
-      <article class="lead">
-        <div class="story-meta">
-          <span class="section">Daily life</span>
-          <span class="sep" aria-hidden="true"></span>
-          <span class="date">March 12, 2040</span>
-          <span class="sep" aria-hidden="true"></span>
-          <span>Consumer index</span>
-        </div>
-        <h2>In 2040, Your Grocery Receipt Now Shows an “EI Score.” For Some Families, It’s a Source of Pride — and Guilt.</h2>
-        <p class="dek">A quiet number at checkout has become a daily ritual — and a new fault line between households that can afford low-intensity living and those that cannot.</p>
-
-        <div class="receipt">
-          <div class="receipt-body" aria-hidden="true">
-            <div class="receipt-line"><span>Oat milk · 1qt</span><span>EI 3</span></div>
-            <div class="receipt-line"><span>Rice · 2lb bag</span><span>EI 18</span></div>
-            <div class="receipt-line"><span>Cereal · brand B</span><span>EI 9</span></div>
-            <div class="receipt-line"><span>Produce · local</span><span>EI 4</span></div>
-            <div class="receipt-total">
-              <span>EI Intensity</span>
-              <span class="score">42</span>
-            </div>
+    <div class="columns">
+      <!-- 01 Daily life -->
+      <section class="col col--clay">
+        <p class="kicker">01 · Daily life</p>
+        <h2>EI on the grocery receipt</h2>
+        <div class="receipt" aria-hidden="true">
+          <div class="receipt-body">
+            <div class="hdr">Self-checkout · Phoenix</div>
+            <div class="receipt-line"><span>Oat milk</span><span>EI 3</span></div>
+            <div class="receipt-line"><span>Rice · 2lb</span><span>EI 18</span></div>
+            <div class="receipt-line"><span>Local produce</span><span>EI 4</span></div>
+            <div class="receipt-total"><span>Intensity</span><span>42</span></div>
           </div>
           <div class="score-card">
-            <span class="label">Maria’s score</span>
+            <span class="lbl">Maria</span>
             <span class="big">42</span>
             <span class="delta">↓ from 51</span>
-            <span class="was">last month</span>
           </div>
         </div>
-
-        <div class="article-body">
-          <p class="drop">
-            When Maria Lopez, a 38-year-old nurse in Phoenix, scans her groceries at the self-checkout, a small number appears at the bottom of her digital receipt: <strong>EI Intensity: 42</strong>. It is lower than last month’s 51. She smiles.
-          </p>
-          <p>
-            Across the United States and dozens of other countries, major retailers now display a standardized <strong>Environmental Impact Intensity</strong> score — a simplified version of the corporate EI/Revenue metrics companies have been required to publish since the mid-2030s. The number reflects the estimated environmental footprint (carbon, water stress, and land use) embedded in each product, normalized for price.
-          </p>
-          <p>
-            For many households, the score has become a quiet daily ritual. Parents compare cereal brands. College students track their monthly “EI budget” the way earlier generations watched calories. Community groups in several states have created neighborhood leaderboards, turning lower scores into a source of local pride.
-          </p>
-          <p>
-            But the system has also exposed deep divides. In lower-income neighborhoods, residents say the cheapest options often carry the highest EI scores — ultra-processed foods shipped from far away or produced with heavy irrigation in water-stressed regions.
-          </p>
-        </div>
-
-        <blockquote class="pull-quote">
-          <p>“I want to do the right thing. But when the low-EI rice costs twice as much, what choice do I really have?”</p>
-          <cite>Jamal Washington · Detroit · climate justice volunteer</cite>
+        <p>
+          Retailers print a simple <strong>EI Intensity</strong> — carbon, water, land per dollar.
+          Families track it like a monthly budget. Pride for some; pressure for others when
+          the cheapest food scores worst.
+        </p>
+        <blockquote class="quote">
+          <p>“I want the low-EI rice. When it costs twice as much, what choice do I have?”</p>
+          <cite>Jamal · Detroit</cite>
         </blockquote>
+      </section>
 
-        <div class="article-body">
-          <p>
-            Advocates from the People’s EI Accountability Coalition argue that the index, while useful, still places too much burden on individual consumers rather than forcing upstream changes in agriculture and manufacturing. “We didn’t ask for a scorecard,” one organizer said at a recent protest outside a supermarket chain headquarters. “We asked for systems that make the sustainable choice the affordable one.”
-          </p>
-        </div>
-
-        <div class="chips">
-          <span class="chip accent">Carbon · water · land</span>
-          <span class="chip">Normalized for price</span>
-          <span class="chip warn">Affordability gap</span>
-        </div>
-      </article>
-
-      <!-- Side: Provincial rankings -->
-      <article class="side-story">
-        <div class="story-meta">
-          <span class="section">Place &amp; power</span>
-          <span class="sep" aria-hidden="true"></span>
-          <span class="date">June 4, 2040</span>
-        </div>
-        <h2>Once Dismissed as “Green Theater,” Provincial EI Rankings Are Now Reshaping Where People Choose to Live and Work</h2>
-
-        <div class="rank-board" aria-label="Sample 2040 ranking callouts">
-          <div class="rank-row">
+      <!-- 02 Place -->
+      <section class="col col--accent">
+        <p class="kicker">02 · Place &amp; power</p>
+        <h2>Where rankings move people</h2>
+        <div class="ranks" aria-label="Sample ranking moves">
+          <div class="rank">
             <span class="n">↑</span>
             <span class="place">Nova Scotia</span>
-            <span class="trend">offshore wind</span>
+            <span class="why">wind</span>
           </div>
-          <div class="rank-row">
+          <div class="rank">
             <span class="n">↑</span>
-            <span class="place">Minnesota Iron Range</span>
-            <span class="trend">circular mfg</span>
+            <span class="place">Iron Range</span>
+            <span class="why">circular</span>
           </div>
-          <div class="rank-row slip">
+          <div class="rank down">
             <span class="n">↓</span>
-            <span class="place">Legacy steel regions</span>
-            <span class="trend">tension</span>
+            <span class="place">Legacy steel</span>
+            <span class="why">tension</span>
           </div>
         </div>
-
-        <div class="article-body">
-          <p>
-            When the 2040 <strong>EI Progress &amp; Decoupling Index</strong> rankings were released last month, few expected the top spots in North America to go to places like Nova Scotia and Minnesota’s Iron Range — regions long associated with heavy industry.
-          </p>
-          <p>
-            The index measures not just absolute emissions reductions but how cleanly economic activity has <strong>decoupled</strong> from environmental harm at the provincial and state level. Policymakers credit long-term investments in offshore wind, mine-site remediation, and circular manufacturing clusters.
-          </p>
-          <p>
-            Rankings now carry real weight. Large employers cite strong provincial EI scores when opening facilities or relocating workers. Real estate agents advertise <strong>“Low-EI Living.”</strong> Remote workers deliberately move to high-performing places for lifestyle and values alignment.
-          </p>
-          <p>
-            Not everyone is celebrating. In places that have slipped, residents describe frustration and political tension. “We’re being punished for industries that kept the lights on for the whole country for fifty years,” said a steelworker in Pennsylvania. Environmental groups counter that the index rewards genuine transition, not nostalgia.
-          </p>
-          <p>
-            The Global EI Justice Network has pushed for a <strong>“historical responsibility”</strong> adjustment — credit for cleaning up pollution legacies, not only rewarding cleaner baselines. The proposal has traction in several legislatures but remains controversial.
-          </p>
-        </div>
-      </article>
-
-      <!-- Justice movement — full width under lead/side -->
-      <article class="justice">
-        <div>
-          <div class="story-meta">
-            <span class="section" style="color: var(--rose-deep);">Global movements</span>
-            <span class="sep" aria-hidden="true"></span>
-            <span class="date">September 18, 2040</span>
-          </div>
-          <h2>“This Index Was Supposed to Save Us. Now It’s Being Used Against Us.” Social Movements Demand a Justice-Centered EI Overhaul</h2>
-          <div class="article-body" style="margin-top: 0.06in;">
-            <p>
-              On a humid afternoon in Manila, hundreds of activists gathered outside the regional offices of an international development bank. Fifteen years after widespread adoption of corporate, portfolio, and national Environmental Impact indices, a growing global movement argues the tools have been captured by powerful interests and are deepening inequality rather than solving the climate crisis.
-            </p>
-            <p>
-              Critics say portfolio EI metrics accelerated capital flight from the Global South; national rankings often ignore emissions embedded in exports serving rich-nation consumers; and companies celebrate intensity gains while workers in carbon-intensive regions report job losses without support.
-            </p>
-            <blockquote class="pull-quote" style="border-left-color: var(--rose); margin-top: 0.06in;">
-              <p>“We were told these numbers would create accountability. Instead, they’re being used to justify trade barriers and deny financing to countries still building basic infrastructure.”</p>
-              <cite>Aisha Rahman · Bangladesh · climate justice organizer</cite>
-            </blockquote>
-          </div>
-        </div>
-        <div>
-          <div class="sign-wall" aria-hidden="true">
-            <div class="sign">EI Without Justice Is Just Green Colonialism<span class="loc">Manila</span></div>
-            <div class="sign">Our Emissions, Their Rankings<span class="loc">Global South</span></div>
-            <div class="sign">Historical responsibility now<span class="loc">Coalition</span></div>
-            <div class="sign">Transition with workers<span class="loc">Frontline</span></div>
-          </div>
-          <div class="charter">
-            <div class="kicker">People’s EI Charter · 200+ organizations</div>
-            <ul>
-              <li>Mandatory historical emissions &amp; consumption-based accounting in national indices</li>
-              <li>Stronger protections for workers and communities during transitions</li>
-              <li>Indigenous and frontline groups help define how “environmental impact” is measured</li>
-            </ul>
-          </div>
-        </div>
-      </article>
-    </div>
-
-    <!-- Founders feature -->
-    <section class="founders" aria-label="Climatico founding story">
-      <div class="founders-copy">
-        <div class="story-meta">
-          <span class="section" style="color: var(--accent-deep);">Origin story</span>
-          <span class="sep" aria-hidden="true"></span>
-          <span class="date">October 22, 2040</span>
-          <span class="sep" aria-hidden="true"></span>
-          <span>Looking back to 2026</span>
-        </div>
-        <h2>How Three Founders With Very Different Skills Built a Tool That Made Environmental Tracking Routine for Startups</h2>
-        <div class="article-body">
-          <p>
-            In early 2026, when most climate tools still required spreadsheets, consultants, or engineering teams, three people set out to change that for startups. <strong>Rae</strong> brought deep technical expertise in data infrastructure and emissions modeling. <strong>Gabriel</strong> focused on strategy — how the product could fit into funding, regulation, and day-to-day founder decisions. <strong>Tej</strong> handled design and prototyping, determined to make complex environmental data feel as intuitive as a modern financial dashboard.
-          </p>
-          <p>
-            The result was <strong>Climatico</strong> — a platform that let early-stage companies calculate, visualize, and track their Environmental Impact intensity (emissions per dollar of revenue) without a sustainability hire. Fourteen years later, the three founders have followed different paths, yet each continues to shape how environmental performance is measured and acted upon.
-          </p>
-          <p>
-            Early adopters say tracking EI intensity from the first funding round changed product design, supplier choices, and investor conversations. Some accelerators and funds began requiring such tools — influencing how portfolio-level EI metrics were calculated downstream. Critics warn easy dashboards can mask structural emissions outside the startup economy and create an illusion of precision. Even so, in many founder communities today, EI intensity sits alongside revenue and growth as a basic operating metric.
-          </p>
-        </div>
-      </div>
-      <div>
-        <div class="trio">
-          <div class="person">
-            <div class="avatar rae" aria-hidden="true">R</div>
-            <div class="name">Rae</div>
-            <div class="role">Technical</div>
-            <p class="skill">Data infrastructure &amp; emissions modeling</p>
-          </div>
-          <div class="person">
-            <div class="avatar gabriel" aria-hidden="true">G</div>
-            <div class="name">Gabriel</div>
-            <div class="role">Strategy</div>
-            <p class="skill">Funding, regulation &amp; founder decisions</p>
-          </div>
-          <div class="person">
-            <div class="avatar tej" aria-hidden="true">T</div>
-            <div class="name">Tej</div>
-            <div class="role">Design</div>
-            <p class="skill">Prototyping &amp; intuitive dashboards</p>
-          </div>
-        </div>
-        <div class="platform-pill">
-          <span class="logo" aria-hidden="true"></span>
-          Climatico · EI intensity from day one
-        </div>
-        <p class="article-body" style="margin-top: 0.08in; font-size: 7.2pt; text-align: center; color: var(--ink-soft);">
-          Rigorous foundations · strategic finance &amp; policy · user-centered design — still the template for early-stage environmental tracking.
+        <p>
+          Provincial and state <strong>decoupling indices</strong> now sway jobs and housing.
+          Employers open where scores climb. Listings advertise “low-EI living.”
+          Regions that powered the old economy demand credit for cleanup — not only for clean baselines.
         </p>
-      </div>
-    </section>
+        <blockquote class="quote">
+          <p>Rankings reward transition. Workers still ask who pays for the bridge.</p>
+          <cite>EI Progress Index · 2040</cite>
+        </blockquote>
+      </section>
+
+      <!-- 03 Justice -->
+      <section class="col col--rose">
+        <p class="kicker">03 · Global movements</p>
+        <h2>Justice or green colonialism?</h2>
+        <div class="signs" aria-hidden="true">
+          <div class="sign">EI without justice is green colonialism</div>
+          <div class="sign">Our emissions, their rankings</div>
+          <div class="sign">Historical responsibility now</div>
+          <div class="sign">Transition with workers</div>
+        </div>
+        <p>
+          Movements say scores were captured: capital flight from the Global South,
+          export-blind national ranks, intensity wins that hide lost jobs.
+        </p>
+        <ul class="bullets">
+          <li>Count history &amp; consumption, not only local stacks</li>
+          <li>Protect workers in transition</li>
+          <li>Frontline voices define “impact”</li>
+        </ul>
+      </section>
+
+      <!-- 04 Origin -->
+      <section class="col col--ink">
+        <p class="kicker">04 · Origin · 2026</p>
+        <h2>How Climatico began</h2>
+        <p>
+          When climate tools still meant consultants and spreadsheets, three founders built
+          EI intensity tracking for startups — emissions per dollar of revenue, from day one.
+        </p>
+        <figure class="founders-photo">
+          <img
+            src="./assets/founders-portrait.png"
+            alt="Ink portrait of Climatico founders Rae, Gabriel, and Tej"
+            width="1061"
+            height="676"
+          />
+          <figcaption class="founders-caption">
+            <div class="person">
+              <div class="name">Rae</div>
+              <div class="role">Data &amp; models</div>
+            </div>
+            <div class="person">
+              <div class="name">Tej</div>
+              <div class="role">Design</div>
+            </div>
+            <div class="person">
+              <div class="name">Gabriel</div>
+              <div class="role">Strategy · policy</div>
+            </div>
+          </figcaption>
+        </figure>
+        <div class="pill">EI intensity beside revenue</div>
+      </section>
+    </div>
 
     <footer class="foot">
       <span>Climatico · Paradigm shift</span>
       <strong>gtr1.web.app/midterm/posters</strong>
-      <span>Rae · Gabriel · Tej · 11×17</span>
+      <span>17 × 11 landscape · Rae · Gabriel · Tej</span>
     </footer>
   </article>
 </body>
