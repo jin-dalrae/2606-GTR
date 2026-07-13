@@ -137,7 +137,7 @@
       flex-direction: column;
       min-height: calc(100vh - var(--nav-h));
       min-width: 0;
-      background: #e8e6df;
+      background: #F4F6EF;
     }
     .proto-toolbar {
       display: flex;
@@ -162,7 +162,10 @@
       width: 100%;
       height: 100%;
       border: 0;
-      background: #dedcd5;
+      background: #F4F6EF;
+    }
+    .proto-embed {
+      min-height: calc(100vh - var(--nav-h) - 52px);
     }
     .proto-empty {
       position: absolute;
@@ -205,8 +208,8 @@
           <p class="eyebrow" style="margin-bottom:0.5rem"><span class="dot"></span> Live HTML prototypes</p>
           <h1>Try the product</h1>
           <p class="lead" style="font-size:0.95rem;margin:0.5rem 0 0">
-            Same guided page for all prototype builds — switch tabs below; each loads in the panel on the right.
-            1 Assessment · 2 Dashboard · 3 Investor · 4 Program · 5 Leaderboard.
+            Switch tabs to load each live HTML build in the panel on the right.
+            Tab <strong>2 · Dashboard</strong> is the Jul 12 interactive founder mockup.
           </p>
         </div>
 
@@ -214,12 +217,6 @@
           <!-- filled by prototype.js: Assessment · Founder · Investor · Program -->
         </div>
 
-        <div id="proto-device-row" hidden>
-          <p class="proto-device-label">Founder dashboard view</p>
-          <div class="proto-device" role="tablist" aria-label="Dashboard device">
-            <button type="button" id="tab-device-desktop" class="active" role="tab" aria-selected="true">Interactive</button>
-            <button type="button" id="tab-device-mobile" role="tab" aria-selected="false">Mobile shell</button>
-          </div>
         </div>
 
         <ol class="proto-steps" id="proto-steps"></ol>

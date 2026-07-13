@@ -53,74 +53,34 @@
       id: "p2",
       label: "2 · Dashboard",
       stageLabel: "Prototype 2 · Founder dashboard",
-      openLabel: "Open founder dashboard ↗",
-      src: "../prototype2/index.html",
+      openLabel: "Open dashboard full screen ↗",
+      src: "../prototype2/",
       full: "../prototype2/",
-      device: true,
-      srcMobile: "../prototype2/mobile/index.html",
-      fullMobile: "../prototype2/mobile/",
+      device: false,
       steps: [
         {
           title: "1 · Enter company URL",
           short: "Start from the web",
           detail:
-            "Interactive founder mockup: paste a company URL to generate a personalized climate snapshot — the lightweight path after (or instead of) the full assessment.",
+            "Interactive founder dashboard mockup: paste a company URL to generate a personalized climate snapshot.",
         },
         {
           title: "2 · Identity strip",
           short: "Logo + company context",
           detail:
-            "Dashboard opens with company identity, stage cues, and a clear “your climate footprint” framing.",
+            "Dashboard opens with company identity and a clear “your climate footprint” framing.",
         },
         {
           title: "3 · Overview metrics",
           short: "Emit, avoid, maturity",
           detail:
-            "See operational footprint, avoided emissions potential, and a simple maturity read — designed for founders, not consultants.",
+            "See operational footprint, avoided emissions potential, and a simple maturity read.",
         },
         {
           title: "4 · Goals & journey",
           short: "What to improve",
           detail:
-            "Climate goals, journey milestones, and a “what’s next” path so the dashboard becomes an operating surface, not a one-time PDF.",
-        },
-        {
-          title: "5 · Mobile shell (optional)",
-          short: "Phone layout",
-          detail:
-            "Toggle Device → Mobile for the earlier phone-bezel dashboard (ledger tabs, goals, cost exposure) used in fieldwork sessions.",
-        },
-      ],
-      stepsMobile: [
-        {
-          title: "1 · Overview",
-          short: "Live impact snapshot",
-          detail:
-            "Mobile founder shell: footprint, handprint potential, and maturity at a glance inside a phone frame.",
-        },
-        {
-          title: "2 · Footprint",
-          short: "Operational emissions",
-          detail:
-            "Drill into operational carbon — compute, electricity, travel scaled to the team.",
-        },
-        {
-          title: "3 · Handprint",
-          short: "Avoided emissions",
-          detail:
-            "Avoided emissions stay separate. Claims stay gated on additionality before any public number.",
-        },
-        {
-          title: "4 · Goals",
-          short: "Goal board & maturity",
-          detail:
-            "Owned goals, evidence, and the maturity ladder (L0–L5) with a binding first action.",
-        },
-        {
-          title: "5 · Cost & risk",
-          short: "Exposure signals",
-          detail:
-            "Cost-exposure bands translate tonnes into $ scenarios. Planning ranges, not bills.",
+            "Climate goals, journey milestones, and a “what’s next” path — an operating surface, not a one-time PDF.",
         },
       ],
     },
