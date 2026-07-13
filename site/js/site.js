@@ -11,21 +11,16 @@
     const parts = pathParts();
     const i = parts.indexOf(SITE_ROOT_NAME);
     if (i >= 0) return "/" + parts.slice(0, i + 1).join("/") + "/";
-    // Local file or unexpected host: fall back to relative resolution
     return null;
   }
 
   /**
    * Relative base from current page to site root.
-   * /midterm/ → ./
-   * /midterm/research/ → ../
-   * /midterm/research/metrics/ → ../../
    */
   function computeBase() {
     const parts = pathParts();
     const i = parts.indexOf(SITE_ROOT_NAME);
     if (i < 0) {
-      // Not under /midterm — treat first segment depth like before
       if (parts.length === 0) return "./";
       if (parts.includes("research")) {
         const idx = parts.lastIndexOf("research");
@@ -42,14 +37,12 @@
   }
 
   const base = computeBase();
-  const rootAbs = siteRoot() || base;
 
   const links = [
     { href: base + "index.html", id: "home", label: "Home" },
     { href: base + "research/", id: "research", label: "Research" },
     { href: base + "prototype/", id: "prototype", label: "Prototype" },
     { href: base + "posters/", id: "posters", label: "Posters" },
-    { href: base + "vision/", id: "vision", label: "Vision" },
   ];
 
   function currentId() {
@@ -60,7 +53,7 @@
     }
     if (path.includes("/leaderboard")) return "prototype";
     if (path.includes("/posters")) return "posters";
-    if (path.includes("/vision")) return "vision";
+    if (path.includes("/vision")) return "home";
     return "home";
   }
 
@@ -80,7 +73,7 @@
         <span class="nav-mark">C</span>
         <span class="nav-brand-text">
           <strong>Climatico</strong>
-          <span>Midterm · 2026</span>
+          <span>gtr1.web.app</span>
         </span>
       </a>
       <button class="nav-toggle" type="button" aria-label="Open menu" id="nav-toggle"><span></span></button>
@@ -105,7 +98,7 @@
       <div class="footer-inner">
         <div>
           <p class="footer-brand">Climatico</p>
-          <p class="footer-copy">Evidence first. Estimates next. Climate-aware decisions for every kind of early-stage business — footprint and handprint, good or bad.</p>
+          <p class="footer-copy">An environmental impact dashboard for early-stage startups — measure EI as you grow, act on insights, improve performance as you scale.</p>
         </div>
         <div class="footer-col">
           <h4>Explore</h4>
@@ -114,15 +107,13 @@
             <li><a href="${gtr}">Evidence archive</a></li>
             <li><a href="${base}prototype/">Interactive prototype</a></li>
             <li><a href="${base}posters/">Poster series</a></li>
-            <li><a href="${base}prototype/?tab=p5">Leaderboard (in prototype)</a></li>
-            <li><a href="${base}vision/">Next vision</a></li>
+            <li><a href="${base}index.html#vision">Vision on home</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h4>Also in this build</h4>
           <ul>
             <li><a href="${base}app/">Full product demo</a></li>
-            <li><a href="${base}prototype/?tab=p5">Leaderboard</a></li>
             <li><a href="${base}prototype2/">Founder dashboard</a></li>
             <li><a href="${base}prototype3/">Investor portfolio</a></li>
             <li><a href="${base}prototype4/">Program director</a></li>
@@ -132,9 +123,9 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>Climatico · Midterm Review 2026</span>
+        <span>Climatico</span>
         <span style="color:var(--accent-deep);font-weight:500">Rae · Gabriel · Tej</span>
-        <span>gtr1.web.app/midterm</span>
+        <span>gtr1.web.app</span>
       </div>
     `;
   }
