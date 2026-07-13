@@ -543,6 +543,24 @@
 
     .metric-call strong { color: var(--ink); }
 
+    .metric-table .rank-1 .val {
+      color: var(--accent-deep);
+    }
+
+    .metric-table .badge-1 {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 8pt;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.02in 0.07in;
+      border-radius: 999px;
+      border: 1.5px solid color-mix(in oklab, var(--accent) 45%, var(--line));
+      background: color-mix(in oklab, var(--accent) 12%, white);
+      color: var(--accent-deep);
+      font-weight: 500;
+    }
+
     .foot {
       display: flex;
       justify-content: space-between;
@@ -711,11 +729,12 @@
               <strong>like-for-like comparison</strong> possible at market scale: same definitions, comparable intensity math.
             </p>
             <p>
-              That public map is what lets GTRock argue for <strong>“environmentally friendly capitalism”</strong> without
-              grading only its own managers in private. When Big Three holdings sit under the same estimated-EI light,
-              capital can chase improvement instead of opacity. GTRock still claims the managers it backs have improved
-              EI without sacrificing returns; critics flag Scope 3 uncertainty in any estimated book. The consulting
-              layer’s bet is simple: open numbers beat selective disclosure.
+              On that open scoreboard, <strong>GTRock ranks first among the peer set</strong> — not only on
+              <strong>EI intensity</strong> (lowest impact per dollar invested) but on <strong>ROI</strong> as well.
+              That is the cultural proof point for <strong>“environmentally friendly capitalism”</strong>: when everyone
+              is measured the same way, the leader can win on both green and returns, not trade one for the other.
+              Critics still flag Scope 3 uncertainty in any estimated book; the consulting bet is that open numbers beat
+              selective disclosure.
             </p>
             <blockquote class="quote">
               <p>“Five years ago, almost no one asked these questions during fundraising. Now it’s becoming part of the conversation, whether you like it or not.”</p>
@@ -726,8 +745,8 @@
               Founders brag about <strong>EI / Revenue</strong> the way they brag about ARR. Hiring pages show intensity
               next to remote policy. Due diligence gets more rigorous on EI — not only unit economics. Green claims without
               evidence get socially expensive. If more allocators copy the bar, pressure hits <strong>before Series A</strong>,
-              when product and supplier choices still set the trajectory. GTRock says it will publish fuller portfolio-level
-              EI and return data; whether both hold at scale remains the open question.
+              when product and supplier choices still set the trajectory. A public #1 on both intensity and ROI is the
+              story GTRock wants the market to copy.
             </p>
           </div>
         </div>
@@ -756,39 +775,42 @@
         </div>
 
         <div class="panel grow">
-          <div class="kicker">GTRock portfolio book</div>
-          <h3>What the firm claims</h3>
-          <p class="note">EI intensity vs. returns by year — firm figures, not third-party audited.</p>
-          <table class="metric-table" aria-label="EI intensity and returns by year">
+          <div class="kicker">Public scoreboard · Big Three peer set</div>
+          <h3>GTRock ranks #1 on both</h3>
+          <p class="note">From GTR consulting’s open estimated-EI + return comparison (illustrative 2030 ranking).</p>
+          <table class="metric-table" aria-label="Fund ranking on EI intensity and ROI">
             <thead>
               <tr>
-                <th scope="col">Metric</th>
-                <th scope="col">2024</th>
-                <th scope="col">2027</th>
-                <th scope="col">2030</th>
-                <th scope="col">Trend</th>
+                <th scope="col">Fund</th>
+                <th scope="col">EI intensity</th>
+                <th scope="col">ROI</th>
+                <th scope="col">Rank</th>
               </tr>
             </thead>
             <tbody>
-              <tr class="row-ei">
-                <td>EI intensity<br/><span class="unit">tCO₂e per $M invested</span></td>
-                <td><span class="val">82</span><span class="unit">high</span></td>
-                <td><span class="val">61</span><span class="unit">down</span></td>
-                <td><span class="val">48</span><span class="unit">lower = better</span></td>
-                <td><span class="arrow">↓ −41%</span></td>
+              <tr class="row-ei rank-1">
+                <td>GTRock<br/><span class="unit">this book</span></td>
+                <td><span class="val">48</span><span class="unit">tCO₂e / $M · lowest</span></td>
+                <td><span class="val">16%</span><span class="unit">net annualized</span></td>
+                <td><span class="badge-1">#1 both</span></td>
               </tr>
               <tr class="row-ret">
-                <td>Portfolio returns<br/><span class="unit">annualized, net</span></td>
-                <td><span class="val">14%</span><span class="unit">baseline</span></td>
-                <td><span class="val">15%</span><span class="unit">stable</span></td>
-                <td><span class="val">16%</span><span class="unit">held</span></td>
-                <td><span class="arrow flat">→ held</span></td>
+                <td>Peer fund A<br/><span class="unit">Big Three set</span></td>
+                <td><span class="val">67</span><span class="unit">tCO₂e / $M</span></td>
+                <td><span class="val">14%</span><span class="unit">net annualized</span></td>
+                <td><span class="arrow flat">#2</span></td>
+              </tr>
+              <tr class="row-ret">
+                <td>Peer fund B<br/><span class="unit">Big Three set</span></td>
+                <td><span class="val">79</span><span class="unit">tCO₂e / $M</span></td>
+                <td><span class="val">13%</span><span class="unit">net annualized</span></td>
+                <td><span class="arrow flat">#3</span></td>
               </tr>
             </tbody>
           </table>
           <p class="metric-call">
-            <strong>Read as:</strong> EI intensity falls (greener per dollar) while returns stay roughly flat —
-            the claim behind “environmentally friendly capitalism.”
+            <strong>Read as:</strong> under the same public yardstick, GTRock leads on
+            <strong>lower EI intensity and higher ROI</strong> — not a green trade-off story.
           </p>
         </div>
       </aside>
