@@ -69,7 +69,8 @@ function rewriteTree(dir) {
     // Bundled design exports (base64/JSON) — never rewrite path strings inside them
     if (
       /^prototype[0-4](\b|\/)/.test(rel) ||
-      rel.startsWith("posters/main/")
+      rel.startsWith("posters/main/") ||
+      rel.startsWith("posters/systems-change/")
     ) {
       continue;
     }
