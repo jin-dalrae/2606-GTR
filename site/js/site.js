@@ -97,7 +97,7 @@
       <div class="footer-inner">
         <div>
           <p class="footer-brand">Climatico</p>
-          <p class="footer-copy">An environmental impact dashboard for early-stage startups — measure EI as you grow, act on insights, improve performance as you scale.</p>
+          <p class="footer-copy">Climatico is an environmental impact dashboard for early-stage startups. We help startups to scale sustainably from day one.</p>
         </div>
         <div class="footer-col">
           <h4>Explore</h4>
