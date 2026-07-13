@@ -185,6 +185,14 @@
 
     .hint.show { opacity: 1; }
 
+    /* Fullscreen state */
+    body.is-fullscreen .deck {
+      grid-template-rows: 1fr auto;
+    }
+    body.is-fullscreen .bar {
+      display: none;
+    }
+
     @media (max-width: 720px) {
       .bar .meta .title { font-size: 0.9rem; }
       .controls .hide-sm { display: none; }
@@ -203,6 +211,7 @@
         <button type="button" id="btn-prev" aria-label="Previous">Prev</button>
         <button type="button" id="btn-pause" class="primary" aria-label="Pause or play">Pause</button>
         <button type="button" id="btn-next" aria-label="Next">Next</button>
+        <button type="button" id="btn-fullscreen" aria-label="Fullscreen">Fullscreen</button>
         <a class="hide-sm" href="../" id="btn-exit">Exit</a>
       </div>
     </header>
@@ -238,6 +247,7 @@
       const btnPrev = document.getElementById("btn-prev");
       const btnNext = document.getElementById("btn-next");
       const btnPause = document.getElementById("btn-pause");
+      const btnFullscreen = document.getElementById("btn-fullscreen");
       const hint = document.getElementById("hint");
 
       let index = 0;
@@ -324,6 +334,28 @@
       btnPrev.addEventListener("click", function () { go(index - 1); });
       btnNext.addEventListener("click", function () { go(index + 1); });
       btnPause.addEventListener("click", togglePause);
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen?.().catch(function (err) {
+            console.error("Error entering fullscreen:", err);
+          });
+        } else {
+          document.exitFullscreen?.();
+        }
+      }
+
+      btnFullscreen.addEventListener("click", toggleFullscreen);
+
+      document.addEventListener("fullscreenchange", function () {
+        if (document.fullscreenElement) {
+          document.body.classList.add("is-fullscreen");
+          btnFullscreen.textContent = "Exit Full";
+        } else {
+          document.body.classList.remove("is-fullscreen");
+          btnFullscreen.textContent = "Fullscreen";
+        }
+      });
 
       document.addEventListener("keydown", function (e) {
         if (e.key === "ArrowRight" || e.key === "PageDown") {

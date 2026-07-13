@@ -188,7 +188,8 @@
 
     .tri {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      /* Operate : Track : Story */
+      grid-template-columns: 2.5fr 2fr 1.5fr;
       gap: 0.12in;
       min-height: 0;
       height: 100%;
@@ -249,7 +250,7 @@
     .cards {
       display: flex;
       flex-direction: column;
-      gap: 0.09in;
+      gap: 0.08in;
       flex: 1;
       min-height: 0;
     }
@@ -258,17 +259,93 @@
       background: white;
       border: 1.5px solid var(--line);
       border-radius: 8px;
-      padding: 0.11in 0.12in;
+      padding: 0.1in 0.11in;
       display: flex;
       flex-direction: column;
-      gap: 0.07in;
+      gap: 0.06in;
       flex: 1 1 0;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    /*
+      Operate row 1 = content height (auto) so the hotspot card never clips.
+      Rows 2–3 share leftover space. Do not use fr on row 1 — that was
+      shrinking the first card below its chart + copy and “breaking” it.
+    */
+    .band.operate .cards {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) minmax(0, 0.95fr);
+      gap: 0.07in;
+      flex: 1;
       min-height: 0;
     }
 
-    /* Story has 2 cards — let them share height evenly (same as 3-card columns) */
+    .band.operate .card {
+      flex: unset;
+      min-height: 0;
+    }
+
+    .band.operate .card:first-child {
+      min-height: min-content;
+      height: auto;
+      overflow: hidden;
+      gap: 0.05in;
+      padding: 0.09in 0.1in;
+      flex-shrink: 0;
+    }
+
+    .band.operate .card:first-child .num {
+      font-size: 10pt;
+    }
+
+    .band.operate .card:first-child h3 {
+      font-size: 12pt;
+      line-height: 1.12;
+      flex-shrink: 0;
+    }
+
+    .band.operate .card:first-child .hotspot {
+      flex: 0 0 auto;
+      flex-shrink: 0;
+    }
+
+    .band.operate .card:first-child ul {
+      flex: 0 0 auto;
+      gap: 0.035in;
+      min-height: 0;
+    }
+
+    .band.operate .card:first-child li {
+      font-size: 10.5pt;
+      line-height: 1.26;
+    }
+
+    .band.operate .card:first-child .action {
+      flex: 0 0 auto;
+      margin-top: 0.04in;
+      padding-top: 0.05in;
+    }
+
+    /* Story has 2 cards — share height evenly */
+    .band.story .cards {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 0.08in;
+    }
+
     .band.story .card {
-      flex: 1 1 0;
+      flex: unset;
+    }
+
+    .band.track .cards {
+      display: grid;
+      grid-template-rows: 1fr 1fr 1fr;
+      gap: 0.08in;
+    }
+
+    .band.track .card {
+      flex: unset;
     }
 
     .card .num {
@@ -349,17 +426,19 @@
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 6px;
-      padding: 0.08in 0.09in 0.07in;
-      flex-shrink: 0;
+      padding: 0.055in 0.07in 0.05in;
+      flex: 0 0 auto;
+      width: 100%;
     }
 
     .hotspot .cap {
       font-family: var(--mono);
-      font-size: 9pt;
-      letter-spacing: 0.06em;
+      font-size: 8pt;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
       color: var(--ink-soft);
-      margin-bottom: 0.05in;
+      margin-bottom: 0.03in;
+      line-height: 1.15;
     }
 
     .hotspot .bars {
@@ -367,33 +446,40 @@
       grid-template-columns: repeat(5, 1fr);
       gap: 0.05in;
       align-items: end;
-      height: 0.62in;
+      /* bars + label sit inside fixed cols — never use % heights */
+      height: 0.52in;
+      width: 100%;
     }
 
-    .hotspot .col {
+    .hotspot .bar-col {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.03in;
-      height: 100%;
       justify-content: flex-end;
+      gap: 0.02in;
+      height: 0.52in;
+      min-width: 0;
     }
 
     .hotspot .bar {
       width: 100%;
+      max-width: 100%;
       border-radius: 3px 3px 0 0;
       background: color-mix(in oklab, var(--clay) 40%, var(--line));
-      min-height: 0.08in;
+      flex: 0 0 auto;
+      /* absolute inch heights from HTML — never flex-grow */
     }
 
     .hotspot .bar.hi { background: var(--clay); }
 
     .hotspot .lab {
       font-family: var(--mono);
-      font-size: 8.5pt;
+      font-size: 7.5pt;
       color: var(--ink-soft);
       text-align: center;
-      line-height: 1.1;
+      line-height: 1;
+      flex: 0 0 auto;
+      white-space: nowrap;
     }
 
     .foot {
@@ -493,16 +579,16 @@
             <div class="hotspot" aria-hidden="true">
               <div class="cap">Example sources · biggest bar = prioritize first</div>
               <div class="bars">
-                <div class="col"><div class="bar" style="height:38%"></div><span class="lab">Cloud</span></div>
-                <div class="col"><div class="bar hi" style="height:100%"></div><span class="lab">Supply</span></div>
-                <div class="col"><div class="bar" style="height:52%"></div><span class="lab">Ship</span></div>
-                <div class="col"><div class="bar" style="height:32%"></div><span class="lab">Office</span></div>
-                <div class="col"><div class="bar" style="height:62%"></div><span class="lab">Use</span></div>
+                <div class="bar-col"><div class="bar" style="height:0.14in"></div><span class="lab">Cloud</span></div>
+                <div class="bar-col"><div class="bar hi" style="height:0.34in"></div><span class="lab">Supply</span></div>
+                <div class="bar-col"><div class="bar" style="height:0.2in"></div><span class="lab">Ship</span></div>
+                <div class="bar-col"><div class="bar" style="height:0.12in"></div><span class="lab">Office</span></div>
+                <div class="bar-col"><div class="bar" style="height:0.24in"></div><span class="lab">Use</span></div>
               </div>
             </div>
             <ul>
-              <li>Which part of your business contributes the most to your environmental impact (e.g., cloud computing, supplier manufacturing, shipping, office operations, or product usage).</li>
-              <li>Specific suppliers or materials that are driving high emissions.</li>
+              <li>Which activities drive most EI (cloud, suppliers, shipping, office, product use).</li>
+              <li>Suppliers or materials with outsized emissions.</li>
             </ul>
             <p class="action"><span>Action</span>Prioritize which area to tackle first instead of guessing.</p>
           </article>
