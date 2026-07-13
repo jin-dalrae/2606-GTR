@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paradigm Shift — Climatico Tabloid Poster</title>
-  <meta name="description" content="2040 landscape tabloid: grocery EI scores, provincial rankings, and justice movements demanding a fairer Environmental Impact index." />
+  <title>Paradigm Shift — The Scoreboard Changes</title>
+  <meta name="description" content="2040: EI intensity rewrites grocery aisles, place rankings, and climate justice — three dispatches after a decade of EI as capital language." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" />
@@ -13,7 +13,7 @@
       --paper: oklch(0.976 0.008 85);
       --panel: oklch(0.948 0.01 85);
       --ink: oklch(0.24 0.02 255);
-      --ink-soft: oklch(0.46 0.016 255);
+      --ink-soft: oklch(0.42 0.016 255);
       --line: oklch(0.85 0.012 90);
       --accent: oklch(0.56 0.11 155);
       --accent-deep: oklch(0.4 0.07 160);
@@ -74,6 +74,13 @@
 
     .chrome a:hover { text-decoration: underline; }
 
+    .print-stage {
+      display: flex;
+      justify-content: center;
+      margin: 0 auto;
+      overflow: visible;
+    }
+
     .poster {
       width: var(--poster-w);
       height: var(--poster-h);
@@ -83,10 +90,10 @@
       position: relative;
       overflow: hidden;
       box-shadow: 0 22px 55px rgba(18, 24, 22, 0.14);
-      padding: 0.3in 0.38in 0.24in;
+      padding: 0.26in 0.32in 0.2in;
       display: grid;
       grid-template-rows: auto auto 1fr auto;
-      gap: 0.12in;
+      gap: 0.1in;
     }
 
     .topbar {
@@ -94,8 +101,8 @@
       justify-content: space-between;
       align-items: center;
       font-family: var(--mono);
-      font-size: 8.5pt;
-      letter-spacing: 0.16em;
+      font-size: 11pt;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--ink-soft);
     }
@@ -118,58 +125,67 @@
 
     .masthead {
       display: grid;
-      grid-template-columns: 1.5fr auto;
-      gap: 0.3in;
+      grid-template-columns: 1.6fr auto;
+      gap: 0.28in;
       align-items: end;
+    }
+
+    .masthead .kicker {
+      font-family: var(--mono);
+      font-size: 9.5pt;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      margin-bottom: 0.04in;
     }
 
     .masthead h1 {
       font-family: var(--serif);
-      font-weight: 500;
-      font-size: 38pt;
-      line-height: 0.92;
+      font-weight: 600;
+      font-size: 28pt;
+      line-height: 1.08;
       letter-spacing: -0.025em;
+      max-width: 13in;
     }
 
     .masthead .sub {
       font-family: var(--serif);
       font-style: italic;
-      font-size: 12pt;
-      line-height: 1.25;
+      font-size: 13.5pt;
+      line-height: 1.28;
       color: var(--ink-soft);
       margin-top: 0.06in;
-      max-width: 12in;
+      max-width: 13in;
     }
 
     .edition {
       text-align: right;
       font-family: var(--mono);
-      font-size: 9pt;
+      font-size: 11pt;
       line-height: 1.4;
       white-space: nowrap;
     }
 
     .edition .lbl {
-      font-size: 7.5pt;
-      letter-spacing: 0.14em;
+      font-size: 9.5pt;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--ink-soft);
     }
 
     .edition .year {
       font-family: var(--serif);
-      font-size: 28pt;
+      font-size: 34pt;
       font-weight: 500;
       line-height: 1;
       color: var(--accent-deep);
       margin: 0.03in 0;
     }
 
-    /* Three article columns */
     .columns {
       display: grid;
-      grid-template-columns: 1.12fr 1fr 1fr;
-      gap: 0.14in;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.12in;
       min-height: 0;
       align-items: stretch;
     }
@@ -178,7 +194,7 @@
       background: var(--panel);
       border: 1.5px solid var(--line);
       border-radius: 10px;
-      padding: 0.14in 0.15in 0.13in;
+      padding: 0.13in 0.14in 0.12in;
       display: flex;
       flex-direction: column;
       gap: 0.07in;
@@ -194,10 +210,10 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 0.06in 0.1in;
+      gap: 0.05in 0.08in;
       font-family: var(--mono);
-      font-size: 7.5pt;
-      letter-spacing: 0.1em;
+      font-size: 9.5pt;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--ink-soft);
     }
@@ -216,8 +232,8 @@
 
     .col h2 {
       font-family: var(--serif);
-      font-weight: 500;
-      font-size: 13.5pt;
+      font-weight: 600;
+      font-size: 14.5pt;
       line-height: 1.12;
       letter-spacing: -0.015em;
     }
@@ -225,14 +241,14 @@
     .col .body {
       display: flex;
       flex-direction: column;
-      gap: 0.06in;
+      gap: 0.065in;
       flex: 1;
       min-height: 0;
     }
 
     .col .body p {
-      font-size: 8.6pt;
-      line-height: 1.36;
+      font-size: 11.5pt;
+      line-height: 1.34;
       color: var(--ink-soft);
     }
 
@@ -242,9 +258,8 @@
     }
 
     .quote {
-      padding: 0.06in 0 0.06in 0.1in;
-      border-left: 3px solid var(--clay);
-      margin: 0.02in 0;
+      padding: 0.05in 0 0.05in 0.1in;
+      border-left: 3.5px solid var(--clay);
     }
 
     .col--accent .quote { border-left-color: var(--accent); }
@@ -253,7 +268,7 @@
     .quote p {
       font-family: var(--serif);
       font-style: italic;
-      font-size: 9.5pt;
+      font-size: 12pt;
       line-height: 1.25;
       color: var(--ink);
     }
@@ -263,13 +278,12 @@
       margin-top: 0.04in;
       font-family: var(--mono);
       font-style: normal;
-      font-size: 7pt;
-      letter-spacing: 0.06em;
+      font-size: 9pt;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
       color: var(--ink-soft);
     }
 
-    /* Receipt */
     .receipt {
       display: grid;
       grid-template-columns: 1fr auto;
@@ -280,15 +294,15 @@
       background: white;
       border: 1.5px dashed color-mix(in oklab, var(--ink) 22%, var(--line));
       border-radius: 5px;
-      padding: 0.07in 0.09in;
+      padding: 0.08in 0.1in;
       font-family: var(--mono);
-      font-size: 7.5pt;
-      line-height: 1.4;
+      font-size: 10.5pt;
+      line-height: 1.35;
       color: var(--ink-soft);
     }
 
     .receipt-body .hdr {
-      font-size: 6.5pt;
+      font-size: 8.5pt;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--ink);
@@ -301,13 +315,13 @@
       justify-content: space-between;
       gap: 0.06in;
       border-bottom: 1px dotted var(--line);
-      padding: 0.015in 0;
+      padding: 0.02in 0;
     }
 
     .receipt-total {
       margin-top: 0.04in;
-      padding-top: 0.035in;
-      border-top: 1.5px solid var(--ink);
+      padding-top: 0.04in;
+      border-top: 2px solid var(--ink);
       display: flex;
       justify-content: space-between;
       color: var(--ink);
@@ -318,18 +332,18 @@
       background: oklch(0.96 0.02 155);
       border: 1.5px solid color-mix(in oklab, var(--accent) 40%, var(--line));
       border-radius: 7px;
-      padding: 0.08in;
+      padding: 0.08in 0.1in;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      min-width: 0.85in;
+      min-width: 0.95in;
     }
 
     .score-card .lbl {
       font-family: var(--mono);
-      font-size: 6.5pt;
+      font-size: 8.5pt;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--accent-deep);
@@ -337,7 +351,7 @@
 
     .score-card .big {
       font-family: var(--serif);
-      font-size: 24pt;
+      font-size: 30pt;
       font-weight: 500;
       line-height: 0.95;
       color: var(--accent-deep);
@@ -345,29 +359,28 @@
 
     .score-card .delta {
       font-family: var(--mono);
-      font-size: 8pt;
+      font-size: 10.5pt;
       color: var(--accent-deep);
       font-weight: 500;
     }
 
-    /* Ranks */
     .ranks {
       background: white;
-      border: 1px solid var(--line);
+      border: 1.5px solid var(--line);
       border-radius: 6px;
-      padding: 0.06in 0.09in;
+      padding: 0.07in 0.1in;
       display: flex;
       flex-direction: column;
-      gap: 0.03in;
+      gap: 0.02in;
     }
 
     .rank {
       display: grid;
       grid-template-columns: auto 1fr auto;
-      gap: 0.08in;
+      gap: 0.1in;
       align-items: center;
-      font-size: 8.5pt;
-      padding: 0.03in 0;
+      font-size: 11.5pt;
+      padding: 0.04in 0;
       border-bottom: 1px solid var(--line);
     }
 
@@ -377,7 +390,7 @@
       font-family: var(--mono);
       font-weight: 500;
       color: var(--accent-deep);
-      font-size: 9pt;
+      font-size: 12.5pt;
     }
 
     .rank.down .n { color: var(--rose-deep); }
@@ -386,26 +399,25 @@
 
     .rank .why {
       font-family: var(--mono);
-      font-size: 7pt;
+      font-size: 9.5pt;
       letter-spacing: 0.04em;
       color: var(--ink-soft);
     }
 
-    /* Signs */
     .signs {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.06in;
+      gap: 0.07in;
     }
 
     .sign {
       background: white;
       border: 1.5px solid var(--line);
       border-radius: 5px;
-      padding: 0.07in 0.08in;
+      padding: 0.08in 0.08in;
       font-family: var(--serif);
       font-weight: 500;
-      font-size: 8.5pt;
+      font-size: 11.5pt;
       line-height: 1.15;
       text-align: center;
       box-shadow: 2px 2px 0 color-mix(in oklab, var(--rose) 18%, transparent);
@@ -417,33 +429,33 @@
 
     .charter {
       background: white;
-      border: 1px solid var(--line);
+      border: 1.5px solid var(--line);
       border-radius: 6px;
-      padding: 0.07in 0.09in;
+      padding: 0.09in 0.1in;
       margin-top: auto;
     }
 
     .charter .k {
       font-family: var(--mono);
-      font-size: 6.5pt;
+      font-size: 9pt;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--rose-deep);
-      margin-bottom: 0.04in;
+      margin-bottom: 0.05in;
     }
 
     .charter ul {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 0.035in;
+      gap: 0.04in;
     }
 
     .charter li {
-      font-size: 7.8pt;
-      line-height: 1.28;
+      font-size: 11pt;
+      line-height: 1.3;
       color: var(--ink-soft);
-      padding-left: 0.12in;
+      padding-left: 0.14in;
       position: relative;
     }
 
@@ -451,9 +463,9 @@
       content: "";
       position: absolute;
       left: 0;
-      top: 0.2em;
-      width: 0.06in;
-      height: 0.06in;
+      top: 0.28em;
+      width: 0.07in;
+      height: 0.07in;
       border-radius: 50%;
       background: var(--rose);
     }
@@ -465,24 +477,17 @@
       gap: 0.2in;
       flex-wrap: wrap;
       font-family: var(--mono);
-      font-size: 8pt;
-      letter-spacing: 0.1em;
+      font-size: 11pt;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--ink-soft);
       border-top: 2px solid var(--ink);
-      padding-top: 0.08in;
+      padding-top: 0.07in;
     }
 
     .foot strong {
       color: var(--accent-deep);
       font-weight: 500;
-    }
-
-    .print-stage {
-      display: flex;
-      justify-content: center;
-      margin: 0 auto;
-      overflow: visible;
     }
 
     @media print {
@@ -508,24 +513,25 @@
 <body>
   <div class="chrome">
     <a href="../">← All posters</a>
-    <span>17 × 11 landscape · Three stories from 2040 · Print this page</span>
+    <span>17 × 11 landscape · Three dispatches from 2040 · Print this page</span>
   </div>
 
-  <article class="poster" aria-label="Paradigm shift landscape tabloid — three 2040 articles">
+  <article class="poster" aria-label="Paradigm shift — the scoreboard changes, three 2040 articles">
     <div>
       <div class="topbar">
         <span>05 · Paradigm shift · Climatico poster series</span>
-        <span><span class="dot" aria-hidden="true"></span>Special edition · Looking ahead to 2040</span>
+        <span><span class="dot" aria-hidden="true"></span>Looking ahead to 2040 · After EI became capital language</span>
       </div>
-      <div class="rule" aria-hidden="true" style="margin-top:0.08in"></div>
+      <div class="rule" aria-hidden="true" style="margin-top:0.06in"></div>
     </div>
 
     <header class="masthead">
       <div>
-        <h1>Paradigm Shift</h1>
+        <div class="kicker">Paradigm shift</div>
+        <h1>The scoreboard changes: EI intensity runs daily life, place, and politics</h1>
         <p class="sub">
-          When Environmental Impact intensity left the annual report — and rewrote how people shop,
-          choose where to live, and fight for climate justice.
+          Ten years after EI became capital language, it rewrites the social scoreboard —
+          how people shop, where they live and work, and who gets to define “impact.”
         </p>
       </div>
       <div class="edition">
@@ -537,14 +543,14 @@
     </header>
 
     <div class="columns">
-      <!-- 01 Grocery EI -->
+      <!-- 01 Grocery -->
       <article class="col col--clay">
         <div class="meta">
           <span class="section">01 · Daily life</span>
           <span class="sep" aria-hidden="true"></span>
           <span>March 12, 2040</span>
         </div>
-        <h2>In 2040, Your Grocery Receipt Now Shows an “EI Score.” For Some Families, It’s a Source of Pride — and Guilt.</h2>
+        <h2>In 2040, your grocery receipt shows an “EI Score.” For some families, it’s pride — and guilt.</h2>
 
         <div class="receipt" aria-hidden="true">
           <div class="receipt-body">
@@ -552,7 +558,7 @@
             <div class="receipt-line"><span>Oat milk</span><span>EI 3</span></div>
             <div class="receipt-line"><span>Rice · 2lb</span><span>EI 18</span></div>
             <div class="receipt-line"><span>Local produce</span><span>EI 4</span></div>
-            <div class="receipt-total"><span>EI Intensity</span><span>42</span></div>
+            <div class="receipt-total"><span>EI intensity</span><span>42</span></div>
           </div>
           <div class="score-card">
             <span class="lbl">Maria</span>
@@ -563,48 +569,40 @@
 
         <div class="body">
           <p>
-            When Maria Lopez, a 38-year-old nurse in Phoenix, scans her groceries at the self-checkout,
-            a small number appears at the bottom of her digital receipt: <strong>EI Intensity: 42</strong>.
-            It is lower than last month’s 51. She smiles.
+            When Maria Lopez, a 38-year-old nurse in Phoenix, scans her groceries, a small number appears:
+            <strong>EI intensity: 42</strong> — down from 51 last month. She smiles.
           </p>
           <p>
-            Across the United States and dozens of other countries, major retailers now display a standardized
-            <strong>Environmental Impact Intensity</strong> score — a simplified version of the corporate EI/Revenue
-            metrics companies have been required to publish since the mid-2030s. The number reflects the estimated
-            footprint (carbon, water stress, and land use) embedded in each product, normalized for price.
+            Across the U.S. and dozens of countries, major retailers display a standardized
+            <strong>Environmental Impact intensity</strong> score — a consumer version of the corporate EI/Revenue
+            metrics companies have published since the mid-2030s. Carbon, water stress, and land use, normalized for price.
           </p>
           <p>
-            For many households, the score has become a quiet daily ritual. Parents compare cereal brands.
-            College students track a monthly “EI budget” the way earlier generations watched calories.
-            Community groups in several states have created neighborhood leaderboards, turning lower scores
-            into a source of local pride.
-          </p>
-          <p>
-            But the system has also exposed deep divides. In lower-income neighborhoods, residents say the
-            cheapest options often carry the highest EI scores — ultra-processed foods shipped from far away
-            or produced with heavy irrigation in water-stressed regions.
+            Parents compare cereal brands. College students track a monthly “EI budget” the way earlier generations
+            watched calories. Community groups run neighborhood leaderboards. Pride for some; pressure for others when
+            the cheapest food scores worst — ultra-processed goods shipped far or grown with heavy irrigation in
+            water-stressed regions.
           </p>
           <blockquote class="quote">
             <p>“I want to do the right thing. But when the low-EI rice costs twice as much, what choice do I really have?”</p>
             <cite>Jamal Washington · Detroit · climate justice volunteer</cite>
           </blockquote>
           <p>
-            Advocates from the People’s EI Accountability Coalition argue that the index, while useful, still
-            places too much burden on individual consumers rather than forcing upstream changes in agriculture
-            and manufacturing. “We didn’t ask for a scorecard,” one organizer said at a protest outside a
-            supermarket chain headquarters. “We asked for systems that make the sustainable choice the affordable one.”
+            The People’s EI Accountability Coalition says the index still loads too much onto shoppers.
+            They didn’t ask for a scorecard — they asked for systems that make the sustainable choice the
+            <strong>affordable</strong> one.
           </p>
         </div>
       </article>
 
-      <!-- 02 Provincial rankings -->
+      <!-- 02 Place -->
       <article class="col col--accent">
         <div class="meta">
           <span class="section">02 · Place &amp; power</span>
           <span class="sep" aria-hidden="true"></span>
           <span>June 4, 2040</span>
         </div>
-        <h2>Once Dismissed as “Green Theater,” Provincial EI Rankings Are Now Reshaping Where People Choose to Live and Work</h2>
+        <h2>Once dismissed as “green theater,” provincial EI rankings now reshape where people live and work.</h2>
 
         <div class="ranks" aria-label="Sample 2040 ranking moves">
           <div class="rank">
@@ -626,32 +624,28 @@
 
         <div class="body">
           <p>
-            When the 2040 <strong>EI Progress &amp; Decoupling Index</strong> rankings were released last month,
-            few expected the top spots in North America to go to places like Nova Scotia and Minnesota’s Iron Range —
-            regions long associated with heavy industry.
+            When the 2040 <strong>EI Progress &amp; Decoupling Index</strong> landed, few expected North American
+            leaders to include Nova Scotia and Minnesota’s Iron Range — regions long tied to heavy industry.
           </p>
           <p>
-            Yet both have climbed dramatically. The index measures not just absolute emissions reductions but how
-            cleanly economic activity has <strong>decoupled</strong> from environmental harm at the provincial and
-            state level. Policymakers credit long-term investments in offshore wind, mine-site remediation, and
-            circular manufacturing clusters.
+            The index measures not only absolute emissions cuts but how cleanly economic activity has
+            <strong>decoupled</strong> from environmental harm. Policymakers credit offshore wind, mine-site
+            remediation, and circular manufacturing clusters.
           </p>
           <p>
-            The rankings now carry real weight. Several large employers have cited strong provincial EI scores when
-            deciding where to open facilities or relocate workers. Real estate agents in high-ranking regions advertise
-            <strong>“Low-EI Living.”</strong> Some remote workers deliberately move to places that perform well on
-            the index, seeking both lifestyle and alignment with their values.
-          </p>
-          <p>
-            Not everyone is celebrating. In provinces and states that have slipped, residents describe frustration
-            and political tension. “We’re being punished for industries that kept the lights on for the whole country
-            for fifty years,” said a steelworker in a Pennsylvania town hall. Environmental groups counter that the
-            index rewards genuine transition, not nostalgia.
+            Rankings now carry weight. Large employers cite strong provincial EI scores when opening facilities
+            or relocating workers. Real estate agents advertise <strong>“Low-EI Living.”</strong> Remote workers
+            move for lifestyle and values alignment. Places that slip describe frustration — and political tension.
           </p>
           <blockquote class="quote">
-            <p>The Global EI Justice Network wants a “historical responsibility” adjustment — credit for cleaning up pollution legacies, not only for cleaner baselines.</p>
-            <cite>Proposal · several national legislatures · still controversial</cite>
+            <p>“We’re being punished for industries that kept the lights on for fifty years.” Environmental groups counter: the index rewards transition, not nostalgia.</p>
+            <cite>Steelworker · Pennsylvania town hall</cite>
           </blockquote>
+          <p>
+            The Global EI Justice Network wants a <strong>“historical responsibility”</strong> adjustment —
+            credit for cleaning up pollution legacies, not only for cleaner baselines. Traction in several
+            legislatures; still contested.
+          </p>
         </div>
       </article>
 
@@ -662,39 +656,35 @@
           <span class="sep" aria-hidden="true"></span>
           <span>September 18, 2040</span>
         </div>
-        <h2>“This Index Was Supposed to Save Us. Now It’s Being Used Against Us.” Social Movements Demand a Justice-Centered EI Overhaul</h2>
+        <h2>“This index was supposed to save us. Now it’s being used against us.”</h2>
 
         <div class="signs" aria-hidden="true">
-          <div class="sign">EI Without Justice Is Just Green Colonialism</div>
-          <div class="sign">Our Emissions, Their Rankings</div>
+          <div class="sign">EI without justice is green colonialism</div>
+          <div class="sign">Our emissions, their rankings</div>
           <div class="sign">Historical responsibility now</div>
           <div class="sign">Transition with workers</div>
         </div>
 
         <div class="body">
           <p>
-            On a humid afternoon in Manila, hundreds of activists gathered outside the regional offices of an
-            international development bank. Fifteen years after widespread adoption of corporate, portfolio, and
-            national Environmental Impact indices, a growing global movement argues the tools have been captured by
-            powerful interests and are deepening inequality rather than solving the climate crisis.
+            On a humid afternoon in Manila, hundreds of activists surround a development bank. Fifteen years into
+            corporate, portfolio, and national Environmental Impact indices, a growing movement says the tools were
+            <strong>captured</strong> — deepening inequality instead of solving the climate crisis.
           </p>
           <p>
-            Critics point to several problems. Portfolio EI metrics, they say, have accelerated capital flight from
-            the Global South as investors chase lower-intensity assets in already wealthy countries. National and
-            provincial rankings often fail to account for emissions embedded in exported goods that ultimately serve
-            consumers in rich nations. And while companies celebrate year-over-year intensity gains, many workers in
-            carbon-intensive industries — from coal regions in India to oil towns in Nigeria and the U.S. Gulf Coast —
-            report job losses without adequate support.
+            Portfolio EI metrics accelerate capital flight from the Global South as investors chase lower-intensity
+            assets in already wealthy countries. National ranks often ignore emissions embedded in exports that serve
+            rich-nation consumers. Companies celebrate intensity gains while workers in coal, oil, and heavy industry
+            report job losses without support.
           </p>
           <blockquote class="quote">
-            <p>“We were told these numbers would create accountability. Instead, they’re being used to justify trade barriers and deny financing to countries still building basic infrastructure.”</p>
+            <p>“We were told these numbers would create accountability. Instead, they’re used to justify trade barriers and deny financing to countries still building basic infrastructure.”</p>
             <cite>Aisha Rahman · Bangladesh · climate justice organizer</cite>
           </blockquote>
           <p>
-            In response, a coalition of more than 200 organizations has launched the <strong>People’s EI Charter</strong>.
-            Some governments are experimenting with revised indices that blend environmental data with equity metrics.
-            Whether those experiments scale — or the current generation of EI indices remains dominant — has become one
-            of the defining political battles of the 2040s.
+            A coalition of more than 200 organizations has launched the <strong>People’s EI Charter</strong>.
+            Some governments experiment with indices that blend environmental data and equity metrics. Whether those
+            scale — or current EI indices stay dominant — is one of the defining political fights of the 2040s.
           </p>
         </div>
 
