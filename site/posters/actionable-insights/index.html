@@ -184,8 +184,25 @@
       display: flex;
       flex-direction: column;
       gap: 0.06in;
-      flex: 1;
       min-height: 0;
+    }
+
+    /* A & B take more vertical space; C stays compact */
+    .band.operate,
+    .band.track {
+      flex: 1.4 1 0;
+    }
+
+    .band.story {
+      flex: 0.65 0 auto;
+    }
+
+    .band.story .cards {
+      flex: 0 0 auto;
+    }
+
+    .band.story .card {
+      flex: 0 0 auto;
     }
 
     .band-head {
