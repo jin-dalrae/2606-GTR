@@ -466,47 +466,88 @@
       text-align: center;
     }
 
-    .chart {
+    /* Clear labeled metrics (no cut-off SVG) */
+    .metric-table {
+      width: 100%;
+      border-collapse: collapse;
       background: white;
       border: 1.5px solid var(--line);
       border-radius: 8px;
-      padding: 0.1in 0.12in 0.08in;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      overflow: hidden;
+      font-size: 10.5pt;
     }
 
-    .chart svg {
-      width: 100%;
-      height: auto;
+    .metric-table th,
+    .metric-table td {
+      padding: 0.08in 0.1in;
+      text-align: center;
+      border-bottom: 1px solid var(--line);
+      vertical-align: middle;
+    }
+
+    .metric-table th {
+      font-family: var(--mono);
+      font-size: 8.5pt;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      background: color-mix(in oklab, var(--panel) 80%, white);
+    }
+
+    .metric-table th:first-child,
+    .metric-table td:first-child {
+      text-align: left;
+      font-weight: 600;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+
+    .metric-table tr:last-child th,
+    .metric-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .metric-table .val {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 13pt;
+      color: var(--ink);
+      line-height: 1.1;
+    }
+
+    .metric-table .unit {
       display: block;
+      font-family: var(--mono);
+      font-size: 7.5pt;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--ink-soft);
+      margin-top: 0.02in;
     }
 
-    .chart-legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.08in 0.16in;
-      margin-top: 0.06in;
+    .metric-table .row-ei .val { color: var(--accent-deep); }
+    .metric-table .row-ret .val { color: var(--clay-deep); }
+
+    .metric-table .arrow {
       font-family: var(--mono);
       font-size: 9pt;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+      color: var(--accent-deep);
+      font-weight: 500;
+    }
+
+    .metric-table .arrow.flat {
+      color: var(--clay-deep);
+    }
+
+    .metric-call {
+      margin-top: 0.08in;
+      font-size: 10pt;
+      line-height: 1.35;
       color: var(--ink-soft);
     }
 
-    .chart-legend span::before {
-      content: "";
-      display: inline-block;
-      width: 0.14in;
-      height: 0.07in;
-      margin-right: 0.05in;
-      vertical-align: middle;
-      border-radius: 1px;
-    }
-
-    .chart-legend .ei::before { background: var(--accent-deep); }
-    .chart-legend .ret::before { background: var(--clay); }
+    .metric-call strong { color: var(--ink); }
 
     .foot {
       display: flex;
@@ -743,33 +784,40 @@
         </div>
 
         <div class="panel grow">
-          <div class="kicker">Illustrative · Hypothetical portfolio path</div>
-          <h3>Intensity can fall while returns hold</h3>
-          <p class="note">Fictional path under FoF pressure — part of the news framing, not verified performance.</p>
-          <div class="chart" aria-hidden="true">
-            <svg viewBox="0 0 320 130" xmlns="http://www.w3.org/2000/svg">
-              <line x1="40" y1="12" x2="40" y2="100" stroke="#ccc" stroke-width="1.5"/>
-              <line x1="40" y1="100" x2="308" y2="100" stroke="#ccc" stroke-width="1.5"/>
-              <line x1="40" y1="35" x2="308" y2="35" stroke="#e8e4dc" stroke-width="1"/>
-              <line x1="40" y1="60" x2="308" y2="60" stroke="#e8e4dc" stroke-width="1"/>
-              <line x1="40" y1="80" x2="308" y2="80" stroke="#e8e4dc" stroke-width="1"/>
-              <polyline fill="none" stroke="#2d6b4f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-                points="48,28 95,40 145,52 195,64 245,78 300,88"/>
-              <circle cx="48" cy="28" r="4" fill="#2d6b4f"/>
-              <circle cx="300" cy="88" r="4" fill="#2d6b4f"/>
-              <polyline fill="none" stroke="#a65c28" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 4"
-                points="48,72 95,70 145,66 195,62 245,56 300,48"/>
-              <circle cx="48" cy="72" r="3.5" fill="#a65c28"/>
-              <circle cx="300" cy="48" r="3.5" fill="#a65c28"/>
-              <text x="48" y="120" font-family="IBM Plex Mono, monospace" font-size="12" fill="#666">’22</text>
-              <text x="145" y="120" font-family="IBM Plex Mono, monospace" font-size="12" fill="#666">’24</text>
-              <text x="275" y="120" font-family="IBM Plex Mono, monospace" font-size="12" fill="#666">’26</text>
-            </svg>
-            <div class="chart-legend">
-              <span class="ei">EI intensity ↓</span>
-              <span class="ret">Returns</span>
-            </div>
-          </div>
+          <div class="kicker">Hypothetical · GTRock underlying-fund book</div>
+          <h3>What the firm claims (not verified)</h3>
+          <p class="note">Made-up numbers for the news framing — two metrics, labeled years.</p>
+          <table class="metric-table" aria-label="Hypothetical EI intensity and returns by year">
+            <thead>
+              <tr>
+                <th scope="col">Metric</th>
+                <th scope="col">2022</th>
+                <th scope="col">2024</th>
+                <th scope="col">2026</th>
+                <th scope="col">Trend</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="row-ei">
+                <td>EI intensity<br/><span class="unit">tCO₂e per $M invested</span></td>
+                <td><span class="val">82</span><span class="unit">high</span></td>
+                <td><span class="val">61</span><span class="unit">down</span></td>
+                <td><span class="val">48</span><span class="unit">lower = better</span></td>
+                <td><span class="arrow">↓ −41%</span></td>
+              </tr>
+              <tr class="row-ret">
+                <td>Portfolio returns<br/><span class="unit">annualized, net</span></td>
+                <td><span class="val">14%</span><span class="unit">baseline</span></td>
+                <td><span class="val">15%</span><span class="unit">stable</span></td>
+                <td><span class="val">16%</span><span class="unit">held</span></td>
+                <td><span class="arrow flat">→ held</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="metric-call">
+            <strong>Read as:</strong> EI intensity falls (greener per dollar) while returns stay roughly flat —
+            the cultural claim of “environmentally friendly capitalism.” Not third-party audited.
+          </p>
         </div>
       </aside>
     </div>
