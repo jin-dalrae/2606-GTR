@@ -13,18 +13,18 @@
       --ink: #2b2b2b;
       --muted: #77756b;
       --muted-2: #9a988f;
+      --muted-3: #807e73;
       --line: #e6e4dd;
       --line-2: #cfcdc7;
-      --accent: #2b2b2b;
+      --head: #eae8e1;
+      --chip: #eeece5;
       --good: #5a6a3e;
       --good-soft: #e4e6d5;
-      --warn: #8a6410;
-      --warn-soft: #e9d7ba;
-      --bad: #9e3b26;
-      --bad-soft: #e5c6ba;
-      --chip: #f0efea;
-      --shadow: 0 1px 0 rgba(43,43,43,0.04), 0 10px 28px rgba(43,43,43,0.06);
-      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --warn: #9a7415;
+      --warn-soft: #ede2c9;
+      --bad: #a5432e;
+      --bad-soft: #efdcd4;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -84,7 +84,7 @@
       color: var(--muted);
       text-decoration: none;
       padding: 8px 12px;
-      border: 1.5px solid var(--line-2);
+      border: 1px solid var(--line-2);
       border-radius: 9px;
       background: var(--panel);
     }
@@ -92,10 +92,10 @@
 
     .lb-header {
       background: var(--panel);
-      border: 1.5px solid var(--line);
-      border-radius: 16px;
-      padding: 22px 22px 18px;
-      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 20px 20px 16px;
+      box-shadow: none;
       margin-bottom: 14px;
     }
     .lb-kicker {
@@ -128,7 +128,7 @@
       margin: 16px 0 12px;
     }
     .stage-row button {
-      border: 1.5px solid var(--line-2);
+      border: 1px solid var(--line-2);
       background: var(--panel);
       color: var(--muted);
       border-radius: 999px;
@@ -163,7 +163,7 @@
     .search input {
       width: 100%;
       appearance: none;
-      border: 1.5px solid var(--line-2);
+      border: 1px solid var(--line-2);
       background: var(--panel-2);
       border-radius: 9px;
       padding: 11px 12px;
@@ -195,7 +195,7 @@
       gap: 6px;
     }
     .sort-pills button {
-      border: 1.5px solid var(--line-2);
+      border: 1px solid var(--line-2);
       background: var(--panel);
       border-radius: 999px;
       padding: 7px 12px;
@@ -220,10 +220,9 @@
     }
     .metric {
       background: var(--panel);
-      border: 1.5px solid var(--line);
+      border: 1px solid var(--line);
       border-radius: 14px;
-      padding: 14px 16px;
-      box-shadow: var(--shadow);
+      padding: 16px 18px;
     }
     .metric .k {
       font-size: 10.5px;
@@ -248,10 +247,9 @@
     /* Table board */
     .board {
       background: var(--panel);
-      border: 1.5px solid var(--line);
-      border-radius: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
       overflow: auto;
-      box-shadow: var(--shadow);
     }
     table {
       width: 100%;
@@ -268,7 +266,7 @@
     th {
       position: sticky;
       top: 0;
-      background: #f3f2ec;
+      background: var(--head);
       font-size: 10.5px;
       font-weight: 700;
       letter-spacing: 0.06em;
@@ -347,6 +345,33 @@
     .trend.up { color: var(--bad); }
     .trend.flat { color: var(--muted-2); }
 
+
+    .tier {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .tier::before {
+      content: "";
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .tier-strong { background: var(--good-soft); color: var(--good); }
+    .tier-mod { background: var(--warn-soft); color: var(--warn); }
+    .tier-emerg { background: var(--bad-soft); color: var(--bad); }
+    .integrity {
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+
     .maturity {
       font-size: 12.5px;
       font-weight: 600;
@@ -371,7 +396,7 @@
       padding: 12px 14px;
       border-radius: 12px;
       background: var(--panel);
-      border: 1.5px solid var(--line);
+      border: 1px solid var(--line);
       font-size: 12.5px;
       color: var(--muted);
       line-height: 1.5;
@@ -396,12 +421,12 @@
     .btn-primary {
       background: var(--ink);
       color: #fbfaf7;
-      border: 1.5px solid var(--ink);
+      border: 1px solid var(--ink);
     }
     .btn-secondary {
       background: var(--panel);
       color: var(--ink);
-      border: 1.5px solid var(--line-2);
+      border: 1px solid var(--line-2);
     }
 
     @media (max-width: 900px) {
@@ -427,12 +452,12 @@
     </div>
 
     <header class="lb-header">
-      <div class="lb-kicker">Investor view · Portfolio leaderboard</div>
+      <div class="lb-kicker">Investor &amp; program style · Portfolio leaderboard</div>
       <h1>Compare holdings by stage, size &amp; intensity</h1>
       <p>
         Rank companies within a fair cohort — same funding stage, similar headcount and revenue —
         on <strong style="color:var(--ink)">EI / Revenue</strong>, absolute footprint, handprint integrity, and maturity.
-        Diligence-ready language. Illustrative data only.
+        Same visual system as the investor portfolio board and program director cohort board. Illustrative data only.
       </p>
 
       <div class="stage-row" id="stage-chips" role="tablist" aria-label="Funding stage cohort"></div>
@@ -593,6 +618,11 @@
     fte: "desc", footprint: "asc", handprint: "desc", name: "asc", stage: "asc",
   };
 
+  function tierClass(m) {
+    if (m >= 4) return "tier-strong";
+    if (m >= 2) return "tier-mod";
+    return "tier-emerg";
+  }
   function eiClass(v) {
     if (v <= 6) return "ei-good";
     if (v <= 14) return "ei-mid";
@@ -734,9 +764,8 @@
           <td class="num">${d.footprint.toFixed(1)} t/yr</td>
           <td class="num">${d.handprint > 0 ? "~" + d.handprint : "—"}</td>
           <td>
-            <div class="maturity">${MATURITY_LABEL[d.maturity]}
-              <small>${d.integrity}% integrity</small>
-            </div>
+            <span class="tier ${tierClass(d.maturity)}">${MATURITY_LABEL[d.maturity]}</span>
+            <div class="integrity">${d.integrity}% integrity</div>
           </td>
           <td>${trendHtml(d.eiTrend)}</td>
         </tr>`;

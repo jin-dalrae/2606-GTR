@@ -305,6 +305,12 @@
     body.textContent = step.detail;
 
     const c = cfg();
+    const workspace = document.querySelector(".proto-workspace");
+    if (workspace) {
+      // Investor / program product chrome for dashboard-family tabs
+      const boardTabs = new Set(["p2", "p3", "p4", "p5"]);
+      workspace.classList.toggle("board-theme", boardTabs.has(proto));
+    }
     let label = `${c.stageLabel} · Step ${index + 1}/${S.length}`;
     if (c.device) {
       label = `${c.stageLabel} · ${device === "mobile" ? "Mobile" : "Desktop"} · Step ${
