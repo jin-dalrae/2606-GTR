@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Dashboard Wireframe — Polished</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.44.0/iconfont/tabler-icons.min.css" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    min-height: 100%;
+    overflow: auto;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: #e9e7de;
+    color: #1a1a1a;
+  }
+  .frame {
+    width: min(1200px, calc(100% - 20px));
+    min-height: 720px;
+    height: auto;
+    margin: 10px auto;
+    background: #f7f6f2;
+    border: 1px solid #d9d8d2;
+    border-radius: 18px;
+    padding: 22px 26px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 16px;
+  }
+
+  /* header */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .site-info { display: flex; align-items: center; gap: 10px; }
+  .site-icon {
+    width: 34px; height: 34px; border-radius: 8px;
+    background: #dfe8d5; display: flex; align-items: center; justify-content: center;
+  }
+  .site-icon i { font-size: 17px; color: #3f6b2a; }
+  .site-info strong { font-size: 16px; font-weight: 600; display: block; }
+  .site-info span { font-size: 12px; color: #8a8983; }
+  .share-row { display: flex; gap: 8px; }
+  .share-btn {
+    display: flex; align-items: center; gap: 6px;
+    height: 32px; padding: 0 14px;
+    border: 1px solid #d9d8d2; border-radius: 7px;
+    background: #ffffff; font-size: 12.5px; color: #55554f;
+    cursor: pointer;
+  }
+  .share-btn.primary { background: #3f6b2a; border-color: #3f6b2a; color: #ffffff; }
+  .share-btn i { font-size: 15px; }
+  .share-btn:hover { filter: brightness(0.97); }
+
+  /* main grid */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr 0.95fr;
+    gap: 16px;
+    min-height: 0;
+  }
+  .col { display: flex; flex-direction: column; gap: 16px; min-height: 0; }
+  .panel {
+    background: #ffffff;
+    border: 1px solid #e3e2db;
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .panel-title {
+    font-size: 11.5px; font-weight: 700; color: #8a8983;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .panel-title i { font-size: 13px; }
+
+  /* overview stat cards */
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat-card {
+    background: #f3f2ec; border-radius: 10px; padding: 12px 14px;
+    display: flex; flex-direction: column; gap: 4px; justify-content: center;
+  }
+  .stat-card p.label { font-size: 11px; color: #6b6a66; }
+  .stat-card p.number { font-size: 22px; font-weight: 700; }
+  .stat-card p.unit { font-size: 10.5px; color: #9a9990; }
+
+  /* maturity ring */
+  .ring-wrap { display: flex; align-items: center; gap: 14px; flex: 1; }
+  .ring {
+    width: 88px; height: 88px; border-radius: 50%;
+    background: conic-gradient(#3f6b2a 0deg 72deg, #e3e2db 72deg 360deg);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .ring-inner {
+    width: 66px; height: 66px; border-radius: 50%; background: #ffffff;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .ring-inner strong { font-size: 18px; }
+  .ring-inner span { font-size: 9.5px; color: #9a9990; }
+  .ring-text p { font-size: 12px; color: #55554f; line-height: 1.45; }
+  .ring-text p strong { color: #1a1a1a; }
+
+  /* goals */
+  .goal-row { display: flex; flex-direction: column; gap: 5px; }
+  .goal-top { display: flex; justify-content: space-between; }
+  .goal-name { font-size: 13.5px; font-weight: 600; }
+  .goal-percent { font-size: 12px; color: #3f6b2a; font-weight: 600; }
+  .progress-track { height: 7px; background: #edece5; border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: #3f6b2a; border-radius: 4px; }
+  .goal-meta { font-size: 11px; color: #9a9990; }
+
+  .milestone-track {
+    display: flex; justify-content: space-between; align-items: center;
+    position: relative; padding: 6px 4px 0;
+  }
+  .milestone-track::before {
+    content: ""; position: absolute; left: 4px; right: 4px; top: 50%;
+    height: 1.5px; background: #e3e2db;
+  }
+  .milestone { position: relative; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .milestone .marker { width: 9px; height: 9px; border-radius: 50%; background: #cfcec6; }
+  .milestone.now .marker { width: 15px; height: 15px; background: #3f6b2a; }
+  .milestone p { font-size: 10px; color: #9a9990; white-space: nowrap; }
+
+  /* recommendations */
+  .rec-summary {
+    display: flex; align-items: center; gap: 8px;
+    background: #fbf3e2; border-radius: 10px; padding: 10px 12px;
+  }
+  .rec-summary i { font-size: 16px; color: #a5760f; }
+  .rec-summary p { font-size: 12px; color: #6b5a35; }
+  .rec-summary p strong { color: #4a3d1f; }
+  .rec-list { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .rec-item { display: flex; align-items: flex-start; gap: 10px; }
+  .rec-icon {
+    width: 22px; height: 22px; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+  }
+  .rec-icon.add { background: #dfe8d5; } .rec-icon.add i { color: #3f6b2a; font-size: 13px; }
+  .rec-icon.remove { background: #f6e0da; } .rec-icon.remove i { color: #b5502f; font-size: 13px; }
+  .rec-text p.title { font-size: 13px; font-weight: 500; line-height: 1.35; }
+  .rec-text p.tag { font-size: 11px; color: #9a9990; margin-top: 2px; }
+
+  /* why this matters */
+  .why-panel { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+  .why-body p { font-size: 12.5px; line-height: 1.55; color: #4a4a46; }
+  .why-leaf-row {
+    margin-top: auto; display: flex; align-items: center; gap: 10px;
+    background: #eef3e8; border-radius: 10px; padding: 12px;
+  }
+  .why-leaf-row i { font-size: 20px; color: #3f6b2a; }
+  .why-leaf-row p { font-size: 11.5px; color: #3f6b2a; font-weight: 500; }
+
+  .impact-mini { display: flex; flex-direction: column; gap: 8px; }
+  .impact-bars { display: flex; align-items: flex-end; gap: 6px; height: 60px; }
+  .impact-bars .b { flex: 1; background: #dfe8d5; border-radius: 3px 3px 0 0; }
+  .impact-labels { display: flex; justify-content: space-between; }
+  .impact-labels span { font-size: 9.5px; color: #9a9990; }
+
+  /* footer */
+  .footer-strip {
+    display: flex; align-items: center; justify-content: space-between;
+    background: #1a2e15; border-radius: 14px; padding: 14px 20px;
+  }
+  .footer-strip .msg { display: flex; align-items: center; gap: 10px; }
+  .footer-strip .msg i { font-size: 18px; color: #b7d99a; }
+  .footer-strip .msg p { font-size: 13px; color: #e8f0e0; }
+  .footer-strip .msg p strong { color: #ffffff; }
+  .footer-stats { display: flex; gap: 26px; }
+  .footer-stat { text-align: right; }
+  .footer-stat p.n { font-size: 16px; font-weight: 700; color: #ffffff; }
+  .footer-stat p.l { font-size: 10.5px; color: #b7d99a; }
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <div class="header">
+    <div class="site-info">
+      <div class="site-icon"><i class="ti ti-building"></i></div>
+      <div>
+        <strong>startup.com</strong>
+        <span>Climate impact snapshot · Updated today</span>
+      </div>
+    </div>
+    <div class="share-row">
+      <button class="share-btn"><i class="ti ti-link"></i>Copy link</button>
+      <button class="share-btn"><i class="ti ti-download"></i>Download</button>
+      <button class="share-btn primary"><i class="ti ti-brand-linkedin"></i>Share to LinkedIn</button>
+    </div>
+  </div>
+
+  <div class="main-grid">
+
+    <div class="col">
+      <div class="panel">
+        <p class="panel-title"><i class="ti ti-chart-bar"></i>Overview</p>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <p class="label">CO2 you emit</p>
+            <p class="number">42.6</p>
+            <p class="unit">tons this year</p>
+          </div>
+          <div class="stat-card">
+            <p class="label">CO2 you help avoid</p>
+            <p class="number">10.8</p>
+            <p class="unit">tons avoided</p>
+          </div>
+          <div class="stat-card">
+            <p class="label">Your overall impact</p>
+            <p class="number">-65.4</p>
+            <p class="unit">net tons CO2</p>
+          </div>
+          <div class="stat-card">
+            <p class="label">Trend</p>
+            <p class="number" style="color:#3f6b2a;">↓ 12%</p>
+            <p class="unit">vs last quarter</p>
+          </div>
+        </div>
+        <div class="ring-wrap">
+          <div class="ring"><div class="ring-inner"><strong>1</strong><span>of 5</span></div></div>
+          <div class="ring-text">
+            <p><strong>Level 1 · Getting started.</strong><br/>You're tracking the basics — most startups reach Level 2 within 6 months.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" style="flex:1;">
+        <p class="panel-title"><i class="ti ti-target-arrow"></i>Climate goals</p>
+        <div class="goal-row">
+          <div class="goal-top"><p class="goal-name">Use sustainable data</p><p class="goal-percent">60%</p></div>
+          <div class="progress-track"><div class="progress-fill" style="width:60%;"></div></div>
+          <p class="goal-meta">Owner: Priya · Due Sep 2026</p>
+        </div>
+        <div class="goal-row">
+          <div class="goal-top"><p class="goal-name">Cut supplier emissions</p><p class="goal-percent">20%</p></div>
+          <div class="progress-track"><div class="progress-fill" style="width:20%;"></div></div>
+          <p class="goal-meta">Owner: Dan · Due Dec 2026</p>
+        </div>
+        <div class="milestone-track">
+          <div class="milestone"><div class="marker"></div><p>Past</p></div>
+          <div class="milestone"><div class="marker"></div><p>Past</p></div>
+          <div class="milestone now"><div class="marker"></div><p>Now</p></div>
+          <div class="milestone"><div class="marker"></div><p>Next</p></div>
+          <div class="milestone"><div class="marker"></div><p>Target</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="panel" style="flex:1;">
+        <p class="panel-title"><i class="ti ti-bulb"></i>How to improve</p>
+        <div class="rec-summary">
+          <i class="ti ti-sparkles"></i>
+          <p><strong>4 opportunities</strong> found that could improve your score</p>
+        </div>
+        <div class="rec-list">
+          <div class="rec-item">
+            <div class="rec-icon add"><i class="ti ti-plus"></i></div>
+            <div class="rec-text"><p class="title">Switch to a renewable energy supplier</p><p class="tag">Could cut footprint ~8 tons/yr</p></div>
+          </div>
+          <div class="rec-item">
+            <div class="rec-icon add"><i class="ti ti-plus"></i></div>
+            <div class="rec-text"><p class="title">Add carbon offsets for shipping</p><p class="tag">Raises your handprint score</p></div>
+          </div>
+          <div class="rec-item">
+            <div class="rec-icon remove"><i class="ti ti-minus"></i></div>
+            <div class="rec-text"><p class="title">Cut single-use packaging</p><p class="tag">Common quick win for startups</p></div>
+          </div>
+          <div class="rec-item">
+            <div class="rec-icon remove"><i class="ti ti-minus"></i></div>
+            <div class="rec-text"><p class="title">Reduce non-essential travel</p><p class="tag">Biggest lever at your stage</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="panel why-panel">
+        <p class="panel-title"><i class="ti ti-info-circle"></i>Why this matters</p>
+        <div class="why-body">
+          <p>Startups that track and act on emissions early build trust with investors, partners, and customers who care about climate impact — and avoid costly retrofits later.</p>
+        </div>
+        <div class="impact-mini">
+          <p class="panel-title" style="margin-top:4px;"><i class="ti ti-trending-down"></i>6-month outlook</p>
+          <div class="impact-bars">
+            <div class="b" style="height:40%;"></div>
+            <div class="b" style="height:52%;"></div>
+            <div class="b" style="height:65%;"></div>
+            <div class="b" style="height:58%;"></div>
+            <div class="b" style="height:44%;"></div>
+            <div class="b" style="height:30%;"></div>
+          </div>
+          <div class="impact-labels">
+            <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+          </div>
+        </div>
+        <div class="why-leaf-row">
+          <i class="ti ti-leaf"></i>
+          <p>Small, steady changes add up to real climate impact.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-strip">
+    <div class="msg">
+      <i class="ti ti-trending-down"></i>
+      <p>Projected next 6 months: <strong>emissions trending down</strong> if current goals stay on track</p>
+    </div>
+    <div class="footer-stats">
+      <div class="footer-stat"><p class="n">2</p><p class="l">active goals</p></div>
+      <div class="footer-stat"><p class="n">40%</p><p class="l">avg progress</p></div>
+      <div class="footer-stat"><p class="n">4</p><p class="l">tips to try</p></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Behavior Change — Climatico Posters</title>
+  <meta name="description" content="Climatico poster: Behavior change — small decisions that compound into lower impact." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: oklch(0.976 0.008 85);
+      --panel: oklch(0.948 0.01 85);
+      --ink: #16201c;
+      --ink-soft: #4a5751;
+      --accent: oklch(0.56 0.11 155);
+      --accent-deep: oklch(0.4 0.07 160);
+      --line: oklch(0.85 0.012 90);
+      --serif: "Fraunces", Georgia, serif;
+      --sans: "DM Sans", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: var(--sans);
+      color: var(--ink);
+      background: #d9d5cb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.25rem;
+    }
+    .chrome {
+      width: min(1120px, 100%);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.85rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #3d4a44;
+    }
+    .chrome a { color: var(--accent-deep); text-decoration: none; font-weight: 500; }
+    .chrome a:hover { text-decoration: underline; }
+    .poster {
+      width: min(900px, 100%);
+      aspect-ratio: 3 / 4;
+      background:
+        radial-gradient(900px 500px at 12% 8%, rgba(31, 138, 91, 0.12), transparent 55%),
+        radial-gradient(700px 420px at 100% 100%, rgba(196, 122, 18, 0.08), transparent 50%),
+        var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 24px 60px rgba(18, 24, 22, 0.12);
+      padding: clamp(1.5rem, 4vw, 3rem);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+    }
+    .series {
+      margin-top: 0.85rem;
+      font-family: var(--mono);
+      font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    h1 {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: clamp(2.6rem, 8vw, 4.8rem);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-top: 0.55rem;
+      max-width: 10ch;
+    }
+    .lede {
+      margin-top: auto;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(1.15rem, 2.8vw, 1.65rem);
+      line-height: 1.25;
+      color: var(--ink-soft);
+      max-width: 22ch;
+    }
+    .points {
+      margin-top: 1.5rem;
+      display: grid;
+      gap: 0.75rem;
+    }
+    .point {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.75rem;
+      align-items: start;
+      padding: 0.85rem 1rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid var(--line);
+    }
+    .point b {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: var(--accent-deep);
+      padding-top: 0.2rem;
+    }
+    .point p {
+      font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+      line-height: 1.45;
+      color: var(--ink);
+    }
+    .footer {
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-family: var(--mono);
+      font-size: clamp(0.65rem, 1.3vw, 0.78rem);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      border-top: 1px solid var(--line);
+      padding-top: 1rem;
+    }
+    .footer strong { color: var(--accent-deep); font-weight: 500; }
+    @media print {
+      body { background: white; padding: 0; }
+      .chrome { display: none; }
+      .poster {
+        width: 100%;
+        min-height: 100vh;
+        aspect-ratio: auto;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="chrome">
+    <a href="../">← All posters</a>
+    <span>Climatico · Midterm 2026</span>
+  </div>
+  <article class="poster" aria-label="Behavior change poster">
+    <p class="eyebrow">02 · Behavior change</p>
+    <p class="series">Climatico poster series</p>
+    <h1>What people do next.</h1>
+    <p class="lede">Impact becomes a weekly habit — not an annual PDF.</p>
+    <div class="points">
+      <div class="point">
+        <b>01</b>
+        <p>Founders open the check-up before the board deck — and act on hotspots while the stack is still soft.</p>
+      </div>
+      <div class="point">
+        <b>02</b>
+        <p>Teams replace vague pledges with activity data: energy, travel, cloud, and the good their product enables.</p>
+      </div>
+      <div class="point">
+        <b>03</b>
+        <p>Default choices shift: cleaner regions, fewer empty flights, evidence before a green claim leaves the room.</p>
+      </div>
+    </div>
+    <div class="footer">
+      <span>Climatico</span>
+      <strong>gtr1.web.app/midterm</strong>
+      <span>Rae · Gabriel · Tej</span>
+    </div>
+  </article>
+</body>
+</html>

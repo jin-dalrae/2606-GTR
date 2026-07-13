@@ -66,7 +66,7 @@ function rewriteTree(dir) {
     // Never rewrite self-contained prototype bundles — base64/JSON breaks easily
     // and they resolve paths at runtime via midterm-aware injectShowcaseHeader.
     const rel = relative(MID, file).replace(/\\/g, "/");
-    if (/^prototype[0-4](\b|\/)/.test(rel)) continue; // self-contained HTML bundles
+    if (/^prototype[0-4](\b|\/)/.test(rel) || rel.startsWith("posters/main/")) continue; // self-contained bundles
 
     if (!/\.(html?|js|css|jsx|json|md|svg)$/i.test(file)) continue;
     const before = readFileSync(file, "utf8");

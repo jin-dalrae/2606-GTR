@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prototype 1 · Mobile — Climatico</title>
+  <meta name="description" content="Onboarding assessment prototype in its native mobile phone frame." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/site.css" />
+  <style>
+    /* Full-height stage so Prototype 1’s built-in phone bezel (380×760) shows as-is */
+    .mobile-page {
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - var(--nav-h));
+      border-top: 1px solid var(--line);
+      background: #dedcd5;
+    }
+
+    .mobile-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      padding: 0.65rem 1rem;
+      background: rgba(255, 255, 255, 0.88);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+      flex-shrink: 0;
+    }
+
+    .mobile-toolbar strong {
+      font-size: 0.9rem;
+    }
+
+    .mobile-toolbar .meta {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--ink-3);
+      font-weight: 500;
+      margin-top: 0.1rem;
+    }
+
+    .mobile-stage {
+      flex: 1;
+      min-height: 0;
+      position: relative;
+      /* Match prototype’s own canvas so the phone sits centered as designed */
+      background: #dedcd5;
+    }
+
+    .mobile-stage iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #dedcd5;
+    }
+
+    @media (max-width: 520px) {
+      .mobile-page {
+        min-height: calc(100dvh - var(--nav-h));
+      }
+      .mobile-stage {
+        /* Keep enough height for the 760px phone + bezel + labels */
+        min-height: max(820px, calc(100dvh - var(--nav-h) - 64px));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-nav" id="site-nav"></header>
+
+    <div class="mobile-page">
+      <div class="mobile-toolbar">
+        <div>
+          <strong>Prototype 1 · Onboarding</strong>
+          <span class="meta">Mobile wireframe · as designed</span>
+        </div>
+        <div class="btn-row" style="margin:0">
+          <a class="btn btn-secondary" href="../" style="padding:0.5rem 0.9rem;font-size:0.85rem">Guided walkthrough</a>
+          <a class="btn btn-primary" href="../../prototype1/" target="_blank" rel="noopener" style="padding:0.5rem 0.9rem;font-size:0.85rem">Open full screen ↗</a>
+        </div>
+      </div>
+
+      <div class="mobile-stage" aria-label="Onboarding assessment mobile prototype">
+        <iframe
+          id="proto-mobile-frame"
+          title="Climatico onboarding assessment — mobile"
+          src="../../prototype1/index.html"
+          loading="eager"
+          allow="clipboard-write"
+        ></iframe>
+      </div>
+    </div>
+  </div>
+  <script src="../../js/site.js"></script>
+</body>
+</html>

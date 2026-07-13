@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Culture Shift — Climatico Posters</title>
+  <meta name="description" content="Climatico poster: Culture shift — impact ratios become as legible as ARR." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: oklch(0.975 0.002 0);
+      --ink: #161616;
+      --ink-soft: #555;
+      --accent: oklch(0.58 0.12 35);
+      --accent-deep: oklch(0.42 0.1 35);
+      --line: oklch(0.86 0.004 0);
+      --hand: oklch(0.5 0.1 155);
+      --serif: "Fraunces", Georgia, serif;
+      --sans: "DM Sans", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: var(--sans);
+      color: var(--ink);
+      background: #d4d2cd;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.25rem;
+    }
+    .chrome {
+      width: min(1120px, 100%);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.85rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #3d4a44;
+    }
+    .chrome a { color: var(--accent-deep); text-decoration: none; font-weight: 500; }
+    .chrome a:hover { text-decoration: underline; }
+    .poster {
+      width: min(900px, 100%);
+      aspect-ratio: 3 / 4;
+      background:
+        radial-gradient(700px 480px at 0% 0%, rgba(196, 122, 18, 0.12), transparent 55%),
+        radial-gradient(600px 400px at 100% 80%, rgba(31, 138, 91, 0.08), transparent 50%),
+        var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 24px 60px rgba(18, 24, 22, 0.12);
+      padding: clamp(1.5rem, 4vw, 3rem);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+    }
+    .series {
+      margin-top: 0.85rem;
+      font-family: var(--mono);
+      font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    h1 {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: clamp(2.5rem, 7.5vw, 4.4rem);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-top: 0.55rem;
+      max-width: 11ch;
+    }
+    .quote {
+      margin-top: auto;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(1.2rem, 3vw, 1.75rem);
+      line-height: 1.2;
+      max-width: 18ch;
+    }
+    .chips {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+    }
+    .chip {
+      font-family: var(--mono);
+      font-size: clamp(0.68rem, 1.4vw, 0.8rem);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.55rem 0.85rem;
+      border-radius: 999px;
+      border: 1.5px solid var(--line);
+      background: rgba(255, 255, 255, 0.65);
+    }
+    .chip.accent {
+      border-color: color-mix(in oklab, var(--hand) 45%, var(--line));
+      color: oklch(0.35 0.07 155);
+      background: oklch(0.96 0.02 155);
+    }
+    .footer {
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-family: var(--mono);
+      font-size: clamp(0.65rem, 1.3vw, 0.78rem);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      border-top: 1px solid var(--line);
+      padding-top: 1rem;
+    }
+    .footer strong { color: var(--accent-deep); font-weight: 500; }
+    @media print {
+      body { background: white; padding: 0; }
+      .chrome { display: none; }
+      .poster {
+        width: 100%;
+        min-height: 100vh;
+        aspect-ratio: auto;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="chrome">
+    <a href="../">← All posters</a>
+    <span>Climatico · Midterm 2026</span>
+  </div>
+  <article class="poster" aria-label="Culture shift poster">
+    <p class="eyebrow">04 · Culture shift</p>
+    <p class="series">Climatico poster series</p>
+    <h1>What we brag about changes.</h1>
+    <p class="quote">Impact ratios sit next to ARR — on hiring pages, in pitch rooms, in customer questionnaires.</p>
+    <div class="chips">
+      <span class="chip accent">tCO₂e / $1M revenue</span>
+      <span class="chip">Handprint integrity</span>
+      <span class="chip">Maturity L0–L5</span>
+      <span class="chip accent">Claims need evidence</span>
+      <span class="chip">Social cost of greenwash</span>
+    </div>
+    <div class="footer">
+      <span>Climatico</span>
+      <strong>gtr1.web.app/midterm</strong>
+      <span>Rae · Gabriel · Tej</span>
+    </div>
+  </article>
+</body>
+</html>

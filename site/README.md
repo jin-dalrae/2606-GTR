@@ -11,11 +11,14 @@ Public multipage site served under **`/midterm/`**.
 | `/midterm/research/` | Research library |
 | `/midterm/gtr/` | Evidence archive (reports + PRDs) |
 | `/midterm/prototype/` | Guided multi-role prototype shell |
+| `/midterm/prototype/mobile/` | Prototype 1 onboarding in mobile frame |
 | `/midterm/prototype1/` | Assessment (founder) |
 | `/midterm/prototype2/` | Founder dashboard (interactive) |
 | `/midterm/prototype2/mobile/` | Founder mobile shell |
 | `/midterm/prototype3/` | Investor portfolio board |
 | `/midterm/prototype4/` | Program director cohort board |
+| `/midterm/posters/` | Poster series (main, EI concepts, 4 shifts) |
+| `/midterm/posters/ei-concept/` | EI concept tabloid (11×17) |
 | `/midterm/vision/` | Next vision |
 | `/midterm/prototype/?tab=p5` | Leaderboard (inside guided prototype) |
 | `/midterm/leaderboard/` | Leaderboard full-page (also iframe target) |

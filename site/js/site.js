@@ -32,7 +32,7 @@
         const depthAfter = parts.length - idx - 1;
         return depthAfter === 0 ? "../" : "../".repeat(depthAfter + 1);
       }
-      const roots = new Set(["research", "prototype", "vision", "leaderboard", "app", "gtr"]);
+      const roots = new Set(["research", "prototype", "vision", "leaderboard", "app", "gtr", "posters"]);
       if (parts.some((p) => roots.has(p))) return "../";
       return "./";
     }
@@ -48,6 +48,7 @@
     { href: base + "index.html", id: "home", label: "Home" },
     { href: base + "research/", id: "research", label: "Research" },
     { href: base + "prototype/", id: "prototype", label: "Prototype" },
+    { href: base + "posters/", id: "posters", label: "Posters" },
     { href: base + "vision/", id: "vision", label: "Vision" },
   ];
 
@@ -58,6 +59,7 @@
       return "prototype";
     }
     if (path.includes("/leaderboard")) return "prototype";
+    if (path.includes("/posters")) return "posters";
     if (path.includes("/vision")) return "vision";
     return "home";
   }
@@ -78,7 +80,7 @@
         <span class="nav-mark">C</span>
         <span class="nav-brand-text">
           <strong>Climatico</strong>
-          <span>Climate impact · Midterm</span>
+          <span>Midterm · 2026</span>
         </span>
       </a>
       <button class="nav-toggle" type="button" aria-label="Open menu" id="nav-toggle"><span></span></button>
@@ -111,6 +113,7 @@
             <li><a href="${base}research/">Research library</a></li>
             <li><a href="${gtr}">Evidence archive</a></li>
             <li><a href="${base}prototype/">Interactive prototype</a></li>
+            <li><a href="${base}posters/">Poster series</a></li>
             <li><a href="${base}prototype/?tab=p5">Leaderboard (in prototype)</a></li>
             <li><a href="${base}vision/">Next vision</a></li>
           </ul>
@@ -129,8 +132,9 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>Midterm site · ${rootAbs}</span>
-        <span>Directional model · Not certified carbon accounting</span>
+        <span>Climatico · Midterm Review 2026</span>
+        <span style="color:var(--accent-deep);font-weight:500">Rae · Gabriel · Tej</span>
+        <span>gtr1.web.app/midterm</span>
       </div>
     `;
   }
