@@ -193,6 +193,24 @@
       display: none;
     }
 
+    .count select {
+      border: 1px solid var(--line);
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      cursor: pointer;
+      outline: none;
+      margin: 0 0.15rem;
+    }
+
+    .count select:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
     @media (max-width: 720px) {
       .bar .meta .title { font-size: 0.9rem; }
       .controls .hide-sm { display: none; }
@@ -205,7 +223,20 @@
       <div class="brand"><strong>Slideshow</strong> · Landscape posters</div>
       <div class="meta">
         <div class="title" id="slide-title">Loading…</div>
-        <div class="count" id="slide-count">—</div>
+        <div class="count">
+          <span id="slide-count">—</span>
+          · 
+          <select id="select-duration" aria-label="Slide duration">
+            <option value="5000">5s</option>
+            <option value="10000">10s</option>
+            <option value="15000">15s</option>
+            <option value="20000" selected>20s</option>
+            <option value="30000">30s</option>
+            <option value="45000">45s</option>
+            <option value="60000">60s</option>
+          </select>
+          each
+        </div>
       </div>
       <div class="controls">
         <button type="button" id="btn-prev" aria-label="Previous">Prev</button>
@@ -228,7 +259,7 @@
 
   <script>
     (function () {
-      const DURATION = 20000;
+      let duration = 20000;
       // Horizontal / landscape posters only, narrative order
       const SLIDES = [
         { href: "../ei-concept/", title: "How Environmental Impact is calculated and used?" },
@@ -248,13 +279,14 @@
       const btnNext = document.getElementById("btn-next");
       const btnPause = document.getElementById("btn-pause");
       const btnFullscreen = document.getElementById("btn-fullscreen");
+      const selectDuration = document.getElementById("select-duration");
       const hint = document.getElementById("hint");
 
       let index = 0;
       let paused = false;
       let timer = null;
       let startedAt = 0;
-      let remaining = DURATION;
+      let remaining = duration;
 
       function showHintBriefly() {
         hint.classList.add("show");
@@ -297,10 +329,10 @@
         index = i;
         const s = SLIDES[index];
         titleEl.textContent = s.title;
-        countEl.textContent = (index + 1) + " / " + SLIDES.length + " · 20s each";
+        countEl.textContent = (index + 1) + " / " + SLIDES.length;
         frame.src = s.href;
-        remaining = DURATION;
-        if (!paused) schedule(DURATION);
+        remaining = duration;
+        if (!paused) schedule(duration);
         else {
           stopTimer();
           fill.style.width = "0%";
@@ -315,7 +347,7 @@
         if (paused) {
           paused = false;
           btnPause.textContent = "Pause";
-          schedule(remaining > 200 ? remaining : DURATION);
+          schedule(remaining > 200 ? remaining : duration);
         } else {
           paused = true;
           btnPause.textContent = "Play";
@@ -325,7 +357,7 @@
           }
           stopTimer();
           // freeze fill where it is
-          const pct = Math.min(100, ((DURATION - remaining) / DURATION) * 100);
+          const pct = Math.min(100, ((duration - remaining) / duration) * 100);
           fill.style.transitionDuration = "0ms";
           fill.style.width = pct + "%";
         }
@@ -354,6 +386,19 @@
         } else {
           document.body.classList.remove("is-fullscreen");
           btnFullscreen.textContent = "Fullscreen";
+        }
+      });
+
+      selectDuration.addEventListener("change", function () {
+        duration = parseInt(selectDuration.value, 10);
+        document.documentElement.style.setProperty("--slide-ms", duration + "ms");
+        if (!paused) {
+          remaining = duration;
+          schedule(duration);
+        } else {
+          stopTimer();
+          fill.style.width = "0%";
+          remaining = duration;
         }
       });
 
