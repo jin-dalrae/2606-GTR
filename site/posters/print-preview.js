@@ -21,9 +21,14 @@
     stage.style.width = "";
     stage.style.height = "";
 
-    const pad = 32;
+    const isEmbedded = window.self !== window.top;
     const chrome = document.querySelector(".chrome");
-    const chromeH = chrome ? chrome.getBoundingClientRect().height + 24 : 24;
+    if (isEmbedded && chrome) {
+      chrome.style.display = "none";
+    }
+
+    const pad = isEmbedded ? 0 : 32;
+    const chromeH = isEmbedded ? 0 : (chrome ? chrome.getBoundingClientRect().height + 24 : 24);
     const availW = Math.max(200, window.innerWidth - pad);
     const availH = Math.max(200, window.innerHeight - chromeH - pad);
 
@@ -32,7 +37,8 @@
     const ph = rect.height || poster.offsetHeight;
     if (!pw || !ph) return;
 
-    const scale = Math.min(1, availW / pw, availH / ph);
+    const maxScale = isEmbedded ? Infinity : 1;
+    const scale = Math.min(maxScale, availW / pw, availH / ph);
 
     poster.style.transformOrigin = "top center";
     poster.style.transform = scale < 0.999 ? "scale(" + scale + ")" : "none";
