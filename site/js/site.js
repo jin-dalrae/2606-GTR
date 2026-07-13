@@ -121,7 +121,9 @@
           <ul>
             <li><a href="${base}app/">Full product demo</a></li>
             <li><a href="${base}leaderboard/">Impact leaderboard</a></li>
-            <li><a href="${base}prototype2/">Dashboard prototype</a></li>
+            <li><a href="${base}prototype2/">Founder dashboard</a></li>
+            <li><a href="${base}prototype3/">Investor portfolio</a></li>
+            <li><a href="${base}prototype4/">Program director</a></li>
             <li><a href="${gtr}docs/fieldwork-report/">Fieldwork report</a></li>
             <li><a href="${gtr}docs/stage-1/">Stage 1 PRD</a></li>
           </ul>

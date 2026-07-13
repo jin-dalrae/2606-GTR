@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard v2 — Interactive Mockup</title>
+<style>
+  :root {
+    --forest: #2C5F2D;
+    --forest-dark: #1F4620;
+    --moss: #97BC62;
+    --moss-light: #D8E8C4;
+    --cream: #F4F6EF;
+    --ink: #23301D;
+    --muted: #66765C;
+    --line: #DCE6D2;
+    --white: #FFFFFF;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Calibri, Arial, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+  }
+  .frame {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 36px 28px 70px;
+  }
+  .banner {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 18px;
+  }
+
+  /* --- Step 1: URL entry --- */
+  #entryCard {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 40px 32px;
+    text-align: center;
+    box-shadow: 0 2px 14px rgba(35,48,29,0.06);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  #entryCard h1 { font-size: 22px; margin: 0 0 6px; color: var(--forest); }
+  #entryCard p.sub { font-size: 14px; color: var(--muted); margin: 0 0 24px; }
+  .entry-row {
+    display: flex;
+    gap: 10px;
+    max-width: 460px;
+    margin: 0 auto;
+  }
+  #urlInput {
+    flex: 1;
+    border: 1.5px solid var(--line);
+    border-radius: 9px;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+  }
+  #urlInput:focus { border-color: var(--forest); }
+  #goBtn {
+    border: none;
+    background: var(--forest);
+    color: #fff;
+    border-radius: 9px;
+    padding: 0 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  #goBtn:hover { background: var(--forest-dark); }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 12px; }
+
+  /* --- Loading --- */
+  #loading {
+    display: none;
+    text-align: center;
+    padding: 40px 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .spinner {
+    width: 28px; height: 28px;
+    border: 3px solid var(--line);
+    border-top-color: var(--forest);
+    border-radius: 50%;
+    margin: 0 auto 14px;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* --- Step 2: Dashboard (hidden until submit) --- */
+  #dashboard { display: none; }
+  .fade-in { animation: fadeIn 0.5s ease both; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: translateY(0);} }
+
+  .identity {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--white);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 10px rgba(35,48,29,0.05);
+  }
+  .logo-tile {
+    width: 48px; height: 48px;
+    border-radius: 10px;
+    background: var(--forest);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 19px;
+    flex-shrink: 0;
+  }
+  .identity .name { font-size: 17px; font-weight: 700; }
+  .identity .domain { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  .identity .badge {
+    margin-left: auto;
+    font-size: 11px;
+    background: var(--moss-light);
+    color: var(--forest-dark);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+
+  .preview {
+    background: var(--forest);
+    color: #fff;
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .preview .label { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--moss-light); margin-bottom: 6px; }
+  .preview .big { font-size: 32px; font-weight: 700; }
+  .preview .caveat { font-size: 12px; color: var(--moss-light); max-width: 200px; text-align: right; line-height: 1.4; }
+
+  h2.section {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    margin: 26px 4px 12px;
+  }
+
+  .grid4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (min-width: 560px) { .grid4 { grid-template-columns: repeat(4, 1fr); } }
+  .box {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 14px 14px 16px;
+    box-shadow: 0 1px 6px rgba(35,48,29,0.05);
+  }
+  .box .k { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .box .v { font-size: 20px; font-weight: 700; color: var(--forest); }
+  .box .d { font-size: 11px; color: var(--muted); margin-top: 3px; }
+  .pbar { height: 6px; background: var(--line); border-radius: 4px; margin-top: 9px; overflow: hidden; }
+  .pbar > span { display: block; height: 100%; background: var(--moss); }
+
+  .goal-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--white);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 6px rgba(35,48,29,0.04);
+  }
+  .goal-row .name { width: 140px; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+  .goal-row .bar { flex: 1; height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
+  .goal-row .bar > span { display: block; height: 100%; background: var(--forest); }
+  .goal-row .pct { width: 38px; text-align: right; font-size: 12px; color: var(--muted); flex-shrink: 0; }
+  .goal-row .due { width: 90px; text-align: right; font-size: 12px; color: var(--muted); flex-shrink: 0; }
+
+  .timeline-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 20px 18px 16px;
+    box-shadow: 0 1px 6px rgba(35,48,29,0.04);
+  }
+  .timeline { display: flex; align-items: center; position: relative; }
+  .timeline::before {
+    content: "";
+    position: absolute; left: 18px; right: 18px; top: 9px;
+    border-top: 2px solid var(--line);
+  }
+  .tl-step { flex: 1; text-align: center; position: relative; }
+  .tl-dot {
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 2.5px solid var(--line);
+    background: #fff;
+    margin: 0 auto 8px;
+    position: relative; z-index: 1;
+  }
+  .tl-dot.done { background: var(--moss); border-color: var(--moss); }
+  .tl-dot.now { border-color: var(--forest); }
+  .tl-dot.now::after {
+    content: "";
+    position: absolute; inset: 3px;
+    background: var(--forest);
+    border-radius: 50%;
+  }
+  .tl-label { font-size: 10.5px; color: var(--muted); }
+
+  .proj-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 18px 18px 14px;
+    box-shadow: 0 1px 6px rgba(35,48,29,0.04);
+  }
+  .proj { display: flex; align-items: flex-end; gap: 10px; height: 80px; }
+  .proj-col { flex: 1; background: var(--moss-light); border-radius: 4px 4px 0 0; }
+  .proj-col.now { background: var(--forest); }
+  .proj-labels { display: flex; gap: 10px; margin-top: 8px; }
+  .proj-labels span { flex: 1; text-align: center; font-size: 10.5px; color: var(--muted); }
+
+  .reset {
+    display: block;
+    margin: 30px auto 0;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 12.5px;
+    text-decoration: underline;
+    cursor: pointer;
+    font-family: inherit;
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="banner">Dashboard v2 &middot; simplified language &amp; shapes (feedback: Marc)</div>
+
+  <div id="entryCard">
+    <h1>See your climate footprint</h1>
+    <p class="sub">Enter your startup's website. We'll pull what we can and give you a first estimate.</p>
+    <div class="entry-row">
+      <input id="urlInput" type="text" placeholder="yourstartup.com" />
+      <button id="goBtn">Get my dashboard</button>
+    </div>
+    <div class="hint">Try any name &mdash; this is a mockup, no real site is fetched.</div>
+  </div>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    Looking up your site&hellip;
+  </div>
+
+  <div id="dashboard">
+
+    <div class="identity fade-in">
+      <div class="logo-tile" id="logoTile">?</div>
+      <div>
+        <div class="name" id="companyName">Company</div>
+        <div class="domain" id="companyDomain">yourstartup.com</div>
+      </div>
+      <div class="badge">Auto-detected</div>
+    </div>
+
+    <div class="preview fade-in">
+      <div>
+        <div class="label">Estimated footprint</div>
+        <div class="big">~42.6 tCO2e / yr</div>
+      </div>
+      <div class="caveat">Rough first estimate based on your site and industry. Refine it below.</div>
+    </div>
+
+    <h2 class="section">Overview</h2>
+    <div class="grid4 fade-in">
+      <div class="box">
+        <div class="k">CO2 you emit</div>
+        <div class="v">42.6</div>
+        <div class="d">tCO2e this year</div>
+      </div>
+      <div class="box">
+        <div class="k">CO2 you help avoid</div>
+        <div class="v">10.8</div>
+        <div class="d">tCO2e avoided</div>
+      </div>
+      <div class="box">
+        <div class="k">Your net impact</div>
+        <div class="v">-65.4</div>
+        <div class="d">emitted minus avoided</div>
+      </div>
+      <div class="box">
+        <div class="k">Your progress</div>
+        <div class="v">Level 1 of 5</div>
+        <div class="pbar"><span style="width:20%"></span></div>
+      </div>
+    </div>
+
+    <h2 class="section">Your climate goals</h2>
+    <div class="fade-in">
+      <div class="goal-row">
+        <div class="name">Sustainable data</div>
+        <div class="bar"><span style="width:60%"></span></div>
+        <div class="pct">60%</div>
+        <div class="due">Due Q4</div>
+      </div>
+      <div class="goal-row">
+        <div class="name">Cloud efficiency</div>
+        <div class="bar"><span style="width:20%"></span></div>
+        <div class="pct">20%</div>
+        <div class="due">Due Q1 next yr</div>
+      </div>
+    </div>
+
+    <h2 class="section">Your journey</h2>
+    <div class="timeline-card fade-in">
+      <div class="timeline">
+        <div class="tl-step"><div class="tl-dot done"></div><div class="tl-label">Signed up</div></div>
+        <div class="tl-step"><div class="tl-dot done"></div><div class="tl-label">First estimate</div></div>
+        <div class="tl-step"><div class="tl-dot now"></div><div class="tl-label">Now</div></div>
+        <div class="tl-step"><div class="tl-dot"></div><div class="tl-label">Next goal</div></div>
+        <div class="tl-step"><div class="tl-dot"></div><div class="tl-label">Target</div></div>
+      </div>
+    </div>
+
+    <h2 class="section">What's next</h2>
+    <div class="proj-card fade-in">
+      <div class="proj">
+        <div class="proj-col" style="height:30%"></div>
+        <div class="proj-col" style="height:45%"></div>
+        <div class="proj-col now" style="height:55%"></div>
+        <div class="proj-col" style="height:40%"></div>
+        <div class="proj-col" style="height:65%"></div>
+        <div class="proj-col" style="height:80%"></div>
+      </div>
+      <div class="proj-labels">
+        <span>Q1</span><span>Q2</span><span>Q3</span><span>Q4</span><span>Q5</span><span>Q6</span>
+      </div>
+    </div>
+
+    <button class="reset" id="resetBtn">Try a different URL</button>
+  </div>
+</div>
+
+<script>
+  const entryCard = document.getElementById('entryCard');
+  const loading = document.getElementById('loading');
+  const dashboard = document.getElementById('dashboard');
+  const urlInput = document.getElementById('urlInput');
+  const goBtn = document.getElementById('goBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const companyName = document.getElementById('companyName');
+  const companyDomain = document.getElementById('companyDomain');
+  const logoTile = document.getElementById('logoTile');
+
+  function parseUrl(raw) {
+    let v = raw.trim();
+    if (!v) v = "yourstartup.com";
+    v = v.replace(/^https?:\/\//i, "").replace(/^www\./i, "").split("/")[0];
+    const namePart = v.split(".")[0] || "yourstartup";
+    const name = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+    return { domain: v, name };
+  }
+
+  function submit() {
+    const { domain, name } = parseUrl(urlInput.value);
+    entryCard.style.display = "none";
+    loading.style.display = "block";
+    dashboard.style.display = "none";
+
+    setTimeout(() => {
+      loading.style.display = "none";
+      companyName.textContent = name;
+      companyDomain.textContent = domain;
+      logoTile.textContent = name.charAt(0).toUpperCase();
+      dashboard.style.display = "block";
+    }, 900);
+  }
+
+  goBtn.addEventListener("click", submit);
+  urlInput.addEventListener("keydown", (e) => { if (e.key === "Enter") submit(); });
+  resetBtn.addEventListener("click", () => {
+    dashboard.style.display = "none";
+    entryCard.style.display = "block";
+    urlInput.value = "";
+    urlInput.focus();
+  });
+</script>
+</body>
+</html>

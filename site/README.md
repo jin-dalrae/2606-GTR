@@ -10,7 +10,12 @@ Public multipage site served under **`/midterm/`**.
 | `/midterm/` | Landing |
 | `/midterm/research/` | Research library |
 | `/midterm/gtr/` | Evidence archive (reports + PRDs) |
-| `/midterm/prototype/` | Guided Prototype 1 |
+| `/midterm/prototype/` | Guided multi-role prototype shell |
+| `/midterm/prototype1/` | Assessment (founder) |
+| `/midterm/prototype2/` | Founder dashboard (interactive) |
+| `/midterm/prototype2/mobile/` | Founder mobile shell |
+| `/midterm/prototype3/` | Investor portfolio board |
+| `/midterm/prototype4/` | Program director cohort board |
 | `/midterm/vision/` | Next vision |
 | `/midterm/leaderboard/` | Stage/size/revenue leaderboard prototype |
 | `/midterm/app/` | Full product demo |

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Prototype — GTR Handprint</title>
-  <meta name="description" content="Try Prototype 1 (assessment) and Prototype 2 (dashboard) — live HTML prototypes." />
+  <title>Prototypes — GTR Handprint midterm</title>
+  <meta name="description" content="Midterm prototypes: assessment, founder dashboard, investor portfolio, program director — live HTML." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&display=swap" rel="stylesheet" />
@@ -38,6 +38,9 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0.5rem;
+    }
+    @media (min-width: 1100px) {
+      .proto-tabs { grid-template-columns: 1fr 1fr; }
     }
     .proto-tabs button {
       border: 1px solid var(--line);
@@ -202,21 +205,20 @@
           <p class="eyebrow" style="margin-bottom:0.5rem"><span class="dot"></span> Live HTML prototypes</p>
           <h1>Try the product</h1>
           <p class="lead" style="font-size:0.95rem;margin:0.5rem 0 0">
-            Prototype 1 is the free assessment. Prototype 2 is the founder dashboard
-            (desktop wireframe + mobile shell). Both are real HTML builds — open full screen if the embed feels tight.
+            Four live HTML builds from the Jul 12 set: founder assessment, founder dashboard,
+            investor portfolio board, and program-director cohort board. Open full screen if the embed feels tight.
           </p>
         </div>
 
-        <div class="proto-tabs" role="tablist" aria-label="Which prototype">
-          <button type="button" id="tab-p1" class="active" role="tab" aria-selected="true">1 · Assessment</button>
-          <button type="button" id="tab-p2" role="tab" aria-selected="false">2 · Dashboard</button>
+        <div class="proto-tabs" id="proto-tabs" role="tablist" aria-label="Which prototype">
+          <!-- filled by prototype.js: Assessment · Founder · Investor · Program -->
         </div>
 
         <div id="proto-device-row" hidden>
           <p class="proto-device-label">Device</p>
           <div class="proto-device" role="tablist" aria-label="Dashboard device">
-            <button type="button" id="tab-device-desktop" class="active" role="tab" aria-selected="true">Desktop</button>
-            <button type="button" id="tab-device-mobile" role="tab" aria-selected="false">Mobile</button>
+            <button type="button" id="tab-device-desktop" class="active" role="tab" aria-selected="true">Interactive</button>
+            <button type="button" id="tab-device-mobile" role="tab" aria-selected="false">Mobile shell</button>
           </div>
         </div>
 

@@ -1,129 +1,227 @@
-/* Guided walkthrough + prototype 1/2 switcher + P2 mobile/desktop */
+/* Midterm prototype shell — Jul 12 multi-role set
+   1 Assessment · 2 Founder dashboard · 3 Investor · 4 Program director */
 (function () {
-  const STEPS_P1 = [
-    {
-      title: "1 · Welcome",
-      short: "What this assessment is",
-      detail:
-        "Prototype 1 is the free onboarding assessment. Six short questions, then a modeled footprint / handprint snapshot — no consultants, no mandatory uploads.",
+  const PROTOS = {
+    p1: {
+      id: "p1",
+      label: "1 · Assessment",
+      stageLabel: "Prototype 1 · Assessment",
+      openLabel: "Open assessment ↗",
+      src: "../prototype1/index.html",
+      full: "../prototype1/",
+      device: false,
+      steps: [
+        {
+          title: "1 · Welcome",
+          short: "What this assessment is",
+          detail:
+            "Free onboarding for founders: six short questions, then a modeled footprint / handprint snapshot — no consultants, no mandatory uploads.",
+        },
+        {
+          title: "2 · Company basics",
+          short: "Name, stage, model",
+          detail:
+            "Company name, funding stage, and business model set peer benchmarks (SaaS, hardware, food, biotech, etc.).",
+        },
+        {
+          title: "3 · Scale",
+          short: "Team size signals",
+          detail:
+            "Team size scales default activity lines. This is impact by time (tCO₂e/yr) and headcount intensity.",
+        },
+        {
+          title: "4 · Activities",
+          short: "Day-to-day operations",
+          detail:
+            "Pick activities: compute, hardware, travel, vendors, logistics, and avoided-emissions paths. Scope 1 & 2 included by default.",
+        },
+        {
+          title: "5 · Context",
+          short: "Cloud, energy, notes",
+          detail:
+            "Optional detail sharpens the model. Stealth founders can skip uploads — structured fields are enough.",
+        },
+        {
+          title: "6 · Instant report",
+          short: "Footprint, handprint, next action",
+          detail:
+            "Hotspots, peer band, cost exposure, and a maturity-aware first action. Metered data lands later in the founder dashboard.",
+        },
+      ],
     },
-    {
-      title: "2 · Company basics",
-      short: "Name, stage, model",
-      detail:
-        "Enter company name, funding stage, and business model. Stage and archetype set peer benchmarks (SaaS, hardware, food, biotech, etc.).",
+    p2: {
+      id: "p2",
+      label: "2 · Founder",
+      stageLabel: "Prototype 2 · Founder dashboard",
+      openLabel: "Open founder dashboard ↗",
+      src: "../prototype2/index.html",
+      full: "../prototype2/",
+      device: true,
+      srcMobile: "../prototype2/mobile/index.html",
+      fullMobile: "../prototype2/mobile/",
+      steps: [
+        {
+          title: "1 · Enter company URL",
+          short: "Start from the web",
+          detail:
+            "Interactive founder mockup: paste a company URL to generate a personalized climate snapshot — the lightweight path after (or instead of) the full assessment.",
+        },
+        {
+          title: "2 · Identity strip",
+          short: "Logo + company context",
+          detail:
+            "Dashboard opens with company identity, stage cues, and a clear “your climate footprint” framing.",
+        },
+        {
+          title: "3 · Overview metrics",
+          short: "Emit, avoid, maturity",
+          detail:
+            "See operational footprint, avoided emissions potential, and a simple maturity read — designed for founders, not consultants.",
+        },
+        {
+          title: "4 · Goals & journey",
+          short: "What to improve",
+          detail:
+            "Climate goals, journey milestones, and a “what’s next” path so the dashboard becomes an operating surface, not a one-time PDF.",
+        },
+        {
+          title: "5 · Mobile shell (optional)",
+          short: "Phone layout",
+          detail:
+            "Toggle Device → Mobile for the earlier phone-bezel dashboard (ledger tabs, goals, cost exposure) used in fieldwork sessions.",
+        },
+      ],
+      stepsMobile: [
+        {
+          title: "1 · Overview",
+          short: "Live impact snapshot",
+          detail:
+            "Mobile founder shell: footprint, handprint potential, and maturity at a glance inside a phone frame.",
+        },
+        {
+          title: "2 · Footprint",
+          short: "Operational emissions",
+          detail:
+            "Drill into operational carbon — compute, electricity, travel scaled to the team.",
+        },
+        {
+          title: "3 · Handprint",
+          short: "Avoided emissions",
+          detail:
+            "Avoided emissions stay separate. Claims stay gated on additionality before any public number.",
+        },
+        {
+          title: "4 · Goals",
+          short: "Goal board & maturity",
+          detail:
+            "Owned goals, evidence, and the maturity ladder (L0–L5) with a binding first action.",
+        },
+        {
+          title: "5 · Cost & risk",
+          short: "Exposure signals",
+          detail:
+            "Cost-exposure bands translate tonnes into $ scenarios. Planning ranges, not bills.",
+        },
+      ],
     },
-    {
-      title: "3 · Scale",
-      short: "Team size signals",
-      detail:
-        "Team size scales default activity lines from a 10-FTE reference model. This is impact by time (tCO₂e/yr) and headcount intensity.",
+    p3: {
+      id: "p3",
+      label: "3 · Investor",
+      stageLabel: "Prototype 3 · Investor portfolio",
+      openLabel: "Open investor board ↗",
+      src: "../prototype3/index.html",
+      full: "../prototype3/",
+      device: false,
+      steps: [
+        {
+          title: "1 · Portfolio climate risk",
+          short: "Fund-level view",
+          detail:
+            "Investor board: climate risk and impact across a portfolio — not one company at a time.",
+        },
+        {
+          title: "2 · Compare holdings",
+          short: "Intensity & exposure",
+          detail:
+            "Rank and compare companies on footprint intensity, cost exposure, and confidence — diligence-ready language.",
+        },
+        {
+          title: "3 · Drill into a company",
+          short: "Founder-level detail",
+          detail:
+            "Open a single holding for hotspots, sources, and peer context before the partner meeting.",
+        },
+        {
+          title: "4 · Share & export",
+          short: "IC-ready snapshot",
+          detail:
+            "Export or share a portfolio climate read. Illustrative prototype — not live fund data.",
+        },
+      ],
     },
-    {
-      title: "4 · Activities",
-      short: "What you run day to day",
-      detail:
-        "Pick activities that apply: compute, hardware, travel, vendors, logistics, and avoided-emissions paths. Scope 1 & 2 are included by default.",
+    p4: {
+      id: "p4",
+      label: "4 · Program",
+      stageLabel: "Prototype 4 · Program director",
+      openLabel: "Open program board ↗",
+      src: "../prototype4/index.html",
+      full: "../prototype4/",
+      device: false,
+      steps: [
+        {
+          title: "1 · Cohort overview",
+          short: "Completion & intensity",
+          detail:
+            "Program / incubator director view: how many founders finished the assessment, average intensity, and confidence mix for the current cohort.",
+        },
+        {
+          title: "2 · Founder roster",
+          short: "Completed vs pending",
+          detail:
+            "Filter the roster, nudge pending founders, and open a company detail when the assessment is done.",
+        },
+        {
+          title: "3 · Compare cohorts",
+          short: "Year over year",
+          detail:
+            "Stack this cohort against prior ones on completion rate, intensity, and confidence tier mix.",
+        },
+        {
+          title: "4 · Export for partners",
+          short: "Program reporting",
+          detail:
+            "Download a cohort climate snapshot for LPs, grant reports, or internal reviews. Prototype data only.",
+        },
+      ],
     },
-    {
-      title: "5 · Context",
-      short: "Cloud, energy, notes",
-      detail:
-        "Optional detail sharpens the model and grounds the AI briefing. Stealth founders can skip uploads — structured fields are enough.",
-    },
-    {
-      title: "6 · Instant report",
-      short: "Footprint, handprint, next action",
-      detail:
-        "See hotspots, peer band, cost exposure, and a maturity-aware first action. Replace defaults with metered data later in the dashboard.",
-    },
-  ];
+  };
 
-  const STEPS_P2_MOBILE = [
-    {
-      title: "1 · Overview",
-      short: "Live impact snapshot",
-      detail:
-        "Mobile Prototype 2 is the founder dashboard in a phone shell. Start on Overview: estimated footprint, handprint potential, and maturity at a glance.",
-    },
-    {
-      title: "2 · Footprint",
-      short: "Operational emissions",
-      detail:
-        "Drill into the operational carbon footprint — hotspots like compute, electricity, and travel scaled to the team.",
-    },
-    {
-      title: "3 · Handprint",
-      short: "Avoided emissions",
-      detail:
-        "Avoided emissions stay separate from the footprint. Claims should stay gated on additionality before any public number.",
-    },
-    {
-      title: "4 · Goals",
-      short: "Goal board & maturity",
-      detail:
-        "Open the Goal Board tab: owned goals, evidence attachments, and the maturity ladder (L0–L5) with a binding first action.",
-    },
-    {
-      title: "5 · Cost & risk",
-      short: "Exposure signals",
-      detail:
-        "Cost-exposure bands translate tonnes into $ scenarios (compliance vs social cost). Use them as planning ranges, not bills.",
-    },
-  ];
-
-  const STEPS_P2_DESKTOP = [
-    {
-      title: "1 · Snapshot header",
-      short: "Company + share actions",
-      detail:
-        "Desktop dashboard wireframe: company strip with copy link, download, and LinkedIn share — the operator surface after assessment.",
-    },
-    {
-      title: "2 · Overview",
-      short: "Emit, avoid, net, trend",
-      detail:
-        "Four cards: CO₂ you emit, CO₂ you help avoid, overall impact, and trend — plus a simple maturity ring (Level 1 of 5).",
-    },
-    {
-      title: "3 · Climate goals",
-      short: "Progress & milestones",
-      detail:
-        "Owned goals with progress bars and a milestone track (Past → Now → Next → Target) so founders see the path, not just a number.",
-    },
-    {
-      title: "4 · How to improve",
-      short: "Recommendations",
-      detail:
-        "Opportunity list with add/remove levers (energy supplier, packaging, travel) and rough tonnes/yr impact tags.",
-    },
-    {
-      title: "5 · Why it matters",
-      short: "Outlook + footer",
-      detail:
-        "Right column explains investor/partner trust, a 6-month outlook sketch, and a footer strip with active goals and average progress.",
-    },
-  ];
+  const ORDER = ["p1", "p2", "p3", "p4"];
 
   let proto = "p1";
-  let device = "desktop";
+  let device = "desktop"; // for p2: desktop = interactive mockup, mobile = phone shell
   let index = 0;
 
+  function cfg() {
+    return PROTOS[proto];
+  }
+
   function steps() {
-    if (proto === "p1") return STEPS_P1;
-    return device === "desktop" ? STEPS_P2_DESKTOP : STEPS_P2_MOBILE;
+    const c = cfg();
+    if (c.device && device === "mobile" && c.stepsMobile) return c.stepsMobile;
+    return c.steps;
   }
 
   function frameSrc() {
-    if (proto === "p1") return "../prototype1/index.html";
-    return device === "desktop"
-      ? "../prototype2/desktop/index.html"
-      : "../prototype2/index.html";
+    const c = cfg();
+    if (c.device && device === "mobile") return c.srcMobile;
+    return c.src;
   }
 
   function fullHref() {
-    if (proto === "p1") return "../prototype1/";
-    return device === "desktop" ? "../prototype2/desktop/" : "../prototype2/";
+    const c = cfg();
+    if (c.device && device === "mobile") return c.fullMobile;
+    return c.full;
   }
 
   function setFrameIfNeeded(wanted) {
@@ -138,6 +236,21 @@
     }
   }
 
+  function renderTabs() {
+    const mount = document.getElementById("proto-tabs");
+    if (!mount) return;
+    mount.innerHTML = ORDER.map((id) => {
+      const c = PROTOS[id];
+      const active = id === proto ? "active" : "";
+      return `<button type="button" role="tab" data-proto="${id}" class="${active}" aria-selected="${
+        id === proto ? "true" : "false"
+      }">${c.label}</button>`;
+    }).join("");
+    mount.querySelectorAll("button").forEach((btn) => {
+      btn.addEventListener("click", () => setProto(btn.dataset.proto));
+    });
+  }
+
   function render() {
     const list = document.getElementById("proto-steps");
     const title = document.getElementById("proto-detail-title");
@@ -146,12 +259,12 @@
     const prev = document.getElementById("proto-prev");
     const next = document.getElementById("proto-next");
     const open = document.getElementById("proto-open");
-    const tab1 = document.getElementById("tab-p1");
-    const tab2 = document.getElementById("tab-p2");
     const deviceRow = document.getElementById("proto-device-row");
     const tabMobile = document.getElementById("tab-device-mobile");
     const tabDesktop = document.getElementById("tab-device-desktop");
     if (!list || !title || !body) return;
+
+    renderTabs();
 
     const S = steps();
     if (index >= S.length) index = S.length - 1;
@@ -171,36 +284,30 @@
     title.textContent = step.title;
     body.textContent = step.detail;
 
-    let label;
-    if (proto === "p1") {
-      label = `Prototype 1 · Assessment · Step ${index + 1}/${S.length}`;
-    } else {
-      const mode = device === "desktop" ? "Desktop" : "Mobile";
-      label = `Prototype 2 · Dashboard · ${mode} · Step ${index + 1}/${S.length}`;
+    const c = cfg();
+    let label = `${c.stageLabel} · Step ${index + 1}/${S.length}`;
+    if (c.device) {
+      label = `${c.stageLabel} · ${device === "mobile" ? "Mobile" : "Desktop"} · Step ${
+        index + 1
+      }/${S.length}`;
     }
     if (bar) bar.textContent = label;
     if (prev) prev.disabled = index === 0;
-    if (next) next.textContent = index === S.length - 1 ? "Done" : "Next step";
+    if (next) {
+      const last = index === S.length - 1;
+      const lastProto = proto === ORDER[ORDER.length - 1];
+      next.textContent = last ? (lastProto ? "Done" : "Next prototype") : "Next step";
+    }
 
     setFrameIfNeeded(frameSrc());
 
     if (open) {
       open.href = fullHref();
-      if (proto === "p1") open.textContent = "Open assessment ↗";
-      else if (device === "desktop") open.textContent = "Open desktop dashboard ↗";
-      else open.textContent = "Open mobile dashboard ↗";
+      open.textContent = c.openLabel;
+      if (c.device && device === "mobile") open.textContent = "Open mobile dashboard ↗";
     }
 
-    if (tab1 && tab2) {
-      tab1.classList.toggle("active", proto === "p1");
-      tab2.classList.toggle("active", proto === "p2");
-      tab1.setAttribute("aria-selected", proto === "p1" ? "true" : "false");
-      tab2.setAttribute("aria-selected", proto === "p2" ? "true" : "false");
-    }
-
-    if (deviceRow) {
-      deviceRow.hidden = proto !== "p2";
-    }
+    if (deviceRow) deviceRow.hidden = !c.device;
     if (tabMobile && tabDesktop) {
       tabMobile.classList.toggle("active", device === "mobile");
       tabDesktop.classList.toggle("active", device === "desktop");
@@ -217,17 +324,17 @@
   }
 
   function setProto(next) {
-    if (proto === next) return;
+    if (!PROTOS[next] || proto === next) return;
     proto = next;
     index = 0;
-    if (proto === "p2") device = "desktop";
+    if (PROTOS[next].device) device = "desktop";
     const frame = document.getElementById("proto-frame");
     if (frame) frame.src = frameSrc();
     render();
   }
 
   function setDevice(next) {
-    if (device === next || proto !== "p2") return;
+    if (!cfg().device || device === next) return;
     device = next;
     index = 0;
     const frame = document.getElementById("proto-frame");
@@ -236,8 +343,6 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("tab-p1")?.addEventListener("click", () => setProto("p1"));
-    document.getElementById("tab-p2")?.addEventListener("click", () => setProto("p2"));
     document.getElementById("tab-device-mobile")?.addEventListener("click", () => setDevice("mobile"));
     document.getElementById("tab-device-desktop")?.addEventListener("click", () => setDevice("desktop"));
     document.getElementById("proto-prev")?.addEventListener("click", () => {
@@ -249,11 +354,11 @@
       if (index < S.length - 1) {
         index += 1;
         render();
-      } else if (proto === "p1") {
-        setProto("p2");
-      } else {
-        window.location.href = "../vision/";
+        return;
       }
+      const i = ORDER.indexOf(proto);
+      if (i < ORDER.length - 1) setProto(ORDER[i + 1]);
+      else window.location.href = "../leaderboard/";
     });
 
     const frame = document.getElementById("proto-frame");

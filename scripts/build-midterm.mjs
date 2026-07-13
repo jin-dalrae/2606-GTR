@@ -66,7 +66,7 @@ function rewriteTree(dir) {
     // Never rewrite self-contained prototype bundles — base64/JSON breaks easily
     // and they resolve paths at runtime via midterm-aware injectShowcaseHeader.
     const rel = relative(MID, file).replace(/\\/g, "/");
-    if (rel.startsWith("prototype1/") || rel.startsWith("prototype2/")) continue;
+    if (/^prototype[0-4](\b|\/)/.test(rel)) continue; // self-contained HTML bundles
 
     if (!/\.(html?|js|css|jsx|json|md|svg)$/i.test(file)) continue;
     const before = readFileSync(file, "utf8");
@@ -85,28 +85,51 @@ mkdirSync(MID, { recursive: true });
 // 3) Marketing multipage site
 cpSync(join(ROOT, "site"), MID, { recursive: true });
 
-// 4) Product demos
+// 4) Product demos — Jul 12 multi-role prototype set
 mkdirSync(join(MID, "app"), { recursive: true });
 cpSync(join(ROOT, "dist", "index.html"), join(MID, "app", "index.html"));
 mkdirSync(join(MID, "assets"), { recursive: true });
 cpSync(join(ROOT, "dist", "assets"), join(MID, "assets"), { recursive: true });
 mkdirSync(join(MID, "prototype0"), { recursive: true });
 cpSync(join(ROOT, "dist", "index.html"), join(MID, "prototype0", "index.html"));
+
+// 1 · Founder assessment (mobile shell)
 mkdirSync(join(MID, "prototype1"), { recursive: true });
 cpSync(
   join(ROOT, "Onboarding Assessment Standalone.html"),
   join(MID, "prototype1", "index.html")
 );
+
+// 2 · Founder dashboard — interactive mockup (primary) + optional mobile shell
 mkdirSync(join(MID, "prototype2"), { recursive: true });
 cpSync(
-  join(ROOT, "Dashboard Standalone.html"),
+  join(ROOT, "Dashboard_Mockup_Interactive.html"),
   join(MID, "prototype2", "index.html")
 );
-// Desktop dashboard wireframe (midterm prototype · 2 · Dashboard · Desktop)
+mkdirSync(join(MID, "prototype2", "mobile"), { recursive: true });
+cpSync(
+  join(ROOT, "Dashboard Standalone.html"),
+  join(MID, "prototype2", "mobile", "index.html")
+);
+// legacy desktop wireframe path (kept for old links)
 mkdirSync(join(MID, "prototype2", "desktop"), { recursive: true });
 cpSync(
-  join(ROOT, "dashboard-wireframe-polished.html"),
+  join(ROOT, "Dashboard_Mockup_Interactive.html"),
   join(MID, "prototype2", "desktop", "index.html")
+);
+
+// 3 · Investor portfolio board
+mkdirSync(join(MID, "prototype3"), { recursive: true });
+cpSync(
+  join(ROOT, "Climate Risk Portfolio Dashboard (Investors).html"),
+  join(MID, "prototype3", "index.html")
+);
+
+// 4 · Program / incubator director cohort board
+mkdirSync(join(MID, "prototype4"), { recursive: true });
+cpSync(
+  join(ROOT, "Program Director Dashboard.html"),
+  join(MID, "prototype4", "index.html")
 );
 
 // 5) Evidence archive + cosmos styles + images
