@@ -40,8 +40,6 @@
       background: #d8d4cb;
       color: var(--ink);
       font-family: var(--sans);
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
     }
 
     body {
@@ -85,6 +83,8 @@
       gap: 0.1in;
       overflow: hidden;
       position: relative;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
 
     .topbar {
@@ -473,11 +473,14 @@
 
     @media print {
       html, body {
-        background: white;
-        padding: 0;
-        margin: 0;
+        background: #fff !important;
+        padding: 0 !important;
+        margin: 0 !important;
         width: 8.5in;
         height: 11in;
+        min-height: 0 !important;
+        -webkit-print-color-adjust: economy;
+        print-color-adjust: economy;
       }
       .chrome { display: none !important; }
       .leaflet {
@@ -485,6 +488,8 @@
         height: 11in;
         box-shadow: none;
         margin: 0;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
     }
   </style>

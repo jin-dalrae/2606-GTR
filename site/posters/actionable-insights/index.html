@@ -39,8 +39,6 @@
       background: #d8d4cb;
       color: var(--ink);
       font-family: var(--sans);
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
     }
 
     body {
@@ -86,6 +84,8 @@
       flex-direction: column;
       gap: 0.16in;
       overflow: hidden;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
 
     .topbar {
@@ -440,20 +440,29 @@
 
     @media print {
       html, body {
-        background: white;
-        padding: 0;
-        margin: 0;
+        background: #fff !important;
+        padding: 0 !important;
+        margin: 0 !important;
         width: 11in;
         height: 17in;
+        min-height: 0 !important;
+        -webkit-print-color-adjust: economy;
+        print-color-adjust: economy;
       }
       .chrome { display: none !important; }
-      .print-stage { width: auto !important; height: auto !important; }
+      .print-stage {
+        width: auto !important;
+        height: auto !important;
+        background: transparent !important;
+      }
       .poster {
         width: 11in;
         height: 17in;
         box-shadow: none;
         margin: 0;
         transform: none !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
     }
   </style>
