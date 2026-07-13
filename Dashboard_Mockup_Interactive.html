@@ -240,6 +240,41 @@
     font-family: inherit;
   }
 </style>
+
+<style>
+  .midterm-prototype-chip {
+    position: fixed; top: 12px; left: 12px; z-index: 9999;
+    font: 600 12px/1.2 system-ui, -apple-system, sans-serif;
+    background: #16201c; color: #f7f6f2;
+    padding: 8px 12px; border-radius: 999px;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(0,0,0,.15);
+  }
+  .midterm-prototype-chip:hover { background: #1f8a5b; color: #fff; }
+  @media (max-width: 520px) {
+    .midterm-prototype-chip { top: 8px; left: 8px; font-size: 11px; padding: 7px 10px; }
+  }
+</style>
+<script>
+(function () {
+  // Hide chrome when embedded in the midterm guided shell iframe
+  try {
+    if (window.self !== window.top) return;
+  } catch (e) { return; }
+  var path = location.pathname || "";
+  var root = path.indexOf("/midterm/") >= 0
+    ? path.slice(0, path.indexOf("/midterm/") + "/midterm/".length)
+    : "../";
+  var a = document.createElement("a");
+  a.className = "midterm-prototype-chip";
+  a.href = root + "prototype/?tab=p2";
+  a.textContent = "← Midterm prototype · Founder dashboard";
+  document.addEventListener("DOMContentLoaded", function () {
+    document.body.appendChild(a);
+  });
+})();
+</script>
+
 </head>
 <body>
 <div class="frame">

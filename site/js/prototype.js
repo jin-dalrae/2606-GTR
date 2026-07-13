@@ -51,7 +51,7 @@
     },
     p2: {
       id: "p2",
-      label: "2 · Founder",
+      label: "2 · Dashboard",
       stageLabel: "Prototype 2 · Founder dashboard",
       openLabel: "Open founder dashboard ↗",
       src: "../prototype2/index.html",
@@ -212,27 +212,44 @@
     return c.steps;
   }
 
+  /** Resolve site root e.g. "/midterm/" so iframe srcs work with cleanUrls + embeds */
+  function siteRoot() {
+    const parts = window.location.pathname.replace(/\/index\.html$/, "/").split("/").filter(Boolean);
+    const i = parts.indexOf("midterm");
+    if (i >= 0) return "/" + parts.slice(0, i + 1).join("/") + "/";
+    // local file or preview without /midterm
+    return new URL("../", window.location.href).pathname.endsWith("/")
+      ? new URL("../", window.location.href).pathname
+      : new URL("../", window.location.href).pathname + "/";
+  }
+
+  function abs(rel) {
+    // rel like "../prototype2/index.html" or "../prototype2/"
+    const name = rel
+      .replace(/^\.\.\//, "")
+      .replace(/index\.html$/, "")
+      .replace(/\/$/, "");
+    return siteRoot() + name + "/";
+  }
+
   function frameSrc() {
     const c = cfg();
-    if (c.device && device === "mobile") return c.srcMobile;
-    return c.src;
+    if (c.device && device === "mobile") return abs(c.srcMobile || c.fullMobile);
+    return abs(c.src || c.full);
   }
 
   function fullHref() {
-    const c = cfg();
-    if (c.device && device === "mobile") return c.fullMobile;
-    return c.full;
+    return frameSrc();
   }
 
-  function setFrameIfNeeded(wanted) {
+  function setFrame(wanted) {
     const frame = document.getElementById("proto-frame");
     if (!frame) return;
-    try {
-      const cur = new URL(frame.src, window.location.href).pathname;
-      const nextPath = new URL(wanted, window.location.href).pathname;
-      if (cur !== nextPath) frame.src = wanted;
-    } catch {
-      frame.src = wanted;
+    const next = wanted || frameSrc();
+    // Always assign — path compare breaks under Firebase cleanUrls/trailingSlash
+    if (frame.getAttribute("data-src") !== next) {
+      frame.setAttribute("data-src", next);
+      frame.src = next;
     }
   }
 
@@ -299,7 +316,7 @@
       next.textContent = last ? (lastProto ? "Done" : "Next prototype") : "Next step";
     }
 
-    setFrameIfNeeded(frameSrc());
+    setFrame();
 
     if (open) {
       open.href = fullHref();
@@ -329,7 +346,7 @@
     index = 0;
     if (PROTOS[next].device) device = "desktop";
     const frame = document.getElementById("proto-frame");
-    if (frame) frame.src = frameSrc();
+    setFrame();
     render();
   }
 
@@ -338,11 +355,17 @@
     device = next;
     index = 0;
     const frame = document.getElementById("proto-frame");
-    if (frame) frame.src = frameSrc();
+    setFrame();
     render();
   }
 
   document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get("tab");
+    if (tab && PROTOS[tab]) proto = tab;
+    const dev = params.get("device");
+    if (dev === "mobile" || dev === "desktop") device = dev;
+
     document.getElementById("tab-device-mobile")?.addEventListener("click", () => setDevice("mobile"));
     document.getElementById("tab-device-desktop")?.addEventListener("click", () => setDevice("desktop"));
     document.getElementById("proto-prev")?.addEventListener("click", () => {
@@ -361,8 +384,7 @@
       else window.location.href = "../leaderboard/";
     });
 
-    const frame = document.getElementById("proto-frame");
-    if (frame) frame.src = "../prototype1/index.html";
+    setFrame();
     render();
   });
 })();
