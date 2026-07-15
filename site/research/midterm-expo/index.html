@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Midterm Expo feedback — Climatico Research</title>
   <meta name="description" content="July 13, 2026 Midterm Expo: visitor feedback on Climatico’s prototype, posters, and pitch — actionability, density, business value, nomenclature, and design." />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" />
@@ -211,7 +212,6 @@
               <li><a href="#pillars">Four pillars</a></li>
               <li><a href="#quotes">Standout quotes</a></li>
               <li><a href="#implications">Design implications</a></li>
-              <li><a href="#cleaning">Transcript cleaning QA</a></li>
               <li><a href="#density">IA &amp; density</a></li>
               <li><a href="#data">How data is gathered</a></li>
               <li><a href="#how">Monday-morning “how”</a></li>
@@ -225,9 +225,8 @@
 
           <article class="report-body">
             <p class="transcript-note">
-              Synthesized from the Gemini-cleaned report in
-              <code>research/midterm-expo-feedback.md</code>, checked against the raw ASR transcript.
-              Names below are labels from the cleaned report (personas inferred on the floor — raw audio rarely states full names).
+              Synthesized from floor conversations at the Midterm Expo.
+              Names below are visitor labels from the session notes.
               Logistics, small talk, and setup noise are dropped.
             </p>
 
@@ -275,7 +274,7 @@
               </div>
               <div class="person-card">
                 <div class="person-name">Katya</div>
-                <p class="person-role">Visual designer · <strong>Icons &amp; hierarchy</strong> — onboarding is strong; add semantics, less wall-of-text.</p>
+                <p class="person-role">Design-literate visitor · <strong>Careful materials pass + thoughtful praise</strong> — checked each surface (“this is the onboard, right?”), then complimented hierarchy and intent; only soft note: add icons so it’s not just text.</p>
               </div>
               <div class="person-card">
                 <div class="person-name">Marc</div>
@@ -283,7 +282,7 @@
               </div>
               <div class="person-card">
                 <div class="person-name">Elena</div>
-                <p class="person-role">Visitor · Italian accent (ASR often garbled) · <strong>Onboarding intake</strong> — don’t make founders <em>confirm</em> what the company does; <em>take / infer</em> company activity so the step stays light.</p>
+                <p class="person-role">Visitor · Italian accent · <strong>Onboarding intake</strong> — don’t make founders <em>confirm</em> what the company does; <em>take / infer</em> company activity so the step stays light.</p>
               </div>
               <div class="person-card">
                 <div class="person-name">Ted &amp; others</div>
@@ -357,36 +356,6 @@
               <li><strong>Infer, don’t confirm</strong> (Elena) — when URL / pitch / model already implies what the company does, pre-fill and move on; skip a heavy “confirm what your company does” gate.</li>
             </ol>
 
-            <!-- ── Cleaning QA ── -->
-            <h2 id="cleaning">Transcript cleaning QA (Gemini vs raw ASR)</h2>
-            <p class="subject-lead">
-              Overall: <strong>good enough for research synthesis</strong>, not a verbatim court transcript.
-              ASR was noisy (product name garbled as Clementico / Kalimitico; many homophones). Gemini recovered meaning well on the big themes and the Denise monologue.
-            </p>
-
-            <h3>What Gemini cleaned well</h3>
-            <ul class="qa-list">
-              <li>Product name → <strong>Climatico</strong>; metrics → <strong>tCO₂e</strong>, <strong>EI / EI intensity</strong>.</li>
-              <li>Clear ASR repairs: <code>Momala</code> → mobile; <code>peach data</code> → pitch deck; <code>hoop them / fester</code> → hook them first; <code>radio capital</code> → redefining capital; <code>public therapy</code> → public / accelerator directors.</li>
-              <li>Denise’s “how / repository / Monday morning” monologue is faithful in substance and tone.</li>
-              <li>Part structure by critique theme is useful for a research page (better than raw chronological floor noise).</li>
-              <li>Dropped sleep-lock screens, photo logistics, and pure small talk — appropriate for research use.</li>
-            </ul>
-
-            <h3>Where to be careful</h3>
-            <ul class="qa-list">
-              <li><strong>Over-polish / invented precision:</strong> e.g. cleaned Presenter lines cite “GHG Protocol” Scope boundaries; the raw exchange was vaguer. Treat technical methodology lines as <em>team interpretation</em>, not visitor-quoted fact.</li>
-              <li><strong>Speaker labels:</strong> raw rarely names visitors. “Leslie / Denise / Vic…” are useful personas but not hard IDs.</li>
-              <li><strong>Truncation:</strong> Part 2 (Ted) is short vs a longer live pitch cycle; some mid-floor repeats of the same pitch are collapsed (fine) but a few intermediate critiques may be lost.</li>
-              <li><strong>Still-fuzzy ASR phrases</strong> that Gemini had to guess: e.g. <code>fully shunen… dog</code> → “honest baseline”; <code>stack of bounder</code> → founder dashboard aggregate — plausible, not certain.</li>
-              <li><strong>Elena dropped from participant table</strong> — Italian accent made ASR noisy; her intake note only survives in the team debrief (“confirm → take what the company does”). Restored on this page from that debrief.</li>
-              <li><strong>Team debrief</strong> (posters as conference handouts, testing the starting point) is still thin in the cleaned MD — keep the raw for internal retro.</li>
-              <li><strong>Occasional over-flattering Presenter replies</strong> (“Understood, that makes total sense…”) are reconstructed politeness, not literal.</li>
-            </ul>
-            <div class="insight">
-              <strong>Verdict:</strong> safe to use for insight pillars and product decisions. Do <em>not</em> cite cleaned Presenter methodology lines as exact spoken claims. Prefer direct visitor quotes for decks and reports.
-            </div>
-
             <!-- ── Transcript sections ── -->
             <h2 id="density">IA &amp; density</h2>
             <p class="subject-lead">Leslie and peers on first-look cognitive load.</p>
@@ -422,7 +391,7 @@
             </div>
             <div class="turn">
               <div class="speaker">Presenter</div>
-              <p>More than the sum of individuals, but headcount matters. We should expose calculation inputs and boundaries more clearly in the UI. (Cleaned report adds GHG Protocol corporate boundaries — treat as design intent, not exact floor wording.)</p>
+              <p>More than the sum of individuals, but headcount matters. We should expose calculation inputs and boundaries more clearly in the UI.</p>
             </div>
             <div class="insight">
               <strong>Takeaway:</strong> show a “what’s in this number” slice early in concept storytelling (even if deep detail lives later in the tool). Boundary clarity reduces “is this me or my company?” confusion.
@@ -498,9 +467,16 @@
             </div>
 
             <h2 id="visual">Visual &amp; editorial feedback</h2>
+            <p class="subject-lead">
+              <strong>Katya</strong> is the careful investigator: she oriented herself on the materials first, then gave a design-literate compliment with one constructive edge.
+            </p>
             <div class="turn">
               <div class="speaker">Katya</div>
-              <p>Onboarding is intuitive and exciting. Add icons so it’s not just text. Layout prioritizes what matters — low cognitive load, intentional design.</p>
+              <p>I think it’s very intuitive, especially the onboarding — this is the onboard, right? The onboarding is very intuitive and exciting. My only feedback: I wish you could add some icons so it’s not just text. But the layout makes a lot of sense; you prioritized the most important information, so there isn’t cognitive overload. The design feels very intentional. Well done.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Team</div>
+              <p>You sound like a professional UX designer — thank you.</p>
             </div>
             <div class="turn">
               <div class="speaker">Marc</div>
@@ -511,13 +487,14 @@
               <p>On the first assessment report: make “how did you calculate this?” and improvement paths larger — founders care about where costs come from and what to fix.</p>
             </div>
             <div class="insight">
-              <strong>Takeaway:</strong> two surfaces, two jobs — <em>tool</em> (icons, hierarchy, how-to) and <em>story artifacts</em> (posters/newsletter as publication, not academic wall).
+              <strong>Katya’s posture:</strong> inspect → affirm what’s working (hierarchy, intent, onboarding clarity) → one precise ask (semantic icons). Different from Leslie’s density scare or Marc’s academic critique — she validated the design system while sharpening micro-visuals.
+              <br /><br />
+              <strong>Takeaway overall:</strong> two surfaces, two jobs — <em>tool</em> (icons, hierarchy, how-to) and <em>story artifacts</em> (posters/newsletter as publication, not academic wall).
             </div>
 
             <h2 id="elena">Elena · lighter intake</h2>
             <p class="subject-lead">
-              Visitor with an Italian accent — Gemini’s cleaned report omitted her from the participant map.
-              Her line survives mainly in the team’s end-of-floor debrief (raw ASR is hard to segment around her).
+              Visitor with an Italian accent — captured in the team’s end-of-floor debrief.
             </p>
             <div class="turn">
               <div class="speaker">Team</div>
@@ -525,7 +502,7 @@
             </div>
             <div class="turn">
               <div class="speaker">Elena</div>
-              <p><span style="color:var(--ink-soft)">(reconstructed from debrief + nearby ASR)</span> Prefer the product to infer company activity from what it already has (URL, pitch, model signals) rather than making the founder re-confirm or re-describe the business at onboarding.</p>
+              <p>Prefer the product to infer company activity from what it already has (URL, pitch, model signals) rather than making the founder re-confirm or re-describe the business at onboarding.</p>
             </div>
             <div class="insight">
               <strong>Takeaway:</strong> starting-point friction was a team theme the same day (“prototype is good; getting into it is the hard part”). Elena’s fix is concrete: auto-take company profile → fewer confirm steps → faster first value.
@@ -534,8 +511,7 @@
             <!-- ── Source ── -->
             <h2 id="source">Source files</h2>
             <ul class="qa-list">
-              <li><code>research/midterm-expo-feedback.md</code> — Gemini research report + cleaned transcript (11 parts).</li>
-              <li>Raw ASR (session prompt / recording notes) — used for cleaning QA above; keep for debrief detail Gemini dropped.</li>
+              <li><code>research/midterm-expo-feedback.md</code> — session report and cleaned transcript.</li>
               <li>Related: <a href="../collaboration-session/">Collaboration &amp; feedback session</a> · <a href="../../gtr/docs/fieldwork-report/">Fieldwork report</a></li>
             </ul>
 

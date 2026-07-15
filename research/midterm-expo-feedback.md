@@ -40,7 +40,7 @@ The participant mappings from the expo are aligned below:
 | **Harshit** | SaaS / Audit Critic | **Data Feasibility**: Raised questions about SaaS data collection friction, specifically highlighting the challenge of tracing cloud/AI compute and the utility of API integrations. |
 | **Neha** | Corporate Communications | **Jargon & Nomenclature**: Flagged that "EI" is universally recognized as *Emotional Intelligence* outside climate spaces, and recommended explicit definitions. |
 | **Vic** | Investor / VC Persona | **Business Value ("The Bottom Line")**: Challenged the business case ("Why should I care as a business owner? How does it affect my cost or revenue?"). |
-| **Katya** | Visual Designer / Peer | **Micro-Interactions & Styling**: Highlighted onboarding layout strength, but urged adding semantic icons to reduce cognitive load and avoid large blocks of raw text. |
+| **Katya** | Design-literate visitor (careful materials pass) | **Thoughtful compliment + micro-visuals**: Oriented herself on each surface first (“this is the onboard, right?”), then praised hierarchy and intentional design; only soft critique — add semantic icons so it’s not just text. Team reaction: “you sound like a professional UX designer.” |
 | **Marc** | Editorial / Publication Designer | **Media & Communication**: Critiqued the tabloid poster layout as "looking too academic" and recommended digital publication design patterns. |
 | **Elena** | Visitor (Italian accent; ASR often garbled) | **Onboarding intake friction**: Don’t make founders *confirm* what the company does — *take / infer* company activity from URL/pitch/model so the first step stays light. Named in team debrief; missing from original Gemini participant map. |
 
@@ -265,16 +265,18 @@ The team’s end-of-expo debrief captured Elena’s point: the onboarding should
 
 ---
 
-### PART 10: The UI and Iconography Pass
-**Speakers**: **Katya** (Visual Designer) and **Presenter** (Team GTR)
+### PART 10: Katya — Careful Materials Pass + Thoughtful Compliment
+**Speakers**: **Katya** (design-literate visitor) and **Team GTR**
 
-> **Katya**: I think the onboarding is very intuitive and exciting. 
+> **Identification**: Floor visitor who cautiously inspected the materials before speaking — confirmed what surface she was on, then delivered a design-literate compliment with one precise ask. Matches raw ASR: *“This is the onboard, right?”* → full hierarchy praise → icons note. (ASR: “cognitive road” → cognitive load; “intentional and twitter” → intentional and intuitive; team: “professional UFC designer” → UX designer.)
 > 
-> **Presenter**: Thank you!
+> **Katya**: I think it’s very intuitive, especially the onboarding. This is the onboard, right?
 > 
-> **Katya**: My only design feedback is that I wish you could add some semantic icons next to the metrics and actions so it’s not just big blocks of text. Icons would reduce cognitive load. But the layout itself makes a lot of sense, and you have successfully prioritized the most important information near the top. It doesn't feel cluttered. The design feels very intentional and intuitive. Well done!
+> **Team**: Yes.
 > 
-> **Presenter**: Oh my god, thank you so much! You sound like a professional UX designer, that means a lot to us!
+> **Katya**: The onboarding is very intuitive and exciting. My only feedback is that I wish you could add some icons so it’s not just text. But the layout makes a lot of sense, and you have prioritized the most important information, so there isn’t any kind of cognitive load. The design feels very intentional and intuitive. Well done.
+> 
+> **Team**: You sound like a professional UX designer — thank you so much!
 
 ---
 
