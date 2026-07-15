@@ -218,6 +218,7 @@
               <li><a href="#bottom-line">Business bottom line</a></li>
               <li><a href="#naming">EI naming</a></li>
               <li><a href="#visual">Visual &amp; editorial</a></li>
+              <li><a href="#elena">Elena · intake</a></li>
               <li><a href="#source">Source files</a></li>
             </ol>
           </aside>
@@ -279,6 +280,10 @@
               <div class="person-card">
                 <div class="person-name">Marc</div>
                 <p class="person-role">Publication designer · <strong>Editorial layout</strong> — posters feel academic; borrow NYT-style digital publication patterns.</p>
+              </div>
+              <div class="person-card">
+                <div class="person-name">Elena</div>
+                <p class="person-role">Visitor · Italian accent (ASR often garbled) · <strong>Onboarding intake</strong> — don’t make founders <em>confirm</em> what the company does; <em>take / infer</em> company activity so the step stays light.</p>
               </div>
               <div class="person-card">
                 <div class="person-name">Ted &amp; others</div>
@@ -349,6 +354,7 @@
               <li><strong>Poster / editorial pass</strong> — less academic grid; more imagery, callouts, publication pacing (Marc).</li>
               <li><strong>Business hook in the story</strong> — acquisition and onboarding copy answer Vic’s ROI test before the climate thesis.</li>
               <li><strong>Habit loop</strong> — weekly reminder to log actions + new data so founders see bad → neutral → good (Denise’s progress narrative).</li>
+              <li><strong>Infer, don’t confirm</strong> (Elena) — when URL / pitch / model already implies what the company does, pre-fill and move on; skip a heavy “confirm what your company does” gate.</li>
             </ol>
 
             <!-- ── Cleaning QA ── -->
@@ -373,7 +379,8 @@
               <li><strong>Speaker labels:</strong> raw rarely names visitors. “Leslie / Denise / Vic…” are useful personas but not hard IDs.</li>
               <li><strong>Truncation:</strong> Part 2 (Ted) is short vs a longer live pitch cycle; some mid-floor repeats of the same pitch are collapsed (fine) but a few intermediate critiques may be lost.</li>
               <li><strong>Still-fuzzy ASR phrases</strong> that Gemini had to guess: e.g. <code>fully shunen… dog</code> → “honest baseline”; <code>stack of bounder</code> → founder dashboard aggregate — plausible, not certain.</li>
-              <li><strong>Team debrief at end</strong> (posters as conference handouts, testing starting point, Elena note) is thin or missing in the cleaned MD — keep the raw for internal retro.</li>
+              <li><strong>Elena dropped from participant table</strong> — Italian accent made ASR noisy; her intake note only survives in the team debrief (“confirm → take what the company does”). Restored on this page from that debrief.</li>
+              <li><strong>Team debrief</strong> (posters as conference handouts, testing the starting point) is still thin in the cleaned MD — keep the raw for internal retro.</li>
               <li><strong>Occasional over-flattering Presenter replies</strong> (“Understood, that makes total sense…”) are reconstructed politeness, not literal.</li>
             </ul>
             <div class="insight">
@@ -505,6 +512,23 @@
             </div>
             <div class="insight">
               <strong>Takeaway:</strong> two surfaces, two jobs — <em>tool</em> (icons, hierarchy, how-to) and <em>story artifacts</em> (posters/newsletter as publication, not academic wall).
+            </div>
+
+            <h2 id="elena">Elena · lighter intake</h2>
+            <p class="subject-lead">
+              Visitor with an Italian accent — Gemini’s cleaned report omitted her from the participant map.
+              Her line survives mainly in the team’s end-of-floor debrief (raw ASR is hard to segment around her).
+            </p>
+            <div class="turn">
+              <div class="speaker">Team</div>
+              <p>Elena was suggesting: instead of asking founders to <em>confirm</em> what the company does, we should <em>take</em> what the company does — so that step isn’t a big gate.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Elena</div>
+              <p><span style="color:var(--ink-soft)">(reconstructed from debrief + nearby ASR)</span> Prefer the product to infer company activity from what it already has (URL, pitch, model signals) rather than making the founder re-confirm or re-describe the business at onboarding.</p>
+            </div>
+            <div class="insight">
+              <strong>Takeaway:</strong> starting-point friction was a team theme the same day (“prototype is good; getting into it is the hard part”). Elena’s fix is concrete: auto-take company profile → fewer confirm steps → faster first value.
             </div>
 
             <!-- ── Source ── -->

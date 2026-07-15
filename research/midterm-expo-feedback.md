@@ -18,7 +18,8 @@
 - **Speaker labels:** raw rarely names visitors. Leslie / Denise / Vic etc. are useful personas, not hard IDs.
 - **Truncation:** Part 2 (Ted) is short vs a longer live pitch cycle; some mid-floor repeats collapsed (fine) but intermediate critiques may be lost.
 - **Still-fuzzy ASR** that Gemini guessed: e.g. *fully shunen… dog* → “honest baseline”; *stack of bounder* → founder dashboard aggregate — plausible, not certain.
-- **Team debrief at end** (posters as conference handouts, testing the starting point, Elena note) is thin or missing — keep the raw for internal retro.
+- **Elena omitted from participant table** — Italian accent made ASR noisy; her intake critique only clearly survives in the team debrief (“instead of *confirm* what the company does, *take* what the company does”). Restored on the research page.
+- **Team debrief at end** (posters as conference handouts, testing the starting point) is thin — keep the raw for internal retro.
 - **Occasional over-flattering Presenter replies** are reconstructed politeness, not literal.
 
 ---
@@ -41,6 +42,7 @@ The participant mappings from the expo are aligned below:
 | **Vic** | Investor / VC Persona | **Business Value ("The Bottom Line")**: Challenged the business case ("Why should I care as a business owner? How does it affect my cost or revenue?"). |
 | **Katya** | Visual Designer / Peer | **Micro-Interactions & Styling**: Highlighted onboarding layout strength, but urged adding semantic icons to reduce cognitive load and avoid large blocks of raw text. |
 | **Marc** | Editorial / Publication Designer | **Media & Communication**: Critiqued the tabloid poster layout as "looking too academic" and recommended digital publication design patterns. |
+| **Elena** | Visitor (Italian accent; ASR often garbled) | **Onboarding intake friction**: Don’t make founders *confirm* what the company does — *take / infer* company activity from URL/pitch/model so the first step stays light. Named in team debrief; missing from original Gemini participant map. |
 
 ---
 
@@ -62,6 +64,9 @@ The dashboard and poster designs are highly comprehensive but risk inducing "cog
 ### D. The Jevons & Nomenclature Clash (Neha & Marc’s Pillar)
 *   **Nomenclature Clash**: "EI" was repeatedly misread as *Emotional Intelligence*. We must explicitly clarify that **EI stands for Environmental Impact** on first use.
 *   **Publication Layouts**: Tabloid posters should move away from dense academic grids and incorporate more dynamic publication layout patterns (e.g., *The New York Times* digital style) utilizing rich negative space and imagery.
+
+### E. Intake Friction — Infer, Don’t Confirm (Elena’s Pillar)
+The team’s end-of-expo debrief captured Elena’s point: the onboarding should not force founders through a heavy “confirm what your company does” gate. Prefer **taking** company activity from signals already collected (website URL, pitch deck, model choice) so first value arrives faster. This aligns with the same-day observation that the prototype itself felt strong while *getting into it* (the starting point) still needed work. Italian-accented speech was poorly segmented by ASR, which is why Gemini under-represented her in the cleaned report.
 
 ---
 
@@ -283,3 +288,14 @@ The dashboard and poster designs are highly comprehensive but risk inducing "cog
 > **Marc**: Yes, add imagery! The environment is highly visual—leverage that. It shouldn't just be a wall of text.
 > 
 > **Presenter**: Absolutely. Thank you so much for the feedback! This gives us a clear roadmap for our next design sprint.
+
+---
+
+### PART 12: Elena — Infer Company Activity (Team Debrief Capture)
+**Speakers**: **Elena** (Visitor, Italian accent), **Team GTR** (debrief)
+
+> **Team (recalling Elena)**: Elena was suggesting that instead of asking founders to *confirm* what the company does, we should *take* what the company does — so that step isn’t a big gate in onboarding.
+> 
+> **Elena** (reconstructed): Prefer the product to infer company activity from what it already has (URL, pitch, model signals) rather than making the founder re-confirm or re-describe the business before they see value.
+> 
+> **Team**: That matches what we felt on the floor — prototype lands well; the starting point / getting into it is what we still need to learn.
