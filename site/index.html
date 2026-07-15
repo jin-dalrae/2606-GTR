@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Climatico — Environmental impact dashboard for early-stage startups</title>
-  <meta name="description" content="Climatico is an environmental impact dashboard for early-stage startups. We help startups to scale sustainably from day one." />
+  <title>Climatico — Scale sustainably from day one</title>
+  <meta name="description" content="Climatico is an Environmental Impact (EI) dashboard for early-stage startups. Intervene early, estimate past–present–future impact, and scale sustainably from day one." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" />
@@ -56,88 +56,123 @@
       color: rgba(242, 244, 242, 0.72);
       line-height: 1.5;
     }
-    .broadcast-hero {
+    .pitch-why {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.85rem;
       margin-top: 1.25rem;
-      border-radius: 22px;
-      border: 1px solid var(--line);
-      background:
-        radial-gradient(1200px 280px at 10% 0%, rgba(31, 138, 91, 0.12), transparent 60%),
-        var(--bg-elevated);
-      padding: 1.6rem 1.6rem 1.4rem;
-      overflow: hidden;
     }
-    .broadcast-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      font-size: 0.78rem;
-      font-weight: 700;
+    .pitch-why article {
+      background: var(--bg-elevated);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 1.15rem 1.2rem;
+    }
+    .pitch-why h3 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      margin: 0 0 0.45rem;
+      letter-spacing: -0.015em;
+    }
+    .pitch-why p {
+      margin: 0;
+      color: var(--ink-2);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .pitch-why .why-kicker {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 500;
       letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--hand-deep);
-      background: var(--hand-soft);
-      border: 1px solid rgba(31, 138, 91, 0.25);
-      border-radius: 999px;
-      padding: 0.35rem 0.7rem;
-      margin-bottom: 0.9rem;
+      margin-bottom: 0.45rem;
     }
-    .broadcast-title {
-      font-family: var(--font-display);
-      font-size: clamp(1.55rem, 3.2vw, 2.2rem);
-      letter-spacing: -0.02em;
-      margin: 0 0 0.75rem;
-      line-height: 1.15;
-    }
-    .broadcast-body {
-      max-width: 62ch;
-      color: var(--ink-2);
-      font-size: 1rem;
-      line-height: 1.6;
-      margin: 0 0 1.1rem;
-    }
-    .broadcast-ticker {
+    .audience-row {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.75rem;
+      gap: 0.85rem;
+      margin-top: 1.25rem;
     }
-    .ticker-item {
-      background: #fff;
+    .audience-row article {
       border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 0.85rem 0.95rem;
+      border-radius: 16px;
+      padding: 1.15rem 1.2rem;
+      background: #fff;
     }
-    .ticker-item .t-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: var(--ink-2);
-      margin-bottom: 0.35rem;
-    }
-    .ticker-item .t-value {
-      font-weight: 700;
+    .audience-row h3 {
+      margin: 0 0 0.4rem;
       font-size: 1.05rem;
-      color: var(--ink);
     }
-    .ticker-item .t-value.down { color: #1f8a5b; }
-    .ticker-item .t-value.up { color: #b5502f; }
-    .ticker-item .t-meta {
-      margin-top: 0.25rem;
-      font-size: 0.8rem;
+    .audience-row p {
+      margin: 0;
       color: var(--ink-2);
+      font-size: 0.93rem;
+      line-height: 1.5;
     }
-    .source-link {
-      margin-top: 1rem;
-      font-size: 0.88rem;
+    .ei-callout {
+      margin-top: 1.25rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+    }
+    .ei-callout .ei-box {
+      border-radius: 16px;
+      padding: 1.2rem 1.3rem;
+      border: 1px solid var(--line);
+      background: var(--bg-elevated);
+    }
+    .ei-callout .ei-box strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      margin-bottom: 0.35rem;
+      letter-spacing: -0.02em;
+    }
+    .ei-callout .ei-box p {
+      margin: 0;
       color: var(--ink-2);
+      font-size: 0.95rem;
+      line-height: 1.5;
     }
-    .source-link a {
+    .ei-note {
+      margin-top: 0.85rem;
+      font-size: 0.9rem;
+      color: var(--ink-2);
+      max-width: 62ch;
+    }
+    .journey-step {
+      display: grid;
+      grid-template-columns: 3rem 1fr;
+      gap: 0.75rem 1rem;
+      padding: 0.95rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .journey-step:last-child { border-bottom: 0; }
+    .journey-num {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
       color: var(--hand-deep);
-      font-weight: 600;
+      padding-top: 0.2rem;
+    }
+    .journey-step h3 {
+      margin: 0 0 0.3rem;
+      font-size: 1.05rem;
+    }
+    .journey-step p {
+      margin: 0;
+      color: var(--ink-2);
+      font-size: 0.95rem;
+      line-height: 1.5;
     }
     @media (max-width: 800px) {
       .concept-strip,
-      .broadcast-ticker {
+      .pitch-why,
+      .audience-row,
+      .ei-callout {
         grid-template-columns: 1fr;
       }
     }
@@ -148,12 +183,12 @@
     <header class="site-nav" id="site-nav"></header>
 
     <main class="home-main">
-      <!-- Masthead -->
+      <!-- Masthead — floor pitch -->
       <section class="home-hero">
         <div class="container">
           <div class="home-topbar">
             <span>gtr1.web.app</span>
-            <span class="home-topbar-right"><span class="home-dot" aria-hidden="true"></span>Climate impact platform</span>
+            <span class="home-topbar-right"><span class="home-dot" aria-hidden="true"></span>Midterm · Climatico</span>
           </div>
           <div class="home-rule" aria-hidden="true"></div>
 
@@ -161,340 +196,265 @@
             <div class="home-masthead-copy">
               <h1 class="home-title">Climatico</h1>
               <p class="home-lede">
-                <span class="home-lede-line">Climatico is an environmental impact dashboard for early-stage startups.</span>
-                <span class="home-lede-line">We help startups to scale sustainably from day one.</span>
+                <span class="home-lede-line">An Environmental Impact dashboard for early-stage startups.</span>
+                <span class="home-lede-line">Scale sustainably from day one — before the wrong defaults lock in.</span>
               </p>
             </div>
           </div>
 
           <div class="home-meta-row">
-            <span>For Seed–Series B · Any industry</span>
+            <span>Idea → Seed → Series A/B</span>
+            <span>Founders · Accelerators · Investors</span>
             <span>Team · Rae · Gabriel · Tej</span>
-            <span>gtr1.web.app</span>
           </div>
 
           <div class="btn-row home-cta-row">
-            <a class="btn btn-primary" href="./prototype/">Try the prototype</a>
-            <a class="btn btn-secondary" href="./research/">Read the research</a>
-            <a class="btn btn-secondary" href="./posters/">View posters</a>
+            <a class="btn btn-primary" href="./prototype/">Try the assessment</a>
+            <a class="btn btn-secondary" href="./prototype/mobile/">Mobile onboard</a>
+            <a class="btn btn-secondary" href="./research/midterm-expo/">Expo feedback</a>
           </div>
         </div>
       </section>
 
-      <!-- 01 · How it works -->
+      <!-- 01 · Why intervene early -->
       <section class="section home-section">
         <div class="container">
           <header class="home-sec-head home-sec-head--clay">
             <div>
-              <p class="home-sec-num">01 — How it works</p>
-              <h2 class="home-sec-title">Evidence → snapshot → better decisions.</h2>
+              <p class="home-sec-num">01 — Why day one</p>
+              <h2 class="home-sec-title">Startups scale fast. The window to intervene is early.</h2>
+              <p class="home-cta-copy" style="margin-top:0.65rem;max-width:56ch">
+                Large companies must report ESG and emissions. Early-stage startups usually do not —
+                so impact is easy to ignore until infrastructure, suppliers, and cloud regions are already locked in.
+              </p>
             </div>
           </header>
 
-          <div class="home-card-grid home-card-grid--4">
-            <article class="home-card home-card--clay">
-              <p class="home-card-kicker">01 · Collect</p>
-              <h3>What you know</h3>
-              <p>Six short questions: stage, model, headcount, activities. No mandatory uploads. Stealth-friendly by default.</p>
-              <p class="home-card-punch">Start in minutes, not months.</p>
+          <div class="pitch-why">
+            <article>
+              <p class="why-kicker">The gap</p>
+              <h3>No obligation — yet</h3>
+              <p>Enterprises face disclosure and procurement pressure. Pre-seed and seed teams rarely measure cloud, travel, or manufacturing at all.</p>
             </article>
-            <article class="home-card home-card--clay">
-              <p class="home-card-kicker">02 · See</p>
-              <h3>Footprint &amp; handprint</h3>
-              <p>Instant modeled tCO₂e/yr, hotspots, peer band, cost exposure, and impact beyond carbon — with citations.</p>
-              <p class="home-card-punch">Absolute impact, then intensity.</p>
+            <article>
+              <p class="why-kicker">The risk</p>
+              <h3>Lock-in as you grow</h3>
+              <p>One wrong factory, grid, or stack choice compounds with every user. Fixing it at Series B costs engineering years you do not have.</p>
             </article>
-            <article class="home-card home-card--clay">
-              <p class="home-card-kicker">03 · Estimate</p>
-              <h3>The path forward</h3>
-              <p>Maturity-conditional first actions, goals, risk radar, and additionality gates before any avoided-emissions claim.</p>
-              <p class="home-card-punch">Forecast before you lock in.</p>
-            </article>
-            <article class="home-card home-card--clay">
-              <p class="home-card-kicker">04 · Decide</p>
-              <h3>Climate in the room</h3>
-              <p>Founders own the dashboard. Investors get time-limited diligence links. Portfolio view is the next layer.</p>
-              <p class="home-card-punch">Diligence without the PDF pile.</p>
+            <article>
+              <p class="why-kicker">The move</p>
+              <h3>Intervene while plastic</h3>
+              <p>Estimate Environmental Impact (EI) from the idea stage. Cascade by funding period. Change the trajectory before scale multiplies it.</p>
             </article>
           </div>
         </div>
       </section>
 
-      <!-- 02 · Explore -->
+      <!-- 02 · What EI means -->
       <section class="section home-section home-section--panel">
         <div class="container">
           <header class="home-sec-head home-sec-head--accent">
             <div>
-              <p class="home-sec-num">02 — Explore</p>
-              <h2 class="home-sec-title">Research, product, posters.</h2>
+              <p class="home-sec-num">02 — Environmental Impact (EI)</p>
+              <h2 class="home-sec-title">Not emotional intelligence. Not vibes. A living score.</h2>
+              <p class="home-cta-copy" style="margin-top:0.65rem;max-width:56ch">
+                We always spell it out on first use: <strong>EI means Environmental Impact</strong> —
+                absolute footprint, then intensity so a tiny company is not “clean” only because it is small.
+              </p>
             </div>
           </header>
 
-          <div class="home-card-grid home-card-grid--4">
-            <a class="home-card home-card--accent home-card-link" href="./research/">
-              <p class="home-card-kicker">Evidence</p>
-              <h3>Research</h3>
-              <p>Full archive: Climate Goal Platform report, fieldwork, Stage 1–2 PRDs — plus short background notes.</p>
-              <span class="home-card-arrow">Open →</span>
-            </a>
-            <a class="home-card home-card--accent home-card-link" href="./prototype/">
-              <p class="home-card-kicker">Interactive</p>
-              <h3>Prototype</h3>
-              <p>Assessment, founder dashboard, investor board, and program director — one guided shell.</p>
-              <span class="home-card-arrow">Try →</span>
-            </a>
-            <a class="home-card home-card--accent home-card-link" href="./prototype/mobile/">
-              <p class="home-card-kicker">Mobile</p>
-              <h3>Onboarding phone</h3>
-              <p>Founder assessment in its native mobile wireframe — as designed for founders on a phone.</p>
-              <span class="home-card-arrow">Open →</span>
-            </a>
-            <a class="home-card home-card--accent home-card-link" href="./posters/">
-              <p class="home-card-kicker">Print</p>
-              <h3>Posters</h3>
-              <p>Main poster, EI concepts, and the shifts — behavior, systems, culture, paradigm.</p>
-              <span class="home-card-arrow">View →</span>
-            </a>
-            <a class="home-card home-card--accent home-card-link" href="./leaflet/">
-              <p class="home-card-kicker">Letter</p>
-              <h3>Leaflet</h3>
-              <p>Climatico by GTR (Rae, Gabriel, Tej) — actionable insights from an EI dashboard, US Letter.</p>
-              <span class="home-card-arrow">Open →</span>
-            </a>
+          <div class="ei-callout">
+            <div class="ei-box">
+              <strong>EI</strong>
+              <p>Absolute Environmental Impact — how much you emit (tCO₂e today; water, energy, waste in the longer model). Past, present, and a forward estimate as the business scales.</p>
+            </div>
+            <div class="ei-box">
+              <strong>EI intensity</strong>
+              <p>EI divided by revenue (or growth). The ratio that matters when you scale: are you getting cleaner per dollar, or just bigger?</p>
+            </div>
           </div>
+          <p class="ei-note">
+            Footprint (−) is what you cause. Handprint (+) is avoided impact only when additionality holds —
+            never a free offset. Modeled estimates until you replace them with real ops data.
+          </p>
         </div>
       </section>
 
-      <!-- 03 · Snapshot + honesty -->
+      <!-- 03 · Journey (demo pitch order) -->
       <section class="section home-section">
         <div class="container">
           <header class="home-sec-head home-sec-head--clay">
             <div>
-              <p class="home-sec-num">03 — Honesty baked in</p>
-              <h2 class="home-sec-title">Modeled is not measured. Handprint is not an offset.</h2>
+              <p class="home-sec-num">03 — How founders meet Climatico</p>
+              <h2 class="home-sec-title">Onboard → report → dashboard → act.</h2>
+              <p class="home-cta-copy" style="margin-top:0.65rem;max-width:56ch">
+                The same path we walked on the expo floor: mobile-first assessment, instant snapshot,
+                a dashboard you return to, then insights that say <em>how</em> — not only what.
+              </p>
             </div>
           </header>
 
-          <div class="home-split">
-            <div class="home-snapshot" aria-label="Sample impact snapshot">
-              <div class="home-metric-row">
-                <div class="home-metric home-metric--foot">
-                  <div class="home-metric-lbl">Footprint (−)</div>
-                  <div class="home-metric-val">61.7 <small>tCO₂e/yr</small></div>
-                </div>
-                <div class="home-metric home-metric--hand">
-                  <div class="home-metric-lbl">Handprint (+)</div>
-                  <div class="home-metric-val">~60 <small>tCO₂e/yr</small></div>
-                </div>
+          <div style="max-width:720px;margin-top:0.5rem">
+            <div class="journey-step">
+              <div class="journey-num">01</div>
+              <div>
+                <h3>Mobile onboarding</h3>
+                <p>Light assessment — funding stage, model, headcount, activities. Prefer inferring what the company does over a heavy confirm step. Start in minutes.</p>
               </div>
-              <div class="home-metric">
-                <div class="home-metric-lbl">Impact maturity</div>
-                <div class="home-metric-val home-metric-val--sm">Level 2 · Gated</div>
-              </div>
-              <p class="home-snapshot-note">
-                Modeled from team size, activities, and industry defaults — labeled as estimates until you replace them with metered evidence.
-              </p>
             </div>
+            <div class="journey-step">
+              <div class="journey-num">02</div>
+              <div>
+                <h3>First snapshot report</h3>
+                <p>Website or pitch signals plus your answers → a directional Environmental Impact estimate: hotspots, stage cascade, first actions. Immediate value before any integration.</p>
+              </div>
+            </div>
+            <div class="journey-step">
+              <div class="journey-num">03</div>
+              <div>
+                <h3>Living dashboard</h3>
+                <p>Come back as you grow. Goals, maturity levels, progress from rough model to better data. Connect Salesforce, Workday, or accounting later for precision.</p>
+              </div>
+            </div>
+            <div class="journey-step">
+              <div class="journey-num">04</div>
+              <div>
+                <h3>Actionable insights — the how</h3>
+                <p>Not “reduce emissions.” Steps, scenarios, and resources you can assign on Monday — then log new numbers and watch the score move.</p>
+              </div>
+            </div>
+            <div class="journey-step">
+              <div class="journey-num">05</div>
+              <div>
+                <h3>Accelerators &amp; investors</h3>
+                <p>Program directors see cohort progress and competition. VCs see portfolio Environmental Impact exposure and intensity — shared language for demo day and diligence.</p>
+              </div>
+            </div>
+          </div>
 
-            <div class="home-principle-list">
-              <div class="home-principle">
-                <span class="home-principle-mark" aria-hidden="true">A</span>
-                <div>
-                  <h3>Footprint (−)</h3>
-                  <p>Emissions you cause — Scope 1, 2, and material Scope 3. Defaults cite GHG Protocol, SCI, DEFRA, EPA, Project Frame.</p>
-                </div>
-              </div>
-              <div class="home-principle">
-                <span class="home-principle-mark" aria-hidden="true">B</span>
-                <div>
-                  <h3>Handprint (+)</h3>
-                  <p>Avoided emissions your product enables — only when additionality holds. Never a substitute for certified accounting.</p>
-                </div>
-              </div>
-              <div class="home-principle">
-                <span class="home-principle-mark" aria-hidden="true">C</span>
-                <div>
-                  <h3>Any business model</h3>
-                  <p>SaaS, hardware, food, biotech, services — every model leaves a mark. AI briefings may only use the curated fact pack.</p>
-                </div>
-              </div>
-            </div>
+          <div class="btn-row" style="margin-top:1.5rem">
+            <a class="btn btn-primary" href="./prototype/">Open the prototype</a>
+            <a class="btn btn-secondary" href="./prototype/mobile/">Phone assessment</a>
           </div>
         </div>
       </section>
 
-      <!-- 04 · Vision (inlined) -->
+      <!-- 04 · Who -->
+      <section class="section home-section home-section--panel">
+        <div class="container">
+          <header class="home-sec-head home-sec-head--accent">
+            <div>
+              <p class="home-sec-num">04 — Who it’s for</p>
+              <h2 class="home-sec-title">Three seats at the same scoreboard.</h2>
+            </div>
+          </header>
+          <div class="audience-row">
+            <article>
+              <h3>Startup founders</h3>
+              <p>See Environmental Impact as the business grows. Past, present, and future estimate — so ops choices (cloud region, factory, travel) stay visible while they are still cheap to change.</p>
+            </article>
+            <article>
+              <h3>Accelerators</h3>
+              <p>Onboard cohorts into a shared program surface. Track who is improving intensity. Embed climate into the journey through demo day — not a side workshop.</p>
+            </article>
+            <article>
+              <h3>Investors</h3>
+              <p>Portfolio-level exposure and EI intensity, not only revenue. Compare funds and companies on how cleanly capital scales — redefining capital with climate in the room.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 05 · Explore materials -->
+      <section class="section home-section">
+        <div class="container">
+          <header class="home-sec-head home-sec-head--clay">
+            <div>
+              <p class="home-sec-num">05 — Materials</p>
+              <h2 class="home-sec-title">Prototype, evidence, posters.</h2>
+            </div>
+          </header>
+
+          <div class="home-card-grid home-card-grid--4">
+            <a class="home-card home-card--clay home-card-link" href="./prototype/">
+              <p class="home-card-kicker">Interactive</p>
+              <h3>Prototype</h3>
+              <p>Assessment, founder dashboard, investor board, program director — the live midterm shell.</p>
+              <span class="home-card-arrow">Try →</span>
+            </a>
+            <a class="home-card home-card--clay home-card-link" href="./research/midterm-expo/">
+              <p class="home-card-kicker">Latest evidence</p>
+              <h3>Midterm Expo</h3>
+              <p>Floor feedback: Monday-morning how, density, business ROI, EI naming, design.</p>
+              <span class="home-card-arrow">Read →</span>
+            </a>
+            <a class="home-card home-card--clay home-card-link" href="./research/">
+              <p class="home-card-kicker">Library</p>
+              <h3>All research</h3>
+              <p>Collab session, fieldwork, PRDs, and background notes — newest first.</p>
+              <span class="home-card-arrow">Open →</span>
+            </a>
+            <a class="home-card home-card--clay home-card-link" href="./posters/">
+              <p class="home-card-kicker">Print</p>
+              <h3>Poster series</h3>
+              <p>EI concept, actionable insights, systems / culture / paradigm shifts, main board.</p>
+              <span class="home-card-arrow">View →</span>
+            </a>
+            <a class="home-card home-card--clay home-card-link" href="./leaflet/">
+              <p class="home-card-kicker">Letter</p>
+              <h3>Leaflet</h3>
+              <p>Handout: actionable insights from an EI dashboard — take-away for founders.</p>
+              <span class="home-card-arrow">Open →</span>
+            </a>
+            <a class="home-card home-card--clay home-card-link" href="./prototype/mobile/">
+              <p class="home-card-kicker">Mobile</p>
+              <h3>Onboarding phone</h3>
+              <p>Founder assessment in its native mobile frame — easiest entry to the system.</p>
+              <span class="home-card-arrow">Open →</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 06 · North star (posters + vision, compressed) -->
       <section class="section home-section home-section--panel" id="vision">
         <div class="container">
           <header class="home-sec-head home-sec-head--accent">
             <div>
-              <p class="home-sec-num">04 — If this works</p>
-              <h2 class="home-sec-title">The scoreboard changes.</h2>
-              <p class="home-cta-copy" style="margin-top:0.65rem;max-width:52ch">
-                Start with company-wise environmental impact. Then EI / Revenue as the competitive ratio.
-                A dashboard for operators. A board for portfolios. Then a culture — and a national index —
-                that treats intensity as public infrastructure.
+              <p class="home-sec-num">06 — If this works</p>
+              <h2 class="home-sec-title">Environmentally accountable capitalism.</h2>
+              <p class="home-cta-copy" style="margin-top:0.65rem;max-width:54ch">
+                From one company’s EI ledger, to cohort competition, to capital that prices intensity —
+                growth without a better ratio is no longer automatic success.
               </p>
             </div>
           </header>
 
           <div class="concept-strip">
             <div class="concept-card">
-              <h3>Company-wise environmental impact</h3>
+              <h3>System · culture · paradigm</h3>
               <p>
-                Every firm gets a living ledger: footprint (−) from operations and value chain,
-                handprint (+) only when additionality holds, maturity scored L0–L5,
-                claims gated on evidence. Same language Climatico prototypes today —
-                Scope-aware, sourced factors, modeled until metered.
+                <strong>System</strong> — climate data leaves annual PDFs; every venture-backed firm keeps a living EI surface, and accelerators embed it through demo day.
               </p>
-              <p style="margin-top:0.85rem">
-                Not a one-off consultant PDF. A continuous operator surface:
-                evidence in, estimates out, first action binding to the next maturity step.
+              <p style="margin-top:0.75rem">
+                <strong>Culture</strong> — founders brag about EI intensity the way they brag about ARR; customers and hires ask for it.
+              </p>
+              <p style="margin-top:0.75rem">
+                <strong>Paradigm</strong> — funds and regions compete on value created per tonne of impact, not revenue alone.
               </p>
             </div>
             <div class="formula-box">
-              <p class="eyebrow" style="margin:0"><span class="dot"></span> Intensity, not vibes</p>
+              <p class="eyebrow" style="margin:0"><span class="dot"></span> The competitive ratio</p>
               <div class="formula-main">
                 <em>EI / Revenue</em><br />
-                Environmental impact per unit of economic output
+                Environmental Impact per unit of output
               </div>
               <p class="formula-sub">
-                Pair absolute tonnes (tCO₂e/yr) with intensity
-                (tCO₂e per $1M revenue, per FTE, per unit shipped).
-                Growth without a better ratio is no longer automatic success.
+                Absolute tonnes still matter. Intensity is how you stay honest while you scale —
+                and how portfolios and cohorts compare without drowning in raw tables.
               </p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section home-section">
-        <div class="container">
-          <header class="home-sec-head home-sec-head--clay">
-            <div>
-              <p class="home-sec-num">05 — Three shifts</p>
-              <h2 class="home-sec-title">System. Culture. Paradigm.</h2>
-            </div>
-          </header>
-          <div class="vision-pillars">
-            <article class="pillar">
-              <div class="pillar-index">01</div>
-              <h3>System change</h3>
-              <p>
-                Climate data stops living in annual PDF reports for the largest companies only.
-                Every venture-backed firm ships a company-wise EI ledger: evidence in, estimates out,
-                maturity scored, handprint claims gated on additionality.
-                Investors open portfolio boards ranked by intensity — not gut feel after a pitch.
-              </p>
-            </article>
-            <article class="pillar">
-              <div class="pillar-index">02</div>
-              <h3>Culture change</h3>
-              <p>
-                Founders brag about <strong>EI / Revenue</strong> the way they brag about ARR and burn multiple.
-                Hiring pages show “tCO₂e per $1M revenue” next to remote policy.
-                Customers ask for intensity the way they ask for security questionnaires.
-                Green claims without evidence become socially expensive — environmentally accountable capitalism.
-              </p>
-            </article>
-            <article class="pillar">
-              <div class="pillar-index">03</div>
-              <h3>Paradigm shift</h3>
-              <p>
-                Competition expands beyond revenue and GDP.
-                Nations, cities, funds, and companies race on environmental impact ratios —
-                value created per tonne, harm avoided per product unit, handprint integrity under audit.
-                Growth that cannot decouple from damage is no longer celebrated as success.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section home-section home-section--panel">
-        <div class="container">
-          <header class="home-sec-head home-sec-head--accent">
-            <div>
-              <p class="home-sec-num">06 — Design fiction</p>
-              <h2 class="home-sec-title">If the index is public</h2>
-            </div>
-          </header>
-          <div class="broadcast-hero">
-            <div class="broadcast-kicker">Breaking · National Index</div>
-            <h3 class="broadcast-title">National Index Broadcasts Regional Resource Depletion</h3>
-            <p class="broadcast-body">
-              Imagine the evening feed: not only GDP and unemployment, but a national environmental
-              intensity index — rolling up company-wise EI into regional resource signals.
-              Watershed stress, grid carbon intensity, material throughput, and verified handprints
-              sit beside growth. Capital and culture reprice overnight because the number is public.
-            </p>
-            <div class="broadcast-ticker" aria-label="Illustrative national index ticker">
-              <div class="ticker-item">
-                <div class="t-label">Bay Area · SaaS cluster</div>
-                <div class="t-value down">EI/Rev −11% YoY</div>
-                <div class="t-meta">Decoupling while ARR rises</div>
-              </div>
-              <div class="ticker-item">
-                <div class="t-label">Industrial Midwest</div>
-                <div class="t-value up">Resource draw +6%</div>
-                <div class="t-meta">Material + energy hotspot</div>
-              </div>
-              <div class="ticker-item">
-                <div class="t-label">National handprint integrity</div>
-                <div class="t-value">58% verified</div>
-                <div class="t-meta">Ungated claims flagged red</div>
-              </div>
-            </div>
-            <p class="source-link" style="margin-bottom:0">Illustrative only — design fiction. Not live market data.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="section home-section">
-        <div class="container">
-          <header class="home-sec-head home-sec-head--clay">
-            <div>
-              <p class="home-sec-num">07 — Scenes</p>
-              <h2 class="home-sec-title">From one company’s EI ledger to a public resource index.</h2>
-            </div>
-          </header>
-          <div class="scene-grid">
-            <article class="scene">
-              <div class="scene-year">Near term</div>
-              <div>
-                <h3>Company-wise EI is the diligence tab</h3>
-                <p>
-                  A partner does not start with the growth chart. They open the Climatico share link:
-                  company-wise footprint hotspots, EI/Revenue vs peers, maturity level,
-                  additionality status on handprint claims, and the stranding-year countdown
-                  if the architecture does not change. Climate is no longer slide-28.
-                </p>
-              </div>
-            </article>
-            <article class="scene">
-              <div class="scene-year">Medium term</div>
-              <div>
-                <h3>Founders compete on EI / Revenue</h3>
-                <p>
-                  Demo days include a second scoreboard: environmental impact ratio vs peers
-                  at the same stage. Not “net zero someday,” but tCO₂e per revenue, per FTE,
-                  and verified avoided tonnes — with red flags for ungated handprints.
-                  Status accrues to those who improve the ratio while scaling.
-                </p>
-              </div>
-            </article>
-            <article class="scene">
-              <div class="scene-year">Long arc</div>
-              <div>
-                <h3>National index on the air</h3>
-                <p>
-                  Cities and countries broadcast growth alongside resource-depletion intensity
-                  the way they broadcast unemployment. Capital markets price transition risk
-                  in continuous signals, not annual PDFs. Climatico-like ledgers become the
-                  company-level sensors feeding that national index — infrastructure, not a niche app.
-                </p>
-              </div>
-            </article>
           </div>
         </div>
       </section>
@@ -504,10 +464,9 @@
           <blockquote class="quote-block">
             <p>
               “What if the companies we celebrate are not only the ones that grow the fastest —
-              but the ones that grow with the lightest scar, the strongest handprint,
-              and a falling EI / Revenue?”
+              but the ones that grow with the lightest scar, and a falling EI intensity?”
             </p>
-            <cite>Climatico · vision</cite>
+            <cite>Climatico · environmentally accountable scale-up</cite>
           </blockquote>
         </div>
       </section>
@@ -516,8 +475,11 @@
       <section class="home-cta">
         <div class="container home-cta-inner">
           <p class="home-sec-num" style="color: var(--accent-deep)">Start here</p>
-          <h2 class="home-sec-title">See your impact in one report</h2>
-          <p class="home-cta-copy">No consultants. No spreadsheets. Six questions, then a clear next action.</p>
+          <h2 class="home-sec-title">Take the assessment. See your EI.</h2>
+          <p class="home-cta-copy">
+            Six short inputs. A directional Environmental Impact snapshot.
+            Then a dashboard built to keep intervening as you grow.
+          </p>
           <div class="btn-row" style="justify-content:center;margin-top:1.25rem">
             <a class="btn btn-hand" href="./prototype/">Start guided prototype</a>
             <a class="btn btn-secondary" href="./prototype/mobile/">Mobile onboarding</a>

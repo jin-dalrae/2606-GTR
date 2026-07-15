@@ -80,7 +80,7 @@
       <button class="nav-toggle" type="button" aria-label="Open menu" id="nav-toggle"><span></span></button>
       <nav class="nav-links" id="nav-links">
         ${navHtml}
-        <a class="nav-cta" href="${base}prototype/">Try the prototype</a>
+        <a class="nav-cta" href="${base}prototype/">Try the assessment</a>
       </nav>
     `;
 
@@ -99,17 +99,17 @@
       <div class="footer-inner">
         <div>
           <p class="footer-brand">Climatico</p>
-          <p class="footer-copy">Climatico is an environmental impact dashboard for early-stage startups. We help startups to scale sustainably from day one.</p>
+          <p class="footer-copy">Environmental Impact (EI) dashboard for early-stage startups — intervene early and scale sustainably from day one.</p>
         </div>
         <div class="footer-col">
           <h4>Explore</h4>
           <ul>
+            <li><a href="${base}research/midterm-expo/">Midterm Expo feedback</a></li>
             <li><a href="${base}research/">Research library</a></li>
-            <li><a href="${gtr}">Evidence archive</a></li>
             <li><a href="${base}prototype/">Interactive prototype</a></li>
             <li><a href="${base}posters/">Poster series</a></li>
             <li><a href="${base}leaflet/">Climatico leaflet</a></li>
-            <li><a href="${base}index.html#vision">Vision on home</a></li>
+            <li><a href="${base}index.html#vision">If this works</a></li>
           </ul>
         </div>
         <div class="footer-col">
