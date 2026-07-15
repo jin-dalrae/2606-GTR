@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Midterm Expo feedback — Climatico Research</title>
+  <meta name="description" content="July 13, 2026 Midterm Expo: visitor feedback on Climatico’s prototype, posters, and pitch — actionability, density, business value, nomenclature, and design." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/site.css" />
+  <style>
+    .person-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin: 1.25rem 0 1.75rem;
+    }
+    @media (max-width: 720px) {
+      .person-grid { grid-template-columns: 1fr; }
+    }
+    .person-card {
+      background: var(--panel, oklch(0.96 0.01 85));
+      border: 1px solid var(--line, oklch(0.88 0.01 90));
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+    }
+    .person-name {
+      font-family: var(--serif, "Newsreader", Georgia, serif);
+      font-weight: 600;
+      font-size: 1.05rem;
+      margin-bottom: 0.25rem;
+    }
+    .person-role {
+      font-size: 0.92rem;
+      line-height: 1.4;
+      color: var(--ink-soft, oklch(0.45 0.02 255));
+      margin: 0;
+    }
+    .subject-lead {
+      font-size: 1.02rem;
+      line-height: 1.5;
+      color: var(--ink-soft, oklch(0.42 0.02 255));
+      margin: 0 0 1rem;
+    }
+    .turn {
+      display: grid;
+      grid-template-columns: 6.5rem 1fr;
+      gap: 0.75rem 1rem;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid color-mix(in oklab, var(--line, #ddd) 80%, transparent);
+    }
+    @media (max-width: 640px) {
+      .turn { grid-template-columns: 1fr; gap: 0.25rem; }
+    }
+    .turn .speaker {
+      font-family: var(--mono, "IBM Plex Mono", monospace);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent-deep, oklch(0.4 0.07 160));
+      padding-top: 0.15rem;
+    }
+    .turn p {
+      margin: 0;
+      font-size: 1.02rem;
+      line-height: 1.55;
+      color: var(--ink-soft, oklch(0.38 0.02 255));
+    }
+    .report-body .turn p { margin: 0; }
+    .transcript-note {
+      background: var(--panel, oklch(0.96 0.01 85));
+      border-left: 4px solid var(--accent, oklch(0.56 0.11 155));
+      border-radius: 0 8px 8px 0;
+      padding: 0.85rem 1rem;
+      margin: 0 0 1.5rem;
+      font-size: 0.98rem;
+      line-height: 1.45;
+      color: var(--ink-soft, oklch(0.42 0.02 255));
+    }
+    .transcript-note.caution {
+      border-left-color: var(--clay, oklch(0.56 0.11 55));
+    }
+    .insight {
+      background: color-mix(in oklab, var(--panel, #f3f1ea) 80%, white);
+      border: 1px solid var(--line, #ddd);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      margin: 0.75rem 0 1.25rem;
+      font-size: 0.98rem;
+      line-height: 1.45;
+      color: var(--ink-soft, oklch(0.4 0.02 255));
+    }
+    .insight strong {
+      color: var(--ink, #222);
+      font-weight: 600;
+    }
+    .pillar-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+      margin: 1rem 0 1.75rem;
+    }
+    @media (max-width: 720px) {
+      .pillar-grid { grid-template-columns: 1fr; }
+    }
+    .pillar {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      background: var(--bg-elevated);
+    }
+    .pillar h3 {
+      font-family: var(--serif, "Newsreader", Georgia, serif);
+      font-size: 1.15rem;
+      margin: 0 0 0.4rem;
+      letter-spacing: -0.01em;
+    }
+    .pillar .who {
+      font-family: var(--mono, "IBM Plex Mono", monospace);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      margin: 0 0 0.55rem;
+    }
+    .pillar p {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.45;
+      color: var(--ink-soft);
+    }
+    .qa-list {
+      margin: 0 0 1.25rem;
+      padding-left: 1.2rem;
+      color: var(--ink-soft);
+    }
+    .qa-list li {
+      margin-bottom: 0.55rem;
+      line-height: 1.45;
+    }
+    .qa-list code {
+      font-family: var(--mono, "IBM Plex Mono", monospace);
+      font-size: 0.86em;
+      background: var(--panel);
+      padding: 0.05em 0.35em;
+      border-radius: 4px;
+    }
+    .quote-pull {
+      margin: 1.25rem 0;
+      padding: 1.1rem 1.25rem;
+      border-left: 3px solid var(--accent);
+      background: color-mix(in oklab, var(--hand-soft, #e8f2ea) 55%, white);
+      border-radius: 0 10px 10px 0;
+    }
+    .quote-pull p {
+      font-family: var(--serif, "Newsreader", Georgia, serif);
+      font-size: 1.15rem;
+      line-height: 1.45;
+      margin: 0 0 0.5rem;
+      color: var(--ink);
+    }
+    .quote-pull cite {
+      font-style: normal;
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      font-family: var(--sans, "IBM Plex Sans", sans-serif);
+    }
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.25rem;
+      margin: 0 0 1rem;
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+    }
+    .meta-row strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-nav" id="site-nav"></header>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <p class="eyebrow"><span class="dot"></span> Fieldwork · Midterm Expo · July 13, 2026</p>
+          <h1 class="display">Midterm Expo feedback</h1>
+          <p class="lead">
+            Live floor feedback on Climatico’s landscape poster series and the three-monitor interactive prototype.
+            Visitors ranged from founders and VC-minded critics to design peers — and repeatedly pushed on
+            <em>how</em> to act, not only <em>what</em> the metrics say.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="../../prototype/">Open prototype</a>
+            <a class="btn btn-secondary" href="../collaboration-session/">Earlier collab session</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-sm" style="padding-top:0">
+        <div class="container report-layout">
+          <aside class="report-toc" aria-label="On this page">
+            <h2>On this page</h2>
+            <ol>
+              <li><a href="#overview">Overview</a></li>
+              <li><a href="#who">Who we heard from</a></li>
+              <li><a href="#pillars">Four pillars</a></li>
+              <li><a href="#quotes">Standout quotes</a></li>
+              <li><a href="#implications">Design implications</a></li>
+              <li><a href="#cleaning">Transcript cleaning QA</a></li>
+              <li><a href="#density">IA &amp; density</a></li>
+              <li><a href="#data">How data is gathered</a></li>
+              <li><a href="#how">Monday-morning “how”</a></li>
+              <li><a href="#bottom-line">Business bottom line</a></li>
+              <li><a href="#naming">EI naming</a></li>
+              <li><a href="#visual">Visual &amp; editorial</a></li>
+              <li><a href="#source">Source files</a></li>
+            </ol>
+          </aside>
+
+          <article class="report-body">
+            <p class="transcript-note">
+              Synthesized from the Gemini-cleaned report in
+              <code>research/midterm-expo-feedback.md</code>, checked against the raw ASR transcript.
+              Names below are labels from the cleaned report (personas inferred on the floor — raw audio rarely states full names).
+              Logistics, small talk, and setup noise are dropped.
+            </p>
+
+            <!-- ── Overview ── -->
+            <h2 id="overview">Overview</h2>
+            <div class="meta-row">
+              <span><strong>Date</strong> July 13, 2026</span>
+              <span><strong>Materials</strong> Tabloid poster series · 3-monitor demo</span>
+              <span><strong>Product</strong> Climatico (founder EI dashboard + assessment)</span>
+            </div>
+            <p>
+              Team GTR presented the Climatico concept: early-stage startups get a lightweight assessment and dashboard
+              so environmental impact (EI) is estimated from day one — past/present snapshot plus growth-coupled future —
+              with accelerator and investor views for cohorts and portfolios.
+            </p>
+            <p>
+              The prototype landed as <strong>usable and exciting</strong>. The sharpest critique was not “why climate,”
+              but the gap between a score and a founder’s Monday morning: actionable steps, resource links, cost correlation,
+              progressive disclosure, and clear naming.
+            </p>
+
+            <!-- ── Who ── -->
+            <h2 id="who">Who we heard from</h2>
+            <p class="subject-lead">Personas mapped in the cleaned report. Treat roles as critique lenses, not verified titles.</p>
+            <div class="person-grid">
+              <div class="person-card">
+                <div class="person-name">Leslie</div>
+                <p class="person-role">Investor / critic lens · <strong>IA &amp; density</strong> — dashboard and pitch surfaces feel like “too much data all at once.”</p>
+              </div>
+              <div class="person-card">
+                <div class="person-name">Denise</div>
+                <p class="person-role">Pragmatic founder · <strong>Monday-morning actionability</strong> — “Don’t just tell me the action. Tell me <em>how</em>.”</p>
+              </div>
+              <div class="person-card">
+                <div class="person-name">Vic</div>
+                <p class="person-role">CEO / investor persona · <strong>Bottom line</strong> — how does this cut cost or grow revenue?</p>
+              </div>
+              <div class="person-card">
+                <div class="person-name">Harshit</div>
+                <p class="person-role">SaaS / audit critic · <strong>Motivation &amp; data feasibility</strong> — why pay attention now; cloud/compute opacity.</p>
+              </div>
+              <div class="person-card">
+                <div class="person-name">Neha</div>
+                <p class="person-role">Corporate comms · <strong>Nomenclature</strong> — “EI” reads as Emotional Intelligence outside climate rooms.</p>
+              </div>
+              <div class="person-card">
+                <div class="person-name">Katya</div>
+                <p class="person-role">Visual designer · <strong>Icons &amp; hierarchy</strong> — onboarding is strong; add semantics, less wall-of-text.</p>
+              </div>
+              <div class="person-card">
+                <div class="person-name">Marc</div>
+                <p class="person-role">Publication designer · <strong>Editorial layout</strong> — posters feel academic; borrow NYT-style digital publication patterns.</p>
+              </div>
+              <div class="person-card">
+                <div class="person-name">Ted &amp; others</div>
+                <p class="person-role">Tech visitors · ecosystem / accelerator propagation, demo walkthroughs, “what am I looking at?” first-pass clarity.</p>
+              </div>
+            </div>
+
+            <!-- ── Pillars ── -->
+            <h2 id="pillars">Four pillars from the floor</h2>
+            <div class="pillar-grid">
+              <div class="pillar">
+                <p class="who">Denise</p>
+                <h3>Monday-morning “how”</h3>
+                <p>Metrics without a playbook fail. Climatico should be a <em>repository</em>: steps, external links, assignable tasks, and progress when new data is logged.</p>
+              </div>
+              <div class="pillar">
+                <p class="who">Vic</p>
+                <h3>Business value</h3>
+                <p>Climate “why” is clear; CEO “why” is not. Pair every carbon insight with cost, risk, or revenue language.</p>
+              </div>
+              <div class="pillar">
+                <p class="who">Leslie · Katya</p>
+                <h3>Density &amp; IA</h3>
+                <p>Progressive disclosure: primary metrics first, detail on demand. Icons over long copy. Don’t scare non-specialists on first glance.</p>
+              </div>
+              <div class="pillar">
+                <p class="who">Neha · Marc</p>
+                <h3>Naming &amp; media</h3>
+                <p>Spell out Environmental Impact on first use. Soften academic poster grids toward publication design and imagery.</p>
+              </div>
+            </div>
+            <div class="insight">
+              <strong>Cross-cutting theme:</strong> visitors believed the early-intervention thesis (startups scale fast; ESG obligation arrives late).
+              They pushed the product to be <em>operational</em> — believable inputs, clear “how,” and a reason to open the dashboard again next week.
+            </div>
+
+            <!-- ── Quotes ── -->
+            <h2 id="quotes">Standout quotes</h2>
+            <div class="quote-pull">
+              <p>“Don’t just tell me the action. Tell me how to do the action… Give me the action I need when I go back to work on Monday and talk to my team.”</p>
+              <cite>— Denise (founder persona)</cite>
+            </div>
+            <div class="quote-pull">
+              <p>“Can Climatico be a repository of information… YouTube videos, articles, podcasts — just give me the knowledge. Tell me how to go.”</p>
+              <cite>— Denise, on actionable insights</cite>
+            </div>
+            <div class="quote-pull">
+              <p>“Why should I care as a business owner? How does it affect my cost or revenue? … If it makes it cheaper to operate, sure. If not, what does this do for me?”</p>
+              <cite>— Vic (CEO / investor lens)</cite>
+            </div>
+            <div class="quote-pull">
+              <p>“My only feedback really is that it feels like a lot of data… This scares me… so much information.”</p>
+              <cite>— Leslie (IA / density)</cite>
+            </div>
+            <div class="quote-pull">
+              <p>“EI is emotional intelligence. Maybe you could specify somewhere that EI is environmental impact.”</p>
+              <cite>— Neha (nomenclature)</cite>
+            </div>
+
+            <!-- ── Implications ── -->
+            <h2 id="implications">Design implications (for the next sprint)</h2>
+            <ol class="qa-list">
+              <li><strong>Actionable insight cards</strong> — each action has: what · why (EI + $) · step-by-step how · external resources · “assign to teammate” / re-measure prompt.</li>
+              <li><strong>Methodology transparency</strong> — show what enters the model (travel, cloud, headcount, manufacturing, etc.), who measures (Climatico vs Workday/Salesforce vs defaults), and confidence.</li>
+              <li><strong>Progressive disclosure</strong> — dashboard overview first; drill-downs second. Reduce first-screen density on investor/pitch views.</li>
+              <li><strong>Always expand EI</strong> — “Environmental Impact (EI)” and “EI intensity (impact ÷ revenue)” on first use in UI, posters, and pitch.</li>
+              <li><strong>Icons + less body copy</strong> — especially onboarding and assessment report; keep Katya’s “intentional hierarchy,” fix the text walls.</li>
+              <li><strong>Poster / editorial pass</strong> — less academic grid; more imagery, callouts, publication pacing (Marc).</li>
+              <li><strong>Business hook in the story</strong> — acquisition and onboarding copy answer Vic’s ROI test before the climate thesis.</li>
+              <li><strong>Habit loop</strong> — weekly reminder to log actions + new data so founders see bad → neutral → good (Denise’s progress narrative).</li>
+            </ol>
+
+            <!-- ── Cleaning QA ── -->
+            <h2 id="cleaning">Transcript cleaning QA (Gemini vs raw ASR)</h2>
+            <p class="subject-lead">
+              Overall: <strong>good enough for research synthesis</strong>, not a verbatim court transcript.
+              ASR was noisy (product name garbled as Clementico / Kalimitico; many homophones). Gemini recovered meaning well on the big themes and the Denise monologue.
+            </p>
+
+            <h3>What Gemini cleaned well</h3>
+            <ul class="qa-list">
+              <li>Product name → <strong>Climatico</strong>; metrics → <strong>tCO₂e</strong>, <strong>EI / EI intensity</strong>.</li>
+              <li>Clear ASR repairs: <code>Momala</code> → mobile; <code>peach data</code> → pitch deck; <code>hoop them / fester</code> → hook them first; <code>radio capital</code> → redefining capital; <code>public therapy</code> → public / accelerator directors.</li>
+              <li>Denise’s “how / repository / Monday morning” monologue is faithful in substance and tone.</li>
+              <li>Part structure by critique theme is useful for a research page (better than raw chronological floor noise).</li>
+              <li>Dropped sleep-lock screens, photo logistics, and pure small talk — appropriate for research use.</li>
+            </ul>
+
+            <h3>Where to be careful</h3>
+            <ul class="qa-list">
+              <li><strong>Over-polish / invented precision:</strong> e.g. cleaned Presenter lines cite “GHG Protocol” Scope boundaries; the raw exchange was vaguer. Treat technical methodology lines as <em>team interpretation</em>, not visitor-quoted fact.</li>
+              <li><strong>Speaker labels:</strong> raw rarely names visitors. “Leslie / Denise / Vic…” are useful personas but not hard IDs.</li>
+              <li><strong>Truncation:</strong> Part 2 (Ted) is short vs a longer live pitch cycle; some mid-floor repeats of the same pitch are collapsed (fine) but a few intermediate critiques may be lost.</li>
+              <li><strong>Still-fuzzy ASR phrases</strong> that Gemini had to guess: e.g. <code>fully shunen… dog</code> → “honest baseline”; <code>stack of bounder</code> → founder dashboard aggregate — plausible, not certain.</li>
+              <li><strong>Team debrief at end</strong> (posters as conference handouts, testing starting point, Elena note) is thin or missing in the cleaned MD — keep the raw for internal retro.</li>
+              <li><strong>Occasional over-flattering Presenter replies</strong> (“Understood, that makes total sense…”) are reconstructed politeness, not literal.</li>
+            </ul>
+            <div class="insight">
+              <strong>Verdict:</strong> safe to use for insight pillars and product decisions. Do <em>not</em> cite cleaned Presenter methodology lines as exact spoken claims. Prefer direct visitor quotes for decks and reports.
+            </div>
+
+            <!-- ── Transcript sections ── -->
+            <h2 id="density">IA &amp; density</h2>
+            <p class="subject-lead">Leslie and peers on first-look cognitive load.</p>
+            <div class="turn">
+              <div class="speaker">Presenter</div>
+              <p>This is the onboarding stage — mobile is the easy entry. Then the founder dashboard: how the business is running, environmental impact cascaded by stage, and the behavior change we’re aiming for. Accelerator cohorts, program directors, and later investors share a system view of the metrics.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Leslie</div>
+              <p>How is data gathered into the dashboard? How is it reported?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Presenter</div>
+              <p>First we hook them: website or pitch-deck data — subjective, but enough to estimate impact. After account creation, connect Salesforce / ops tools for better data.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Leslie</div>
+              <p>My only real feedback is it feels like a lot of data all at once. Play with the information architecture. This is fine… this is great… <em>this scares me</em>. I’m not your target audience — I don’t usually review pitch decks — but for me that’s so much information.</p>
+            </div>
+            <div class="insight">
+              <strong>Takeaway:</strong> density is the first-frame risk for non-climate reviewers and possibly for real VCs skimming. Progressive disclosure is a product requirement, not polish.
+            </div>
+
+            <h2 id="data">How data is gathered (trust)</h2>
+            <p class="subject-lead">Visitors wanted the chain of custody: assessment → model → integrations → what is actually measured.</p>
+            <div class="turn">
+              <div class="speaker">Presenter</div>
+              <p>Onboarding is simplified estimation (headcount, funding stage, model). Later: connect Workday / Salesforce / accounting — travel, remote vs office, spend categories — for precision. Dashboard updates; insights stay current.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Visitor</div>
+              <p>It would help to see <em>what</em> is calculated — travel, manufacturing, cloud — so the number is believable. Are you measuring? Is Workday? Someone else? Also: am I as an individual responsible for company impact vs my home life?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Presenter</div>
+              <p>More than the sum of individuals, but headcount matters. We should expose calculation inputs and boundaries more clearly in the UI. (Cleaned report adds GHG Protocol corporate boundaries — treat as design intent, not exact floor wording.)</p>
+            </div>
+            <div class="insight">
+              <strong>Takeaway:</strong> show a “what’s in this number” slice early in concept storytelling (even if deep detail lives later in the tool). Boundary clarity reduces “is this me or my company?” confusion.
+            </div>
+
+            <h2 id="how">Monday-morning “how”</h2>
+            <p class="subject-lead">The strongest single critique of the day — after assessment + dashboard, founders still don’t know what to <em>do</em>.</p>
+            <div class="turn">
+              <div class="speaker">Denise</div>
+              <p>I have my dashboard, I’m fired up. How do I actually lower things? How do I change what I need to change?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Presenter</div>
+              <p>Insights in the dashboard, part by part — we’re still prototyping that section.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Denise</div>
+              <p>I see “make lower-impact decisions during product development and operations.” <strong>How?</strong> Don’t just tell me the action. Step by step. What I need when I talk to my team on Monday.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Presenter</div>
+              <p>Example: sourcing from a Chinese factory vs a US factory — slightly more expensive, maybe half the EI.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Denise</div>
+              <p>That still doesn’t say how. You don’t have to solve the whole supply chain. Be a repository: links, articles, videos, podcasts. I assign Gabriel research, Tej an action. Next week I log new data; bad → neutral → good. Remind me: “Did you do this? Put your new numbers in.” Tell me how — not only that I should.</p>
+            </div>
+            <div class="insight">
+              <strong>Product shape:</strong> insight = action card + how-to path + external knowledge + team assignment + re-measure loop. “Repository of how” is the differentiator vs a static score.
+            </div>
+
+            <h2 id="bottom-line">Business bottom line</h2>
+            <p class="subject-lead">Climate motivation is insufficient for many operators.</p>
+            <div class="turn">
+              <div class="speaker">Harshit</div>
+              <p>What’s the motivation for startups to pay attention to this?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Presenter</div>
+              <p>Big companies must report ESG / emissions. Startups don’t — so on the way up they can lock in high-emitting infrastructure (e.g. opaque data-center use). Intervene early. Low-cost estimation vs expensive enterprise measurement later.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Vic</div>
+              <p>I get the climate why. Why should I care as a business owner? Cost? Revenue? Cheaper to operate? How do you get people to sign up?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Visitor</div>
+              <p>Also in onboarding: keep reminding people of the larger purpose — it’s easy to start conscious and then drop it when it’s hard.</p>
+            </div>
+            <div class="insight">
+              <strong>Takeaway:</strong> dual hook — (1) lock-in / future reporting / capital, (2) operational $ savings. Purpose microcopy in intake so motivation doesn’t only live on the poster.
+            </div>
+
+            <h2 id="naming">EI naming &amp; scope</h2>
+            <div class="turn">
+              <div class="speaker">Visitor</div>
+              <p>What is tCO₂e?</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Presenter</div>
+              <p>Tonnes of CO₂ equivalent. EI is environmental impact; EI intensity is EI divided by revenue — absolute EI can look “good” just because the company is small.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Neha</div>
+              <p>What does EI mean? Outside climate, EI is emotional intelligence. Specify that. Posters also feel like university research boards.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Presenter</div>
+              <p>Today we focus on CO₂; longer term water, waste, sector-specific factors. Frameworks are existing; presentation needs to be more approachable.</p>
+            </div>
+            <div class="insight">
+              <strong>Takeaway:</strong> expand EI on first use everywhere; keep intensity next to absolute; plan multi-impact but don’t pretend full multi-factor today.
+            </div>
+
+            <h2 id="visual">Visual &amp; editorial feedback</h2>
+            <div class="turn">
+              <div class="speaker">Katya</div>
+              <p>Onboarding is intuitive and exciting. Add icons so it’s not just text. Layout prioritizes what matters — low cognitive load, intentional design.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Marc</div>
+              <p>At first glance it reads very academic. Make it more approachable — digital publication design, not paragraphs on paragraphs. NYT-style editorial. Add imagery; environment is visual.</p>
+            </div>
+            <div class="turn">
+              <div class="speaker">Visitor</div>
+              <p>On the first assessment report: make “how did you calculate this?” and improvement paths larger — founders care about where costs come from and what to fix.</p>
+            </div>
+            <div class="insight">
+              <strong>Takeaway:</strong> two surfaces, two jobs — <em>tool</em> (icons, hierarchy, how-to) and <em>story artifacts</em> (posters/newsletter as publication, not academic wall).
+            </div>
+
+            <!-- ── Source ── -->
+            <h2 id="source">Source files</h2>
+            <ul class="qa-list">
+              <li><code>research/midterm-expo-feedback.md</code> — Gemini research report + cleaned transcript (11 parts).</li>
+              <li>Raw ASR (session prompt / recording notes) — used for cleaning QA above; keep for debrief detail Gemini dropped.</li>
+              <li>Related: <a href="../collaboration-session/">Collaboration &amp; feedback session</a> · <a href="../../gtr/docs/fieldwork-report/">Fieldwork report</a></li>
+            </ul>
+
+            <nav class="report-nav">
+              <a class="btn btn-secondary" href="../">← All research</a>
+              <a class="btn btn-primary" href="../collaboration-session/">Collab session →</a>
+            </nav>
+          </article>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer" id="site-footer"></footer>
+  </div>
+  <script src="../../js/site.js"></script>
+</body>
+</html>

@@ -1,5 +1,28 @@
 # RESEARCH REPORT & CLEANED TRANSCRIPT: Climatico Midterm Expo (July 13, 2026)
 
+> **Research page:** [site/research/midterm-expo/](../site/research/midterm-expo/) — synthesis, pillars, quotes, and design implications for the multipage site.
+
+## 0. Transcript cleaning QA (Gemini vs raw ASR)
+
+**Verdict:** Good enough for research synthesis and product decisions. Not a verbatim court transcript.
+
+### Cleaned well
+- Product name → Climatico; metrics → tCO₂e, EI / EI intensity.
+- Sensible ASR repairs: *Momala* → mobile; *peach data* → pitch deck; *hoop them / fester* → hook them first; *radio capital* → redefining capital; *public therapy* → public / accelerator directors.
+- Denise’s “how / repository / Monday morning” monologue preserves substance and tone.
+- Theme-based parts beat raw chronological floor noise for design use.
+- Dropped sleep-lock screens, photo logistics, and pure small talk appropriately.
+
+### Be careful
+- **Over-polish / invented precision:** e.g. cleaned Presenter lines cite GHG Protocol Scope boundaries; the raw exchange was vaguer. Treat technical methodology lines as team interpretation, not visitor-quoted fact.
+- **Speaker labels:** raw rarely names visitors. Leslie / Denise / Vic etc. are useful personas, not hard IDs.
+- **Truncation:** Part 2 (Ted) is short vs a longer live pitch cycle; some mid-floor repeats collapsed (fine) but intermediate critiques may be lost.
+- **Still-fuzzy ASR** that Gemini guessed: e.g. *fully shunen… dog* → “honest baseline”; *stack of bounder* → founder dashboard aggregate — plausible, not certain.
+- **Team debrief at end** (posters as conference handouts, testing the starting point, Elena note) is thin or missing — keep the raw for internal retro.
+- **Occasional over-flattering Presenter replies** are reconstructed politeness, not literal.
+
+---
+
 ## 1. Overview of the Expo
 On July 13, 2026, Team GTR presented *Climatico* at the Midterm Expo. The presentation materials included the landscape tabloid poster series and the interactive digital prototype on three monitors. The session attracted a diverse cohort of founders, venture capitalists, design educators, and peers, yielding highly strategic feedback. 
 
